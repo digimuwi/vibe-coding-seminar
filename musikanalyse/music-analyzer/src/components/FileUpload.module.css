@@ -1,0 +1,50 @@
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 3rem 2rem;
+  border: 2px dashed #c5cae9;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: border-color 0.15s, background 0.15s;
+  background: #fafafe;
+  min-width: 360px;
+  user-select: none;
+}
+
+.dropzone:hover,
+.dropzone:focus-visible {
+  border-color: #5c6bc0;
+  background: #f0f1fb;
+  outline: none;
+}
+
+.over {
+  border-color: #3949ab;
+  background: #e8eaf6;
+}
+
+.icon {
+  font-size: 3rem;
+  line-height: 1;
+  color: #7986cb;
+}
+
+.primary {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #3c3f5a;
+  margin: 0;
+}
+
+.secondary {
+  font-size: 0.85rem;
+  color: #888;
+  margin: 0;
+}
+
+.hiddenInput {
+  display: none;
+}

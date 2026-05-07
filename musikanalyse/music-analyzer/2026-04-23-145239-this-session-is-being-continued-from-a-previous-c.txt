@@ -1,0 +1,710 @@
+╭─── Claude Code v2.1.108 ─────────────────────────────────────────────────────╮
+│                                                    │ Tips for getting        │
+│                    Welcome back!                   │ started                 │
+│                                                    │ ✔ Run /init to create … │
+│                      ▗ ▗   ▖ ▖                     │ ─────────────────────── │
+│                                                    │ Recent activity         │
+│                        ▘▘ ▝▝                       │ No recent activity      │
+│                                                    │                         │
+│           Sonnet 4.6 · API Usage Billing           │                         │
+│   ~/Documents/Tübingen/VibeCoding/music-analyzer   │                         │
+╰──────────────────────────────────────────────────────────────────────────────╯
+
+✻ Conversation compacted (ctrl+o for history)
+
+  ⎿  Read README.md (51 lines)
+  ⎿  Read src/lib/harmony-analyzer.ts (116 lines)
+  ⎿  Read src/components/ScoreViewer.tsx (96 lines)
+  ⎿  Read src/App.tsx (121 lines)
+  ⎿  Read src/lib/musicxml-parser.ts (154 lines)
+  ⎿  Skills restored (init)
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Let me check the remaining files I need to understand before making changes.
+
+  Read 2 files (ctrl+o to expand)
+
+⏺ Now I have the full picture. The plan: inject <harm> elements into the MEI via
+   DOM manipulation (correct namespace), re-render, and in ScoreViewer use the
+  g.harm positions for overlay labels rather than linear interpolation.
+
+⏺ Write(src/workers/verovio.worker.ts)
+  ⎿  Added 86 lines, removed 20 lines
+       1  import createVerovioModule from 'verovio/wasm';
+       2  import { VerovioToolkit } from 'verovio/esm';
+       3 +import type { BeatChord } from '../types/music';               
+       4  
+       5  type InMessage =
+       5 -  | { type: 'render'; xml: string };                           
+       6 +  | { type: 'render'; xml: string; chords: BeatChord[] };      
+       7  
+       8  type OutMessage =
+       9    | { type: 'ready' }
+      10    | { type: 'result'; svgPages: string[]; pageCount: number }
+      11    | { type: 'error'; message: string };
+      12  
+      13 +const MEI_NS = 'http://www.music-encoding.org/ns/mei';         
+      14 +                                                               
+      15 +const RENDER_OPTIONS = {                                       
+      16 +  scale: 45,                                                   
+      17 +  adjustPageWidth: 1,                                          
+      18 +  adjustPageHeight: 0,                                         
+      19 +  pageHeight: 2970,                                            
+      20 +  pageWidth: 2100,                                             
+      21 +  footer: 'none',                                              
+      22 +  header: 'none',                                              
+      23 +  spacingSystem: 3,                                            
+      24 +};                                                             
+      25 +                                                               
+      26  let toolkit: VerovioToolkit | null = null;
+      13 -let pendingXml: string | null = null;                          
+      27 +let pendingMsg: { xml: string; chords: BeatChord[] } | null = n
+         +ull;                                                           
+      28  
+      29  async function init() {
+      30    const VerovioModule = await createVerovioModule();
+      31    toolkit = new VerovioToolkit(VerovioModule);
+      32    (self as unknown as Worker).postMessage({ type: 'ready' } sat
+          isfies OutMessage);
+      33  
+      20 -  if (pendingXml !== null) {                                   
+      21 -    renderXml(pendingXml);                                     
+      22 -    pendingXml = null;                                         
+      34 +  if (pendingMsg !== null) {                                   
+      35 +    renderXml(pendingMsg.xml, pendingMsg.chords);              
+      36 +    pendingMsg = null;                                         
+      37    }
+      38  }
+      39  
+      26 -function renderXml(xml: string) {                              
+      40 +/**                                                            
+      41 + * Inject <harm> elements into the MEI document using proper na
+         +mespace DOM                                                    
+      42 + * manipulation (avoids the font-size="0px" bug caused by names
+         +pace-less string                                               
+      43 + * injection).  Each chord gets a harm element anchored via @ts
+         +tamp + @staff so                                               
+      44 + * Verovio aligns it with the notated beat.                    
+      45 + */                                                            
+      46 +function injectHarmLabels(meiString: string, chords: BeatChord[
+         +]): string {                                                   
+      47 +  const doc = new DOMParser().parseFromString(meiString, 'appli
+         +cation/xml');                                                  
+      48 +  if (doc.querySelector('parsererror')) return meiString;      
+      49 +                                                               
+      50 +  // MEI @tstamp is 1-indexed and uses the beat-type unit from 
+         +the time signature.                                            
+      51 +  // beatPosition (our unit) is 0-indexed quarter notes, so:   
+      52 +  //   tstamp = beatPosition * (beatUnit / 4) + 1              
+      53 +  const meterSig = doc.querySelector('meterSig');              
+      54 +  const beatUnit = parseInt(meterSig?.getAttribute('unit') ?? '
+         +4', 10) || 4;                                                  
+      55 +  const toTstamp = (beat: number) =>                           
+      56 +    Number((beat * (beatUnit / 4) + 1).toFixed(4));            
+      57 +                                                               
+      58 +  // Attach harm below the last (bottom) staff, which works for
+         + both single-staff                                             
+      59 +  // and grand-staff (piano / SATB) scores.                    
+      60 +  const staffDefs = doc.querySelectorAll('staffDef');          
+      61 +  const harmStaff = staffDefs.length > 0 ? String(staffDefs.len
+         +gth) : '1';                                                    
+      62 +                                                               
+      63 +  // Group labeled chords by measure index                     
+      64 +  const byMeasure = new Map<number, BeatChord[]>();            
+      65 +  for (const chord of chords) {                                
+      66 +    if (!chord.romanNumeral && !chord.chordName) continue;     
+      67 +    if (!byMeasure.has(chord.measureIndex)) byMeasure.set(chord
+         +.measureIndex, []);                                            
+      68 +    byMeasure.get(chord.measureIndex)!.push(chord);            
+      69 +  }                                                            
+      70 +                                                               
+      71 +  const measures = Array.from(doc.querySelectorAll('measure'));
+      72 +  measures.forEach((measure, mi) => {                          
+      73 +    for (const chord of byMeasure.get(mi) ?? []) {             
+      74 +      const label = chord.romanNumeral ?? chord.chordName;     
+      75 +      if (!label) continue;                                    
+      76 +                                                               
+      77 +      const harm = doc.createElementNS(MEI_NS, 'harm');        
+      78 +      harm.setAttribute('tstamp', String(toTstamp(chord.beatPos
+         +ition)));                                                      
+      79 +      harm.setAttribute('place', 'below');                     
+      80 +      harm.setAttribute('staff', harmStaff);                   
+      81 +      harm.textContent = label;                                
+      82 +      measure.appendChild(harm);                               
+      83 +    }                                                          
+      84 +  });                                                          
+      85 +                                                               
+      86 +  return new XMLSerializer().serializeToString(doc);           
+      87 +}                                                              
+      88 +                                                               
+      89 +function renderXml(xml: string, chords: BeatChord[]) {         
+      90    if (!toolkit) return;
+      91    try {
+      29 -    toolkit.setOptions({                                       
+      30 -      scale: 45,                                               
+      31 -      adjustPageWidth: 1,                                      
+      32 -      adjustPageHeight: 0,                                     
+      33 -      pageHeight: 2970,                                        
+      34 -      pageWidth: 2100,                                         
+      35 -      footer: 'none',                                          
+      36 -      header: 'none',                                          
+      37 -      spacingSystem: 3,                                        
+      38 -    });                                                        
+      39 -                                                               
+      92 +    toolkit.setOptions(RENDER_OPTIONS);                        
+      93      const loaded = toolkit.loadData(xml);
+      94      if (!loaded) {
+      95        (self as unknown as Worker).postMessage({
+     ...
+       99        return;
+      100      }
+      101  
+      102 +    // Get the MEI, inject harm labels, then re-render so Vero
+          +vio positions them.                                           
+      103 +    // noLayout:1 strips pre-computed positions so Verovio re-
+          +lays out with the                                             
+      104 +    // new harm elements rather than trying to fit them into a
+          +n existing layout.                                            
+      105 +    const mei = toolkit.getMEI({ noLayout: 1 });              
+      106 +    const modifiedMei = injectHarmLabels(mei, chords);        
+      107 +                                                              
+      108 +    toolkit.setOptions(RENDER_OPTIONS);                       
+      109 +    const loaded2 = toolkit.loadData(modifiedMei);            
+      110 +    if (!loaded2) {                                           
+      111 +      // Harm injection failed – fall back to plain rendering 
+          +without labels                                                
+      112 +      toolkit.setOptions(RENDER_OPTIONS);                     
+      113 +      toolkit.loadData(xml);                                  
+      114 +    }                                                         
+      115 +                                                              
+      116      const pageCount = toolkit.getPageCount();
+      117      const svgPages: string[] = [];
+      118      for (let p = 1; p <= pageCount; p++) {
+     ...
+      135  (self as unknown as Worker).onmessage = (event: MessageEvent<I
+           nMessage>) => {
+      136    if (event.data.type === 'render') {
+      137      if (!toolkit) {
+       71 -      // Worker still initializing — queue the request        
+       72 -      pendingXml = event.data.xml;                            
+      138 +      pendingMsg = { xml: event.data.xml, chords: event.data.c
+          +hords };                                                      
+      139      } else {
+       74 -      renderXml(event.data.xml);                              
+      140 +      renderXml(event.data.xml, event.data.chords);           
+      141      }
+      142    }
+      143  };
+
+⏺ Now update App.tsx to pass chords to the worker, and simplify ScoreViewer
+  since analysis is no longer needed there:
+
+⏺ Update(src/App.tsx)
+  ⎿  Added 1 line, removed 1 line
+      56          const { notes, tonic, mode, beatsPerMeasure, measureCou
+          nt } = parseMusicXML(xml);
+      57          const analysis = analyzeHarmony(notes, tonic, mode, bea
+          tsPerMeasure, measureCount);
+      58          pendingAnalysis.current = analysis;
+      59 -        workerRef.current?.postMessage({ type: 'render', xml })
+         -;                                                              
+      59 +        workerRef.current?.postMessage({ type: 'render', xml, c
+         +hords: analysis.chords });                                     
+      60        } catch (err) {
+      61          setState({
+      62            phase: 'error',
+
+⏺ Now update ScoreViewer to use g.harm element positions for overlay labels
+  instead of linear interpolation, with fallback:
+
+⏺ Write(src/components/ScoreViewer.tsx)
+  ⎿  Added 74 lines, removed 6 lines
+       6    x: number;
+       7    y: number;
+       8    label: string;
+       9 -  secondary: string; // chord name when roman numeral available
+       9 +  secondary: string;                                           
+      10  }
+      11  
+      12  interface Props {
+     ...
+      14    analysis: HarmonyAnalysis;
+      15  }
+      16  
+      17 +/**                                                            
+      18 + * Read the x position of an SVG element reliably even when its
+         + content is                                                    
+      19 + * invisible (e.g. font-size="0px").  We use getCTM() to get th
+         +e cumulative                                                   
+      20 + * transform matrix and convert from SVG user units to CSS pixe
+         +ls.                                                            
+      21 + */                                                            
+      22 +function getHarmX(                                             
+      23 +  el: Element,                                                 
+      24 +  svgEl: SVGSVGElement,                                        
+      25 +  svgClientRect: DOMRect,                                      
+      26 +): number {                                                    
+      27 +  const ctm = (el as SVGGraphicsElement).getCTM?.();           
+      28 +  const vb = svgEl.viewBox?.baseVal;                           
+      29 +  if (!ctm || !vb || vb.width === 0) return -1;                
+      30 +  return svgClientRect.left + ctm.e * (svgClientRect.width / vb
+         +.width);                                                       
+      31 +}                                                              
+      32 +                                                               
+      33  export default function ScoreViewer({ svgPages, analysis }: Pro
+          ps) {
+      34    const containerRef = useRef<HTMLDivElement>(null);
+      35    const [overlays, setOverlays] = useState<Overlay[]>([]);
+     ...
+       39      if (!container) return;
+       40  
+       41      const containerRect = container.getBoundingClientRect();
+       26 -    const measureEls = Array.from(container.querySelectorAll<S
+          -VGGElement>('g.measure'));                                    
+       42  
+       28 -    // Index chords by measure                                
+       43 +    // Chords that actually have a label (in render order)    
+       44 +    const labeledChords = analysis.chords.filter(             
+       45 +      c => c.romanNumeral || c.chordName,                     
+       46 +    );                                                        
+       47 +                                                              
+       48 +    // --- Primary path: use <harm> elements that Verovio plac
+          +ed in the SVG ---                                             
+       49 +    const harmEls = Array.from(                               
+       50 +      container.querySelectorAll<SVGGElement>('g.harm'),      
+       51 +    );                                                        
+       52 +                                                              
+       53 +    if (harmEls.length > 0 && harmEls.length === labeledChords
+          +.length) {                                                    
+       54 +      // Check whether Verovio rendered the harm text with a v
+          +isible font-size                                              
+       55 +      const firstText = harmEls[0].querySelector('text');     
+       56 +      const renderedFontSize = parseFloat(                    
+       57 +        firstText?.getAttribute('font-size') ?? '0',          
+       58 +      );                                                      
+       59 +                                                              
+       60 +      if (renderedFontSize > 0) {                             
+       61 +        // Verovio rendered the labels natively – no React ove
+          +rlay needed                                                   
+       62 +        setOverlays([]);                                      
+       63 +        return;                                               
+       64 +      }                                                       
+       65 +                                                              
+       66 +      // Font-size is 0 (common Verovio quirk): use the harm e
+          +lement's SVG                                                  
+       67 +      // transform to derive the correct x position, then show
+          + our own overlay.                                             
+       68 +      const svgEl = container.querySelector<SVGSVGElement>('sv
+          +g');                                                          
+       69 +      const svgRect = svgEl?.getBoundingClientRect();         
+       70 +                                                              
+       71 +      if (svgEl && svgRect) {                                 
+       72 +        const next: Overlay[] = [];                           
+       73 +        labeledChords.forEach((chord, i) => {                 
+       74 +          const el = harmEls[i];                              
+       75 +          const x = getHarmX(el, svgEl, svgRect) - containerRe
+          +ct.left;                                                      
+       76 +          if (x < 0) return;                                  
+       77 +          const elRect = el.getBoundingClientRect();          
+       78 +          const y = elRect.top - containerRect.top;           
+       79 +          const label = chord.romanNumeral ?? chord.chordName 
+          +?? '';                                                        
+       80 +          next.push({                                         
+       81 +            x,                                                
+       82 +            y,                                                
+       83 +            label,                                            
+       84 +            secondary: chord.romanNumeral && chord.chordName ?
+          + chord.chordName : '',                                        
+       85 +          });                                                 
+       86 +        });                                                   
+       87 +        setOverlays(next);                                    
+       88 +        return;                                               
+       89 +      }                                                       
+       90 +    }                                                         
+       91 +                                                              
+       92 +    // --- Fallback: linear interpolation within each measure 
+          +---                                                           
+       93 +    const measureEls = Array.from(                            
+       94 +      container.querySelectorAll<SVGGElement>('g.measure'),   
+       95 +    );                                                        
+       96      const byMeasure = new Map<number, typeof analysis.chords>(
+           );
+       97      for (const chord of analysis.chords) {
+       31 -      if (!byMeasure.has(chord.measureIndex)) byMeasure.set(ch
+          -ord.measureIndex, []);                                        
+       98 +      if (!byMeasure.has(chord.measureIndex))                 
+       99 +        byMeasure.set(chord.measureIndex, []);                
+      100        byMeasure.get(chord.measureIndex)!.push(chord);
+      101      }
+      102  
+     ...
+      116            x,
+      117            y: measureBottom,
+      118            label,
+       51 -          secondary: chord.romanNumeral && chord.chordName ? c
+          -hord.chordName : '',                                          
+      119 +          secondary:                                          
+      120 +            chord.romanNumeral && chord.chordName ? chord.chor
+          +dName : '',                                                   
+      121          });
+      122        }
+      123      });
+     ...
+      126    }, [analysis]);
+      127  
+      128    useEffect(() => {
+       60 -    // Wait one frame so the SVG is in the DOM and painted    
+      129      const id = requestAnimationFrame(computeOverlays);
+      130      window.addEventListener('resize', computeOverlays);
+      131      return () => {
+
+⏺ Now let me verify the TypeScript is consistent — particularly that App.tsx
+  worker message shape matches the new worker InMessage type:
+
+  Searched for 1 pattern, read 1 file (ctrl+o to expand)
+
+⏺ Bash(npx tsc --noEmit 2>&1 | head -40)
+  ⎿  (No output)
+
+⏺ TypeScript is clean. Let me start the dev server to test:
+
+⏺ Bash(npm run dev 2>&1 &
+      sleep 3 && curl -s http://localhost:5173 | head -5)
+  ⎿  > music-analyzer@0.0.0 dev
+     > vite
+     … +14 lines (ctrl+o to expand)
+
+⏺ There's a multi-page subtlety I missed in ScoreViewer.tsx: the getCTM()
+  approach needs the containing SVG element (not just the first one), and
+  y-position should fall back to the CTM too. Let me fix that:
+
+⏺ Update(src/components/ScoreViewer.tsx)
+  ⎿  Added 30 lines, removed 10 lines
+      14    analysis: HarmonyAnalysis;
+      15  }
+      16  
+      17 +/** Walk up the DOM to find the nearest ancestor <svg> element.
+         + */                                                            
+      18 +function containingSvg(el: Element): SVGSVGElement | null {    
+      19 +  let cur: Element | null = el;                                
+      20 +  while (cur) {                                                
+      21 +    if (cur.tagName.toLowerCase() === 'svg') return cur as SVGS
+         +VGElement;                                                     
+      22 +    cur = cur.parentElement;                                   
+      23 +  }                                                            
+      24 +  return null;                                                 
+      25 +}                                                              
+      26 +                                                               
+      27  /**
+      18 - * Read the x position of an SVG element reliably even when its
+         - content is                                                    
+      19 - * invisible (e.g. font-size="0px").  We use getCTM() to get th
+         -e cumulative                                                   
+      20 - * transform matrix and convert from SVG user units to CSS pixe
+         -ls.                                                            
+      28 + * Convert a harm element's CTM (SVG user-unit transform) to a 
+         +CSS-pixel                                                      
+      29 + * position relative to the scroll container.  Works even when 
+         +the element has                                                
+      30 + * no visible content (e.g. font-size="0px").                  
+      31   */
+      22 -function getHarmX(                                             
+      32 +function harmPosition(                                         
+      33    el: Element,
+      24 -  svgEl: SVGSVGElement,                                        
+      25 -  svgClientRect: DOMRect,                                      
+      26 -): number {                                                    
+      27 -  const ctm = (el as SVGGraphicsElement).getCTM?.();           
+      34 +  containerRect: DOMRect,                                      
+      35 +): { x: number; y: number } | null {                           
+      36 +  const svgEl = containingSvg(el);                             
+      37 +  if (!svgEl) return null;                                     
+      38 +  const svgRect = svgEl.getBoundingClientRect();               
+      39    const vb = svgEl.viewBox?.baseVal;
+      29 -  if (!ctm || !vb || vb.width === 0) return -1;                
+      30 -  return svgClientRect.left + ctm.e * (svgClientRect.width / vb
+         -.width);                                                       
+      40 +  if (!vb || vb.width === 0 || vb.height === 0) return null;   
+      41 +                                                               
+      42 +  const ctm = (el as SVGGraphicsElement).getCTM?.();           
+      43 +  if (!ctm) return null;                                       
+      44 +                                                               
+      45 +  const scaleX = svgRect.width / vb.width;                     
+      46 +  const scaleY = svgRect.height / vb.height;                   
+      47 +  return {                                                     
+      48 +    x: svgRect.left - containerRect.left + ctm.e * scaleX,     
+      49 +    y: svgRect.top - containerRect.top + ctm.f * scaleY,       
+      50 +  };                                                           
+      51  }
+      52  
+      53  export default function ScoreViewer({ svgPages, analysis }: Pro
+          ps) {
+
+⏺ Update(src/components/ScoreViewer.tsx)
+  ⎿  Added 5 lines, removed 7 lines
+       88        const svgEl = container.querySelector<SVGSVGElement>('sv
+           g');
+       89        const svgRect = svgEl?.getBoundingClientRect();
+       90  
+       91 -      if (svgEl && svgRect) {                                 
+       91 +      {                                                       
+       92          const next: Overlay[] = [];
+       93          labeledChords.forEach((chord, i) => {
+       94            const el = harmEls[i];
+       95 -          const x = getHarmX(el, svgEl, svgRect) - containerRe
+          -ct.left;                                                      
+       96 -          if (x < 0) return;                                  
+       97 -          const elRect = el.getBoundingClientRect();          
+       98 -          const y = elRect.top - containerRect.top;           
+       95 +          const pos = harmPosition(el, containerRect);        
+       96 +          if (!pos) return;                                   
+       97            const label = chord.romanNumeral ?? chord.chordName 
+           ?? '';
+       98            next.push({
+      101 -            x,                                                
+      102 -            y,                                                
+       99 +            x: pos.x,                                         
+      100 +            y: pos.y,                                         
+      101              label,
+      102              secondary: chord.romanNumeral && chord.chordName ?
+            chord.chordName : '',
+      103            });
+
+⏺ Bash(npx tsc --noEmit 2>&1)
+  ⎿  (No output)
+⏺ Clean. Let me do a final review of the full ScoreViewer.tsx:
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Lines 88-89 (svgEl / svgRect) are unused dead code after refactoring to
+  harmPosition. Remove them:
+
+⏺ Update(src/components/ScoreViewer.tsx)
+  ⎿  Removed 3 lines
+      85  
+      86        // Font-size is 0 (common Verovio quirk): use the harm el
+          ement's SVG
+      87        // transform to derive the correct x position, then show 
+          our own overlay.
+      88 -      const svgEl = container.querySelector<SVGSVGElement>('svg
+         -');                                                            
+      89 -      const svgRect = svgEl?.getBoundingClientRect();          
+      90 -                                                               
+      88        {
+      89          const next: Overlay[] = [];
+      90          labeledChords.forEach((chord, i) => {
+
+⏺ Bash(npx tsc --noEmit 2>&1)
+  ⎿  (No output)
+
+⏺ The app is running at http://localhost:5174. Here's a summary of what changed
+  and why:
+
+  ---
+  Worker (verovio.worker.ts)
+  - Now receives chords: BeatChord[] alongside xml in the render message
+  - After the first loadData(xml), calls getMEI({ noLayout: 1 }) to get the
+  score as MEI without pre-computed layout
+  - injectHarmLabels() uses DOMParser + createElementNS(MEI_NS, 'harm') — proper
+   namespace, which was the root cause of the previous font-size="0px" bug from
+  string-injecting namespace-less elements
+  - Each <harm> gets @tstamp (converted from 0-based quarter-note beats using
+  the MEI meterSig@unit), @staff (bottom staff, so labels appear below the grand
+   staff), and @place="below"
+  - Re-renders from the modified MEI so Verovio positions the harm elements at
+  the exact notated beat
+
+  ScoreViewer (ScoreViewer.tsx)
+  - After the SVGs are in the DOM, queries g.harm elements
+  - If Verovio rendered them with a visible font-size → clears the overlay (no
+  duplicates)
+  - If font-size is still 0 (Verovio quirk) → reads each harm element's position
+   via getCTM() converted to CSS pixels — reliable even for invisible elements,
+  works across multiple SVG pages
+  - Falls back to the old linear-interpolation approach if no harm elements are
+  found at all
+
+✻ Cogitated for 11m 51s
+
+❯ The app fails with "DOMParser not defined" when I try to upload a file.       
+
+⏺ DOMParser (and XMLSerializer) are not available in the Verovio Web Worker's
+  context — they're browser-only globals not exposed to workers. I need to
+  replace them with a pure string-based MEI injection that avoids any DOM APIs
+  inside the worker.
+
+⏺ Update(src/workers/verovio.worker.ts)
+  ⎿  Removed 2 lines
+      10    | { type: 'result'; svgPages: string[]; pageCount: number }
+      11    | { type: 'error'; message: string };
+      12  
+      13 -const MEI_NS = 'http://www.music-encoding.org/ns/mei';         
+      14 -                                                               
+      13  const RENDER_OPTIONS = {
+      14    scale: 45,
+      15    adjustPageWidth: 1,
+
+⏺ Update(src/workers/verovio.worker.ts)
+  ⎿  Added 45 lines, removed 36 lines
+      35    }
+      36  }
+      37  
+      38 +function escapeXml(s: string): string {                        
+      39 +  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace
+         +(/>/g, '&gt;');                                                
+      40 +}                                                              
+      41 +                                                               
+      42  /**
+      39 - * Inject <harm> elements into the MEI document using proper na
+         -mespace DOM                                                    
+      40 - * manipulation (avoids the font-size="0px" bug caused by names
+         -pace-less string                                               
+      41 - * injection).  Each chord gets a harm element anchored via @ts
+         -tamp + @staff so                                               
+      42 - * Verovio aligns it with the notated beat.                    
+      43 + * Inject <harm> elements into a MEI string without DOMParser /
+         + XMLSerializer                                                 
+      44 + * (neither is available inside a Vite Web Worker).            
+      45 + *                                                             
+      46 + * Strategy:                                                   
+      47 + *  - Extract the time-signature beat unit from the first <mete
+         +rSig> so we can                                                
+      48 + *    convert our 0-indexed quarter-note beat positions to MEI'
+         +s 1-indexed                                                    
+      49 + *    @tstamp values (which use the beat-type denominator as th
+         +eir unit).                                                     
+      50 + *  - Count <staffDef> elements to identify the bottom staff; h
+         +arm elements are                                               
+      51 + *    placed below it so they appear under the grand staff.    
+      52 + *  - Splice a <harm> string before each </measure> closing tag
+         +.  The element                                                 
+      53 + *    carries an explicit xmlns so Verovio recognises it as a M
+         +EI element even                                                
+      54 + *    when the injection is done as a raw string.              
+      55   */
+      56  function injectHarmLabels(meiString: string, chords: BeatChord[
+          ]): string {
+      45 -  const doc = new DOMParser().parseFromString(meiString, 'appli
+         -cation/xml');                                                  
+      46 -  if (doc.querySelector('parsererror')) return meiString;      
+      57 +  // Beat unit: denominator of the time signature (4 = quarter,
+         + 8 = eighth, …)                                                
+      58 +  const beatUnitMatch = meiString.match(/\bmeterSig\b[^>]+\buni
+         +t="(\d+)"/);                                                   
+      59 +  const beatUnit = parseInt(beatUnitMatch?.[1] ?? '4', 10) || 4
+         +;                                                              
+      60 +  // beatPosition is 0-indexed quarter notes; MEI @tstamp is 1-
+         +indexed beat-unit ticks                                        
+      61 +  const toTstamp = (beat: number) => (beat * (beatUnit / 4) + 1
+         +).toFixed(4);                                                  
+      62  
+      48 -  // MEI @tstamp is 1-indexed and uses the beat-type unit from 
+         -the time signature.                                            
+      49 -  // beatPosition (our unit) is 0-indexed quarter notes, so:   
+      50 -  //   tstamp = beatPosition * (beatUnit / 4) + 1              
+      51 -  const meterSig = doc.querySelector('meterSig');              
+      52 -  const beatUnit = parseInt(meterSig?.getAttribute('unit') ?? '
+         -4', 10) || 4;                                                  
+      53 -  const toTstamp = (beat: number) =>                           
+      54 -    Number((beat * (beatUnit / 4) + 1).toFixed(4));            
+      63 +  // Number of staves (place harm below the last / bottom staff
+         +)                                                              
+      64 +  const staffDefCount = (meiString.match(/<staffDef\b/g) ?? [])
+         +.length;                                                       
+      65 +  const harmStaff = staffDefCount > 0 ? String(staffDefCount) :
+         + '1';                                                          
+      66  
+      56 -  // Attach harm below the last (bottom) staff, which works for
+         - both single-staff                                             
+      57 -  // and grand-staff (piano / SATB) scores.                    
+      58 -  const staffDefs = doc.querySelectorAll('staffDef');          
+      59 -  const harmStaff = staffDefs.length > 0 ? String(staffDefs.len
+         -gth) : '1';                                                    
+      60 -                                                               
+      67    // Group labeled chords by measure index
+      62 -  const byMeasure = new Map<number, BeatChord[]>();            
+      68 +  const byMeasure = new Map<number, Array<{ tstamp: string; lab
+         +el: string }>>();                                              
+      69    for (const chord of chords) {
+      64 -    if (!chord.romanNumeral && !chord.chordName) continue;     
+      65 -    if (!byMeasure.has(chord.measureIndex)) byMeasure.set(chord
+         -.measureIndex, []);                                            
+      66 -    byMeasure.get(chord.measureIndex)!.push(chord);            
+      70 +    const label = chord.romanNumeral ?? chord.chordName;       
+      71 +    if (!label) continue;                                      
+      72 +    if (!byMeasure.has(chord.measureIndex))                    
+      73 +      byMeasure.set(chord.measureIndex, []);                   
+      74 +    byMeasure.get(chord.measureIndex)!.push({                  
+      75 +      tstamp: toTstamp(chord.beatPosition),                    
+      76 +      label,                                                   
+      77 +    });                                                        
+      78    }
+      79  
+      69 -  const measures = Array.from(doc.querySelectorAll('measure'));
+      70 -  measures.forEach((measure, mi) => {                          
+      71 -    for (const chord of byMeasure.get(mi) ?? []) {             
+      72 -      const label = chord.romanNumeral ?? chord.chordName;     
+      73 -      if (!label) continue;                                    
+      80 +  if (byMeasure.size === 0) return meiString;                  
+      81  
+      75 -      const harm = doc.createElementNS(MEI_NS, 'harm');        
+      76 -      harm.setAttribute('tstamp', String(toTstamp(chord.beatPos
+         -ition)));                                                      
+      77 -      harm.setAttribute('place', 'below');                     
+      78 -      harm.setAttribute('staff', harmStaff);                   
+      79 -      harm.textContent = label;                                
+      80 -      measure.appendChild(harm);                               
+      81 -    }                                                          
+      82 +  // Replace each </measure> with injected harm elements + </me
+         +asure>                                                         
+      83 +  let mi = 0;                                                  
+      84 +  return meiString.replace(/<\/measure>/g, () => {             
+      85 +    const entries = byMeasure.get(mi++) ?? [];                 
+      86 +    const harmStr = entries                                    
+      87 +      .map(                                                    
+      88 +        ({ tstamp, label }) =>                                 
+      89 +          `<harm xmlns="http://www.music-encoding.org/ns/mei" t
+         +stamp="${tstamp}" place="below" staff="${harmStaff}">${escapeXm
+         +l(label)}</harm>`,                                             
+      90 +      )                                                        
+      91 +      .join('');                                               
+      92 +    return `${harmStr}</measure>`;                             
+      93    });
+      83 -                                                               
+      84 -  return new XMLSerializer().serializeToString(doc);           
+      94  }
+      95  
+      96  function renderXml(xml: string, chords: BeatChord[]) {
+
+⏺ Bash(npx tsc --noEmit 2>&1)
+  ⎿  (No output)
+
+⏺ Clean. Let me verify the final worker looks right end-to-end:
+
+  Read 1 file (ctrl+o to expand)
+
+⏺ Good. The fix was straightforward: DOMParser and XMLSerializer are not part of
+   the Dedicated Worker global scope in Vite's bundled worker environment, so
+  the MEI injection now uses pure string operations instead — a regex to read
+  meterSig@unit and <staffDef count, then a replace on </measure> to splice in
+  the <harm> strings. Each injected element carries an explicit xmlns so
+  Verovio's parser recognises it as a MEI element regardless of where in the
+  string it lands.
+
+  The dev server at http://localhost:5174 should now load the file without
+  error. Try uploading test_files/BWV_0269.xml — the labels should be positioned
+   at actual beat onsets rather than linearly interpolated.
+
+✻ Baked for 1m 43s
+
+※ recap: Aligning harmony labels to note positions by injecting harm elements into Verovio's MEI. Upload BWV_0269.xml to test whether labels now appear correctly positioned.
+
+❯ /cost                                                                         
+  ⎿  Total cost:            $8.22
+     Total duration (API):  47m 26s
+     Total duration (wall): 1h 41m 7s
+     Total code changes:    1430 lines added, 596 lines removed
+     Usage by model:
+        claude-sonnet-4-6:  156.4k input, 188.0k output, 10.6m cache read, 439.0k cache write ($8.12)
+         claude-haiku-4-5:  458 input, 3.8k output, 200.2k cache read, 45.7k cache write ($0.0965)

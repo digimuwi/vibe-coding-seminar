@@ -1,0 +1,34 @@
+.wrapper {
+  width: 100%;
+  overflow-x: auto;
+}
+
+.scoreContainer {
+  position: relative;
+  display: inline-block;
+  min-width: 100%;
+}
+
+.svgPage {
+  display: block;
+  line-height: 0;
+}
+
+/* Make Verovio SVG responsive */
+.svgPage svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.romanLabel {
+  position: absolute;
+  transform: translateX(-50%);
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-style: italic;
+  font-size: 0.8rem;
+  color: #1a56db;
+  pointer-events: none;
+  white-space: nowrap;
+  line-height: 1;
+}
