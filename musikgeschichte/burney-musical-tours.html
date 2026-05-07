@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Charles Burney's Musical Tours of Europe</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Georgia',serif;background:#111009;color:#e8d9b0;height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+header{
+  background:linear-gradient(to bottom,#2e1f08,#1e1408);
+  border-bottom:2px solid #7a5510;
+  padding:10px 20px;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-shrink:0;
+}
+header h1{font-size:1.25rem;color:#d9a93a;letter-spacing:1px;font-style:italic}
+header p{font-size:0.73rem;color:#9a7a3a;margin-top:2px}
+.legend{display:flex;gap:18px;align-items:center;flex-shrink:0}
+.legend-item{display:flex;align-items:center;gap:7px;font-size:0.76rem;color:#b89050}
+.legend-dash{width:26px;height:3px;border-radius:2px}
+
+.main{display:flex;flex:1;overflow:hidden}
+#map{flex:1}
+
+/* ── Sidebar ── */
+#sidebar{
+  width:270px;flex-shrink:0;
+  background:#150f06;
+  border-left:2px solid #5a3d0a;
+  overflow-y:auto;
+  display:flex;flex-direction:column;gap:12px;
+  padding:14px;
+}
+#sidebar::-webkit-scrollbar{width:5px}
+#sidebar::-webkit-scrollbar-track{background:#0e0b04}
+#sidebar::-webkit-scrollbar-thumb{background:#5a3d0a;border-radius:3px}
+
+.sec-head{
+  font-size:0.7rem;color:#d9a93a;
+  text-transform:uppercase;letter-spacing:2.5px;
+  border-bottom:1px solid #5a3d0a;padding-bottom:5px;
+}
+.about{font-size:0.76rem;line-height:1.65;color:#a08850}
+.about strong{color:#c8a050}
+
+.filter-group{display:flex;flex-direction:column;gap:5px}
+.filter-group label{
+  display:flex;align-items:center;gap:8px;
+  font-size:0.78rem;color:#b89050;cursor:pointer;
+  user-select:none;
+}
+.filter-group input[type=checkbox]{cursor:pointer;accent-color:#d9a93a}
+
+/* ── Info panel ── */
+#info-panel{
+  background:#1c1208;border:1px solid #5a3d0a;border-radius:3px;
+  padding:11px 13px;font-size:0.76rem;line-height:1.65;
+  color:#a08850;flex-shrink:0;
+}
+#info-panel h3{color:#d9a93a;margin-bottom:3px;font-size:0.9rem}
+#info-panel .ip-date{color:#8a6830;font-style:italic;margin-bottom:6px;font-size:0.72rem}
+#info-panel .ip-people{margin-bottom:6px}
+#info-panel .ip-people strong{color:#b89050}
+#info-panel blockquote{
+  border-left:2px solid #7a5510;padding-left:8px;
+  margin-top:7px;font-style:italic;font-size:0.74rem;color:#8a7050;
+}
+.placeholder{color:#5a4020;font-style:italic;font-size:0.76rem}
+
+/* ── Key figures list ── */
+.figure-list{list-style:none;display:flex;flex-direction:column;gap:6px}
+.figure-list li{font-size:0.75rem;line-height:1.5;color:#a08850;border-bottom:1px solid #2a1a06;padding-bottom:5px}
+.figure-list li strong{color:#d4a030}
+
+/* ── Popup ── */
+.leaflet-popup-content-wrapper{
+  background:#241608!important;color:#e0d0a0!important;
+  border:1px solid #7a5510!important;border-radius:4px!important;
+  box-shadow:0 4px 18px rgba(0,0,0,.75)!important;
+}
+.leaflet-popup-tip{background:#241608!important}
+.leaflet-popup-content{margin:12px 15px!important;font-family:'Georgia',serif}
+.leaflet-popup-close-button{color:#c8a040!important;font-size:16px!important}
+.pu-city{font-size:1rem;color:#d9a93a;margin-bottom:2px;font-style:italic}
+.pu-date{font-size:0.72rem;color:#8a6830;margin-bottom:7px}
+.pu-people{font-size:0.76rem;color:#b89050;margin-bottom:5px}
+.pu-people strong{color:#c8a050}
+.pu-text{font-size:0.76rem;line-height:1.6;color:#9a8050}
+.pu-quote{
+  border-left:2px solid #7a5510;padding-left:8px;
+  margin-top:7px;font-style:italic;font-size:0.73rem;color:#7a6840;
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>Charles Burney's Musical Tours of Europe</h1>
+    <p>"The Present State of Music in France &amp; Italy" (1771) &nbsp;·&nbsp; "The Present State of Music in Germany, the Netherlands &amp; United Provinces" (1773)</p>
+  </div>
+  <div class="legend">
+    <div class="legend-item">
+      <div class="legend-dash" style="background:#c8963e"></div>
+      Journey I · France &amp; Italy (1770)
+    </div>
+    <div class="legend-item">
+      <div class="legend-dash" style="background:#4a9ec8"></div>
+      Journey II · Germany &amp; Netherlands (1772)
+    </div>
+  </div>
+</header>
+
+<div class="main">
+  <div id="map"></div>
+  <div id="sidebar">
+
+    <p class="sec-head">About</p>
+    <p class="about">
+      Dr. <strong>Charles Burney</strong> (1726–1814), English music historian, undertook two tours of Europe to gather material for his <em>General History of Music</em> (1776–1789). Armed with letters of introduction, he visited opera houses, conservatories, and royal courts — interviewing the greatest composers and performers of his age.
+      <br><br>His two published travel diaries remain among the most vivid documents of 18th-century musical life.
+      <br><br><strong>Click any marker</strong> to read his notes on that city.
+    </p>
+
+    <p class="sec-head">Filter</p>
+    <div class="filter-group">
+      <label><input type="checkbox" id="tog-j1" checked>
+        <span style="color:#c8963e">●</span> Journey I: France &amp; Italy</label>
+      <label><input type="checkbox" id="tog-j2" checked>
+        <span style="color:#4a9ec8">●</span> Journey II: Germany &amp; Netherlands</label>
+      <label><input type="checkbox" id="tog-rt" checked> Show route lines</label>
+    </div>
+
+    <p class="sec-head">City Notes</p>
+    <div id="info-panel">
+      <p class="placeholder">Click a city marker to read Burney's observations.</p>
+    </div>
+
+    <p class="sec-head">Key Figures Met</p>
+    <ul class="figure-list">
+      <li><strong>Padre Martini</strong> · Bologna — Europe's foremost music historian; Burney examined his library of 17,000 manuscripts</li>
+      <li><strong>Farinelli</strong> · Bologna — The legendary castrato, in comfortable retirement</li>
+      <li><strong>C.P.E. Bach</strong> · Hamburg — Director of music for Hamburg's churches; demonstrated his keyboard style</li>
+      <li><strong>Frederick the Great</strong> · Potsdam — Monarch and serious flautist; Burney heard him perform</li>
+      <li><strong>Johann Joachim Quantz</strong> · Potsdam — Frederick's flute teacher and court composer</li>
+      <li><strong>Christoph Willibald Gluck</strong> · Vienna — Opera reformer; Burney called him "a great and powerful genius"</li>
+      <li><strong>Pietro Metastasio</strong> · Vienna — The ageing but still revered master of opera seria libretti</li>
+      <li><strong>Joseph Haydn</strong> · Eszterháza — Burney made a special detour to hear Haydn conduct his symphonies</li>
+      <li><strong>Leopold Mozart</strong> · Salzburg — Father of the prodigy; showed Burney Wolfgang's compositions</li>
+      <li><strong>Nicola Jommelli</strong> · Naples — Leading Neapolitan opera composer, recently returned from Stuttgart</li>
+    </ul>
+
+  </div>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+// ── Map init ──────────────────────────────────────────────
+const map = L.map('map',{center:[47.5,10],zoom:5});
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_matter/{z}/{x}/{y}{r}.png',{
+  attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains:'abcd',maxZoom:19
+}).addTo(map);
+
+const C1='#c8963e', C2='#4a9ec8';
+
+// ── Journey data ──────────────────────────────────────────
+const J1={
+  color:C1,
+  // ordered by travel sequence
+  cities:[
+    {
+      name:"London",coords:[51.5074,-0.1278],
+      date:"June 1770 — departure",
+      people:[],
+      text:"Burney left London in June 1770 carrying letters of introduction to the leading musicians and patrons of Europe. His aim: to gather first-hand accounts for a comprehensive history of music that no English writer had yet attempted.",
+      quote:'"I set out on my musical tour with the most ardent desire of being useful to the lovers of music in my own country." — Burney'
+    },
+    {
+      name:"Paris",coords:[48.8566,2.3522],
+      date:"June–July 1770",
+      people:["Jean-Jacques Rousseau","Jean le Rond d'Alembert"],
+      text:"Burney attended the Opéra and the Comédie-Italienne, marvelling at the theatrical grandeur of French opera even while judging French singing inferior to Italian. He met Rousseau and d'Alembert, both entangled in France's fierce debates over musical aesthetics (the Querelle des Bouffons had raged only a decade before).",
+      quote:'"The orchestra is very numerous, and the performers, in general, are excellent... yet the singing seemed to me to be inferior to what I had expected." — Burney'
+    },
+    {
+      name:"Lyon",coords:[45.7640,4.8357],
+      date:"July 1770",
+      people:[],
+      text:"An important stop on the road southward. Burney noted the musical theatre and concert life of this prosperous French commercial city.",
+      quote:null
+    },
+    {
+      name:"Turin",coords:[45.0703,7.6869],
+      date:"July 1770",
+      people:["Gaetano Pugnani"],
+      text:"Burney was impressed by the opera at the Teatro Regio and by the quality of the Savoy court orchestra. He met the celebrated violinist Gaetano Pugnani, later the teacher of Viotti.",
+      quote:'"The opera here is very magnificent, and the performers in general very good." — Burney'
+    },
+    {
+      name:"Milan",coords:[45.4642,9.1900],
+      date:"August 1770",
+      people:["Giovanni Battista Sammartini","Count Karl von Firmian"],
+      text:"At the Teatro Regio Ducale (the forerunner of La Scala), Burney heard opera seria at its height. He met the elderly symphonist Sammartini — sometimes credited as an early influence on Haydn — and Count Firmian, the enlightened Austrian governor who had patronised the young Mozart's Italian visits.",
+      quote:'"Giovanni Battista Sammartini...was, without dispute, the most celebrated composer for instruments in all Italy." — Burney'
+    },
+    {
+      name:"Parma",coords:[44.8015,10.3279],
+      date:"August 1770",
+      people:["Traetta (research)"],
+      text:"Parma was famous for its Francophile musical culture under Bourbon patronage, and its school of refined singing. Burney studied the ducal musical establishment carefully.",
+      quote:null
+    },
+    {
+      name:"Bologna",coords:[44.4949,11.3426],
+      date:"August–September 1770",
+      people:["Padre Martini","Farinelli","Wolfgang Amadeus Mozart (briefly)"],
+      text:"The most intellectually rich stop of the tour. Burney spent long sessions with Padre Giovanni Battista Martini — Europe's greatest living music historian — examining his legendary library of 17,000 manuscripts. He also visited Farinelli, the most famous castrato of the century, in elegant retirement at his villa. The teenage Mozart happened also to be in Bologna, studying counterpoint with Martini.",
+      quote:'"Padre Martini is the most profound theorist and best practical musician now living in Europe, in the opinion of all who have conversed with him." — Burney'
+    },
+    {
+      name:"Florence",coords:[43.7696,11.2558],
+      date:"September 1770",
+      people:["Pietro Nardini"],
+      text:"Burney visited Florence's opera and concert life, finding it somewhat quieter than Naples or Venice. He met the distinguished violinist Pietro Nardini, a pupil of Tartini.",
+      quote:null
+    },
+    {
+      name:"Rome",coords:[41.9028,12.4964],
+      date:"September–October 1770",
+      people:["Nicola Piccinni"],
+      text:"Rome presented a peculiar theatrical world: women were banned from the public stage, so castrati played female roles. Burney attended services at the Sistine Chapel, investigated the church polyphonic tradition, and met leading opera composers. He was struck by how Roman audiences showed reverence for their own conservative style.",
+      quote:'"The performance of music in the churches at Rome is certainly very fine... the style of the Sistine Chapel is as peculiar as its construction." — Burney'
+    },
+    {
+      name:"Naples",coords:[40.8518,14.2681],
+      date:"October–November 1770",
+      people:["Nicola Jommelli","Giovanni Paisiello","Nicola Piccinni","Giovanni Paisiello"],
+      text:"Naples was the undisputed musical capital of 18th-century Europe. Burney visited all four great conservatories — Pietà dei Turchini, Sant'Onofrio, Poveri di Gesù Cristo, and della Loreto — observing classes, inspecting practice rooms, and listening to students. He met Jommelli, lately returned from Stuttgart, and attended brilliant performances at the Teatro San Carlo.",
+      quote:'"There is certainly more music practised at Naples than in any other city in Europe: it may in truth be called the conservatory of the whole continent." — Burney'
+    },
+    {
+      name:"Venice",coords:[45.4408,12.3155],
+      date:"December 1770",
+      people:["Baldassare Galuppi"],
+      text:"Venice was famous for its four Ospedali — charitable music schools for orphaned girls that had become the finest music academies in Europe. Burney visited the Ospedale della Pietà (where Vivaldi had once been maestro di violino), the Mendicanti, the Incurabili, and the Ospedaletto, hearing performances of exceptional quality from their all-female ensembles.",
+      quote:'"I went to the Mendicanti...the performance was admirable; the singing of the girls, particularly of two sopranos, was incomparably fine." — Burney'
+    },
+    {
+      name:"Padua",coords:[45.4064,11.8768],
+      date:"December 1770",
+      people:["(Research on Tartini, d. 1770)"],
+      text:"In Padua, Burney collected accounts of the great violinist-composer Giuseppe Tartini, who had died only months earlier. Tartini had run a celebrated violin school here for decades. Burney interviewed those who had known him personally.",
+      quote:null
+    },
+    {
+      name:"Verona",coords:[45.4384,10.9916],
+      date:"December 1770",
+      people:[],
+      text:"Burney passed through Verona on his return northward, noting its musical life and the ancient Roman amphitheatre still pressed into service for public spectacle.",
+      quote:null
+    },
+  ]
+};
+
+const J2={
+  color:C2,
+  cities:[
+    {
+      name:"Brussels",coords:[50.8503,4.3517],
+      date:"July 1772",
+      people:[],
+      text:"The capital of the Austrian Netherlands opened Burney's second tour. He found a court musical life blending French theatrical fashion with Italian operatic taste.",
+      quote:null
+    },
+    {
+      name:"Ghent",coords:[51.0543,3.7174],
+      date:"July 1772",
+      people:[],
+      text:"A brief stop in the heart of the Flemish Low Countries, where Burney noted the strong church music tradition rooted in the great Flemish polyphonic school of the previous two centuries.",
+      quote:null
+    },
+    {
+      name:"Antwerp",coords:[51.2194,4.4025],
+      date:"July 1772",
+      people:[],
+      text:"Antwerp's magnificent Cathedral of Our Lady carried the memory of its great Renaissance polyphonic masters. Burney investigated the organ tradition and the current state of Flemish sacred music.",
+      quote:null
+    },
+    {
+      name:"The Hague",coords:[52.0705,4.3007],
+      date:"July–August 1772",
+      people:["Christian Ernst Graaf"],
+      text:"At the court of the Prince of Orange, Burney found a thriving concert life and met the court Kapellmeister. The Hague had become an important hub for visiting Italian and German musicians.",
+      quote:null
+    },
+    {
+      name:"Amsterdam",coords:[52.3676,4.9041],
+      date:"August 1772",
+      people:[],
+      text:"Burney attended concerts and investigated the organ tradition for which the Netherlands was celebrated throughout Europe. The great instruments of the Dutch churches astonished him.",
+      quote:'"The organs in Holland are more celebrated than those of any other country." — Burney'
+    },
+    {
+      name:"Hamburg",coords:[53.5753,10.0153],
+      date:"September 1772",
+      people:["C.P.E. Bach","Johann Adam Hiller"],
+      text:"One of the most important encounters of the entire tour: Burney spent extended time with Carl Philipp Emanuel Bach, J.S. Bach's celebrated son, now director of music for Hamburg's five principal churches. C.P.E. Bach demonstrated his distinctive, highly expressive keyboard style and spoke at length about his father's music and legacy.",
+      quote:'"C.P.E. Bach...is one of the greatest composers for keyed instruments that ever existed; and is equally celebrated for his performance on them." — Burney'
+    },
+    {
+      name:"Berlin",coords:[52.5200,13.4050],
+      date:"September 1772",
+      people:["Johann Friedrich Agricola","Princess Anna Amalia of Prussia"],
+      text:"Berlin supported a brilliant musical culture under the Prussian court. Burney met Agricola (a pupil of J.S. Bach), investigated the royal musical collections, and discovered a city deeply invested in its own conservative operatic tradition centred on the works of Graun and Hasse.",
+      quote:'"The state of music at Berlin is very flourishing... the late Kapellmeister Graun\'s music is in great favor here." — Burney'
+    },
+    {
+      name:"Potsdam",coords:[52.3906,13.0645],
+      date:"September 1772",
+      people:["Frederick the Great","Johann Joachim Quantz"],
+      text:"At Sans-Souci palace, Burney attended an evening concert at which King Frederick II performed flute concertos from memory. The elderly Quantz — Frederick's flute teacher since the 1720s and composer of some 300 concertos for him — sat beside the King. Burney marvelled at the spectacle of an absolute monarch who was also a serious and accomplished musician.",
+      quote:'"His Majesty played three long and difficult concertos on the flute with great precision; his tone was clear and brilliant, his execution neat." — Burney'
+    },
+    {
+      name:"Dresden",coords:[51.0504,13.7373],
+      date:"October 1772",
+      people:["Johann Adolf Hasse (research)","Josef Naumann"],
+      text:"Dresden had been one of the supreme musical courts of Europe before the Seven Years' War stripped it of its wealth. Burney found its spirit still alive in a distinguished court orchestra and investigated the legacy of Hasse, whose operas had dominated the German and Italian stage for decades.",
+      quote:'"The music at the court of Dresden has long been celebrated throughout Europe." — Burney'
+    },
+    {
+      name:"Vienna",coords:[48.2082,16.3738],
+      date:"October–November 1772",
+      people:["Christoph Willibald Gluck","Pietro Metastasio","Marianne Martinez","Carl Ditters von Dittersdorf"],
+      text:"Vienna was a highlight of the second tour. Burney met Gluck, whose operatic reforms were then the most controversially discussed development in European music, and the aged librettist Metastasio, still revered as the undisputed master of opera seria. He also encountered the remarkable pianist-composer Marianne Martinez and spent evenings in the city's active concert society.",
+      quote:'"Gluck has more fire and imagination than any composer of the present age." — Burney'
+    },
+    {
+      name:"Eszterháza",coords:[47.6244,16.8847],
+      date:"November 1772",
+      people:["Joseph Haydn"],
+      text:"Burney made a special detour to the Esterházy palace at Eszterháza (now Fertőd, Hungary) to meet Joseph Haydn, serving as Kapellmeister to Prince Nikolaus Esterházy. He heard Haydn conduct rehearsals and performances of his own symphonies and was extravagant in his praise.",
+      quote:'"Haydn himself presided at the pianoforte... I was all attention and pleasure... his style is varied, rich, bold and nervous." — Burney'
+    },
+    {
+      name:"Salzburg",coords:[47.8095,13.0550],
+      date:"November 1772",
+      people:["Michael Haydn","Leopold Mozart"],
+      text:"In Salzburg, Burney met Joseph Haydn's younger brother Michael, a court musician to Archbishop Colloredo, and Leopold Mozart, whose son Wolfgang — then 16 — was returning from his Italian tours. Leopold showed Burney some of the young composer's recent work.",
+      quote:null
+    },
+    {
+      name:"Munich",coords:[48.1351,11.5820],
+      date:"November 1772",
+      people:["Josef Myslivecek"],
+      text:"At the Bavarian Electoral court, Burney found opera production of high quality. The Residenz theatre was one of the finest court opera houses in the Empire. He observed the well-organized court musical establishment and attended performances.",
+      quote:null
+    },
+    {
+      name:"Augsburg",coords:[48.3705,10.8978],
+      date:"November 1772",
+      people:["Johann Andreas Stein"],
+      text:"Burney visited the celebrated piano builder Johann Andreas Stein, whose innovative fortepiano action would later win the admiration of Mozart. As a keen observer of instrument technology, Burney examined and praised Stein's new mechanisms carefully.",
+      quote:null
+    },
+    {
+      name:"Mannheim",coords:[49.4875,8.4660],
+      date:"November 1772",
+      people:["Christian Cannabich","Carl Stamitz","Anton Fils"],
+      text:"Mannheim was home to what many considered the finest orchestra in Europe — famous for its military precision, extraordinary dynamic range, and the electrifying 'Mannheim crescendo'. Burney attended a concert conducted by Christian Cannabich and was genuinely astonished by what he heard.",
+      quote:'"An army of generals, equally fit to plan a battle as to fight it... there are more solo players and good composers in this, than in any other orchestra in Europe." — Burney'
+    },
+    {
+      name:"Frankfurt",coords:[50.1109,8.6821],
+      date:"November 1772",
+      people:[],
+      text:"An important commercial city with an active concert life. Burney observed its musical institutions before continuing northward toward the Rhine.",
+      quote:null
+    },
+    {
+      name:"Bonn",coords:[50.7374,7.0982],
+      date:"November 1772",
+      people:[],
+      text:"The residence of the Elector of Cologne, with a court musical establishment Burney examined. A curious historical footnote: the two-year-old Ludwig van Beethoven was living here at this moment, entirely beneath Burney's notice.",
+      quote:null
+    },
+    {
+      name:"Cologne",coords:[50.9333,6.9500],
+      date:"November–December 1772",
+      people:[],
+      text:"Burney investigated the musical life of Cologne and its great Cathedral before beginning his return through the Low Countries toward London, his notebooks full.",
+      quote:null
+    },
+  ]
+};
+
+// ── Layer groups ──────────────────────────────────────────
+const lg1=L.layerGroup().addTo(map);
+const lg2=L.layerGroup().addTo(map);
+const lgR=L.layerGroup().addTo(map);
+
+// ── Routes ────────────────────────────────────────────────
+function addRoute(journey,layer){
+  const pts=journey.cities.map(c=>c.coords);
+  L.polyline(pts,{color:journey.color,weight:1.8,opacity:.45,dashArray:'6 5',smoothFactor:2}).addTo(layer);
+}
+addRoute(J1,lgR);
+addRoute(J2,lgR);
+
+// ── Info panel update ─────────────────────────────────────
+function showPanel(c){
+  const peoplePart=c.people.length
+    ?`<p class="ip-people"><strong>Figures met:</strong> ${c.people.join(', ')}</p>`:'';
+  const quotePart=c.quote?`<blockquote>${c.quote}</blockquote>`:'';
+  document.getElementById('info-panel').innerHTML=
+    `<h3>${c.name}</h3><p class="ip-date">${c.date}</p>${peoplePart}<p>${c.text}</p>${quotePart}`;
+}
+
+// ── Markers ───────────────────────────────────────────────
+function addMarker(c,color,layer){
+  const icon=L.divIcon({
+    className:'',
+    html:`<div style="width:13px;height:13px;background:${color};border-radius:50%;
+          border:2px solid rgba(255,255,255,.45);
+          box-shadow:0 2px 7px rgba(0,0,0,.65),0 0 0 4px ${color}28"></div>`,
+    iconSize:[13,13],iconAnchor:[6,6]
+  });
+
+  const peoplePart=c.people.length
+    ?`<p class="pu-people"><strong>Figures met:</strong> ${c.people.join(', ')}</p>`:'';
+  const quotePart=c.quote?`<p class="pu-quote">${c.quote}</p>`:'';
+
+  L.marker(c.coords,{icon})
+   .bindPopup(
+     `<p class="pu-city">${c.name}</p>
+      <p class="pu-date">${c.date}</p>
+      ${peoplePart}
+      <p class="pu-text">${c.text}</p>
+      ${quotePart}`,
+     {maxWidth:290}
+   )
+   .on('click',()=>showPanel(c))
+   .addTo(layer);
+}
+
+J1.cities.forEach(c=>addMarker(c,C1,lg1));
+J2.cities.forEach(c=>addMarker(c,C2,lg2));
+
+// ── Filter toggles ────────────────────────────────────────
+document.getElementById('tog-j1').addEventListener('change',function(){
+  this.checked?map.addLayer(lg1):map.removeLayer(lg1);});
+document.getElementById('tog-j2').addEventListener('change',function(){
+  this.checked?map.addLayer(lg2):map.removeLayer(lg2);});
+document.getElementById('tog-rt').addEventListener('change',function(){
+  this.checked?map.addLayer(lgR):map.removeLayer(lgR);});
+</script>
+</body>
+</html>
