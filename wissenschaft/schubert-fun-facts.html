@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Schubert Fun Facts</title>
+<style>
+  :root {
+    --paper: #f5ecd7;
+    --ink: #2b2216;
+    --accent: #8a3a2a;
+    --rule: #c9b890;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: var(--paper); color: var(--ink); }
+  body {
+    font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+    font-size: 18px;
+    line-height: 1.55;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    padding: 3rem 1.25rem 5rem;
+  }
+  main { width: 100%; max-width: 640px; }
+  header { border-bottom: 1px solid var(--rule); padding-bottom: 1rem; margin-bottom: 2rem; }
+  h1 { font-size: 2rem; margin: 0 0 0.25rem; font-weight: 600; letter-spacing: 0.01em; }
+  .sub { font-style: italic; color: #6a5a3f; font-size: 0.95rem; margin: 0; }
+  form { display: flex; gap: 0.5rem; margin-bottom: 1.5rem; }
+  input[type=text] {
+    flex: 1;
+    padding: 0.65rem 0.9rem;
+    font: inherit;
+    border: 1px solid var(--rule);
+    border-radius: 3px;
+    background: #fffaf0;
+    color: var(--ink);
+  }
+  input[type=text]:focus { outline: none; border-color: var(--accent); }
+  button {
+    font: inherit;
+    padding: 0.65rem 1.1rem;
+    border: 1px solid var(--ink);
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 3px;
+    cursor: pointer;
+  }
+  button:hover { background: var(--accent); border-color: var(--accent); }
+  .fact {
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 1.5rem 0.25rem;
+    margin-bottom: 1.25rem;
+  }
+  .fact-text { font-size: 1.2rem; line-height: 1.5; margin: 0 0 1rem; }
+  .quote {
+    font-size: 0.95rem;
+    font-style: italic;
+    color: #4a3d28;
+    border-left: 2px solid var(--rule);
+    padding-left: 0.8rem;
+    margin: 0 0 1rem;
+  }
+  .cite { font-size: 0.85rem; color: #6a5a3f; margin: 0; }
+  .cite a { color: var(--accent); text-decoration: none; border-bottom: 1px dotted var(--accent); }
+  .cite a:hover { color: var(--ink); border-color: var(--ink); }
+  .actions { display: flex; justify-content: space-between; align-items: center; gap: 1rem; margin-bottom: 1rem; }
+  .counter { font-size: 0.85rem; color: #6a5a3f; font-style: italic; }
+  footer { margin-top: 3rem; font-size: 0.8rem; color: #8a7a5c; line-height: 1.5; }
+  .empty { color: #8a7a5c; font-style: italic; padding: 1.5rem 0.25rem; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Schubert Fun Facts</h1>
+    <p class="sub">Anekdoten aus zwei Biographien von Heinrich Kreissle von Hellborn.</p>
+  </header>
+
+  <form id="searchForm" autocomplete="off">
+    <input type="text" id="q" placeholder="Fun fact bitte! (z. B. Geld, Vogl, Goethe)" aria-label="Suche">
+    <button type="submit">Suchen</button>
+  </form>
+
+  <div class="actions">
+    <button type="button" id="next">Gib mir einen neuen Fakt</button>
+    <span class="counter" id="counter"></span>
+  </div>
+
+  <article id="factBox" class="fact" aria-live="polite"></article>
+
+  <footer>
+    Quellen:
+    <a href="https://archive.org/details/cu31924022314961" target="_blank" rel="noopener">
+      Kreissle von Hellborn, <em>Franz Schubert: a musical biography</em>, &Uuml;bers. Edward Wilberforce, London 1866
+    </a> &middot;
+    <a href="https://archive.org/details/lifefranzschube00grovgoog" target="_blank" rel="noopener">
+      Kreissle von Hellborn, <em>The Life of Franz Schubert</em>, &Uuml;bers. A.&nbsp;D.&nbsp;Coleridge, hrsg. G.&nbsp;Grove, Bd.&nbsp;1, London 1869
+    </a>.
+    <br><br>
+    Seitenzahlen automatisch aus dem digitalisierten Volltext extrahiert &mdash;
+    f&uuml;r akademische Zwecke bitte am Original verifizieren (Link oben).
+  </footer>
+</main>
+
+<script>
+const BOOKS = {
+  W: {
+    label: "Kreissle/Wilberforce 1866",
+    full: "Franz Schubert: a musical biography, Übers. E. Wilberforce, London 1866",
+    url:  "https://archive.org/details/cu31924022314961"
+  },
+  G: {
+    label: "Kreissle/Coleridge–Grove 1869, Bd. 1",
+    full: "The Life of Franz Schubert, Übers. A. D. Coleridge, hrsg. G. Grove, Bd. 1, London 1869",
+    url:  "https://archive.org/details/lifefranzschube00grovgoog"
+  }
+};
+
+const FACTS = [
+  { book:"W", page:24, text:"Den <em>Erlkönig</em> soll Schubert in wenigen Stunden an einem einzigen Nachmittag hingeworfen haben — die Musik sei ihm beim Lesen so vollständig erschienen, dass er nur noch mitschreiben musste.",
+    quote:"He read the words over twice with increasing excitement, and during this perusal the music came so fully before him, that he dashed it down on the paper in just the time needed for the mechanical work of writing." },
+  { book:"W", page:5,  text:"Sein Gesangslehrer soll gesagt haben, der Junge habe „Harmonie im kleinen Finger&ldquo;.",
+    quote:"The boy has harmony in his little finger!" },
+  { book:"W", page:13, text:"Als Konviktschüler bat Schubert seinen Bruder schriftlich um ein, zwei Kreuzer monatlich — er hungere zwischen dürftigem Mittag- und Abendessen.",
+    quote:"Supposing you were to allow me one or two kreuzers a month? You would never notice it, while I should be happy and contented in my cell." },
+  { book:"W", page:22, text:"Von einer seiner Opern soll der zweite Akt bei Bediensteten als Anzündpapier fürs Feuer geendet haben.",
+    quote:"his servants used the second act for lighting fires" },
+  { book:"W", page:2,  text:"Schuberts Vater war Schulmeister, seine Mutter Elisabeth Fitz hatte vor der Heirat als Köchin gearbeitet.",
+    quote:"was in service as a cook. Her name was Elizabeth Fitz." },
+  { book:"W", page:52, text:"Der Sänger Vogl warf Schubert vor, er „vergeude seine guten Gedanken, statt sie feiner auszuarbeiten&ldquo;.",
+    quote:"you squander your good thoughts instead of beating them out fine" },
+  { book:"W", page:60, text:"Am Finalsatz seiner eigenen <em>Wanderer-Fantasie</em> Op. 15 verzweifelte Schubert selbst — er sprang einmal vom Klavier auf und rief: „Das soll der Teufel spielen!&ldquo;",
+    quote:"the Fantasia, (Op. 15), which he never could master. He was once playing it … and stuck in the last movement; on which he sprang from his seat and said ‘the devil may play it!’" },
+  { book:"W", page:64, text:"In die junge Gräfin Caroline Esterházy war Schubert unsterblich verliebt; als sie fragte, warum er ihr nichts widme, antwortete er: „Ihnen ist ja ohnehin alles gewidmet.&ldquo;",
+    quote:"Everything is dedicated to you already" },
+  { book:"W", page:67, text:"Eine ungarische Melodie, die er bei den Esterházys einem Dienstmädchen am Herd absang, arbeitete Schubert später in sein <em>Divertissement à la hongroise</em> ein.",
+    quote:"he heard a maid-servant singing an air as she bent over the kitchen fire" },
+  { book:"W", page:74, text:"Goethe, der Schuberts <em>Erlkönig</em>-Vertonung zunächst kalt ließ, war 1830 — nach Schuberts Tod — beim Vortrag von Schröder-Devrient überwältigt.",
+    quote:"A thousand thanks for this grand artistic performance … when it is given like this, the whole becomes a living picture" },
+  { book:"W", page:71, text:"Schubert bewunderte Rossini ohne Neid und räumte offen ein, bei dem „leichtbeschwingten Italiener&ldquo; viel über Instrumentation gelernt zu haben.",
+    quote:"he acknowledged that he had learnt much in the art of instrumentation from the light-winged Italian" },
+  { book:"W", page:52, text:"Bei Vogls erstem Besuch war der schüchterne Schubert so befangen, dass er nur „linkische Verbeugungen und zusammenhanglose Worte&ldquo; herausbrachte.",
+    quote:"received by him with rather awkward bows and scrapes and disconnected words" },
+  { book:"W", page:60, text:"Ein Musikerkollege soll Schubert ins Gesicht gesagt haben: „Ihr Klavierspiel bewundere ich mehr als Ihre Kompositionen!&ldquo;",
+    quote:"Schubert, I admire your playing on the piano more than your compositions!" },
+  { book:"W", page:31, text:"Als erstes Honorar erhielt Schubert ganze vierzig Gulden — für seine Kantate <em>Prometheus</em>.",
+    quote:"forty florins Austrian, that is about £4" },
+  { book:"W", page:51, text:"Sein Freund und Mitbewohner, der Dichter Johann Mayrhofer, endete viele Jahre später selbst tragisch — er sprang aus einem Fenster im obersten Stock.",
+    quote:"flung himself from a window in the top story" },
+  { book:"W", page:62, text:"Privatunterricht war Schubert so zuwider, dass er sich fast nie dazu überreden ließ.",
+    quote:"he was only once prevailed upon to give lessons" },
+  { book:"W", page:9,  text:"Im Konvikt war Schubert so arm, dass er auf Freunde angewiesen war, wenn er Einfälle zu Papier bringen wollte.",
+    quote:"he was often indebted to a friend for the means of preserving his thoughts" },
+  { book:"G", page:10, text:"Notenpapier war für Schubert ein Luxusgut — oft konnte er einen Einfall mangels Papier gar nicht festhalten.",
+    quote:"for want of music-paper he was frequently unable to preserve them. Schubert's means were not adequate to purchase this luxury" },
+  { book:"G", page:20, text:"Zwischen dürftigem Mittag und kärglichem Abendessen lagen im Konvikt achteinhalb Hungerstunden — ein Apfel oder eine Semmel mussten reichen.",
+    quote:"one can often enjoy eating a roll and an apple or two … wait eight hours and a half after a poor dinner for a meagre supper" },
+  { book:"G", page:13, text:"Heimlich während des Unterrichts komponierte der Schüler Schubert Ouvertüren und Sinfonien für die Donnerstags-Konzerte des Konvikts.",
+    quote:"He composed secretly during school-hours, and wrote for the Thursday concerts given by the pupils orchestral overtures and symphonies" },
+  { book:"G", page:20, text:"Beim häuslichen Streichquartett mit Vater und Brüdern überging der junge Schubert einen Fehler des Vaters beim ersten Mal — beim zweiten Mal lächelte er und sagte ganz zaghaft etwas.",
+    quote:"If the father made a blunder, he passed over the mistake the first time, but if it occurred again, he would smile and say quite timidly" },
+  { book:"G", page:5,  text:"Sein erster Gesangslehrer Michael Holzer gestand, er habe den Jungen eigentlich nicht unterrichten können — er habe „nur voller stummer Bewunderung zugesehen&ldquo;.",
+    quote:"I merely amused myself, and looked at my pupil with mute astonishment." },
+  { book:"G", page:36, text:"Nach der Uraufführung seiner <em>F-Dur-Messe</em> soll Salieri ihn umarmt haben: „Franz, du bist mein Schüler, der mir noch große Ehre machen wird.&ldquo;",
+    quote:"Franz, you are my pupil, and will do me great honour." },
+  { book:"G", page:5,  text:"Schuberts älterer Bruder Ignaz, der ihm Klavierstunden gab, war verblüfft, als Franz nach wenigen Monaten erklärte, er brauche keinen Unterricht mehr.",
+    quote:"I was amazed … when Franz told me … that he had no need of any further instruction from me" },
+  { book:"G", page:14, text:"Zeitweise war Schubert so mittellos, dass ein Freund ihn über Wochen in einer kleinen Weinstube durchfütterte.",
+    quote:"Schubert, at that time poor and neglected, was for weeks and months supported by a friend at a small tavern" },
+  { book:"G", page:27, text:"Nach den Stunden bei Salieri drückte sich Schubert gern in ein Weinhaus und plauderte dort stundenlang mit seinem alten Kameraden Franz Doppler.",
+    quote:"There he would sip his glass, and chat for hours with his old comrade Franz Doppler" },
+  { book:"G", page:7,  text:"Zur Aufnahmeprüfung als Chorknabe 1808 erschien der winzige Schubert in einem gräulich-weißen Anzug — man hielt ihn zunächst für den Sohn eines Müllers.",
+    quote:"the diminutive Schubert — who, after the fashion of the time, appeared in a kind of gray or whitish suit — they thought him a miller's son" }
+];
+
+const factBox = document.getElementById("factBox");
+const counter = document.getElementById("counter");
+const nextBtn = document.getElementById("next");
+const form = document.getElementById("searchForm");
+const qEl = document.getElementById("q");
+
+let pool = FACTS.slice();
+let lastIdx = -1;
+
+function render(f) {
+  if (!f) {
+    factBox.innerHTML = '<p class="empty">Kein Treffer. Versuche ein anderes Stichwort oder leer den Suchschlitz.</p>';
+    return;
+  }
+  const b = BOOKS[f.book];
+  factBox.innerHTML =
+    '<p class="fact-text">' + f.text + '</p>' +
+    '<blockquote class="quote">&bdquo;' + f.quote + '&ldquo;</blockquote>' +
+    '<p class="cite">Nachweis: ' + b.label + ', S.&nbsp;' + f.page +
+    ' &middot; <a href="' + b.url + '" target="_blank" rel="noopener">Buch auf archive.org &ouml;ffnen</a></p>';
+}
+
+function pickRandom() {
+  if (pool.length === 0) { render(null); counter.textContent = "0 Fakten im Pool"; return; }
+  let idx;
+  if (pool.length === 1) { idx = 0; }
+  else {
+    do { idx = Math.floor(Math.random() * pool.length); } while (idx === lastIdx);
+  }
+  lastIdx = idx;
+  render(pool[idx]);
+  counter.textContent = pool.length + " Fakten im Pool";
+}
+
+function filter(q) {
+  q = (q || "").trim().toLowerCase();
+  if (!q) { pool = FACTS.slice(); }
+  else {
+    pool = FACTS.filter(f =>
+      f.text.toLowerCase().includes(q) ||
+      f.quote.toLowerCase().includes(q)
+    );
+  }
+  lastIdx = -1;
+  pickRandom();
+}
+
+form.addEventListener("submit", e => { e.preventDefault(); filter(qEl.value); });
+nextBtn.addEventListener("click", () => pickRandom());
+
+pickRandom();
+</script>
+</body>
+</html>
