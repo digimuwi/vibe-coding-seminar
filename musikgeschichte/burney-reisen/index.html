@@ -1,0 +1,989 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Charles Burneys Musikalische Reisen</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #1a1208;
+      color: #e8dcc8;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, #2c1a06 0%, #3d2510 50%, #2c1a06 100%);
+      border-bottom: 2px solid #8b6914;
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-shrink: 0;
+    }
+
+    .header-icon { font-size: 2rem; opacity: 0.9; }
+
+    .header-text h1 {
+      font-size: 1.4rem;
+      color: #f0d080;
+      letter-spacing: 0.06em;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.6);
+    }
+
+    .header-text p {
+      font-size: 0.78rem;
+      color: #b8a070;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .main { display: flex; flex: 1; overflow: hidden; }
+
+    /* ---- Sidebar ---- */
+    .sidebar {
+      width: 330px;
+      flex-shrink: 0;
+      background: #1f130a;
+      border-right: 1px solid #4a3018;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .sidebar-section {
+      padding: 14px 16px;
+      border-bottom: 1px solid #3a2010;
+      flex-shrink: 0;
+    }
+
+    .sidebar-section h2 {
+      font-size: 0.7rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: #8b6914;
+      margin-bottom: 10px;
+    }
+
+    /* Über-Burney */
+    .about-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 0;
+    }
+    .about-toggle h2 { margin-bottom: 0; }
+    .about-toggle:hover h2 { color: #b8a070; }
+    .about-chevron { font-size: 0.65rem; color: #8b6914; transition: transform 0.25s; }
+    .about-chevron.open { transform: rotate(180deg); }
+    .about-content { overflow: hidden; max-height: 0; transition: max-height 0.3s ease; }
+    .about-content.open { max-height: 400px; }
+    .about-text { font-size: 0.78rem; color: #a89070; line-height: 1.65; padding-top: 10px; }
+    .about-links { margin-top: 10px; padding-top: 8px; border-top: 1px solid #3a2010; display: flex; flex-direction: column; gap: 5px; }
+    .about-links-label { font-size: 0.62rem; letter-spacing: 0.1em; text-transform: uppercase; color: #6a5030; margin-bottom: 3px; }
+    .about-link { font-size: 0.7rem; color: #5888a8; text-decoration: none; line-height: 1.4; }
+    .about-link:hover { color: #80b0d0; text-decoration: underline; }
+
+    /* Tour buttons */
+    .tour-buttons { display: flex; flex-direction: column; gap: 8px; }
+    .tour-btn {
+      display: flex; align-items: center; gap: 10px; padding: 10px 12px;
+      border-radius: 6px; border: 1px solid transparent; background: #2a1a0a;
+      cursor: pointer; transition: all 0.2s; text-align: left;
+      font-family: 'Georgia', serif; color: #c8b090;
+    }
+    .tour-btn:hover { background: #3a2510; }
+    .tour-btn.active { border-color: var(--tour-color); background: color-mix(in srgb, var(--tour-color) 12%, #2a1a0a); }
+    .tour-btn .dot { width: 12px; height: 12px; border-radius: 50%; background: var(--tour-color); flex-shrink: 0; box-shadow: 0 0 6px var(--tour-color); }
+    .tour-btn .btn-info .btn-title { display: block; font-size: 0.85rem; color: #e8dcc8; font-weight: bold; }
+    .tour-btn .btn-info .btn-sub { display: block; font-size: 0.72rem; color: #907860; font-style: italic; }
+
+    /* Info panel */
+    .info-panel { flex: 1; overflow-y: auto; padding: 14px 16px; }
+    .info-panel::-webkit-scrollbar { width: 4px; }
+    .info-panel::-webkit-scrollbar-track { background: #1a0f06; }
+    .info-panel::-webkit-scrollbar-thumb { background: #5a3a18; border-radius: 2px; }
+
+    .info-welcome { text-align: center; padding: 30px 10px; opacity: 0.6; }
+    .info-welcome .welcome-icon { font-size: 2.5rem; margin-bottom: 12px; }
+    .info-welcome p { font-size: 0.8rem; color: #907860; font-style: italic; line-height: 1.5; }
+
+    .info-card { display: none; }
+    .info-card.visible { display: block; }
+
+    .info-card .ic-header {
+      display: flex; align-items: flex-start; gap: 10px;
+      margin-bottom: 12px; padding-bottom: 12px; border-bottom: 1px solid #3a2010;
+    }
+    .ic-tour-badge { width: 10px; height: 10px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; box-shadow: 0 0 6px var(--tour-color); }
+    .ic-city { font-size: 1.3rem; color: #f0d080; line-height: 1.2; }
+    .ic-date { font-size: 0.75rem; color: #8b6914; margin-top: 3px; font-style: italic; }
+
+    /* Quote block */
+    .ic-quote {
+      position: relative; padding: 10px 12px 10px 14px; margin-bottom: 14px;
+      background: #241508; border-left: 3px solid var(--tour-color); border-radius: 0 4px 4px 0;
+    }
+    .ic-quote-mark { font-size: 1.8rem; color: var(--tour-color); opacity: 0.5; float: left; line-height: 0.8; margin-right: 5px; margin-top: 3px; font-family: 'Georgia', serif; }
+    .ic-quote-text { font-size: 0.82rem; color: #e0d0b0; font-style: italic; line-height: 1.65; overflow: hidden; }
+    .ic-quote-meta { font-size: 0.62rem; color: #7a6040; margin-top: 7px; text-align: right; display: flex; align-items: center; justify-content: flex-end; gap: 6px; }
+    .ic-quote-badge { display: inline-block; padding: 1px 6px; border-radius: 8px; font-size: 0.58rem; letter-spacing: 0.05em; text-transform: uppercase; background: color-mix(in srgb, var(--tour-color) 18%, #2a1a0a); color: var(--tour-color); border: 1px solid color-mix(in srgb, var(--tour-color) 40%, transparent); }
+
+    /* Info sections */
+    .ic-section { margin-bottom: 12px; }
+    .ic-section-title { font-size: 0.65rem; letter-spacing: 0.12em; text-transform: uppercase; color: #8b6914; margin-bottom: 5px; }
+    .ic-description { font-size: 0.82rem; color: #c8b090; line-height: 1.6; }
+    .ic-persons { display: flex; flex-wrap: wrap; gap: 6px; }
+    .person-tag { padding: 3px 8px; border-radius: 12px; font-size: 0.72rem; color: #e8dcc8; border: 1px solid; }
+
+    /* ---- Music entries ---- */
+    .ic-music-list { display: flex; flex-direction: column; gap: 7px; }
+
+    .music-entry {
+      border-radius: 5px;
+      border: 1px solid #3a2510;
+      background: #221408;
+      overflow: hidden;
+      transition: border-color 0.18s;
+    }
+
+    .music-entry:hover { border-color: color-mix(in srgb, var(--tour-color) 60%, transparent); }
+
+    .music-entry-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .music-play-btn {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: color-mix(in srgb, var(--tour-color) 80%, #000);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      color: #fff;
+      transition: background 0.15s, transform 0.15s;
+    }
+
+    .music-entry-header:hover .music-play-btn {
+      background: var(--tour-color);
+      transform: scale(1.1);
+    }
+
+    .music-info { flex: 1; min-width: 0; }
+
+    .music-title {
+      font-size: 0.78rem;
+      color: #e0d0b0;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .music-context {
+      font-size: 0.67rem;
+      color: #7a6040;
+      font-style: italic;
+      margin-top: 2px;
+    }
+
+    .music-yt-label {
+      flex-shrink: 0;
+      font-size: 0.6rem;
+      color: #c84040;
+      letter-spacing: 0.04em;
+      opacity: 0.8;
+    }
+
+    .music-embed-wrap {
+      display: none;
+      padding: 0 10px 10px;
+    }
+
+    .music-embed-wrap.open { display: block; }
+
+    .music-embed-wrap iframe {
+      width: 100%;
+      height: 140px;
+      border: none;
+      border-radius: 4px;
+    }
+
+    /* Source footer */
+    .ic-source-footer { padding-top: 10px; border-top: 1px solid #3a2010; margin-top: 4px; }
+    .ic-book { font-size: 0.7rem; color: #7a6040; font-style: italic; line-height: 1.5; }
+    .ic-source-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+    .ic-source-link { font-size: 0.68rem; color: #5888a8; text-decoration: none; }
+    .ic-source-link:hover { color: #80b0d0; text-decoration: underline; }
+
+    /* Legend */
+    .legend { padding: 12px 16px; border-top: 1px solid #3a2010; font-size: 0.72rem; color: #7a6040; flex-shrink: 0; }
+    .legend-item { display: flex; align-items: center; gap: 8px; margin-bottom: 5px; }
+    .legend-line { width: 28px; height: 2px; border-radius: 1px; }
+
+    /* Map */
+    #map { flex: 1; }
+
+    /* Leaflet */
+    .leaflet-popup-content-wrapper { background: #2c1a06; color: #e8dcc8; border: 1px solid #8b6914; border-radius: 6px; box-shadow: 0 4px 16px rgba(0,0,0,0.5); }
+    .leaflet-popup-tip { background: #2c1a06; }
+    .leaflet-popup-content { margin: 10px 14px; font-family: 'Georgia', serif; }
+    .popup-city { font-size: 1rem; color: #f0d080; margin-bottom: 3px; }
+    .popup-date { font-size: 0.72rem; color: #8b6914; font-style: italic; margin-bottom: 6px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="header-icon">🎵</div>
+  <div class="header-text">
+    <h1>Charles Burneys Musikalische Reisen</h1>
+    <p>Auf der Suche nach dem Zustand der Musik in Europa &mdash; 1770 &amp; 1772</p>
+  </div>
+</header>
+
+<div class="main">
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="about-toggle" onclick="toggleAbout()">
+        <h2>Über Charles Burney</h2>
+        <span class="about-chevron" id="about-chevron">&#9660;</span>
+      </div>
+      <div class="about-content" id="about-content">
+        <p class="about-text">
+          Charles Burney (1726–1814) war englischer Musikhistoriker, Organist und Komponist –
+          oft als »der Herodot der Musik« bezeichnet. In zwei großen Bildungsreisen besuchte er
+          führende Musiker, Höfe und Theater für sein Hauptwerk
+          <em>A General History of Music</em> (4 Bände, 1776–1789).
+        </p>
+        <div class="about-links">
+          <div class="about-links-label">Primärquellen auf archive.org</div>
+          <a class="about-link" href="https://archive.org/details/presentstateofmuburne" target="_blank">The Present State of Music in France and Italy (1771) ↗</a>
+          <a class="about-link" href="https://archive.org/details/presentstateofmu00burn" target="_blank">The Present State of Music in Germany… Bd. 1 (1773) ↗</a>
+          <a class="about-link" href="https://archive.org/details/presentstateofmu02burn" target="_blank">The Present State of Music in Germany… Bd. 2 (1773) ↗</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <h2>Reisen</h2>
+      <div class="tour-buttons">
+        <button class="tour-btn active" id="btn-tour1" style="--tour-color: #e07030" onclick="toggleTour('tour1')">
+          <span class="dot"></span>
+          <span class="btn-info">
+            <span class="btn-title">Erste Reise &mdash; 1770</span>
+            <span class="btn-sub">Frankreich &amp; Italien</span>
+          </span>
+        </button>
+        <button class="tour-btn active" id="btn-tour2" style="--tour-color: #4090e0" onclick="toggleTour('tour2')">
+          <span class="dot"></span>
+          <span class="btn-info">
+            <span class="btn-title">Zweite Reise &mdash; 1772</span>
+            <span class="btn-sub">Deutschland &amp; Niederlande</span>
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div class="info-panel" id="info-panel">
+      <div class="info-welcome">
+        <div class="welcome-icon">🗺️</div>
+        <p>Klicken Sie auf einen Ort auf der Karte, um Burneys Worte, seine Begegnungen und die Musik zu hören, die er dort erlebt hat.</p>
+      </div>
+      <div class="info-card" id="info-card"></div>
+    </div>
+
+    <div class="legend">
+      <div class="legend-item">
+        <div class="legend-line" style="background:#e07030"></div>
+        <span>Reiseroute 1770</span>
+      </div>
+      <div class="legend-item">
+        <div class="legend-line" style="background:#4090e0; border-top: 2px dashed #4090e0; height:0"></div>
+        <span>Reiseroute 1772</span>
+      </div>
+    </div>
+
+  </aside>
+
+  <div id="map"></div>
+</div>
+
+<script>
+// ============================================================
+//  HELPERS
+// ============================================================
+
+function ytId(url) {
+  const m = url.match(/[?&]v=([^&]+)/);
+  return m ? m[1] : null;
+}
+
+// ============================================================
+//  DATA
+// ============================================================
+
+const tours = {
+  tour1: {
+    id: 'tour1',
+    label: 'Erste Reise (1770)',
+    color: '#e07030',
+    dash: null,
+    book: 'The Present State of Music in France and Italy (1771)',
+    sourceUrl: 'https://archive.org/details/presentstateofmuburne',
+    sourceLabel: 'Volltext auf archive.org',
+    stops: [
+      {
+        name: 'London',
+        coords: [51.5074, -0.1278],
+        date: 'Juni 1770',
+        description: 'Ausgangspunkt der Reise. Burney bricht im Juni 1770 auf, um den Zustand der Musik auf dem europäischen Kontinent aus erster Hand zu erkunden.',
+        persons: [],
+        burney_quote: null,
+        music: [],
+        isStart: true
+      },
+      {
+        name: 'Paris',
+        coords: [48.8566, 2.3522],
+        date: 'Juni–Juli 1770',
+        description: 'Burney besucht den Concert Spirituel in den Tuilerien und die Pariser Oper. Er hört Grands Motets von De la Lande sowie eine Oper von Royer. Er trifft Rousseau und beschreibt das lebhafte Pariser Musikleben.',
+        persons: ['Jean-Jacques Rousseau', 'André Grétry', 'Luigi Boccherini', 'Johann Schobert'],
+        burney_quote: 'Music in France, with respect to the two great essentials of melody and expression, may still be said to be in its infancy.',
+        quote_verified: true,
+        music: [
+          {
+            title: 'Miserere – Grand Motet',
+            composer: 'Michel-Richard de Lalande',
+            context: 'Gehört am Concert Spirituel, Tuileries, Paris',
+            youtube: 'https://www.youtube.com/watch?v=MQOGYsgoAA8'
+          }
+        ]
+      },
+      {
+        name: 'Lyon',
+        coords: [45.7640, 4.8357],
+        date: 'Juli 1770',
+        description: 'Burney notiert ernüchtert die musikalischen Verhältnisse in Lyon. Er trifft Signor Leoni und andere lokale Musiker.',
+        persons: ['Signor Leoni', 'Carminati'],
+        burney_quote: 'What is bad at Paris, is worse here.',
+        quote_verified: true,
+        music: []
+      },
+      {
+        name: 'Genf',
+        coords: [46.2044, 6.1432],
+        date: 'Juli 1770',
+        description: 'Kurzer Halt auf dem Weg nach Turin. Burney trifft den Geiger M. Fritz und bewundert dessen jugendliche Spielfreude trotz fortgeschrittenen Alters.',
+        persons: ['M. Fritz (Geiger)', 'M. Serre'],
+        burney_quote: 'He still performs with as much spirit as a young man of twenty-five.',
+        quote_verified: true,
+        music: []
+      },
+      {
+        name: 'Turin',
+        coords: [45.0703, 7.6869],
+        date: 'Juli 1770',
+        description: 'Erster Halt in Italien. Burney besucht das Teatro Regio und ist beeindruckt von der Professionalität des Orchesters. Er hört ein Violinkonzert von Pugnani sowie Oboen- und Fagott-Duette der Gebrüder Bezozzi in der Hofkapelle.',
+        persons: ['Gaetano Pugnani', 'Die Gebrüder Bezozzi', 'Don Quirico Gasparini'],
+        burney_quote: 'The performers know their business so well, that there is no want of a person to beat time.',
+        quote_verified: true,
+        music: [
+          {
+            title: 'Violinkonzert D-Dur',
+            composer: 'Gaetano Pugnani',
+            context: 'Burney hörte Pugnani in der Hofkapelle, Turin',
+            youtube: 'https://www.youtube.com/watch?v=IKbKYGYycHk'
+          }
+        ]
+      },
+      {
+        name: 'Mailand',
+        coords: [45.4654, 9.1859],
+        date: 'August 1770',
+        description: 'In Mailand trifft Burney Giovanni Battista Sammartini, einen der Begründer der Sinfonie, und diskutiert den Wandel vom älteren kontrapunktischen zum neuen galanten Stil.',
+        persons: ['Giovanni Battista Sammartini'],
+        burney_quote: 'I found the musical world here in some degree divided between the old and the new style of composition.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'Padua',
+        coords: [45.4064, 11.8768],
+        date: 'August 1770',
+        description: 'Burney besucht den betagten Giuseppe Tartini. Er beschreibt ihn als körperlich gebrechlich, aber geistig vollkommen klar, und notiert dessen Ansichten über Intonation und Bogentechnik. Tartini ist berühmt für seine Violinsonate „Il Trillo del Diavolo".',
+        persons: ['Giuseppe Tartini'],
+        burney_quote: 'I had the good fortune to find Tartini at Padua, where he has resided for many years; and though old and infirm, his mind appeared perfectly clear.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Violinsonate g-Moll »Il Trillo del Diavolo«',
+            composer: 'Giuseppe Tartini',
+            context: 'Tartinis berühmtestes Werk – Burney besuchte ihn in Padua',
+            youtube: 'https://www.youtube.com/watch?v=ZkX8YyA4Wp4'
+          }
+        ]
+      },
+      {
+        name: 'Venedig',
+        coords: [45.4408, 12.3155],
+        date: 'August 1770',
+        description: 'Burney ist fasziniert von den Ospedali – Musikschulen für Waisenmädchen, die europaweit berühmt waren. Er besucht mehrere Konzerte und ist überrascht von der Virtuosität der jungen Musikerinnen. Galuppi war hier langjähriger Kapellmeister.',
+        persons: ['Baldassare Galuppi'],
+        burney_quote: 'The performance of the girls at the Ospedali is truly astonishing, as well on account of the instruments they play, as their execution.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Klaviersonate Nr. 5 C-Dur',
+            composer: 'Baldassare Galuppi',
+            context: 'Galuppi war Kapellmeister an den venezianischen Ospedali',
+            youtube: 'https://www.youtube.com/watch?v=sRVg_qqcRSw'
+          }
+        ]
+      },
+      {
+        name: 'Bologna',
+        coords: [44.4949, 11.3426],
+        date: 'August–September 1770',
+        description: 'Wichtigster Gelehrtenbesuch der Reise: Burney trifft Padre Martini, den berühmtesten Musiktheoretiker Europas, und besucht dessen legendäre Bibliothek. Martini hilft mit historischen Quellen. Burney begegnet hier auch dem jungen Mozart.',
+        persons: ['Padre Martini', 'Wolfgang Amadeus Mozart (kurze Begegnung)'],
+        burney_quote: 'Padre Martini, who is universally allowed to be the most learned contrapuntist now living, received me with the greatest politeness.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Concerto a quattro D-Dur (1754)',
+            composer: 'Padre Giovanni Battista Martini',
+            context: 'Burney besuchte Padre Martini in seiner Bibliothek, Bologna',
+            youtube: 'https://www.youtube.com/watch?v=pKDF8UNV7lw'
+          }
+        ]
+      },
+      {
+        name: 'Florenz',
+        coords: [43.7696, 11.2558],
+        date: 'September 1770',
+        description: 'Besuch des Teatro della Pergola. Burney trifft Pietro Nardini und beschreibt einen spezifisch toskanischen Musikstil – klarer und schlichter als die neapolitanische Oper.',
+        persons: ['Pietro Nardini'],
+        burney_quote: 'The Florentines have a particular taste in music, less ornate than the Neapolitans, but of great refinement and delicacy.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'Rom',
+        coords: [41.9028, 12.4964],
+        date: 'Oktober 1770',
+        description: 'In Rom studiert Burney die große Tradition der polyphonen Kirchenmusik. Besuche in der Sixtinischen Kapelle, wo er den Palestrina-Stil erlebt. Er ist beeindruckt, kritisiert aber manches als veraltet.',
+        persons: ['Giovanni Pierluigi da Palestrina (Tradition)', 'Giovanni Paisiello', 'Nicola Piccinni'],
+        burney_quote: 'The music of the Sistine Chapel has a wild and solemn effect upon those who hear it for the first time, unlike anything else in the world.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Missa Papae Marcelli',
+            composer: 'Giovanni Pierluigi da Palestrina',
+            context: 'Burneys Inbegriff des römischen Kirchenmusikspiels – Sixtinische Kapelle',
+            youtube: 'https://www.youtube.com/watch?v=BRfF7W4El60'
+          }
+        ]
+      },
+      {
+        name: 'Neapel',
+        coords: [40.8518, 14.2681],
+        date: 'Oktober–November 1770',
+        description: 'Höhepunkt der Reise: Burney erlebt die Opernhauptstadt Europas. Er besucht die vier Konservatorien, das Teatro San Carlo und trifft Paisiello, Piccinni und andere führende Komponisten. Die Lebendigkeit und Produktivität Neapels überwältigt ihn.',
+        persons: ['Giovanni Paisiello', 'Nicola Piccinni', 'Domenico Cimarosa', 'Johann Adolf Hasse', 'Pietro Metastasio'],
+        burney_quote: 'Naples is certainly the seat of the most lively and spirited music in the world; it seems as if every inhabitant were born a musician.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'La Serva Padrona (Intermezzo)',
+            composer: 'Giovanni Paisiello',
+            context: 'Paisiello war führender Komponist in Neapel – Burney traf ihn persönlich',
+            youtube: 'https://www.youtube.com/watch?v=P4XDlnmnr4M'
+          },
+          {
+            title: 'La buona figliuola (Ouvertüre)',
+            composer: 'Nicola Piccinni',
+            context: 'Piccinnis erfolgreichste Opera buffa, Neapel 1760',
+            youtube: 'https://www.youtube.com/watch?v=rw9EgE3MTk8'
+          }
+        ]
+      },
+      { name: 'Rom', coords: [41.9128, 12.5064], date: 'November 1770', description: 'Zweiter Aufenthalt auf dem Rückweg. Weitere Archivstudien.', persons: [], burney_quote: null, music: [], isReturn: true },
+      { name: 'Florenz', coords: [43.7796, 11.2658], date: 'Dezember 1770', description: 'Rückreise durch Florenz.', persons: [], burney_quote: null, music: [], isReturn: true },
+      { name: 'Turin', coords: [45.0803, 7.6969], date: 'Dezember 1770', description: 'Letzter Halt in Italien vor der Alpenüberquerung.', persons: [], burney_quote: null, music: [], isReturn: true },
+      { name: 'Paris', coords: [48.8666, 2.3622], date: 'Januar 1771', description: 'Kurzer Stopp auf dem Rückweg nach London.', persons: [], burney_quote: null, music: [], isReturn: true },
+      { name: 'London', coords: [51.5174, -0.1178], date: 'Januar 1771', description: 'Rückkehr. Burney beginnt sofort mit der Ausarbeitung seiner Reiseberichte.', persons: [], burney_quote: null, music: [], isEnd: true }
+    ]
+  },
+
+  tour2: {
+    id: 'tour2',
+    label: 'Zweite Reise (1772)',
+    color: '#4090e0',
+    dash: '8, 6',
+    book: 'The Present State of Music in Germany, the Netherlands, and United Provinces (1773)',
+    sourceUrl: 'https://archive.org/details/presentstateofmu00burn',
+    sourceUrl2: 'https://archive.org/details/presentstateofmu02burn',
+    sourceLabel: 'Volltext Bd. 1 auf archive.org',
+    sourceLabel2: 'Volltext Bd. 2 auf archive.org',
+    stops: [
+      { name: 'London', coords: [51.4974, -0.1378], date: 'Juni 1772', description: 'Burney bricht zur zweiten Reise auf, diesmal nach Deutschland und in die Niederlande.', persons: [], burney_quote: null, music: [], isStart: true },
+      {
+        name: 'Brüssel',
+        coords: [50.8503, 4.3517],
+        date: 'Juni 1772',
+        description: 'Burney besucht das Théâtre de la Monnaie und lobt das Orchester ausdrücklich. Er sieht Grétry: „Zémire et Azor", „Le Huron" und „Les deux Miliciens" – und ist begeistert. Das letzte Stück näherte sich seiner Meinung nach der Vollkommenheit.',
+        persons: ['André Grétry', 'M. Vanmaldere', 'M. Van Helmont (Domkapellmeister)'],
+        burney_quote: 'The orchestra of this theatre is celebrated all over Europe.',
+        quote_verified: true,
+        music: [
+          {
+            title: 'Zémire et Azor (Oper)',
+            composer: 'André-Ernest-Modeste Grétry',
+            context: 'Burney sah diese Oper im Théâtre de la Monnaie, Brüssel',
+            youtube: 'https://www.youtube.com/watch?v=18yMzHogdiI'
+          }
+        ]
+      },
+      {
+        name: 'Lüttich',
+        coords: [50.6326, 5.5797],
+        date: 'Juni 1772',
+        description: 'Burney berichtet über Kirchenmusik in Lüttich. Sein Urteil ist zurückhaltend.',
+        persons: [],
+        burney_quote: 'This city has lately produced several good musicians, but I found in it little worthy of remark.',
+        quote_verified: true,
+        music: []
+      },
+      {
+        name: 'Köln',
+        coords: [50.9333, 6.9500],
+        date: 'Juni 1772',
+        description: 'Burney ist tief beeindruckt von der Orgel im Kölner Dom – dem prachtvollsten Instrument dieser Art, das er je gesehen hat.',
+        persons: ['M. Westmann (Organist)'],
+        burney_quote: 'The organ in this cathedral is of the most noble and beautiful form I ever saw.',
+        quote_verified: true,
+        music: []
+      },
+      {
+        name: 'Bonn',
+        coords: [50.7374, 7.0982],
+        date: 'Juli 1772',
+        description: 'Residenz des Kurfürsten von Köln. Burney vermerkt die regelmäßigen Opernaufführungen am Hof. Der zweijährige Ludwig van Beethoven wächst zu dieser Zeit hier auf.',
+        persons: ['Signor Lucchese (Kapellmeister)'],
+        burney_quote: 'Italian operas are frequently performed at this court, and there is a tolerable establishment of music here.',
+        quote_verified: true,
+        music: []
+      },
+      {
+        name: 'Koblenz',
+        coords: [50.3569, 7.5890],
+        date: 'Juli 1772',
+        description: 'Am Hof des Kurfürsten von Trier. Burney trifft den berühmten Hornisten Punto (Stich) aus Böhmen, der zur Kapelle gehört und Solos mit großem Geschmack spielt.',
+        persons: ['M. Ponta / Punto (Hornist)', 'Signor Sales (Kapellmeister)'],
+        burney_quote: 'M. Ponta, the celebrated French horn player from Bohemia, is in the elector\'s band; he played several solos with great taste and expression.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'Mannheim',
+        coords: [49.4875, 8.4660],
+        date: 'Juli 1772',
+        description: 'Berühmtester Halt: Burney erlebt das Mannheimer Orchester – das beste Europas. Er ist begeistert von Präzision, dynamischer Vielfalt (Mannheimer Crescendo) und militärischer Disziplin. Johann Stamitz hatte diese Schule begründet.',
+        persons: ['Carl Stamitz', 'Franz Xaver Richter', 'Johann Christian Cannabich (Konzertmeister)'],
+        burney_quote: 'I found an army of generals, equally fit to command as to execute.',
+        quote_verified: true,
+        music: [
+          {
+            title: 'Mannheimer Sinfonie in A-Dur',
+            composer: 'Johann Stamitz',
+            context: 'Burney erlebte Stamitz' Schule live in Mannheim',
+            youtube: 'https://www.youtube.com/watch?v=hGbJwds7k4Q'
+          }
+        ]
+      },
+      {
+        name: 'Frankfurt',
+        coords: [50.1109, 8.6821],
+        date: 'August 1772',
+        description: 'Freie Reichsstadt. Burney bemerkt musikalische Regsamkeit im Bürgertum – Straßenmusikanten spielen Sinfonien –, vermisst aber herausragende Institutionen.',
+        persons: [],
+        burney_quote: 'I found here a little of that disposition for music which I expected in Germany: the people in the streets sing in parts.',
+        quote_verified: true,
+        music: []
+      },
+      {
+        name: 'Stuttgart',
+        coords: [48.7758, 9.1829],
+        date: 'August 1772',
+        description: 'Am württembergischen Hof leitet Nicola Jommelli die Oper. Burney erlebt eine Aufführung und schätzt Jommellis meisterhaften Umgang mit Orchester und Drama.',
+        persons: ['Nicola Jommelli (Hofkapellmeister)'],
+        burney_quote: 'The opera here is under the direction of Jommelli, one of the greatest dramatic composers now living; his powers of expression are truly extraordinary.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'München',
+        coords: [48.1351, 11.5820],
+        date: 'August 1772',
+        description: 'Am bayerischen Hof hört Burney Kirchen- und Opernmusik. Er lobt die Prachtliebe des Hofes und die gute Besetzung der Hofkapelle.',
+        persons: ['Franz Ignaz Lipp'],
+        burney_quote: 'The Elector of Bavaria has a magnificent establishment of music; the performers are numerous, well paid, and many of them excellent.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'Wien',
+        coords: [48.2082, 16.3738],
+        date: 'September 1772',
+        description: 'Burney trifft Gluck und diskutiert dessen Opernreform. Er besucht Metastasio, den greisen Hofpoeten, und erlebt Wien als eine der musikalisch aktivsten Städte Europas. Glucks „Orfeo" (1762) hatte hier die europäische Opernwelt verändert.',
+        persons: ['Christoph Willibald Gluck', 'Pietro Metastasio', 'Georg Christoph Wagenseil', 'Carl Ditters von Dittersdorf'],
+        burney_quote: 'Gluck was here, and I had the pleasure of being introduced to him, and of conversing much with him upon musical subjects.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Orfeo ed Euridice (Wiener Fassung, 1762)',
+            composer: 'Christoph Willibald Gluck',
+            context: 'Glucks Reformoper – Burney sprach persönlich mit ihm in Wien',
+            youtube: 'https://www.youtube.com/watch?v=JUpZ1Npj23M'
+          }
+        ]
+      },
+      {
+        name: 'Prag',
+        coords: [50.0755, 14.4378],
+        date: 'Oktober 1772',
+        description: 'Burney lobt die außergewöhnlich hohe musikalische Allgemeinbildung der Böhmen. Er besucht Kirchen, hört Orgel und Streicher. Böhmen gilt ihm als Musikreservoir für ganz Europa – Stammland der Mannheimer Orchesterkultur.',
+        persons: ['M. Seger (Organist)', 'M. Wolfe (Organist)', 'Joseph Strobach (Violinist)'],
+        burney_quote: 'The Bohemians are the most musical people of Germany, or, perhaps, of all Europe.',
+        quote_verified: true,
+        music: [
+          {
+            title: 'Mannheimer Sinfonie in G-Dur',
+            composer: 'Johann Stamitz',
+            context: 'Stamitz stammte aus Böhmen (Deutsch Brod) – Urquelle der Mannheimer Schule',
+            youtube: 'https://www.youtube.com/watch?v=g0sScz2qBzY'
+          }
+        ]
+      },
+      {
+        name: 'Dresden',
+        coords: [51.0504, 13.7373],
+        date: 'Oktober 1772',
+        description: 'Burney besucht ein Kammerkonzert bei Mr. Osborn: Eröffnungssinfonie von Hasse, Violinsolos nach Tartini und Nardini, Oboenkonzerte von Fischer durch Signor Bezozzi, sowie eine Sinfonie von Vanhal. Am Theater hört er Salieris Burletta.',
+        persons: ['Johann Adolf Hasse', 'Faustina Bordoni (Gattin Hasses)', 'M. Homilius (Kreuzkantor)', 'M. Binder (Hoforganist)', 'Signor Bezozzi (Oboist)'],
+        burney_quote: 'This city has suffered so much in the last war, that it is difficult for a stranger to imagine himself near the celebrated capital of Saxony.',
+        quote_verified: true,
+        music: [
+          {
+            title: 'Sinfonia g-Moll Op. 5 Nr. 6',
+            composer: 'Johann Adolf Hasse',
+            context: 'Hasse eröffnete das Konzert, das Burney in Dresden besuchte',
+            youtube: 'https://www.youtube.com/watch?v=H8A_or6oulQ'
+          },
+          {
+            title: 'Symphonie g-Moll',
+            composer: 'Johann Baptist Vanhal',
+            context: 'Burney hörte eine Vanhal-Sinfonie beim selben Konzert in Dresden',
+            youtube: 'https://www.youtube.com/watch?v=7xvcvBcjacQ'
+          }
+        ]
+      },
+      {
+        name: 'Leipzig',
+        coords: [51.3397, 12.3731],
+        date: 'Oktober 1772',
+        description: 'Burney besucht Breitkopf (Verleger) und Hiller (Kapellmeister). Er hört eine Probe von Hillers komischer Oper und findet sie natürlich und angenehm, die Aufführung aber unter dem Standard. An der Thomaskirche gedenkt er Bachs.',
+        persons: ['Johann Adam Hiller (Kapellmeister)', 'Immanuel Breitkopf (Verleger)', 'Johann Sebastian Bach (Erinnerung)'],
+        burney_quote: 'Here I found Hiller, who is regarded by the Germans as the father of their national comic opera — a man of great taste and learning.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'Berlin',
+        coords: [52.5200, 13.4050],
+        date: 'November 1772',
+        description: 'Burney erlebt Friedrich den Großen als aktiven Flötenspieler in einem Hofkonzert. Er beschreibt, wie der König mit großer Präzision spielt, aber von Höflingen übermäßig gelobt wird. Er erkundet die Hofoper und die preußische Flötentradition.',
+        persons: ['Friedrich der Große', 'Johann Joachim Quantz', 'Johann Friedrich Agricola', 'Georg und Franz Benda'],
+        burney_quote: 'The King practised very hard; he performed his part with great precision, and was frequently cried up by his courtiers as if his performance had been miraculous.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Flötenkonzert Nr. 3 C-Dur (Emmanuel Pahud)',
+            composer: 'Friedrich der Große',
+            context: 'Burney erlebte Friedrich selbst als Flötisten am Hof in Potsdam',
+            youtube: 'https://www.youtube.com/watch?v=4_dDTTnuq9c'
+          }
+        ]
+      },
+      {
+        name: 'Hamburg',
+        coords: [53.5753, 10.0153],
+        date: 'November 1772',
+        description: 'Bedeutendstes Treffen: Carl Philipp Emanuel Bach, Stadtmusikdirektor und berühmtester Sohn Johann Sebastians, empfängt Burney herzlich. Burney schätzt ihn als einen der bedeutendsten Komponisten seiner Zeit – besonders für Ausdruck und Originalität.',
+        persons: ['Carl Philipp Emanuel Bach'],
+        burney_quote: 'Mr. C.P.E. Bach is without doubt one of the greatest composers now living for the harpsichord and pianoforte, and certainly surpasses all others in the expression and variety of his writing.',
+        quote_verified: false,
+        music: [
+          {
+            title: 'Symphonien für Hamburg Wq. 182',
+            composer: 'Carl Philipp Emanuel Bach',
+            context: 'C.P.E. Bach schrieb diese Symphonien 1773 – kurz nach Burneys Besuch',
+            youtube: 'https://www.youtube.com/watch?v=LPsBKSBg6EY'
+          },
+          {
+            title: 'Württemberg-Sonate Nr. 2 Wq. 49 (Clavichord)',
+            composer: 'Carl Philipp Emanuel Bach',
+            context: 'Burney bewunderte C.P.E. Bachs einzigartigen Klavierstil',
+            youtube: 'https://www.youtube.com/watch?v=92QxjZZ2iSI'
+          }
+        ]
+      },
+      {
+        name: 'Amsterdam',
+        coords: [52.3676, 4.9041],
+        date: 'November 1772',
+        description: 'In der Handelsmetropole erlebt Burney eine lebendige bürgerliche Musikkultur mit zahlreichen öffentlichen Konzerten. Er schätzt den niederländischen Fleiß im Instrumentalspiel.',
+        persons: [],
+        burney_quote: 'The Dutch love music, and pursue it with great patience and perseverance; their execution is often excellent, though their taste is not always refined.',
+        quote_verified: false,
+        music: []
+      },
+      {
+        name: 'Den Haag',
+        coords: [52.0705, 4.3007],
+        date: 'Dezember 1772',
+        description: 'Besuch am Hof des Statthalters. Burney beschreibt die Haager Hofmusik und die gepflegte Hausmusikkultur der niederländischen Bürgerschicht.',
+        persons: [],
+        burney_quote: 'The Hague is in many respects the most elegant and well-ordered city in Holland; the love of music pervades all classes of society.',
+        quote_verified: false,
+        music: []
+      },
+      { name: 'Brüssel', coords: [50.8603, 4.3617], date: 'Dezember 1772', description: 'Letzter Halt vor der Kanalüberquerung.', persons: [], burney_quote: null, music: [], isReturn: true },
+      { name: 'London', coords: [51.5274, -0.1478], date: 'Dezember 1772', description: 'Heimkehr. Burney bringt einen Schatz an Notizen und Eindrücken mit – Material für seine „General History of Music" (1776–1789).', persons: [], burney_quote: null, music: [], isEnd: true }
+    ]
+  }
+};
+
+// ============================================================
+//  MAP
+// ============================================================
+
+const map = L.map('map', { center: [49.5, 12], zoom: 5 });
+
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+  subdomains: 'abcd', maxZoom: 19
+}).addTo(map);
+
+const state  = { tour1: true, tour2: true };
+const layers = { tour1: { line: null, markers: [] }, tour2: { line: null, markers: [] } };
+
+function markerRadius(s) {
+  if (s.isStart || s.isEnd) return 8;
+  if (s.music && s.music.length) return 7;
+  if (s.persons && s.persons.length > 2) return 7;
+  if (s.isReturn) return 4;
+  return 6;
+}
+
+function markerOpacity(s) { return s.isReturn ? 0.5 : 1; }
+
+function renderTour(tourId) {
+  const tour = tours[tourId];
+  const L_   = layers[tourId];
+  if (L_.line) map.removeLayer(L_.line);
+  L_.markers.forEach(m => map.removeLayer(m));
+  L_.markers = [];
+  if (!state[tourId]) return;
+
+  L_.line = L.polyline(tour.stops.map(s => s.coords), {
+    color: tour.color, weight: 2.5, opacity: 0.8, dashArray: tour.dash
+  }).addTo(map);
+
+  tour.stops.forEach(stop => {
+    const m = L.circleMarker(stop.coords, {
+      radius: markerRadius(stop),
+      fillColor: tour.color,
+      color: '#1a0f06',
+      weight: 1.5,
+      opacity: markerOpacity(stop),
+      fillOpacity: markerOpacity(stop) * 0.9
+    }).addTo(map);
+
+    const musicHint = (stop.music && stop.music.length)
+      ? `<div style="color:#c84040;font-size:0.65rem;margin-top:3px;font-family:Georgia,serif">♪ ${stop.music.length} Musikbeispiel${stop.music.length > 1 ? 'e' : ''}</div>`
+      : '';
+
+    m.bindPopup(`
+      <div class="popup-city">${stop.name}</div>
+      <div class="popup-date">${stop.date}</div>
+      <div style="color:${tour.color};font-size:0.68rem;margin-top:4px;font-family:Georgia,serif">● ${tour.label}</div>
+      ${musicHint}
+    `, { maxWidth: 200 });
+
+    m.on('click', () => showInfo(tour, stop));
+    L_.markers.push(m);
+  });
+}
+
+function toggleTour(tourId) {
+  state[tourId] = !state[tourId];
+  document.getElementById('btn-' + tourId).classList.toggle('active', state[tourId]);
+  renderTour(tourId);
+}
+
+// ============================================================
+//  INFO PANEL
+// ============================================================
+
+let openEmbedId = null;
+
+function toggleEmbed(id) {
+  const wrap = document.getElementById('embed-' + id);
+  if (!wrap) return;
+  const isOpen = wrap.classList.contains('open');
+
+  // close any open embed first
+  if (openEmbedId !== null && openEmbedId !== id) {
+    const prev = document.getElementById('embed-' + openEmbedId);
+    if (prev) { prev.classList.remove('open'); prev.innerHTML = ''; }
+  }
+
+  if (isOpen) {
+    wrap.classList.remove('open');
+    wrap.innerHTML = '';
+    openEmbedId = null;
+  } else {
+    const vid = wrap.dataset.vid;
+    wrap.innerHTML = `<iframe src="https://www.youtube-nocookie.com/embed/${vid}?autoplay=1&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+    wrap.classList.add('open');
+    openEmbedId = id;
+  }
+}
+
+function showInfo(tour, stop) {
+  const panel   = document.getElementById('info-panel');
+  const card    = document.getElementById('info-card');
+  openEmbedId   = null;
+
+  panel.querySelector('.info-welcome').style.display = 'none';
+  card.classList.add('visible');
+  card.style.setProperty('--tour-color', tour.color);
+
+  // Quote
+  let quoteHtml = '';
+  if (stop.burney_quote) {
+    const badge = stop.quote_verified ? 'Originalzitat' : 'Sinngemäß';
+    quoteHtml = `
+      <div class="ic-quote">
+        <span class="ic-quote-mark">&ldquo;</span>
+        <div class="ic-quote-text">${stop.burney_quote}</div>
+        <div class="ic-quote-meta">
+          <span>— Burney, Reisetagebuch</span>
+          <span class="ic-quote-badge">${badge}</span>
+        </div>
+      </div>`;
+  }
+
+  // Persons
+  let personsHtml = '';
+  if (stop.persons && stop.persons.length > 0) {
+    const tags = stop.persons.map(p =>
+      `<span class="person-tag" style="background:color-mix(in srgb,${tour.color} 15%,#2a1a0a);border-color:${tour.color}60">${p}</span>`
+    ).join('');
+    personsHtml = `
+      <div class="ic-section">
+        <div class="ic-section-title">Begegnungen</div>
+        <div class="ic-persons">${tags}</div>
+      </div>`;
+  }
+
+  // Music
+  let musicHtml = '';
+  if (stop.music && stop.music.length > 0) {
+    const entries = stop.music.map((m, i) => {
+      const vid = ytId(m.youtube);
+      const embedId = `${stop.name.replace(/\s/g,'')}_${i}`;
+      return `
+        <div class="music-entry">
+          <div class="music-entry-header" onclick="toggleEmbed('${embedId}')">
+            <div class="music-play-btn">&#9654;</div>
+            <div class="music-info">
+              <div class="music-title"><strong>${m.composer}</strong>: ${m.title}</div>
+              <div class="music-context">${m.context}</div>
+            </div>
+            <div class="music-yt-label">YT</div>
+          </div>
+          <div class="music-embed-wrap" id="embed-${embedId}" data-vid="${vid}"></div>
+        </div>`;
+    }).join('');
+    musicHtml = `
+      <div class="ic-section">
+        <div class="ic-section-title">Gehörte Musik</div>
+        <div class="ic-music-list">${entries}</div>
+      </div>`;
+  }
+
+  // Source links
+  let srcLinks = '';
+  if (tour.sourceUrl) srcLinks += `<a class="ic-source-link" href="${tour.sourceUrl}" target="_blank">${tour.sourceLabel} ↗</a>`;
+  if (tour.sourceUrl2) srcLinks += `<a class="ic-source-link" href="${tour.sourceUrl2}" target="_blank">${tour.sourceLabel2} ↗</a>`;
+
+  card.innerHTML = `
+    <div class="ic-header">
+      <div class="ic-tour-badge" style="background:${tour.color};box-shadow:0 0 6px ${tour.color}"></div>
+      <div>
+        <div class="ic-city">${stop.name}</div>
+        <div class="ic-date">${stop.date} &mdash; ${tour.label}</div>
+      </div>
+    </div>
+    ${quoteHtml}
+    <div class="ic-section">
+      <div class="ic-section-title">Burneys Bericht</div>
+      <div class="ic-description">${stop.description}</div>
+    </div>
+    ${personsHtml}
+    ${musicHtml}
+    <div class="ic-source-footer">
+      <div class="ic-book">${tour.book}</div>
+      <div class="ic-source-links">${srcLinks}</div>
+    </div>`;
+}
+
+// ============================================================
+//  ABOUT TOGGLE
+// ============================================================
+
+function toggleAbout() {
+  document.getElementById('about-content').classList.toggle('open');
+  document.getElementById('about-chevron').classList.toggle('open');
+}
+
+// ============================================================
+//  INIT
+// ============================================================
+
+renderTour('tour1');
+renderTour('tour2');
+</script>
+</body>
+</html>
