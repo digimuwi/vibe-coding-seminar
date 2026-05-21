@@ -1,0 +1,6733 @@
+{
+  "version": 3,
+  "meiFile": "comesser-merged.mei",
+  "exportedAt": "2026-05-18T08:45:30.372Z",
+  "annotations": [
+    {
+      "id": "a-da816qd1",
+      "notes": [
+        {
+          "id": "tngdppq0y",
+          "measure": "2",
+          "course": "11",
+          "fret": "0",
+          "label": "m.2 c11/0"
+        }
+      ],
+      "activity": "nachschlagender Bass",
+      "comment": "auf Pause",
+      "createdAt": "2026-05-11T17:39:18.386Z",
+      "updatedAt": "2026-05-11T19:17:02.319Z",
+      "tab": [
+        {
+          "id": "tngdppq0y",
+          "kind": "tab",
+          "measure": "2",
+          "course": "11",
+          "fret": "0",
+          "label": "m.2 c11/0"
+        },
+        {
+          "id": "tnrtj5pht",
+          "kind": "tab",
+          "measure": "2",
+          "course": "6",
+          "fret": "3",
+          "label": "m.2 c6/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nh0i7l8",
+          "kind": "voc",
+          "measure": "2",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.2 C4"
+        }
+      ]
+    },
+    {
+      "id": "a-aqdqp576",
+      "notes": [
+        {
+          "id": "tn246hid2",
+          "measure": "3",
+          "course": "10",
+          "fret": "0",
+          "label": "m.3 c10/0"
+        }
+      ],
+      "activity": "nachschlagender Bass",
+      "comment": "",
+      "createdAt": "2026-05-11T17:39:34.134Z",
+      "tab": [
+        {
+          "id": "tn246hid2",
+          "kind": "tab",
+          "measure": "3",
+          "course": "10",
+          "fret": "0",
+          "label": "m.3 c10/0"
+        },
+        {
+          "id": "tn0tpac56",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "0",
+          "label": "m.3 c5/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1fu9bwv",
+          "kind": "voc",
+          "measure": "3",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.3 D3"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:17:10.820Z"
+    },
+    {
+      "id": "a-p6qebx9a",
+      "notes": [
+        {
+          "id": "tnfrhocn9",
+          "measure": "2",
+          "course": "3",
+          "fret": "1",
+          "label": "m.2 c3/1"
+        },
+        {
+          "id": "tnzfk8ut0",
+          "measure": "2",
+          "course": "1",
+          "fret": "1",
+          "label": "m.2 c1/1"
+        },
+        {
+          "id": "tngvyie6i",
+          "measure": "2",
+          "course": "4",
+          "fret": "2",
+          "label": "m.2 c4/2"
+        },
+        {
+          "id": "tnzioykl1",
+          "measure": "2",
+          "course": "2",
+          "fret": "3",
+          "label": "m.2 c2/3"
+        },
+        {
+          "id": "tndpja1wj",
+          "measure": "3",
+          "course": "1",
+          "fret": "0",
+          "label": "m.3 c1/0"
+        }
+      ],
+      "activity": "auftaktiges Campanella",
+      "comment": "",
+      "createdAt": "2026-05-11T17:40:51.651Z",
+      "updatedAt": "2026-05-18T05:47:42.142Z",
+      "tab": [
+        {
+          "id": "tnfrhocn9",
+          "kind": "tab",
+          "measure": "2",
+          "course": "3",
+          "fret": "1",
+          "label": "m.2 c3/1"
+        },
+        {
+          "id": "tnzfk8ut0",
+          "kind": "tab",
+          "measure": "2",
+          "course": "1",
+          "fret": "1",
+          "label": "m.2 c1/1"
+        },
+        {
+          "id": "tngvyie6i",
+          "kind": "tab",
+          "measure": "2",
+          "course": "4",
+          "fret": "2",
+          "label": "m.2 c4/2"
+        },
+        {
+          "id": "tnzioykl1",
+          "kind": "tab",
+          "measure": "2",
+          "course": "2",
+          "fret": "3",
+          "label": "m.2 c2/3"
+        },
+        {
+          "id": "tndpja1wj",
+          "kind": "tab",
+          "measure": "3",
+          "course": "1",
+          "fret": "0",
+          "label": "m.3 c1/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nydnjbs",
+          "kind": "voc",
+          "measure": "3",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "A4",
+          "label": "SI m.3 A4"
+        }
+      ]
+    },
+    {
+      "id": "a-7gmmoiza",
+      "notes": [
+        {
+          "id": "tnfqewaou",
+          "measure": "4",
+          "course": "5",
+          "fret": "0",
+          "label": "m.4 c5/0"
+        },
+        {
+          "id": "tnl1n13jc",
+          "measure": "4",
+          "course": "2",
+          "fret": "0",
+          "label": "m.4 c2/0"
+        },
+        {
+          "id": "tn18hafey",
+          "measure": "4",
+          "course": "2",
+          "fret": "1",
+          "label": "m.4 c2/1"
+        },
+        {
+          "id": "tne38daly",
+          "measure": "4",
+          "course": "2",
+          "fret": "3",
+          "label": "m.4 c2/3"
+        },
+        {
+          "id": "tn14ve92m",
+          "measure": "4",
+          "course": "1",
+          "fret": "0",
+          "label": "m.4 c1/0"
+        },
+        {
+          "id": "tn8w3zp08",
+          "measure": "4",
+          "course": "1",
+          "fret": "2",
+          "label": "m.4 c1/2"
+        },
+        {
+          "id": "tn43d5iqv",
+          "measure": "4",
+          "course": "1",
+          "fret": "3",
+          "label": "m.4 c1/3"
+        },
+        {
+          "id": "tn5zja8dz",
+          "measure": "4",
+          "course": "3",
+          "fret": "3",
+          "label": "m.4 c3/3"
+        },
+        {
+          "id": "tn0lzjjeg",
+          "measure": "4",
+          "course": "3",
+          "fret": "0",
+          "label": "m.4 c3/0"
+        }
+      ],
+      "activity": "auftaktige Diminution \"alla bastarda\"",
+      "comment": "",
+      "createdAt": "2026-05-11T17:41:57.019Z",
+      "tab": [
+        {
+          "id": "tnfqewaou",
+          "kind": "tab",
+          "measure": "4",
+          "course": "5",
+          "fret": "0",
+          "label": "m.4 c5/0"
+        },
+        {
+          "id": "tnl1n13jc",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "0",
+          "label": "m.4 c2/0"
+        },
+        {
+          "id": "tn18hafey",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "1",
+          "label": "m.4 c2/1"
+        },
+        {
+          "id": "tne38daly",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "3",
+          "label": "m.4 c2/3"
+        },
+        {
+          "id": "tn14ve92m",
+          "kind": "tab",
+          "measure": "4",
+          "course": "1",
+          "fret": "0",
+          "label": "m.4 c1/0"
+        },
+        {
+          "id": "tn8w3zp08",
+          "kind": "tab",
+          "measure": "4",
+          "course": "1",
+          "fret": "2",
+          "label": "m.4 c1/2"
+        },
+        {
+          "id": "tn43d5iqv",
+          "kind": "tab",
+          "measure": "4",
+          "course": "1",
+          "fret": "3",
+          "label": "m.4 c1/3"
+        },
+        {
+          "id": "tn5zja8dz",
+          "kind": "tab",
+          "measure": "4",
+          "course": "3",
+          "fret": "3",
+          "label": "m.4 c3/3"
+        },
+        {
+          "id": "tn0lzjjeg",
+          "kind": "tab",
+          "measure": "4",
+          "course": "3",
+          "fret": "0",
+          "label": "m.4 c3/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nh1xvq2",
+          "kind": "voc",
+          "measure": "4",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "E♭5",
+          "label": "SI m.4 E♭5"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:46:52.013Z"
+    },
+    {
+      "id": "a-6787ppg9",
+      "notes": [
+        {
+          "id": "tn35a0l72",
+          "measure": "3",
+          "course": "5",
+          "fret": "0",
+          "label": "m.3 c5/0"
+        },
+        {
+          "id": "tni3qk2ia",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tn9t7e8g8",
+          "measure": "3",
+          "course": "5",
+          "fret": "3",
+          "label": "m.3 c5/3"
+        },
+        {
+          "id": "tnnujza7t",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tnl4zkloo",
+          "measure": "3",
+          "course": "5",
+          "fret": "3",
+          "label": "m.3 c5/3"
+        },
+        {
+          "id": "tnktakpux",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tndswm31y",
+          "measure": "3",
+          "course": "5",
+          "fret": "3",
+          "label": "m.3 c5/3"
+        },
+        {
+          "id": "tnowgzrix",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tnsbi4q2y",
+          "measure": "3",
+          "course": "5",
+          "fret": "0",
+          "label": "m.3 c5/0"
+        },
+        {
+          "id": "tn3t60rji",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        }
+      ],
+      "activity": "Durchgangsnote mit groppo",
+      "comment": "",
+      "createdAt": "2026-05-11T17:42:27.001Z",
+      "updatedAt": "2026-05-11T19:19:30.366Z",
+      "tab": [
+        {
+          "id": "tn35a0l72",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "0",
+          "label": "m.3 c5/0"
+        },
+        {
+          "id": "tni3qk2ia",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tn9t7e8g8",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "3",
+          "label": "m.3 c5/3"
+        },
+        {
+          "id": "tnnujza7t",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tnl4zkloo",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "3",
+          "label": "m.3 c5/3"
+        },
+        {
+          "id": "tnktakpux",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tndswm31y",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "3",
+          "label": "m.3 c5/3"
+        },
+        {
+          "id": "tnowgzrix",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tnsbi4q2y",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "0",
+          "label": "m.3 c5/0"
+        },
+        {
+          "id": "tn3t60rji",
+          "kind": "tab",
+          "measure": "3",
+          "course": "5",
+          "fret": "2",
+          "label": "m.3 c5/2"
+        },
+        {
+          "id": "tn148p0tv",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "1",
+          "label": "m.4 c2/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1bhy0zu",
+          "kind": "voc",
+          "measure": "3",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.3 D3"
+        },
+        {
+          "id": "n1bsn86v",
+          "kind": "voc",
+          "measure": "4",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "F4",
+          "label": "T m.4 F4"
+        }
+      ]
+    },
+    {
+      "id": "a-vem912ru",
+      "notes": [
+        {
+          "id": "tnatj9tze",
+          "measure": "4",
+          "course": "3",
+          "fret": "1",
+          "label": "m.4 c3/1"
+        },
+        {
+          "id": "tnb7r3ocw",
+          "measure": "4",
+          "course": "1",
+          "fret": "1",
+          "label": "m.4 c1/1"
+        },
+        {
+          "id": "tnv2isqp4",
+          "measure": "4",
+          "course": "4",
+          "fret": "2",
+          "label": "m.4 c4/2"
+        },
+        {
+          "id": "tnhxfgcaq",
+          "measure": "4",
+          "course": "2",
+          "fret": "3",
+          "label": "m.4 c2/3"
+        },
+        {
+          "id": "tn72wx7pt",
+          "measure": "4",
+          "course": "2",
+          "fret": "1",
+          "label": "m.4 c2/1"
+        },
+        {
+          "id": "tnukeyz7s",
+          "measure": "4",
+          "course": "2",
+          "fret": "0",
+          "label": "m.4 c2/0"
+        },
+        {
+          "id": "tn84u89yj",
+          "measure": "4",
+          "course": "5",
+          "fret": "0",
+          "label": "m.4 c5/0"
+        },
+        {
+          "id": "tntogn1w1",
+          "measure": "5",
+          "course": "6",
+          "fret": "3",
+          "label": "m.5 c6/3"
+        }
+      ],
+      "activity": "auftaktiges Campanella",
+      "comment": "kurzes Warten vor der Ziel",
+      "createdAt": "2026-05-11T17:43:23.002Z",
+      "tab": [
+        {
+          "id": "tnatj9tze",
+          "kind": "tab",
+          "measure": "4",
+          "course": "3",
+          "fret": "1",
+          "label": "m.4 c3/1"
+        },
+        {
+          "id": "tnb7r3ocw",
+          "kind": "tab",
+          "measure": "4",
+          "course": "1",
+          "fret": "1",
+          "label": "m.4 c1/1"
+        },
+        {
+          "id": "tnv2isqp4",
+          "kind": "tab",
+          "measure": "4",
+          "course": "4",
+          "fret": "2",
+          "label": "m.4 c4/2"
+        },
+        {
+          "id": "tnhxfgcaq",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "3",
+          "label": "m.4 c2/3"
+        },
+        {
+          "id": "tn72wx7pt",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "1",
+          "label": "m.4 c2/1"
+        },
+        {
+          "id": "tnukeyz7s",
+          "kind": "tab",
+          "measure": "4",
+          "course": "2",
+          "fret": "0",
+          "label": "m.4 c2/0"
+        },
+        {
+          "id": "tn84u89yj",
+          "kind": "tab",
+          "measure": "4",
+          "course": "5",
+          "fret": "0",
+          "label": "m.4 c5/0"
+        },
+        {
+          "id": "tntogn1w1",
+          "kind": "tab",
+          "measure": "5",
+          "course": "6",
+          "fret": "3",
+          "label": "m.5 c6/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nb34zdi",
+          "kind": "voc",
+          "measure": "4",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C5",
+          "label": "SI m.4 C5"
+        },
+        {
+          "id": "n19timt1",
+          "kind": "voc",
+          "measure": "5",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.5 C4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:04:58.348Z"
+    },
+    {
+      "id": "a-mglg67mr",
+      "notes": [
+        {
+          "id": "tnmyx444n",
+          "measure": "5",
+          "course": "4",
+          "fret": "0",
+          "label": "m.5 c4/0"
+        },
+        {
+          "id": "tn790pdw5",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        },
+        {
+          "id": "tnftu2gc5",
+          "measure": "5",
+          "course": "4",
+          "fret": "3",
+          "label": "m.5 c4/3"
+        },
+        {
+          "id": "tna26yfpm",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        },
+        {
+          "id": "tnriuu9k9",
+          "measure": "5",
+          "course": "4",
+          "fret": "3",
+          "label": "m.5 c4/3"
+        },
+        {
+          "id": "tnr6k2vmw",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        },
+        {
+          "id": "tnxlpu0dk",
+          "measure": "5",
+          "course": "4",
+          "fret": "0",
+          "label": "m.5 c4/0"
+        },
+        {
+          "id": "tn3j3r30m",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        }
+      ],
+      "activity": "kadenzieller Groppo",
+      "comment": "",
+      "createdAt": "2026-05-11T17:58:15.086Z",
+      "tab": [
+        {
+          "id": "tnmyx444n",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "0",
+          "label": "m.5 c4/0"
+        },
+        {
+          "id": "tn790pdw5",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        },
+        {
+          "id": "tnftu2gc5",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "3",
+          "label": "m.5 c4/3"
+        },
+        {
+          "id": "tna26yfpm",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        },
+        {
+          "id": "tnriuu9k9",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "3",
+          "label": "m.5 c4/3"
+        },
+        {
+          "id": "tnr6k2vmw",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        },
+        {
+          "id": "tnxlpu0dk",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "0",
+          "label": "m.5 c4/0"
+        },
+        {
+          "id": "tn3j3r30m",
+          "kind": "tab",
+          "measure": "5",
+          "course": "4",
+          "fret": "2",
+          "label": "m.5 c4/2"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n13kpxki",
+          "kind": "voc",
+          "measure": "5",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "A4",
+          "label": "SI m.5 A4"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:20:17.747Z"
+    },
+    {
+      "id": "a-p62zg87s",
+      "notes": [
+        {
+          "id": "tnyt9moge",
+          "measure": "6",
+          "course": "6",
+          "fret": "3",
+          "label": "m.6 c6/3"
+        },
+        {
+          "id": "tnieuc1hh",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tnejgxaa2",
+          "measure": "6",
+          "course": "6",
+          "fret": "3",
+          "label": "m.6 c6/3"
+        },
+        {
+          "id": "tnr2sds8b",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tnoyr6ccv",
+          "measure": "6",
+          "course": "6",
+          "fret": "3",
+          "label": "m.6 c6/3"
+        },
+        {
+          "id": "tnqvdz4x1",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tndpxnf7c",
+          "measure": "6",
+          "course": "6",
+          "fret": "0",
+          "label": "m.6 c6/0"
+        }
+      ],
+      "activity": "Groppo vor Durchgang",
+      "comment": "",
+      "createdAt": "2026-05-11T17:58:36.202Z",
+      "tab": [
+        {
+          "id": "tnyt9moge",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "3",
+          "label": "m.6 c6/3"
+        },
+        {
+          "id": "tnieuc1hh",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tnejgxaa2",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "3",
+          "label": "m.6 c6/3"
+        },
+        {
+          "id": "tnr2sds8b",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tnoyr6ccv",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "3",
+          "label": "m.6 c6/3"
+        },
+        {
+          "id": "tnqvdz4x1",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tndpxnf7c",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "0",
+          "label": "m.6 c6/0"
+        },
+        {
+          "id": "tna5u6hc3",
+          "kind": "tab",
+          "measure": "6",
+          "course": "6",
+          "fret": "1",
+          "label": "m.6 c6/1"
+        },
+        {
+          "id": "tnulemx15",
+          "kind": "tab",
+          "measure": "6",
+          "course": "7",
+          "fret": "0",
+          "label": "m.6 c7/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n17uq72n",
+          "kind": "voc",
+          "measure": "6",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "B2",
+          "label": "B m.6 B2"
+        },
+        {
+          "id": "nr9uo94",
+          "kind": "voc",
+          "measure": "6",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "G2",
+          "label": "B m.6 G2"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:06:17.859Z"
+    },
+    {
+      "id": "a-71fvo4ub",
+      "notes": [
+        {
+          "id": "tnid4n1u3",
+          "measure": "6",
+          "course": "3",
+          "fret": "3",
+          "label": "m.6 c3/3"
+        },
+        {
+          "id": "tn3jgzlma",
+          "measure": "6",
+          "course": "1",
+          "fret": "3",
+          "label": "m.6 c1/3"
+        },
+        {
+          "id": "tnhpmnz1u",
+          "measure": "6",
+          "course": "1",
+          "fret": "1",
+          "label": "m.6 c1/1"
+        },
+        {
+          "id": "tnrpj1epk",
+          "measure": "6",
+          "course": "4",
+          "fret": "2",
+          "label": "m.6 c4/2"
+        },
+        {
+          "id": "tnkhejla0",
+          "measure": "6",
+          "course": "2",
+          "fret": "3",
+          "label": "m.6 c2/3"
+        }
+      ],
+      "activity": "\"alla bastarda\"",
+      "comment": "",
+      "createdAt": "2026-05-11T17:59:05.719Z",
+      "tab": [
+        {
+          "id": "tnid4n1u3",
+          "kind": "tab",
+          "measure": "6",
+          "course": "3",
+          "fret": "3",
+          "label": "m.6 c3/3"
+        },
+        {
+          "id": "tn3jgzlma",
+          "kind": "tab",
+          "measure": "6",
+          "course": "1",
+          "fret": "3",
+          "label": "m.6 c1/3"
+        },
+        {
+          "id": "tnhpmnz1u",
+          "kind": "tab",
+          "measure": "6",
+          "course": "1",
+          "fret": "1",
+          "label": "m.6 c1/1"
+        },
+        {
+          "id": "tnrpj1epk",
+          "kind": "tab",
+          "measure": "6",
+          "course": "4",
+          "fret": "2",
+          "label": "m.6 c4/2"
+        },
+        {
+          "id": "tnkhejla0",
+          "kind": "tab",
+          "measure": "6",
+          "course": "2",
+          "fret": "3",
+          "label": "m.6 c2/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1m1h4cm",
+          "kind": "voc",
+          "measure": "6",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.6 G4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:15:52.058Z"
+    },
+    {
+      "id": "a-hc5lvhjm",
+      "notes": [
+        {
+          "id": "tnzpeal2w",
+          "measure": "6",
+          "course": "2",
+          "fret": "1",
+          "label": "m.6 c2/1"
+        },
+        {
+          "id": "tnolmlgse",
+          "measure": "6",
+          "course": "2",
+          "fret": "0",
+          "label": "m.6 c2/0"
+        },
+        {
+          "id": "tnfhv1xg1",
+          "measure": "6",
+          "course": "2",
+          "fret": "1",
+          "label": "m.6 c2/1"
+        },
+        {
+          "id": "tnw5wfcpk",
+          "measure": "6",
+          "course": "2",
+          "fret": "3",
+          "label": "m.6 c2/3"
+        },
+        {
+          "id": "tnc54wsqt",
+          "measure": "6",
+          "course": "2",
+          "fret": "1",
+          "label": "m.6 c2/1"
+        }
+      ],
+      "activity": "Doppelschlag",
+      "comment": "mit gedehnter 1",
+      "createdAt": "2026-05-11T17:59:46.136Z",
+      "updatedAt": "2026-05-14T11:42:53.290Z",
+      "tab": [
+        {
+          "id": "tnzpeal2w",
+          "kind": "tab",
+          "measure": "6",
+          "course": "2",
+          "fret": "1",
+          "label": "m.6 c2/1"
+        },
+        {
+          "id": "tnolmlgse",
+          "kind": "tab",
+          "measure": "6",
+          "course": "2",
+          "fret": "0",
+          "label": "m.6 c2/0"
+        },
+        {
+          "id": "tnfhv1xg1",
+          "kind": "tab",
+          "measure": "6",
+          "course": "2",
+          "fret": "1",
+          "label": "m.6 c2/1"
+        },
+        {
+          "id": "tnw5wfcpk",
+          "kind": "tab",
+          "measure": "6",
+          "course": "2",
+          "fret": "3",
+          "label": "m.6 c2/3"
+        },
+        {
+          "id": "tnc54wsqt",
+          "kind": "tab",
+          "measure": "6",
+          "course": "2",
+          "fret": "1",
+          "label": "m.6 c2/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1jpuo11",
+          "kind": "voc",
+          "measure": "6",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F4",
+          "label": "SI m.6 F4"
+        }
+      ]
+    },
+    {
+      "id": "a-7mlwl0z4",
+      "notes": [
+        {
+          "id": "tne2atn2t",
+          "measure": "8",
+          "course": "2",
+          "fret": "0",
+          "label": "m.8 c2/0"
+        },
+        {
+          "id": "tn3c9xqym",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tnbefflzm",
+          "measure": "8",
+          "course": "2",
+          "fret": "3",
+          "label": "m.8 c2/3"
+        },
+        {
+          "id": "tnktsg7fx",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tnxux1oxr",
+          "measure": "8",
+          "course": "2",
+          "fret": "3",
+          "label": "m.8 c2/3"
+        },
+        {
+          "id": "tnccprhvl",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tnlqjidkn",
+          "measure": "8",
+          "course": "2",
+          "fret": "0",
+          "label": "m.8 c2/0"
+        },
+        {
+          "id": "tn1rsrla8",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        }
+      ],
+      "activity": "kadenzieller Groppo",
+      "comment": "Doppelschlag",
+      "createdAt": "2026-05-11T18:01:11.219Z",
+      "tab": [
+        {
+          "id": "tne2atn2t",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "0",
+          "label": "m.8 c2/0"
+        },
+        {
+          "id": "tn3c9xqym",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tnbefflzm",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "3",
+          "label": "m.8 c2/3"
+        },
+        {
+          "id": "tnktsg7fx",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tnxux1oxr",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "3",
+          "label": "m.8 c2/3"
+        },
+        {
+          "id": "tnccprhvl",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tnlqjidkn",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "0",
+          "label": "m.8 c2/0"
+        },
+        {
+          "id": "tn1rsrla8",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "2",
+          "label": "m.8 c2/2"
+        },
+        {
+          "id": "tne4q6qdy",
+          "kind": "tab",
+          "measure": "8",
+          "course": "2",
+          "fret": "3",
+          "label": "m.8 c2/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n198pj9o",
+          "kind": "voc",
+          "measure": "8",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.8 G4"
+        },
+        {
+          "id": "nhv3238",
+          "kind": "voc",
+          "measure": "8",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F♯4",
+          "label": "SI m.8 F♯4"
+        }
+      ],
+      "updatedAt": "2026-05-14T11:44:20.322Z"
+    },
+    {
+      "id": "a-j8dhydx5",
+      "notes": [
+        {
+          "id": "tno2m71hs",
+          "measure": "8",
+          "course": "10",
+          "fret": "0",
+          "label": "m.8 c10/0"
+        }
+      ],
+      "activity": "nachschlagender Bass",
+      "comment": "",
+      "createdAt": "2026-05-11T18:01:22.402Z",
+      "tab": [
+        {
+          "id": "tno2m71hs",
+          "kind": "tab",
+          "measure": "8",
+          "course": "10",
+          "fret": "0",
+          "label": "m.8 c10/0"
+        },
+        {
+          "id": "tn1nouhtc",
+          "kind": "tab",
+          "measure": "8",
+          "course": "5",
+          "fret": "0",
+          "label": "m.8 c5/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1tffe74",
+          "kind": "voc",
+          "measure": "8",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.8 D3"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:22:47.200Z"
+    },
+    {
+      "id": "a-87ep0crd",
+      "notes": [
+        {
+          "id": "tny9v20ya",
+          "measure": "9",
+          "course": "2",
+          "fret": "3",
+          "label": "m.9 c2/3"
+        },
+        {
+          "id": "tngww4fyb",
+          "measure": "9",
+          "course": "2",
+          "fret": "5",
+          "label": "m.9 c2/5"
+        },
+        {
+          "id": "tn1750ceh",
+          "measure": "9",
+          "course": "2",
+          "fret": "6",
+          "label": "m.9 c2/6"
+        }
+      ],
+      "activity": "Cercar",
+      "comment": "",
+      "createdAt": "2026-05-11T18:03:30.990Z",
+      "tab": [
+        {
+          "id": "tny9v20ya",
+          "kind": "tab",
+          "measure": "9",
+          "course": "2",
+          "fret": "3",
+          "label": "m.9 c2/3"
+        },
+        {
+          "id": "tngww4fyb",
+          "kind": "tab",
+          "measure": "9",
+          "course": "2",
+          "fret": "5",
+          "label": "m.9 c2/5"
+        },
+        {
+          "id": "tn1750ceh",
+          "kind": "tab",
+          "measure": "9",
+          "course": "2",
+          "fret": "6",
+          "label": "m.9 c2/6"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "ns3q1f7",
+          "kind": "voc",
+          "measure": "9",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "B3",
+          "label": "B m.9 B3"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:49:22.398Z"
+    },
+    {
+      "id": "a-8ffp98o1",
+      "notes": [
+        {
+          "id": "tnm1zxyvg",
+          "measure": "9",
+          "course": "3",
+          "fret": "3",
+          "label": "m.9 c3/3"
+        },
+        {
+          "id": "tnyn9382k",
+          "measure": "9",
+          "course": "3",
+          "fret": "5",
+          "label": "m.9 c3/5"
+        },
+        {
+          "id": "tnt7zewvi",
+          "measure": "9",
+          "course": "3",
+          "fret": "6",
+          "label": "m.9 c3/6"
+        }
+      ],
+      "activity": "Cercar",
+      "comment": "",
+      "createdAt": "2026-05-11T18:03:44.802Z",
+      "tab": [
+        {
+          "id": "tnm1zxyvg",
+          "kind": "tab",
+          "measure": "9",
+          "course": "3",
+          "fret": "3",
+          "label": "m.9 c3/3"
+        },
+        {
+          "id": "tnyn9382k",
+          "kind": "tab",
+          "measure": "9",
+          "course": "3",
+          "fret": "5",
+          "label": "m.9 c3/5"
+        },
+        {
+          "id": "tnt7zewvi",
+          "kind": "tab",
+          "measure": "9",
+          "course": "3",
+          "fret": "6",
+          "label": "m.9 c3/6"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "no5zxb1",
+          "kind": "voc",
+          "measure": "9",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "F4",
+          "label": "A m.9 F4"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:49:30.247Z"
+    },
+    {
+      "id": "a-0pasl0qp",
+      "notes": [
+        {
+          "id": "tn1at7o75",
+          "measure": "9",
+          "course": "4",
+          "fret": "3",
+          "label": "m.9 c4/3"
+        },
+        {
+          "id": "tnut076g5",
+          "measure": "9",
+          "course": "1",
+          "fret": "5",
+          "label": "m.9 c1/5"
+        }
+      ],
+      "activity": "Arpeggieren",
+      "comment": "",
+      "createdAt": "2026-05-11T18:04:10.551Z",
+      "tab": [
+        {
+          "id": "tn1at7o75",
+          "kind": "tab",
+          "measure": "9",
+          "course": "4",
+          "fret": "3",
+          "label": "m.9 c4/3"
+        },
+        {
+          "id": "tnut076g5",
+          "kind": "tab",
+          "measure": "9",
+          "course": "1",
+          "fret": "5",
+          "label": "m.9 c1/5"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1ige8ug",
+          "kind": "voc",
+          "measure": "9",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "B4",
+          "label": "SI m.9 B4"
+        },
+        {
+          "id": "n1cwagg6",
+          "kind": "voc",
+          "measure": "9",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "D5",
+          "label": "SI m.9 D5"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:23:17.734Z"
+    },
+    {
+      "id": "a-7flzyoru",
+      "notes": [
+        {
+          "id": "tnqzcucts",
+          "measure": "10",
+          "course": "1",
+          "fret": "0",
+          "label": "m.10 c1/0"
+        },
+        {
+          "id": "tnds3qsqc",
+          "measure": "10",
+          "course": "1",
+          "fret": "2",
+          "label": "m.10 c1/2"
+        },
+        {
+          "id": "tnbmc97c7",
+          "measure": "10",
+          "course": "1",
+          "fret": "3",
+          "label": "m.10 c1/3"
+        }
+      ],
+      "activity": "Cercar",
+      "comment": "",
+      "createdAt": "2026-05-11T18:04:23.236Z",
+      "tab": [
+        {
+          "id": "tnqzcucts",
+          "kind": "tab",
+          "measure": "10",
+          "course": "1",
+          "fret": "0",
+          "label": "m.10 c1/0"
+        },
+        {
+          "id": "tnds3qsqc",
+          "kind": "tab",
+          "measure": "10",
+          "course": "1",
+          "fret": "2",
+          "label": "m.10 c1/2"
+        },
+        {
+          "id": "tnbmc97c7",
+          "kind": "tab",
+          "measure": "10",
+          "course": "1",
+          "fret": "3",
+          "label": "m.10 c1/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1jfezzo",
+          "kind": "voc",
+          "measure": "10",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.10 C4"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:50:02.381Z"
+    },
+    {
+      "id": "a-6d7cg9pd",
+      "notes": [
+        {
+          "id": "tn9n56nyx",
+          "measure": "10",
+          "course": "5",
+          "fret": "0",
+          "label": "m.10 c5/0"
+        },
+        {
+          "id": "tniaakytt",
+          "measure": "10",
+          "course": "5",
+          "fret": "2",
+          "label": "m.10 c5/2"
+        },
+        {
+          "id": "tn3p15ahd",
+          "measure": "10",
+          "course": "5",
+          "fret": "3",
+          "label": "m.10 c5/3"
+        }
+      ],
+      "activity": "Cercar",
+      "comment": "",
+      "createdAt": "2026-05-11T18:04:43.536Z",
+      "tab": [
+        {
+          "id": "tn9n56nyx",
+          "kind": "tab",
+          "measure": "10",
+          "course": "5",
+          "fret": "0",
+          "label": "m.10 c5/0"
+        },
+        {
+          "id": "tniaakytt",
+          "kind": "tab",
+          "measure": "10",
+          "course": "5",
+          "fret": "2",
+          "label": "m.10 c5/2"
+        },
+        {
+          "id": "tn3p15ahd",
+          "kind": "tab",
+          "measure": "10",
+          "course": "5",
+          "fret": "3",
+          "label": "m.10 c5/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nsnk5n1",
+          "kind": "voc",
+          "measure": "10",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "F3",
+          "label": "B m.10 F3"
+        }
+      ],
+      "updatedAt": "2026-05-18T06:18:41.525Z"
+    },
+    {
+      "id": "a-wqg9vtgn",
+      "notes": [
+        {
+          "id": "tn8e7flqh",
+          "measure": "12",
+          "course": "2",
+          "fret": "0",
+          "label": "m.12 c2/0"
+        },
+        {
+          "id": "tne4xyf9i",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tnxpbwhvn",
+          "measure": "12",
+          "course": "2",
+          "fret": "3",
+          "label": "m.12 c2/3"
+        },
+        {
+          "id": "tnglqj5sx",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tnzkwdeek",
+          "measure": "12",
+          "course": "2",
+          "fret": "3",
+          "label": "m.12 c2/3"
+        },
+        {
+          "id": "tnwyx9trf",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tn8sryo4r",
+          "measure": "12",
+          "course": "2",
+          "fret": "0",
+          "label": "m.12 c2/0"
+        },
+        {
+          "id": "tnq01tee1",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tnd31k9qm",
+          "measure": "12",
+          "course": "3",
+          "fret": "1",
+          "label": "m.12 c3/1"
+        }
+      ],
+      "activity": "Kadenzreflex",
+      "comment": "",
+      "createdAt": "2026-05-11T18:06:02.693Z",
+      "updatedAt": "2026-05-11T19:25:53.266Z",
+      "tab": [
+        {
+          "id": "tn8e7flqh",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "0",
+          "label": "m.12 c2/0"
+        },
+        {
+          "id": "tne4xyf9i",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tnxpbwhvn",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "3",
+          "label": "m.12 c2/3"
+        },
+        {
+          "id": "tnglqj5sx",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tnzkwdeek",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "3",
+          "label": "m.12 c2/3"
+        },
+        {
+          "id": "tnwyx9trf",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tn8sryo4r",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "0",
+          "label": "m.12 c2/0"
+        },
+        {
+          "id": "tnq01tee1",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "2",
+          "label": "m.12 c2/2"
+        },
+        {
+          "id": "tnd31k9qm",
+          "kind": "tab",
+          "measure": "12",
+          "course": "3",
+          "fret": "1",
+          "label": "m.12 c3/1"
+        },
+        {
+          "id": "tn7yt2m6t",
+          "kind": "tab",
+          "measure": "12",
+          "course": "2",
+          "fret": "3",
+          "label": "m.12 c2/3"
+        },
+        {
+          "id": "tnmzwffhh",
+          "kind": "tab",
+          "measure": "12",
+          "course": "3",
+          "fret": "0",
+          "label": "m.12 c3/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nkh4byc",
+          "kind": "voc",
+          "measure": "12",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F4",
+          "label": "SI m.12 F4"
+        },
+        {
+          "id": "n1jl71g0",
+          "kind": "voc",
+          "measure": "12",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.12 G4"
+        },
+        {
+          "id": "n42nzzd",
+          "kind": "voc",
+          "measure": "12",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.12 G4"
+        }
+      ]
+    },
+    {
+      "id": "a-4ebqxkw0",
+      "notes": [
+        {
+          "id": "tnpqvl00e",
+          "measure": "14",
+          "course": "1",
+          "fret": "0",
+          "label": "m.14 c1/0"
+        },
+        {
+          "id": "tnge2j51b",
+          "measure": "14",
+          "course": "1",
+          "fret": "1",
+          "label": "m.14 c1/1"
+        },
+        {
+          "id": "tn0isb5iq",
+          "measure": "14",
+          "course": "1",
+          "fret": "3",
+          "label": "m.14 c1/3"
+        },
+        {
+          "id": "tnplozjcn",
+          "measure": "14",
+          "course": "3",
+          "fret": "3",
+          "label": "m.14 c3/3"
+        },
+        {
+          "id": "tnsh3tow4",
+          "measure": "14",
+          "course": "2",
+          "fret": "3",
+          "label": "m.14 c2/3"
+        }
+      ],
+      "activity": "Auffüllen mit Durchgängen",
+      "comment": "",
+      "createdAt": "2026-05-11T18:07:04.908Z",
+      "updatedAt": "2026-05-14T08:18:55.861Z",
+      "tab": [
+        {
+          "id": "tnpqvl00e",
+          "kind": "tab",
+          "measure": "14",
+          "course": "1",
+          "fret": "0",
+          "label": "m.14 c1/0"
+        },
+        {
+          "id": "tnge2j51b",
+          "kind": "tab",
+          "measure": "14",
+          "course": "1",
+          "fret": "1",
+          "label": "m.14 c1/1"
+        },
+        {
+          "id": "tn0isb5iq",
+          "kind": "tab",
+          "measure": "14",
+          "course": "1",
+          "fret": "3",
+          "label": "m.14 c1/3"
+        },
+        {
+          "id": "tnplozjcn",
+          "kind": "tab",
+          "measure": "14",
+          "course": "3",
+          "fret": "3",
+          "label": "m.14 c3/3"
+        },
+        {
+          "id": "tnsh3tow4",
+          "kind": "tab",
+          "measure": "14",
+          "course": "2",
+          "fret": "3",
+          "label": "m.14 c2/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1ju1h8v",
+          "kind": "voc",
+          "measure": "14",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "G3",
+          "label": "T m.14 G3"
+        },
+        {
+          "id": "nxr94jq",
+          "kind": "voc",
+          "measure": "14",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "B4",
+          "label": "SI m.14 B4"
+        },
+        {
+          "id": "nea1jyo",
+          "kind": "voc",
+          "measure": "14",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "D5",
+          "label": "SI m.14 D5"
+        }
+      ]
+    },
+    {
+      "id": "a-nmqjnouw",
+      "notes": [
+        {
+          "id": "tnh61iaoi",
+          "measure": "14",
+          "course": "2",
+          "fret": "0",
+          "label": "m.14 c2/0"
+        },
+        {
+          "id": "tn0dtirc9",
+          "measure": "14",
+          "course": "2",
+          "fret": "1",
+          "label": "m.14 c2/1"
+        },
+        {
+          "id": "tnp8ijl2z",
+          "measure": "14",
+          "course": "2",
+          "fret": "3",
+          "label": "m.14 c2/3"
+        }
+      ],
+      "activity": "Durchgänge",
+      "comment": "",
+      "createdAt": "2026-05-11T18:07:41.325Z",
+      "tab": [
+        {
+          "id": "tnh61iaoi",
+          "kind": "tab",
+          "measure": "14",
+          "course": "2",
+          "fret": "0",
+          "label": "m.14 c2/0"
+        },
+        {
+          "id": "tn0dtirc9",
+          "kind": "tab",
+          "measure": "14",
+          "course": "2",
+          "fret": "1",
+          "label": "m.14 c2/1"
+        },
+        {
+          "id": "tnp8ijl2z",
+          "kind": "tab",
+          "measure": "14",
+          "course": "2",
+          "fret": "3",
+          "label": "m.14 c2/3"
+        },
+        {
+          "id": "tnkx7n89l",
+          "kind": "tab",
+          "measure": "19",
+          "course": "4",
+          "fret": "2",
+          "label": "m.19 c4/2"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1efgd5b",
+          "kind": "voc",
+          "measure": "14",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F4",
+          "label": "SI m.14 F4"
+        },
+        {
+          "id": "ne2wq0a",
+          "kind": "voc",
+          "measure": "19",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "A4",
+          "label": "SI m.19 A4"
+        }
+      ],
+      "updatedAt": "2026-05-18T07:42:33.532Z"
+    },
+    {
+      "id": "a-2qnqmahw",
+      "notes": [
+        {
+          "id": "tn3ac6pe6",
+          "measure": "15",
+          "course": "5",
+          "fret": "2",
+          "label": "m.15 c5/2"
+        },
+        {
+          "id": "tn3lbqgu3",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tn5bwikot",
+          "measure": "15",
+          "course": "5",
+          "fret": "3",
+          "label": "m.15 c5/3"
+        },
+        {
+          "id": "tnckeh5sw",
+          "measure": "15",
+          "course": "3",
+          "fret": "3",
+          "label": "m.15 c3/3"
+        },
+        {
+          "id": "tn2c9t199",
+          "measure": "15",
+          "course": "5",
+          "fret": "2",
+          "label": "m.15 c5/2"
+        },
+        {
+          "id": "tn6snglh6",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tnh42m44g",
+          "measure": "15",
+          "course": "5",
+          "fret": "3",
+          "label": "m.15 c5/3"
+        },
+        {
+          "id": "tnv3z6bz8",
+          "measure": "15",
+          "course": "3",
+          "fret": "3",
+          "label": "m.15 c3/3"
+        },
+        {
+          "id": "tnrdihsa7",
+          "measure": "15",
+          "course": "5",
+          "fret": "2",
+          "label": "m.15 c5/2"
+        },
+        {
+          "id": "tnhez74la",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tn28xg8y7",
+          "measure": "15",
+          "course": "5",
+          "fret": "0",
+          "label": "m.15 c5/0"
+        },
+        {
+          "id": "tn7odkef8",
+          "measure": "15",
+          "course": "3",
+          "fret": "0",
+          "label": "m.15 c3/0"
+        }
+      ],
+      "activity": "kadenzieller Groppo in Terzen",
+      "comment": "",
+      "createdAt": "2026-05-11T18:08:09.075Z",
+      "tab": [
+        {
+          "id": "tn3ac6pe6",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "2",
+          "label": "m.15 c5/2"
+        },
+        {
+          "id": "tn3lbqgu3",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tn5bwikot",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "3",
+          "label": "m.15 c5/3"
+        },
+        {
+          "id": "tnckeh5sw",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "3",
+          "label": "m.15 c3/3"
+        },
+        {
+          "id": "tn2c9t199",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "2",
+          "label": "m.15 c5/2"
+        },
+        {
+          "id": "tn6snglh6",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tnh42m44g",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "3",
+          "label": "m.15 c5/3"
+        },
+        {
+          "id": "tnv3z6bz8",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "3",
+          "label": "m.15 c3/3"
+        },
+        {
+          "id": "tnrdihsa7",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "2",
+          "label": "m.15 c5/2"
+        },
+        {
+          "id": "tnhez74la",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tn28xg8y7",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "0",
+          "label": "m.15 c5/0"
+        },
+        {
+          "id": "tn7odkef8",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "0",
+          "label": "m.15 c3/0"
+        },
+        {
+          "id": "tnb4ldims",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "3",
+          "label": "m.15 c3/3"
+        },
+        {
+          "id": "tnyj9boq0",
+          "kind": "tab",
+          "measure": "15",
+          "course": "5",
+          "fret": "3",
+          "label": "m.15 c5/3"
+        },
+        {
+          "id": "tniq2fa39",
+          "kind": "tab",
+          "measure": "15",
+          "course": "6",
+          "fret": "0",
+          "label": "m.15 c6/0"
+        },
+        {
+          "id": "tn088o98b",
+          "kind": "tab",
+          "measure": "15",
+          "course": "6",
+          "fret": "0",
+          "label": "m.15 c6/0"
+        },
+        {
+          "id": "tnv78hu7f",
+          "kind": "tab",
+          "measure": "15",
+          "course": "3",
+          "fret": "2",
+          "label": "m.15 c3/2"
+        },
+        {
+          "id": "tn0i9g5dz",
+          "kind": "tab",
+          "measure": "15",
+          "course": "2",
+          "fret": "0",
+          "label": "m.15 c2/0"
+        },
+        {
+          "id": "tnx5qjicj",
+          "kind": "tab",
+          "measure": "15",
+          "course": "1",
+          "fret": "0",
+          "label": "m.15 c1/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n16sjyc",
+          "kind": "voc",
+          "measure": "15",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "D5",
+          "label": "SI m.15 D5"
+        },
+        {
+          "id": "n1tijysw",
+          "kind": "voc",
+          "measure": "15",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C♯5",
+          "label": "SI m.15 C♯5"
+        },
+        {
+          "id": "n1muqr86",
+          "kind": "voc",
+          "measure": "15",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "F♮4",
+          "label": "T m.15 F♮4"
+        },
+        {
+          "id": "n1cef3i8",
+          "kind": "voc",
+          "measure": "15",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "E4",
+          "label": "T m.15 E4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:21:50.704Z"
+    },
+    {
+      "id": "a-z9kslxg9",
+      "notes": [
+        {
+          "id": "tneurxhw0",
+          "measure": "25",
+          "course": "10",
+          "fret": "0",
+          "label": "m.25 c10/0"
+        }
+      ],
+      "activity": "nachschlagender Bass",
+      "comment": "",
+      "createdAt": "2026-05-11T18:10:28.958Z",
+      "tab": [
+        {
+          "id": "tneurxhw0",
+          "kind": "tab",
+          "measure": "25",
+          "course": "10",
+          "fret": "0",
+          "label": "m.25 c10/0"
+        },
+        {
+          "id": "tn6c2cu7o",
+          "kind": "tab",
+          "measure": "25",
+          "course": "5",
+          "fret": "0",
+          "label": "m.25 c5/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n9tljnr",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.25 D3"
+        }
+      ],
+      "updatedAt": "2026-05-18T06:24:02.705Z"
+    },
+    {
+      "id": "a-xpv1gg49",
+      "notes": [
+        {
+          "id": "tne4ex6u8",
+          "measure": "30",
+          "course": "4",
+          "fret": "0",
+          "label": "m.30 c4/0"
+        },
+        {
+          "id": "tnjp61lfc",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnr7vgrf1",
+          "measure": "30",
+          "course": "4",
+          "fret": "3",
+          "label": "m.30 c4/3"
+        },
+        {
+          "id": "tnjq6fx7x",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnp422ta8",
+          "measure": "30",
+          "course": "4",
+          "fret": "3",
+          "label": "m.30 c4/3"
+        },
+        {
+          "id": "tnw8dt8cq",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tn6wmdw0f",
+          "measure": "30",
+          "course": "4",
+          "fret": "0",
+          "label": "m.30 c4/0"
+        },
+        {
+          "id": "tnt4q9bc2",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnfu7bfxq",
+          "measure": "30",
+          "course": "5",
+          "fret": "1",
+          "label": "m.30 c5/1"
+        }
+      ],
+      "activity": "kadenzieller Groppo",
+      "comment": "",
+      "createdAt": "2026-05-11T18:12:18.492Z",
+      "updatedAt": "2026-05-18T04:51:51.701Z",
+      "tab": [
+        {
+          "id": "tne4ex6u8",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "0",
+          "label": "m.30 c4/0"
+        },
+        {
+          "id": "tnjp61lfc",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnr7vgrf1",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "3",
+          "label": "m.30 c4/3"
+        },
+        {
+          "id": "tnjq6fx7x",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnp422ta8",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "3",
+          "label": "m.30 c4/3"
+        },
+        {
+          "id": "tnw8dt8cq",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tn6wmdw0f",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "0",
+          "label": "m.30 c4/0"
+        },
+        {
+          "id": "tnt4q9bc2",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnfu7bfxq",
+          "kind": "tab",
+          "measure": "30",
+          "course": "5",
+          "fret": "1",
+          "label": "m.30 c5/1"
+        },
+        {
+          "id": "tnl9ue421",
+          "kind": "tab",
+          "measure": "31",
+          "course": "6",
+          "fret": "1",
+          "label": "m.31 c6/1"
+        },
+        {
+          "id": "tnvmefozt",
+          "kind": "tab",
+          "measure": "31",
+          "course": "3",
+          "fret": "3",
+          "label": "m.31 c3/3"
+        },
+        {
+          "id": "tnp7bd4w1",
+          "kind": "tab",
+          "measure": "31",
+          "course": "2",
+          "fret": "1",
+          "label": "m.31 c2/1"
+        },
+        {
+          "id": "tnaragdx5",
+          "kind": "tab",
+          "measure": "31",
+          "course": "1",
+          "fret": "1",
+          "label": "m.31 c1/1"
+        },
+        {
+          "id": "tnddqhkga",
+          "kind": "tab",
+          "measure": "30",
+          "course": "8",
+          "fret": "0",
+          "label": "m.30 c8/0"
+        },
+        {
+          "id": "tnxo100vh",
+          "kind": "tab",
+          "measure": "30",
+          "course": "5",
+          "fret": "3",
+          "label": "m.30 c5/3"
+        },
+        {
+          "id": "tnmygty3a",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "3",
+          "label": "m.30 c4/3"
+        },
+        {
+          "id": "tn8p74mjd",
+          "kind": "tab",
+          "measure": "30",
+          "course": "3",
+          "fret": "1",
+          "label": "m.30 c3/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1deg2x",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "A4",
+          "label": "SI m.30 A4"
+        },
+        {
+          "id": "nv1l8ig",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "B4",
+          "label": "SI m.30 B4"
+        },
+        {
+          "id": "n1b2rikl",
+          "kind": "voc",
+          "measure": "31",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "B4",
+          "label": "SI m.31 B4"
+        },
+        {
+          "id": "ncnossa",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "F3",
+          "label": "B m.30 F3"
+        },
+        {
+          "id": "n1rvise4",
+          "kind": "voc",
+          "measure": "31",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "B2",
+          "label": "B m.31 B2"
+        },
+        {
+          "id": "nmwg5eo",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C5",
+          "label": "SI m.30 C5"
+        },
+        {
+          "id": "n172rtmk",
+          "kind": "voc",
+          "measure": "31",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "D5",
+          "label": "SI m.31 D5"
+        }
+      ]
+    },
+    {
+      "id": "a-eihiih7v",
+      "notes": [
+        {
+          "id": "tnaq15o2n",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        },
+        {
+          "id": "tnpj8t22c",
+          "measure": "32",
+          "course": "1",
+          "fret": "3",
+          "label": "m.32 c1/3"
+        },
+        {
+          "id": "tnnwngucz",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        },
+        {
+          "id": "tnytkw283",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        },
+        {
+          "id": "tn8h0imjy",
+          "measure": "32",
+          "course": "1",
+          "fret": "3",
+          "label": "m.32 c1/3"
+        },
+        {
+          "id": "tn8djzr5s",
+          "measure": "32",
+          "course": "1",
+          "fret": "0",
+          "label": "m.32 c1/0"
+        },
+        {
+          "id": "tnxkc5i8x",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        }
+      ],
+      "activity": "kadenzieller Groppo",
+      "comment": "",
+      "createdAt": "2026-05-11T18:13:04.675Z",
+      "tab": [
+        {
+          "id": "tnaq15o2n",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        },
+        {
+          "id": "tnpj8t22c",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "3",
+          "label": "m.32 c1/3"
+        },
+        {
+          "id": "tnnwngucz",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        },
+        {
+          "id": "tnytkw283",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        },
+        {
+          "id": "tn8h0imjy",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "3",
+          "label": "m.32 c1/3"
+        },
+        {
+          "id": "tn8djzr5s",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "0",
+          "label": "m.32 c1/0"
+        },
+        {
+          "id": "tnxkc5i8x",
+          "kind": "tab",
+          "measure": "32",
+          "course": "1",
+          "fret": "2",
+          "label": "m.32 c1/2"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n16dh117",
+          "kind": "voc",
+          "measure": "32",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "B♮4",
+          "label": "SI m.32 B♮4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:40:15.667Z"
+    },
+    {
+      "id": "a-t03htpa0",
+      "notes": [
+        {
+          "id": "tnvork1dj",
+          "measure": "34",
+          "course": "3",
+          "fret": "0",
+          "label": "m.34 c3/0"
+        },
+        {
+          "id": "tn8nyfwdc",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnm4t8bp6",
+          "measure": "34",
+          "course": "3",
+          "fret": "3",
+          "label": "m.34 c3/3"
+        },
+        {
+          "id": "tnkzrezrd",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnor8wm9l",
+          "measure": "34",
+          "course": "3",
+          "fret": "3",
+          "label": "m.34 c3/3"
+        },
+        {
+          "id": "tnlq5u6jz",
+          "measure": "34",
+          "course": "3",
+          "fret": "0",
+          "label": "m.34 c3/0"
+        },
+        {
+          "id": "tnmdmmmxi",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnyms1mwn",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        }
+      ],
+      "activity": "kadenzieller Groppo",
+      "comment": "",
+      "createdAt": "2026-05-11T18:14:30.063Z",
+      "tab": [
+        {
+          "id": "tnvork1dj",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "0",
+          "label": "m.34 c3/0"
+        },
+        {
+          "id": "tn8nyfwdc",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnm4t8bp6",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "3",
+          "label": "m.34 c3/3"
+        },
+        {
+          "id": "tnkzrezrd",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnor8wm9l",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "3",
+          "label": "m.34 c3/3"
+        },
+        {
+          "id": "tnlq5u6jz",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "0",
+          "label": "m.34 c3/0"
+        },
+        {
+          "id": "tnmdmmmxi",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnyms1mwn",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnb9oi0d4",
+          "kind": "tab",
+          "measure": "34",
+          "course": "2",
+          "fret": "3",
+          "label": "m.34 c2/3"
+        },
+        {
+          "id": "tnffykpl3",
+          "kind": "tab",
+          "measure": "35",
+          "course": "3",
+          "fret": "3",
+          "label": "m.35 c3/3"
+        },
+        {
+          "id": "tncho3xjv",
+          "kind": "tab",
+          "measure": "35",
+          "course": "2",
+          "fret": "2",
+          "label": "m.35 c2/2"
+        },
+        {
+          "id": "tnw1puwsn",
+          "kind": "tab",
+          "measure": "35",
+          "course": "4",
+          "fret": "2",
+          "label": "m.35 c4/2"
+        },
+        {
+          "id": "tnuh80q7t",
+          "kind": "tab",
+          "measure": "35",
+          "course": "5",
+          "fret": "0",
+          "label": "m.35 c5/0"
+        },
+        {
+          "id": "tnovd79c9",
+          "kind": "tab",
+          "measure": "34",
+          "course": "3",
+          "fret": "2",
+          "label": "m.34 c3/2"
+        },
+        {
+          "id": "tnmv9e40k",
+          "kind": "tab",
+          "measure": "34",
+          "course": "2",
+          "fret": "0",
+          "label": "m.34 c2/0"
+        },
+        {
+          "id": "tn9rdpxdf",
+          "kind": "tab",
+          "measure": "34",
+          "course": "6",
+          "fret": "0",
+          "label": "m.34 c6/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1m1gsca",
+          "kind": "voc",
+          "measure": "34",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C♯4",
+          "label": "T m.34 C♯4"
+        },
+        {
+          "id": "n8vyucq",
+          "kind": "voc",
+          "measure": "35",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "D4",
+          "label": "T m.35 D4"
+        },
+        {
+          "id": "n19zidxl",
+          "kind": "voc",
+          "measure": "35",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.35 D3"
+        },
+        {
+          "id": "nhy42ra",
+          "kind": "voc",
+          "measure": "34",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "A2",
+          "label": "B m.34 A2"
+        }
+      ],
+      "updatedAt": "2026-05-18T05:08:01.998Z"
+    },
+    {
+      "id": "a-w7qetcx8",
+      "notes": [
+        {
+          "id": "tn210q2lg",
+          "measure": "44",
+          "course": "3",
+          "fret": "0",
+          "label": "m.44 c3/0"
+        },
+        {
+          "id": "tne7a34mp",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tn7f8lwvv",
+          "measure": "44",
+          "course": "3",
+          "fret": "3",
+          "label": "m.44 c3/3"
+        },
+        {
+          "id": "tnuq6ddtb",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tnxccsg4o",
+          "measure": "44",
+          "course": "3",
+          "fret": "3",
+          "label": "m.44 c3/3"
+        },
+        {
+          "id": "tnehpzrv7",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tno3s65qu",
+          "measure": "44",
+          "course": "3",
+          "fret": "0",
+          "label": "m.44 c3/0"
+        },
+        {
+          "id": "tnw3gi60q",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tnjwk6z0h",
+          "measure": "44",
+          "course": "2",
+          "fret": "3",
+          "label": "m.44 c2/3"
+        }
+      ],
+      "activity": "Kadenzreflex",
+      "comment": "",
+      "createdAt": "2026-05-11T18:17:39.074Z",
+      "tab": [
+        {
+          "id": "tn210q2lg",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "0",
+          "label": "m.44 c3/0"
+        },
+        {
+          "id": "tne7a34mp",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tn7f8lwvv",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "3",
+          "label": "m.44 c3/3"
+        },
+        {
+          "id": "tnuq6ddtb",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tnxccsg4o",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "3",
+          "label": "m.44 c3/3"
+        },
+        {
+          "id": "tnehpzrv7",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tno3s65qu",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "0",
+          "label": "m.44 c3/0"
+        },
+        {
+          "id": "tnw3gi60q",
+          "kind": "tab",
+          "measure": "44",
+          "course": "3",
+          "fret": "2",
+          "label": "m.44 c3/2"
+        },
+        {
+          "id": "tnjwk6z0h",
+          "kind": "tab",
+          "measure": "44",
+          "course": "2",
+          "fret": "3",
+          "label": "m.44 c2/3"
+        },
+        {
+          "id": "tn8f34gad",
+          "kind": "tab",
+          "measure": "45",
+          "course": "2",
+          "fret": "2",
+          "label": "m.45 c2/2"
+        },
+        {
+          "id": "tn7l0rcti",
+          "kind": "tab",
+          "measure": "45",
+          "course": "3",
+          "fret": "3",
+          "label": "m.45 c3/3"
+        },
+        {
+          "id": "tnmhbyhz4",
+          "kind": "tab",
+          "measure": "45",
+          "course": "4",
+          "fret": "2",
+          "label": "m.45 c4/2"
+        },
+        {
+          "id": "tnktoc1yf",
+          "kind": "tab",
+          "measure": "45",
+          "course": "5",
+          "fret": "0",
+          "label": "m.45 c5/0"
+        },
+        {
+          "id": "tn3xz6olb",
+          "kind": "tab",
+          "measure": "45",
+          "course": "10",
+          "fret": "0",
+          "label": "m.45 c10/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n19ta7b1",
+          "kind": "voc",
+          "measure": "44",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "C♯4",
+          "label": "A m.44 C♯4"
+        },
+        {
+          "id": "nenjpvh",
+          "kind": "voc",
+          "measure": "44",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "A2",
+          "label": "B m.44 A2"
+        },
+        {
+          "id": "n1h4damw",
+          "kind": "voc",
+          "measure": "45",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.45 D3"
+        },
+        {
+          "id": "n2znyby",
+          "kind": "voc",
+          "measure": "45",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "D4",
+          "label": "A m.45 D4"
+        }
+      ],
+      "updatedAt": "2026-05-18T05:22:15.851Z"
+    },
+    {
+      "id": "a-l3lk7wxe",
+      "notes": [
+        {
+          "id": "tnkdq95g3",
+          "measure": "20",
+          "course": "4",
+          "fret": "0",
+          "label": "m.20 c4/0"
+        },
+        {
+          "id": "tnmqvindh",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tnb2serev",
+          "measure": "20",
+          "course": "4",
+          "fret": "3",
+          "label": "m.20 c4/3"
+        },
+        {
+          "id": "tnti22nv0",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tnk5ogz2u",
+          "measure": "20",
+          "course": "4",
+          "fret": "3",
+          "label": "m.20 c4/3"
+        },
+        {
+          "id": "tnxj4pnjy",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tnlmz04x0",
+          "measure": "20",
+          "course": "4",
+          "fret": "0",
+          "label": "m.20 c4/0"
+        },
+        {
+          "id": "tnzzf8adf",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        }
+      ],
+      "activity": "Kadenzreflex",
+      "comment": "",
+      "createdAt": "2026-05-11T18:20:29.907Z",
+      "tab": [
+        {
+          "id": "tnkdq95g3",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "0",
+          "label": "m.20 c4/0"
+        },
+        {
+          "id": "tnmqvindh",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tnb2serev",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "3",
+          "label": "m.20 c4/3"
+        },
+        {
+          "id": "tnti22nv0",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tnk5ogz2u",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "3",
+          "label": "m.20 c4/3"
+        },
+        {
+          "id": "tnxj4pnjy",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tnlmz04x0",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "0",
+          "label": "m.20 c4/0"
+        },
+        {
+          "id": "tnzzf8adf",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "2",
+          "label": "m.20 c4/2"
+        },
+        {
+          "id": "tngnzei3z",
+          "kind": "tab",
+          "measure": "20",
+          "course": "4",
+          "fret": "3",
+          "label": "m.20 c4/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nqh6fv2",
+          "kind": "voc",
+          "measure": "20",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "B4",
+          "label": "SI m.20 B4"
+        },
+        {
+          "id": "nbbt376",
+          "kind": "voc",
+          "measure": "20",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "A4",
+          "label": "SI m.20 A4"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:31:52.268Z"
+    },
+    {
+      "id": "a-ovcaojk4",
+      "notes": [
+        {
+          "id": "tncs4kek4",
+          "measure": "30",
+          "course": "3",
+          "fret": "1",
+          "label": "m.30 c3/1"
+        },
+        {
+          "id": "tnjzr25md",
+          "measure": "30",
+          "course": "1",
+          "fret": "1",
+          "label": "m.30 c1/1"
+        },
+        {
+          "id": "tnpwh0mx1",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnnzrf5a7",
+          "measure": "30",
+          "course": "2",
+          "fret": "3",
+          "label": "m.30 c2/3"
+        }
+      ],
+      "activity": "Auftaktiges Campanella",
+      "comment": "",
+      "createdAt": "2026-05-11T18:23:02.823Z",
+      "tab": [
+        {
+          "id": "tncs4kek4",
+          "kind": "tab",
+          "measure": "30",
+          "course": "3",
+          "fret": "1",
+          "label": "m.30 c3/1"
+        },
+        {
+          "id": "tnjzr25md",
+          "kind": "tab",
+          "measure": "30",
+          "course": "1",
+          "fret": "1",
+          "label": "m.30 c1/1"
+        },
+        {
+          "id": "tnpwh0mx1",
+          "kind": "tab",
+          "measure": "30",
+          "course": "4",
+          "fret": "2",
+          "label": "m.30 c4/2"
+        },
+        {
+          "id": "tnnzrf5a7",
+          "kind": "tab",
+          "measure": "30",
+          "course": "2",
+          "fret": "3",
+          "label": "m.30 c2/3"
+        },
+        {
+          "id": "tnxo100vh",
+          "kind": "tab",
+          "measure": "30",
+          "course": "5",
+          "fret": "3",
+          "label": "m.30 c5/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "ncnossa",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "F3",
+          "label": "B m.30 F3"
+        }
+      ],
+      "updatedAt": "2026-05-18T05:50:04.969Z"
+    },
+    {
+      "id": "a-i64eyo8k",
+      "notes": [
+        {
+          "id": "tnez5ehr0",
+          "measure": "40",
+          "course": "1",
+          "fret": "2",
+          "label": "m.40 c1/2"
+        }
+      ],
+      "activity": "Durchgang",
+      "comment": "",
+      "createdAt": "2026-05-11T18:24:45.405Z",
+      "tab": [
+        {
+          "id": "tnez5ehr0",
+          "kind": "tab",
+          "measure": "40",
+          "course": "1",
+          "fret": "2",
+          "label": "m.40 c1/2"
+        },
+        {
+          "id": "tncc5rqns",
+          "kind": "tab",
+          "measure": "40",
+          "course": "1",
+          "fret": "0",
+          "label": "m.40 c1/0"
+        },
+        {
+          "id": "tnfvb66h3",
+          "kind": "tab",
+          "measure": "40",
+          "course": "1",
+          "fret": "3",
+          "label": "m.40 c1/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nssslon",
+          "kind": "voc",
+          "measure": "40",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "A3",
+          "label": "T m.40 A3"
+        },
+        {
+          "id": "nsdklkq",
+          "kind": "voc",
+          "measure": "40",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "A3",
+          "label": "T m.40 A3"
+        },
+        {
+          "id": "nroog7a",
+          "kind": "voc",
+          "measure": "40",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.40 C4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:45:36.099Z"
+    },
+    {
+      "id": "a-4n341xz0",
+      "notes": [
+        {
+          "id": "tnpn6937x",
+          "measure": "47",
+          "course": "2",
+          "fret": "0",
+          "label": "m.47 c2/0"
+        }
+      ],
+      "activity": "Campanella-Durchgang",
+      "comment": "",
+      "createdAt": "2026-05-11T18:26:17.996Z",
+      "tab": [
+        {
+          "id": "tnpn6937x",
+          "kind": "tab",
+          "measure": "47",
+          "course": "2",
+          "fret": "0",
+          "label": "m.47 c2/0"
+        },
+        {
+          "id": "tnc1au9ds",
+          "kind": "tab",
+          "measure": "47",
+          "course": "5",
+          "fret": "0",
+          "label": "m.47 c5/0"
+        },
+        {
+          "id": "tn983amb3",
+          "kind": "tab",
+          "measure": "47",
+          "course": "2",
+          "fret": "1",
+          "label": "m.47 c2/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "noj1wko",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "D4",
+          "label": "SI m.47 D4"
+        },
+        {
+          "id": "n1ds26u8",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "D4",
+          "label": "SI m.47 D4"
+        },
+        {
+          "id": "n12eko4t",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F4",
+          "label": "SI m.47 F4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:48:36.915Z"
+    },
+    {
+      "id": "a-b4ly80wy",
+      "notes": [
+        {
+          "id": "tnct49lny",
+          "measure": "47",
+          "course": "1",
+          "fret": "1",
+          "label": "m.47 c1/1"
+        }
+      ],
+      "activity": "kadenzielle Durchgangsseptime",
+      "comment": "",
+      "createdAt": "2026-05-11T18:26:50.459Z"
+    },
+    {
+      "id": "a-jgv0z3pq",
+      "notes": [
+        {
+          "id": "tncu3fg00",
+          "measure": "53",
+          "course": "1",
+          "fret": "0",
+          "label": "m.53 c1/0"
+        },
+        {
+          "id": "tnf5b1sa3",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tnpf9s9eh",
+          "measure": "53",
+          "course": "1",
+          "fret": "3",
+          "label": "m.53 c1/3"
+        },
+        {
+          "id": "tnqlx3f2x",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tntcv1ltw",
+          "measure": "53",
+          "course": "1",
+          "fret": "3",
+          "label": "m.53 c1/3"
+        },
+        {
+          "id": "tnl7amkoh",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tnd3fvnv4",
+          "measure": "53",
+          "course": "1",
+          "fret": "0",
+          "label": "m.53 c1/0"
+        },
+        {
+          "id": "tn3x1f8s0",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tnp61nhvc",
+          "measure": "53",
+          "course": "2",
+          "fret": "1",
+          "label": "m.53 c2/1"
+        }
+      ],
+      "activity": "Kadenzreflex",
+      "comment": "",
+      "createdAt": "2026-05-11T18:27:54.725Z",
+      "tab": [
+        {
+          "id": "tncu3fg00",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "0",
+          "label": "m.53 c1/0"
+        },
+        {
+          "id": "tnf5b1sa3",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tnpf9s9eh",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "3",
+          "label": "m.53 c1/3"
+        },
+        {
+          "id": "tnqlx3f2x",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tntcv1ltw",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "3",
+          "label": "m.53 c1/3"
+        },
+        {
+          "id": "tnl7amkoh",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tnd3fvnv4",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "0",
+          "label": "m.53 c1/0"
+        },
+        {
+          "id": "tn3x1f8s0",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "2",
+          "label": "m.53 c1/2"
+        },
+        {
+          "id": "tnp61nhvc",
+          "kind": "tab",
+          "measure": "53",
+          "course": "2",
+          "fret": "1",
+          "label": "m.53 c2/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1ukoym3",
+          "kind": "voc",
+          "measure": "53",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "B♮4",
+          "label": "SI m.53 B♮4"
+        }
+      ],
+      "updatedAt": "2026-05-14T08:51:58.652Z"
+    },
+    {
+      "id": "a-3k370ql9",
+      "notes": [
+        {
+          "id": "tnx32uew9",
+          "measure": "55",
+          "course": "5",
+          "fret": "3",
+          "label": "m.55 c5/3"
+        },
+        {
+          "id": "tnvm89i9g",
+          "measure": "55",
+          "course": "1",
+          "fret": "0",
+          "label": "m.55 c1/0"
+        },
+        {
+          "id": "tnw24wjt8",
+          "measure": "55",
+          "course": "4",
+          "fret": "0",
+          "label": "m.55 c4/0"
+        },
+        {
+          "id": "tnhdpwvbz",
+          "measure": "55",
+          "course": "1",
+          "fret": "1",
+          "label": "m.55 c1/1"
+        },
+        {
+          "id": "tnmi6kti2",
+          "measure": "55",
+          "course": "4",
+          "fret": "2",
+          "label": "m.55 c4/2"
+        },
+        {
+          "id": "tn21xj7ww",
+          "measure": "55",
+          "course": "1",
+          "fret": "3",
+          "label": "m.55 c1/3"
+        },
+        {
+          "id": "tn3gaguvb",
+          "measure": "56",
+          "course": "3",
+          "fret": "3",
+          "label": "m.56 c3/3"
+        },
+        {
+          "id": "tn99rwtf0",
+          "measure": "56",
+          "course": "4",
+          "fret": "3",
+          "label": "m.56 c4/3"
+        },
+        {
+          "id": "tnehlh07j",
+          "measure": "56",
+          "course": "5",
+          "fret": "0",
+          "label": "m.56 c5/0"
+        },
+        {
+          "id": "tnr8mtk0r",
+          "measure": "56",
+          "course": "6",
+          "fret": "1",
+          "label": "m.56 c6/1"
+        },
+        {
+          "id": "tn5p03wvp",
+          "measure": "56",
+          "course": "6",
+          "fret": "3",
+          "label": "m.56 c6/3"
+        },
+        {
+          "id": "tnov1l28r",
+          "measure": "56",
+          "course": "2",
+          "fret": "0",
+          "label": "m.56 c2/0"
+        },
+        {
+          "id": "tngl2mcxn",
+          "measure": "56",
+          "course": "5",
+          "fret": "0",
+          "label": "m.56 c5/0"
+        },
+        {
+          "id": "tnvk3x8mb",
+          "measure": "56",
+          "course": "2",
+          "fret": "1",
+          "label": "m.56 c2/1"
+        }
+      ],
+      "activity": "Bevorzugung durchgehender Terzen",
+      "comment": "",
+      "createdAt": "2026-05-11T18:30:33.676Z"
+    },
+    {
+      "id": "a-422vfdju",
+      "notes": [
+        {
+          "id": "tntj1gm25",
+          "measure": "7",
+          "course": "5",
+          "fret": "0",
+          "label": "m.7 c5/0"
+        },
+        {
+          "id": "tn9rr7s20",
+          "measure": "7",
+          "course": "5",
+          "fret": "1",
+          "label": "m.7 c5/1"
+        },
+        {
+          "id": "tnlvpymb5",
+          "measure": "7",
+          "course": "5",
+          "fret": "3",
+          "label": "m.7 c5/3"
+        },
+        {
+          "id": "tnn2y8fv2",
+          "measure": "7",
+          "course": "5",
+          "fret": "1",
+          "label": "m.7 c5/1"
+        }
+      ],
+      "activity": "Umspielung",
+      "comment": "",
+      "createdAt": "2026-05-11T18:35:37.011Z",
+      "tab": [
+        {
+          "id": "tntj1gm25",
+          "kind": "tab",
+          "measure": "7",
+          "course": "5",
+          "fret": "0",
+          "label": "m.7 c5/0"
+        },
+        {
+          "id": "tn9rr7s20",
+          "kind": "tab",
+          "measure": "7",
+          "course": "5",
+          "fret": "1",
+          "label": "m.7 c5/1"
+        },
+        {
+          "id": "tnlvpymb5",
+          "kind": "tab",
+          "measure": "7",
+          "course": "5",
+          "fret": "3",
+          "label": "m.7 c5/3"
+        },
+        {
+          "id": "tnn2y8fv2",
+          "kind": "tab",
+          "measure": "7",
+          "course": "5",
+          "fret": "1",
+          "label": "m.7 c5/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1iv933j",
+          "kind": "voc",
+          "measure": "7",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "E♭3",
+          "label": "B m.7 E♭3"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:21:59.199Z"
+    },
+    {
+      "id": "a-755vyapc",
+      "notes": [
+        {
+          "id": "tnngh8rie",
+          "measure": "7",
+          "course": "1",
+          "fret": "0",
+          "label": "m.7 c1/0"
+        },
+        {
+          "id": "tnm1enf31",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnk0qtl3q",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        },
+        {
+          "id": "tns832ejx",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnj6fp8hq",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        },
+        {
+          "id": "tnb74x2ek",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnj4t0sek",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        },
+        {
+          "id": "tnvasifpw",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tns9toqw9",
+          "measure": "7",
+          "course": "1",
+          "fret": "0",
+          "label": "m.7 c1/0"
+        },
+        {
+          "id": "tn0lbt3g2",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnkbhb7s9",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        }
+      ],
+      "activity": "Cercar mit Groppo",
+      "comment": "",
+      "createdAt": "2026-05-11T18:36:29.399Z",
+      "tab": [
+        {
+          "id": "tnngh8rie",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "0",
+          "label": "m.7 c1/0"
+        },
+        {
+          "id": "tnm1enf31",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnk0qtl3q",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        },
+        {
+          "id": "tns832ejx",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnj6fp8hq",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        },
+        {
+          "id": "tnb74x2ek",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnj4t0sek",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        },
+        {
+          "id": "tnvasifpw",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tns9toqw9",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "0",
+          "label": "m.7 c1/0"
+        },
+        {
+          "id": "tn0lbt3g2",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "2",
+          "label": "m.7 c1/2"
+        },
+        {
+          "id": "tnkbhb7s9",
+          "kind": "tab",
+          "measure": "7",
+          "course": "1",
+          "fret": "3",
+          "label": "m.7 c1/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "ny7xzyq",
+          "kind": "voc",
+          "measure": "7",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "C4",
+          "label": "A m.7 C4"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:21:34.715Z"
+    },
+    {
+      "id": "a-mlsjlgio",
+      "notes": [
+        {
+          "id": "tnhkc856w",
+          "measure": "11",
+          "course": "3",
+          "fret": "1",
+          "label": "m.11 c3/1"
+        },
+        {
+          "id": "tnofn1r4k",
+          "measure": "11",
+          "course": "3",
+          "fret": "0",
+          "label": "m.11 c3/0"
+        },
+        {
+          "id": "tnihx74d0",
+          "measure": "11",
+          "course": "3",
+          "fret": "1",
+          "label": "m.11 c3/1"
+        },
+        {
+          "id": "tn0ur5l8a",
+          "measure": "11",
+          "course": "3",
+          "fret": "3",
+          "label": "m.11 c3/3"
+        },
+        {
+          "id": "tnh6t1ntm",
+          "measure": "11",
+          "course": "3",
+          "fret": "1",
+          "label": "m.11 c3/1"
+        }
+      ],
+      "activity": "Umspielung",
+      "comment": "",
+      "createdAt": "2026-05-11T18:38:24.428Z",
+      "tab": [
+        {
+          "id": "tnhkc856w",
+          "kind": "tab",
+          "measure": "11",
+          "course": "3",
+          "fret": "1",
+          "label": "m.11 c3/1"
+        },
+        {
+          "id": "tnofn1r4k",
+          "kind": "tab",
+          "measure": "11",
+          "course": "3",
+          "fret": "0",
+          "label": "m.11 c3/0"
+        },
+        {
+          "id": "tnihx74d0",
+          "kind": "tab",
+          "measure": "11",
+          "course": "3",
+          "fret": "1",
+          "label": "m.11 c3/1"
+        },
+        {
+          "id": "tn0ur5l8a",
+          "kind": "tab",
+          "measure": "11",
+          "course": "3",
+          "fret": "3",
+          "label": "m.11 c3/3"
+        },
+        {
+          "id": "tnh6t1ntm",
+          "kind": "tab",
+          "measure": "11",
+          "course": "3",
+          "fret": "1",
+          "label": "m.11 c3/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1jo21w2",
+          "kind": "voc",
+          "measure": "10",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C5",
+          "label": "SI m.10 C5"
+        }
+      ],
+      "updatedAt": "2026-05-11T19:24:30.849Z"
+    },
+    {
+      "id": "a-6b54vmtx",
+      "notes": [
+        {
+          "id": "tn6nouhfj",
+          "measure": "11",
+          "course": "5",
+          "fret": "1",
+          "label": "m.11 c5/1"
+        },
+        {
+          "id": "tnrxyj38x",
+          "measure": "11",
+          "course": "5",
+          "fret": "0",
+          "label": "m.11 c5/0"
+        },
+        {
+          "id": "tntxcb48y",
+          "measure": "11",
+          "course": "5",
+          "fret": "1",
+          "label": "m.11 c5/1"
+        },
+        {
+          "id": "tnnwywrra",
+          "measure": "11",
+          "course": "5",
+          "fret": "3",
+          "label": "m.11 c5/3"
+        },
+        {
+          "id": "tny36ddfg",
+          "measure": "11",
+          "course": "5",
+          "fret": "1",
+          "label": "m.11 c5/1"
+        }
+      ],
+      "activity": "Umspielung",
+      "comment": "",
+      "createdAt": "2026-05-11T18:38:37.112Z",
+      "tab": [
+        {
+          "id": "tn6nouhfj",
+          "kind": "tab",
+          "measure": "11",
+          "course": "5",
+          "fret": "1",
+          "label": "m.11 c5/1"
+        },
+        {
+          "id": "tnrxyj38x",
+          "kind": "tab",
+          "measure": "11",
+          "course": "5",
+          "fret": "0",
+          "label": "m.11 c5/0"
+        },
+        {
+          "id": "tntxcb48y",
+          "kind": "tab",
+          "measure": "11",
+          "course": "5",
+          "fret": "1",
+          "label": "m.11 c5/1"
+        },
+        {
+          "id": "tnnwywrra",
+          "kind": "tab",
+          "measure": "11",
+          "course": "5",
+          "fret": "3",
+          "label": "m.11 c5/3"
+        },
+        {
+          "id": "tny36ddfg",
+          "kind": "tab",
+          "measure": "11",
+          "course": "5",
+          "fret": "1",
+          "label": "m.11 c5/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1tjizy0",
+          "kind": "voc",
+          "measure": "11",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "E♭3",
+          "label": "B m.11 E♭3"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:50:40.114Z"
+    },
+    {
+      "id": "a-rz02zwp1",
+      "notes": [
+        {
+          "id": "tn9iy4x41",
+          "measure": "11",
+          "course": "2",
+          "fret": "2",
+          "label": "m.11 c2/2"
+        },
+        {
+          "id": "tnh55rbc7",
+          "measure": "11",
+          "course": "2",
+          "fret": "0",
+          "label": "m.11 c2/0"
+        },
+        {
+          "id": "tn1zocfi4",
+          "measure": "11",
+          "course": "2",
+          "fret": "2",
+          "label": "m.11 c2/2"
+        },
+        {
+          "id": "tns9bp4m1",
+          "measure": "11",
+          "course": "2",
+          "fret": "3",
+          "label": "m.11 c2/3"
+        },
+        {
+          "id": "tnm7pyxdw",
+          "measure": "11",
+          "course": "2",
+          "fret": "2",
+          "label": "m.11 c2/2"
+        }
+      ],
+      "activity": "Umspielung",
+      "comment": "",
+      "createdAt": "2026-05-11T18:38:47.678Z",
+      "tab": [
+        {
+          "id": "tn9iy4x41",
+          "kind": "tab",
+          "measure": "11",
+          "course": "2",
+          "fret": "2",
+          "label": "m.11 c2/2"
+        },
+        {
+          "id": "tnh55rbc7",
+          "kind": "tab",
+          "measure": "11",
+          "course": "2",
+          "fret": "0",
+          "label": "m.11 c2/0"
+        },
+        {
+          "id": "tn1zocfi4",
+          "kind": "tab",
+          "measure": "11",
+          "course": "2",
+          "fret": "2",
+          "label": "m.11 c2/2"
+        },
+        {
+          "id": "tns9bp4m1",
+          "kind": "tab",
+          "measure": "11",
+          "course": "2",
+          "fret": "3",
+          "label": "m.11 c2/3"
+        },
+        {
+          "id": "tnm7pyxdw",
+          "kind": "tab",
+          "measure": "11",
+          "course": "2",
+          "fret": "2",
+          "label": "m.11 c2/2"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1oxkzln",
+          "kind": "voc",
+          "measure": "11",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F♯4",
+          "label": "SI m.11 F♯4"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:50:46.515Z"
+    },
+    {
+      "id": "a-feu7xktb",
+      "notes": [
+        {
+          "id": "tnldalmje",
+          "measure": "11",
+          "course": "1",
+          "fret": "1",
+          "label": "m.11 c1/1"
+        },
+        {
+          "id": "tnvlnknd6",
+          "measure": "11",
+          "course": "1",
+          "fret": "0",
+          "label": "m.11 c1/0"
+        },
+        {
+          "id": "tnrcpprcj",
+          "measure": "11",
+          "course": "1",
+          "fret": "1",
+          "label": "m.11 c1/1"
+        },
+        {
+          "id": "tnlw2lm34",
+          "measure": "11",
+          "course": "1",
+          "fret": "3",
+          "label": "m.11 c1/3"
+        },
+        {
+          "id": "tn8kzruin",
+          "measure": "11",
+          "course": "1",
+          "fret": "1",
+          "label": "m.11 c1/1"
+        }
+      ],
+      "activity": "Umspielung",
+      "comment": "",
+      "createdAt": "2026-05-11T18:39:08.699Z",
+      "tab": [
+        {
+          "id": "tnldalmje",
+          "kind": "tab",
+          "measure": "11",
+          "course": "1",
+          "fret": "1",
+          "label": "m.11 c1/1"
+        },
+        {
+          "id": "tnvlnknd6",
+          "kind": "tab",
+          "measure": "11",
+          "course": "1",
+          "fret": "0",
+          "label": "m.11 c1/0"
+        },
+        {
+          "id": "tnrcpprcj",
+          "kind": "tab",
+          "measure": "11",
+          "course": "1",
+          "fret": "1",
+          "label": "m.11 c1/1"
+        },
+        {
+          "id": "tnlw2lm34",
+          "kind": "tab",
+          "measure": "11",
+          "course": "1",
+          "fret": "3",
+          "label": "m.11 c1/3"
+        },
+        {
+          "id": "tn8kzruin",
+          "kind": "tab",
+          "measure": "11",
+          "course": "1",
+          "fret": "1",
+          "label": "m.11 c1/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nqniqw7",
+          "kind": "voc",
+          "measure": "11",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "B♭4",
+          "label": "SI m.11 B♭4"
+        }
+      ],
+      "updatedAt": "2026-05-11T18:50:57.963Z"
+    },
+    {
+      "id": "a-0n26nahk",
+      "tab": [
+        {
+          "id": "tnb6gs8g8",
+          "kind": "tab",
+          "measure": "19",
+          "course": "4",
+          "fret": "0",
+          "label": "m.19 c4/0"
+        },
+        {
+          "id": "tndtz91x7",
+          "kind": "tab",
+          "measure": "19",
+          "course": "4",
+          "fret": "2",
+          "label": "m.19 c4/2"
+        },
+        {
+          "id": "tnuuijnwp",
+          "kind": "tab",
+          "measure": "19",
+          "course": "4",
+          "fret": "3",
+          "label": "m.19 c4/3"
+        },
+        {
+          "id": "tn39ayq6w",
+          "kind": "tab",
+          "measure": "19",
+          "course": "4",
+          "fret": "2",
+          "label": "m.19 c4/2"
+        },
+        {
+          "id": "tnrrhf4ab",
+          "kind": "tab",
+          "measure": "20",
+          "course": "3",
+          "fret": "1",
+          "label": "m.20 c3/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nu3b34s",
+          "kind": "voc",
+          "measure": "19",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "A4",
+          "label": "SI m.19 A4"
+        },
+        {
+          "id": "n1wqy499",
+          "kind": "voc",
+          "measure": "20",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C5",
+          "label": "SI m.20 C5"
+        }
+      ],
+      "activity": "Durchgang",
+      "comment": "",
+      "createdAt": "2026-05-11T18:55:27.082Z",
+      "updatedAt": "2026-05-18T07:23:45.351Z"
+    },
+    {
+      "id": "a-93krdqci",
+      "tab": [
+        {
+          "id": "tn20n8tte",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "0",
+          "label": "m.20 c5/0"
+        },
+        {
+          "id": "tnmoxsfh4",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "1",
+          "label": "m.20 c5/1"
+        },
+        {
+          "id": "tnqtkcd0r",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "3",
+          "label": "m.20 c5/3"
+        },
+        {
+          "id": "tnqwlvunl",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "1",
+          "label": "m.20 c5/1"
+        },
+        {
+          "id": "tne05qmkt",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "3",
+          "label": "m.20 c5/3"
+        },
+        {
+          "id": "tn5ccasbu",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "1",
+          "label": "m.20 c5/1"
+        },
+        {
+          "id": "tn1ni10kq",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "3",
+          "label": "m.20 c5/3"
+        },
+        {
+          "id": "tnfsqg8x8",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "1",
+          "label": "m.20 c5/1"
+        },
+        {
+          "id": "tnbh6nqqb",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "0",
+          "label": "m.20 c5/0"
+        },
+        {
+          "id": "tntgxnx4s",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "1",
+          "label": "m.20 c5/1"
+        },
+        {
+          "id": "tnvsffcxh",
+          "kind": "tab",
+          "measure": "20",
+          "course": "5",
+          "fret": "3",
+          "label": "m.20 c5/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1jcodoy",
+          "kind": "voc",
+          "measure": "20",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "E♭3",
+          "label": "B m.20 E♭3"
+        },
+        {
+          "id": "n1b4k2zf",
+          "kind": "voc",
+          "measure": "20",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "F3",
+          "label": "B m.20 F3"
+        }
+      ],
+      "activity": "Umspielung",
+      "comment": "",
+      "createdAt": "2026-05-11T18:55:47.031Z",
+      "updatedAt": "2026-05-18T07:24:19.770Z"
+    },
+    {
+      "id": "a-1m6tv8za",
+      "tab": [
+        {
+          "id": "tn0cdk36m",
+          "kind": "tab",
+          "measure": "21",
+          "course": "6",
+          "fret": "1",
+          "label": "m.21 c6/1"
+        },
+        {
+          "id": "tnvsigbia",
+          "kind": "tab",
+          "measure": "21",
+          "course": "4",
+          "fret": "3",
+          "label": "m.21 c4/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1muuah1",
+          "kind": "voc",
+          "measure": "21",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "B2",
+          "label": "B m.21 B2"
+        },
+        {
+          "id": "n1qnw3wq",
+          "kind": "voc",
+          "measure": "21",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "B3",
+          "label": "T m.21 B3"
+        }
+      ],
+      "activity": "nachschlagender Bass",
+      "comment": "",
+      "createdAt": "2026-05-11T18:56:02.847Z",
+      "updatedAt": "2026-05-14T08:28:13.487Z"
+    },
+    {
+      "id": "a-27jbp2u7",
+      "tab": [
+        {
+          "id": "tnjz0ifrm",
+          "kind": "tab",
+          "measure": "24",
+          "course": "3",
+          "fret": "3",
+          "label": "m.24 c3/3"
+        },
+        {
+          "id": "tn8c1cqg4",
+          "kind": "tab",
+          "measure": "24",
+          "course": "3",
+          "fret": "4",
+          "label": "m.24 c3/4"
+        },
+        {
+          "id": "tn0bq1s9r",
+          "kind": "tab",
+          "measure": "24",
+          "course": "3",
+          "fret": "6",
+          "label": "m.24 c3/6"
+        },
+        {
+          "id": "tnjwh55he",
+          "kind": "tab",
+          "measure": "24",
+          "course": "3",
+          "fret": "8",
+          "label": "m.24 c3/8"
+        },
+        {
+          "id": "tnb2rvndf",
+          "kind": "tab",
+          "measure": "24",
+          "course": "1",
+          "fret": "8",
+          "label": "m.24 c1/8"
+        },
+        {
+          "id": "tnz2ei921",
+          "kind": "tab",
+          "measure": "24",
+          "course": "1",
+          "fret": "6",
+          "label": "m.24 c1/6"
+        },
+        {
+          "id": "tnrpkzggm",
+          "kind": "tab",
+          "measure": "24",
+          "course": "4",
+          "fret": "7",
+          "label": "m.24 c4/7"
+        },
+        {
+          "id": "tnkjnawng",
+          "kind": "tab",
+          "measure": "24",
+          "course": "2",
+          "fret": "8",
+          "label": "m.24 c2/8"
+        },
+        {
+          "id": "tnnsrtwlx",
+          "kind": "tab",
+          "measure": "24",
+          "course": "2",
+          "fret": "6",
+          "label": "m.24 c2/6"
+        },
+        {
+          "id": "tno4gkwwj",
+          "kind": "tab",
+          "measure": "24",
+          "course": "1",
+          "fret": "3",
+          "label": "m.24 c1/3"
+        },
+        {
+          "id": "tnfshb0oq",
+          "kind": "tab",
+          "measure": "25",
+          "course": "4",
+          "fret": "2",
+          "label": "m.25 c4/2"
+        },
+        {
+          "id": "tn6c2cu7o",
+          "kind": "tab",
+          "measure": "25",
+          "course": "5",
+          "fret": "0",
+          "label": "m.25 c5/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1itwu1q",
+          "kind": "voc",
+          "measure": "24",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "E♭3",
+          "label": "B m.24 E♭3"
+        },
+        {
+          "id": "ns664dm",
+          "kind": "voc",
+          "measure": "24",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "G3",
+          "label": "A m.24 G3"
+        },
+        {
+          "id": "nuvn0nj",
+          "kind": "voc",
+          "measure": "24",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "A3",
+          "label": "A m.24 A3"
+        },
+        {
+          "id": "n1bm2rso",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "B3",
+          "label": "A m.25 B3"
+        },
+        {
+          "id": "nehb5sh",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "A3",
+          "label": "A m.25 A3"
+        },
+        {
+          "id": "n9tljnr",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.25 D3"
+        }
+      ],
+      "activity": "freie Figur über c",
+      "comment": "?",
+      "createdAt": "2026-05-11T18:57:31.248Z",
+      "updatedAt": "2026-05-18T08:45:23.476Z"
+    },
+    {
+      "id": "a-2wnj0hvw",
+      "tab": [
+        {
+          "id": "tnbbadlyp",
+          "kind": "tab",
+          "measure": "57",
+          "course": "3",
+          "fret": "8",
+          "label": "m.57 c3/8"
+        },
+        {
+          "id": "tn5j2d8cl",
+          "kind": "tab",
+          "measure": "57",
+          "course": "1",
+          "fret": "8",
+          "label": "m.57 c1/8"
+        },
+        {
+          "id": "tn5158oqe",
+          "kind": "tab",
+          "measure": "57",
+          "course": "1",
+          "fret": "6",
+          "label": "m.57 c1/6"
+        },
+        {
+          "id": "tnjkcu5x0",
+          "kind": "tab",
+          "measure": "57",
+          "course": "4",
+          "fret": "7",
+          "label": "m.57 c4/7"
+        },
+        {
+          "id": "tngdhvs41",
+          "kind": "tab",
+          "measure": "57",
+          "course": "2",
+          "fret": "8",
+          "label": "m.57 c2/8"
+        },
+        {
+          "id": "tn95s2gkf",
+          "kind": "tab",
+          "measure": "57",
+          "course": "2",
+          "fret": "6",
+          "label": "m.57 c2/6"
+        },
+        {
+          "id": "tn6gbxqj7",
+          "kind": "tab",
+          "measure": "57",
+          "course": "1",
+          "fret": "0",
+          "label": "m.57 c1/0"
+        },
+        {
+          "id": "tndx0pkov",
+          "kind": "tab",
+          "measure": "57",
+          "course": "4",
+          "fret": "0",
+          "label": "m.57 c4/0"
+        },
+        {
+          "id": "tnzod05jh",
+          "kind": "tab",
+          "measure": "57",
+          "course": "1",
+          "fret": "0",
+          "label": "m.57 c1/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nuhv70i",
+          "kind": "voc",
+          "measure": "57",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "A3",
+          "label": "T m.57 A3"
+        }
+      ],
+      "activity": "maximales Campanella",
+      "comment": "",
+      "createdAt": "2026-05-11T19:09:37.302Z",
+      "updatedAt": "2026-05-18T05:51:23.891Z"
+    },
+    {
+      "id": "a-481epf6l",
+      "tab": [
+        {
+          "id": "tng87oi0e",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "3",
+          "label": "m.18 c2/3"
+        },
+        {
+          "id": "tnjtb9xxa",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "0",
+          "label": "m.18 c1/0"
+        },
+        {
+          "id": "tnwkxxjve",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "1",
+          "label": "m.18 c1/1"
+        },
+        {
+          "id": "tnhjshzkb",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "3",
+          "label": "m.18 c1/3"
+        },
+        {
+          "id": "tn4yfds0d",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "1",
+          "label": "m.18 c1/1"
+        },
+        {
+          "id": "tnbk2l0d1",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "0",
+          "label": "m.18 c1/0"
+        },
+        {
+          "id": "tn5d3go8j",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "1",
+          "label": "m.18 c1/1"
+        },
+        {
+          "id": "tnc7fov2y",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "0",
+          "label": "m.18 c1/0"
+        },
+        {
+          "id": "tne7eobjl",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "3",
+          "label": "m.18 c2/3"
+        },
+        {
+          "id": "tnmszdxim",
+          "kind": "tab",
+          "measure": "18",
+          "course": "1",
+          "fret": "0",
+          "label": "m.18 c1/0"
+        },
+        {
+          "id": "tnf445cri",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "1",
+          "label": "m.18 c2/1"
+        },
+        {
+          "id": "tn2q4qerx",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "3",
+          "label": "m.18 c2/3"
+        },
+        {
+          "id": "tnkshy8nb",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "1",
+          "label": "m.18 c2/1"
+        },
+        {
+          "id": "tne1hm38k",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "0",
+          "label": "m.18 c2/0"
+        },
+        {
+          "id": "tndvg7oq2",
+          "kind": "tab",
+          "measure": "18",
+          "course": "5",
+          "fret": "0",
+          "label": "m.18 c5/0"
+        },
+        {
+          "id": "tnqx8ertb",
+          "kind": "tab",
+          "measure": "18",
+          "course": "6",
+          "fret": "3",
+          "label": "m.18 c6/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n10ehpjo",
+          "kind": "voc",
+          "measure": "18",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "G4",
+          "label": "A m.18 G4"
+        },
+        {
+          "id": "n6pol9d",
+          "kind": "voc",
+          "measure": "18",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C♮4",
+          "label": "T m.18 C♮4"
+        }
+      ],
+      "activity": "freie Diminution",
+      "comment": "",
+      "createdAt": "2026-05-11T19:28:59.452Z",
+      "updatedAt": "2026-05-11T19:29:11.802Z"
+    },
+    {
+      "id": "a-wjar51yv",
+      "tab": [
+        {
+          "id": "tnyr06nkw",
+          "kind": "tab",
+          "measure": "23",
+          "course": "2",
+          "fret": "3",
+          "label": "m.23 c2/3"
+        },
+        {
+          "id": "tncfilkjx",
+          "kind": "tab",
+          "measure": "23",
+          "course": "1",
+          "fret": "0",
+          "label": "m.23 c1/0"
+        },
+        {
+          "id": "tn1cjfx5l",
+          "kind": "tab",
+          "measure": "23",
+          "course": "1",
+          "fret": "3",
+          "label": "m.23 c1/3"
+        },
+        {
+          "id": "tn4lr9tjq",
+          "kind": "tab",
+          "measure": "23",
+          "course": "1",
+          "fret": "1",
+          "label": "m.23 c1/1"
+        },
+        {
+          "id": "tnga0x7zc",
+          "kind": "tab",
+          "measure": "23",
+          "course": "1",
+          "fret": "1",
+          "label": "m.23 c1/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nyoh0oq",
+          "kind": "voc",
+          "measure": "23",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "B3",
+          "label": "A m.23 B3"
+        },
+        {
+          "id": "nbosvmf",
+          "kind": "voc",
+          "measure": "23",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "G3",
+          "label": "B m.23 G3"
+        }
+      ],
+      "activity": "Diminution",
+      "comment": "",
+      "createdAt": "2026-05-11T19:32:43.850Z"
+    },
+    {
+      "id": "a-dnieqgyo",
+      "tab": [
+        {
+          "id": "tnj3swebn",
+          "kind": "tab",
+          "measure": "17",
+          "course": "5",
+          "fret": "0",
+          "label": "m.17 c5/0"
+        },
+        {
+          "id": "tn0yknfu8",
+          "kind": "tab",
+          "measure": "17",
+          "course": "2",
+          "fret": "0",
+          "label": "m.17 c2/0"
+        },
+        {
+          "id": "tn1a6xvaj",
+          "kind": "tab",
+          "measure": "17",
+          "course": "2",
+          "fret": "1",
+          "label": "m.17 c2/1"
+        },
+        {
+          "id": "tnjqy3ods",
+          "kind": "tab",
+          "measure": "17",
+          "course": "2",
+          "fret": "3",
+          "label": "m.17 c2/3"
+        },
+        {
+          "id": "tnc9x5jz6",
+          "kind": "tab",
+          "measure": "17",
+          "course": "1",
+          "fret": "0",
+          "label": "m.17 c1/0"
+        },
+        {
+          "id": "tnxyzx9jp",
+          "kind": "tab",
+          "measure": "17",
+          "course": "1",
+          "fret": "2",
+          "label": "m.17 c1/2"
+        },
+        {
+          "id": "tn5gdej31",
+          "kind": "tab",
+          "measure": "17",
+          "course": "1",
+          "fret": "3",
+          "label": "m.17 c1/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1gu57u4",
+          "kind": "voc",
+          "measure": "17",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "D4",
+          "label": "T m.17 D4"
+        },
+        {
+          "id": "nnok0xf",
+          "kind": "voc",
+          "measure": "17",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "C4",
+          "label": "A m.17 C4"
+        }
+      ],
+      "activity": "Auffüllen",
+      "comment": "",
+      "createdAt": "2026-05-14T08:25:21.039Z"
+    },
+    {
+      "id": "a-yreztjqx",
+      "tab": [
+        {
+          "id": "tn2ljk4q5",
+          "kind": "tab",
+          "measure": "17",
+          "course": "3",
+          "fret": "3",
+          "label": "m.17 c3/3"
+        },
+        {
+          "id": "tnkb4ehou",
+          "kind": "tab",
+          "measure": "17",
+          "course": "1",
+          "fret": "3",
+          "label": "m.17 c1/3"
+        },
+        {
+          "id": "tngwaj1g1",
+          "kind": "tab",
+          "measure": "17",
+          "course": "1",
+          "fret": "1",
+          "label": "m.17 c1/1"
+        },
+        {
+          "id": "tnnbhnal3",
+          "kind": "tab",
+          "measure": "17",
+          "course": "4",
+          "fret": "2",
+          "label": "m.17 c4/2"
+        },
+        {
+          "id": "tng87oi0e",
+          "kind": "tab",
+          "measure": "18",
+          "course": "2",
+          "fret": "3",
+          "label": "m.18 c2/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n10ehpjo",
+          "kind": "voc",
+          "measure": "18",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "G4",
+          "label": "A m.18 G4"
+        }
+      ],
+      "activity": "Campanella",
+      "comment": "",
+      "createdAt": "2026-05-14T08:26:21.100Z",
+      "updatedAt": "2026-05-18T07:46:22.799Z"
+    },
+    {
+      "id": "a-zumv6e9c",
+      "tab": [
+        {
+          "id": "tn6c2cu7o",
+          "kind": "tab",
+          "measure": "25",
+          "course": "5",
+          "fret": "0",
+          "label": "m.25 c5/0"
+        },
+        {
+          "id": "tn88d0tgs",
+          "kind": "tab",
+          "measure": "25",
+          "course": "4",
+          "fret": "3",
+          "label": "m.25 c4/3"
+        },
+        {
+          "id": "tnmqx5ggo",
+          "kind": "tab",
+          "measure": "25",
+          "course": "1",
+          "fret": "0",
+          "label": "m.25 c1/0"
+        },
+        {
+          "id": "tnln1p0vu",
+          "kind": "tab",
+          "measure": "25",
+          "course": "2",
+          "fret": "3",
+          "label": "m.25 c2/3"
+        },
+        {
+          "id": "tn09vs9kk",
+          "kind": "tab",
+          "measure": "25",
+          "course": "2",
+          "fret": "2",
+          "label": "m.25 c2/2"
+        },
+        {
+          "id": "tnui3do70",
+          "kind": "tab",
+          "measure": "25",
+          "course": "2",
+          "fret": "3",
+          "label": "m.25 c2/3"
+        },
+        {
+          "id": "tnu7fbmen",
+          "kind": "tab",
+          "measure": "25",
+          "course": "4",
+          "fret": "3",
+          "label": "m.25 c4/3"
+        },
+        {
+          "id": "tnm3o55ix",
+          "kind": "tab",
+          "measure": "25",
+          "course": "4",
+          "fret": "0",
+          "label": "m.25 c4/0"
+        },
+        {
+          "id": "tnvk0ucc1",
+          "kind": "tab",
+          "measure": "25",
+          "course": "2",
+          "fret": "0",
+          "label": "m.25 c2/0"
+        },
+        {
+          "id": "tnfshb0oq",
+          "kind": "tab",
+          "measure": "25",
+          "course": "4",
+          "fret": "2",
+          "label": "m.25 c4/2"
+        },
+        {
+          "id": "tnvshkoec",
+          "kind": "tab",
+          "measure": "25",
+          "course": "3",
+          "fret": "3",
+          "label": "m.25 c3/3"
+        },
+        {
+          "id": "tnubods1e",
+          "kind": "tab",
+          "measure": "25",
+          "course": "2",
+          "fret": "2",
+          "label": "m.25 c2/2"
+        },
+        {
+          "id": "tneurxhw0",
+          "kind": "tab",
+          "measure": "25",
+          "course": "10",
+          "fret": "0",
+          "label": "m.25 c10/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n9tljnr",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.25 D3"
+        },
+        {
+          "id": "n1zi8c2",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "G3",
+          "label": "T m.25 G3"
+        },
+        {
+          "id": "n1bm2rso",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "B3",
+          "label": "A m.25 B3"
+        },
+        {
+          "id": "nehb5sh",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "A3",
+          "label": "A m.25 A3"
+        },
+        {
+          "id": "ngdspfm",
+          "kind": "voc",
+          "measure": "25",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "F♯3",
+          "label": "T m.25 F♯3"
+        }
+      ],
+      "activity": "Diminution über Quartsextakkord",
+      "comment": "Hinzugefügter Sekunddurchgang",
+      "createdAt": "2026-05-14T08:32:29.052Z"
+    },
+    {
+      "id": "a-zb994kqq",
+      "tab": [
+        {
+          "id": "tnvyv2gqu",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "3",
+          "label": "m.27 c1/3"
+        },
+        {
+          "id": "tntkezjss",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "1",
+          "label": "m.27 c1/1"
+        },
+        {
+          "id": "tny79kvls",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "0",
+          "label": "m.27 c1/0"
+        },
+        {
+          "id": "tngvz9aaw",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "3",
+          "label": "m.27 c1/3"
+        },
+        {
+          "id": "tne429omu",
+          "kind": "tab",
+          "measure": "27",
+          "course": "6",
+          "fret": "0",
+          "label": "m.27 c6/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1j0egf2",
+          "kind": "voc",
+          "measure": "27",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "A3",
+          "label": "T m.27 A3"
+        },
+        {
+          "id": "nn20gsz",
+          "kind": "voc",
+          "measure": "27",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "C4",
+          "label": "A m.27 C4"
+        }
+      ],
+      "activity": "Auffüllen",
+      "comment": "",
+      "createdAt": "2026-05-14T08:34:30.219Z"
+    },
+    {
+      "id": "a-2t1g73dg",
+      "tab": [
+        {
+          "id": "tntxrgn74",
+          "kind": "tab",
+          "measure": "30",
+          "course": "1",
+          "fret": "0",
+          "label": "m.30 c1/0"
+        },
+        {
+          "id": "tnrp9dxoq",
+          "kind": "tab",
+          "measure": "30",
+          "course": "1",
+          "fret": "1",
+          "label": "m.30 c1/1"
+        },
+        {
+          "id": "tnmgvu4is",
+          "kind": "tab",
+          "measure": "30",
+          "course": "1",
+          "fret": "3",
+          "label": "m.30 c1/3"
+        },
+        {
+          "id": "tnryf0992",
+          "kind": "tab",
+          "measure": "30",
+          "course": "1",
+          "fret": "1",
+          "label": "m.30 c1/1"
+        },
+        {
+          "id": "tncw2lbm2",
+          "kind": "tab",
+          "measure": "30",
+          "course": "1",
+          "fret": "0",
+          "label": "m.30 c1/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n19raglg",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "A3",
+          "label": "T m.30 A3"
+        },
+        {
+          "id": "n12ez9vp",
+          "kind": "voc",
+          "measure": "30",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "C4",
+          "label": "A m.30 C4"
+        }
+      ],
+      "activity": "Reflexfigur auf einer Saite",
+      "comment": "",
+      "createdAt": "2026-05-14T08:38:30.684Z",
+      "updatedAt": "2026-05-14T08:38:55.184Z"
+    },
+    {
+      "id": "a-th5twrkc",
+      "tab": [
+        {
+          "id": "tne6zvlhy",
+          "kind": "tab",
+          "measure": "31",
+          "course": "2",
+          "fret": "3",
+          "label": "m.31 c2/3"
+        },
+        {
+          "id": "tnhqr6f7q",
+          "kind": "tab",
+          "measure": "31",
+          "course": "1",
+          "fret": "0",
+          "label": "m.31 c1/0"
+        },
+        {
+          "id": "tnyce4qgm",
+          "kind": "tab",
+          "measure": "31",
+          "course": "1",
+          "fret": "2",
+          "label": "m.31 c1/2"
+        },
+        {
+          "id": "tn4d4r9v4",
+          "kind": "tab",
+          "measure": "31",
+          "course": "1",
+          "fret": "3",
+          "label": "m.31 c1/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n1ekof7n",
+          "kind": "voc",
+          "measure": "31",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "G4",
+          "label": "SI m.31 G4"
+        },
+        {
+          "id": "n4rx79a",
+          "kind": "voc",
+          "measure": "31",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C5",
+          "label": "SI m.31 C5"
+        }
+      ],
+      "activity": "Diminution",
+      "comment": "",
+      "createdAt": "2026-05-14T08:39:48.517Z"
+    },
+    {
+      "id": "a-9dsqlni9",
+      "tab": [
+        {
+          "id": "tnej9c0uu",
+          "kind": "tab",
+          "measure": "34",
+          "course": "4",
+          "fret": "2",
+          "label": "m.34 c4/2"
+        },
+        {
+          "id": "tnjp6mkt7",
+          "kind": "tab",
+          "measure": "34",
+          "course": "4",
+          "fret": "3",
+          "label": "m.34 c4/3"
+        },
+        {
+          "id": "tn3ykyydu",
+          "kind": "tab",
+          "measure": "34",
+          "course": "4",
+          "fret": "2",
+          "label": "m.34 c4/2"
+        },
+        {
+          "id": "tndfhg6w3",
+          "kind": "tab",
+          "measure": "34",
+          "course": "4",
+          "fret": "0",
+          "label": "m.34 c4/0"
+        },
+        {
+          "id": "tn37rln36",
+          "kind": "tab",
+          "measure": "34",
+          "course": "5",
+          "fret": "3",
+          "label": "m.34 c5/3"
+        },
+        {
+          "id": "tn4fieecy",
+          "kind": "tab",
+          "measure": "34",
+          "course": "5",
+          "fret": "2",
+          "label": "m.34 c5/2"
+        },
+        {
+          "id": "tnscejcy1",
+          "kind": "tab",
+          "measure": "34",
+          "course": "5",
+          "fret": "0",
+          "label": "m.34 c5/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "npy18km",
+          "kind": "voc",
+          "measure": "34",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "A3",
+          "label": "B m.34 A3"
+        },
+        {
+          "id": "n1j6vfh8",
+          "kind": "voc",
+          "measure": "34",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.34 D3"
+        }
+      ],
+      "activity": "Auffüllen",
+      "comment": "",
+      "createdAt": "2026-05-14T08:42:21.050Z"
+    },
+    {
+      "id": "a-2w8vv8ns",
+      "tab": [
+        {
+          "id": "tnscejcy1",
+          "kind": "tab",
+          "measure": "34",
+          "course": "5",
+          "fret": "0",
+          "label": "m.34 c5/0"
+        },
+        {
+          "id": "tn478mfs0",
+          "kind": "tab",
+          "measure": "34",
+          "course": "6",
+          "fret": "3",
+          "label": "m.34 c6/3"
+        },
+        {
+          "id": "tnk6t9dhs",
+          "kind": "tab",
+          "measure": "34",
+          "course": "6",
+          "fret": "2",
+          "label": "m.34 c6/2"
+        },
+        {
+          "id": "tnnhie9ed",
+          "kind": "tab",
+          "measure": "34",
+          "course": "6",
+          "fret": "0",
+          "label": "m.34 c6/0"
+        },
+        {
+          "id": "tnkvl9ptk",
+          "kind": "tab",
+          "measure": "34",
+          "course": "7",
+          "fret": "0",
+          "label": "m.34 c7/0"
+        },
+        {
+          "id": "tn9rdpxdf",
+          "kind": "tab",
+          "measure": "34",
+          "course": "6",
+          "fret": "0",
+          "label": "m.34 c6/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nhy42ra",
+          "kind": "voc",
+          "measure": "34",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "A2",
+          "label": "B m.34 A2"
+        },
+        {
+          "id": "n1j6vfh8",
+          "kind": "voc",
+          "measure": "34",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "D3",
+          "label": "B m.34 D3"
+        }
+      ],
+      "activity": "Auffüllen",
+      "comment": "bei absteigender Quarte nicht direkt (d c b a), sondern ein Ton darüber hinaus",
+      "createdAt": "2026-05-14T08:43:25.200Z",
+      "updatedAt": "2026-05-18T05:08:50.649Z"
+    },
+    {
+      "id": "a-z8rzz4l9",
+      "tab": [
+        {
+          "id": "tnci68ds0",
+          "kind": "tab",
+          "measure": "52",
+          "course": "5",
+          "fret": "0",
+          "label": "m.52 c5/0"
+        },
+        {
+          "id": "tndgg5gr0",
+          "kind": "tab",
+          "measure": "52",
+          "course": "6",
+          "fret": "1",
+          "label": "m.52 c6/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n7c3p2n",
+          "kind": "voc",
+          "measure": "52",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "B3",
+          "label": "T m.52 B3"
+        },
+        {
+          "id": "n1eod2n9",
+          "kind": "voc",
+          "measure": "52",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "D4",
+          "label": "A m.52 D4"
+        }
+      ],
+      "activity": "Arpeggio",
+      "comment": "",
+      "createdAt": "2026-05-14T08:50:04.487Z",
+      "updatedAt": "2026-05-14T08:50:14.469Z"
+    },
+    {
+      "id": "a-c9mdgb4i",
+      "tab": [
+        {
+          "id": "tnyk3md6x",
+          "kind": "tab",
+          "measure": "53",
+          "course": "5",
+          "fret": "1",
+          "label": "m.53 c5/1"
+        },
+        {
+          "id": "tnxloz2rc",
+          "kind": "tab",
+          "measure": "53",
+          "course": "2",
+          "fret": "3",
+          "label": "m.53 c2/3"
+        },
+        {
+          "id": "tnlpyo2m2",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "1",
+          "label": "m.53 c1/1"
+        },
+        {
+          "id": "tnnupuy0z",
+          "kind": "tab",
+          "measure": "53",
+          "course": "1",
+          "fret": "3",
+          "label": "m.53 c1/3"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n9cq2rp",
+          "kind": "voc",
+          "measure": "53",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "E♭4",
+          "label": "T m.53 E♭4"
+        },
+        {
+          "id": "n1ye4yfu",
+          "kind": "voc",
+          "measure": "53",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "G4",
+          "label": "A m.53 G4"
+        },
+        {
+          "id": "nzkd805",
+          "kind": "voc",
+          "measure": "53",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "C5",
+          "label": "SI m.53 C5"
+        }
+      ],
+      "activity": "Arpeggio",
+      "comment": "",
+      "createdAt": "2026-05-14T08:51:10.754Z"
+    },
+    {
+      "id": "a-lu9274rn",
+      "tab": [
+        {
+          "id": "tn2iz5p3v",
+          "kind": "tab",
+          "measure": "40",
+          "course": "2",
+          "fret": "1",
+          "label": "m.40 c2/1"
+        },
+        {
+          "id": "tnqqq5l2x",
+          "kind": "tab",
+          "measure": "40",
+          "course": "1",
+          "fret": "3",
+          "label": "m.40 c1/3"
+        },
+        {
+          "id": "tn62rzv1s",
+          "kind": "tab",
+          "measure": "40",
+          "course": "3",
+          "fret": "3",
+          "label": "m.40 c3/3"
+        },
+        {
+          "id": "tnoiot860",
+          "kind": "tab",
+          "measure": "40",
+          "course": "7",
+          "fret": "0",
+          "label": "m.40 c7/0"
+        },
+        {
+          "id": "tneugwubu",
+          "kind": "tab",
+          "measure": "40",
+          "course": "1",
+          "fret": "2",
+          "label": "m.40 c1/2"
+        },
+        {
+          "id": "tn5j8yit2",
+          "kind": "tab",
+          "measure": "41",
+          "course": "1",
+          "fret": "3",
+          "label": "m.41 c1/3"
+        },
+        {
+          "id": "tneh1vr1n",
+          "kind": "tab",
+          "measure": "41",
+          "course": "3",
+          "fret": "1",
+          "label": "m.41 c3/1"
+        },
+        {
+          "id": "tnecqoroi",
+          "kind": "tab",
+          "measure": "41",
+          "course": "6",
+          "fret": "3",
+          "label": "m.41 c6/3"
+        },
+        {
+          "id": "tncololn3",
+          "kind": "tab",
+          "measure": "41",
+          "course": "11",
+          "fret": "0",
+          "label": "m.41 c11/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nroog7a",
+          "kind": "voc",
+          "measure": "40",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.40 C4"
+        },
+        {
+          "id": "nsx5xqn",
+          "kind": "voc",
+          "measure": "40",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "B♮3",
+          "label": "T m.40 B♮3"
+        },
+        {
+          "id": "nygkthg",
+          "kind": "voc",
+          "measure": "40",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "G3",
+          "label": "B m.40 G3"
+        },
+        {
+          "id": "n1cwsvjs",
+          "kind": "voc",
+          "measure": "41",
+          "staff": "5",
+          "staffLabel": "Bass",
+          "pitch": "C3",
+          "label": "B m.41 C3"
+        },
+        {
+          "id": "n12axt7u",
+          "kind": "voc",
+          "measure": "41",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.41 C4"
+        }
+      ],
+      "activity": "Kadenz",
+      "comment": "",
+      "createdAt": "2026-05-18T05:11:07.081Z"
+    },
+    {
+      "id": "a-48ih49ay",
+      "tab": [
+        {
+          "id": "tn2xcb3yy",
+          "kind": "tab",
+          "measure": "41",
+          "course": "4",
+          "fret": "0",
+          "label": "m.41 c4/0"
+        },
+        {
+          "id": "tnaq7qhak",
+          "kind": "tab",
+          "measure": "41",
+          "course": "1",
+          "fret": "1",
+          "label": "m.41 c1/1"
+        },
+        {
+          "id": "tnuyucecj",
+          "kind": "tab",
+          "measure": "42",
+          "course": "4",
+          "fret": "2",
+          "label": "m.42 c4/2"
+        },
+        {
+          "id": "tnuis2gy9",
+          "kind": "tab",
+          "measure": "42",
+          "course": "2",
+          "fret": "3",
+          "label": "m.42 c2/3"
+        },
+        {
+          "id": "tnqn15ikp",
+          "kind": "tab",
+          "measure": "42",
+          "course": "4",
+          "fret": "2",
+          "label": "m.42 c4/2"
+        },
+        {
+          "id": "tn7b7p9jy",
+          "kind": "tab",
+          "measure": "42",
+          "course": "2",
+          "fret": "2",
+          "label": "m.42 c2/2"
+        },
+        {
+          "id": "tndr3vwmj",
+          "kind": "tab",
+          "measure": "42",
+          "course": "2",
+          "fret": "3",
+          "label": "m.42 c2/3"
+        },
+        {
+          "id": "tn9pciflw",
+          "kind": "tab",
+          "measure": "42",
+          "course": "4",
+          "fret": "0",
+          "label": "m.42 c4/0"
+        },
+        {
+          "id": "tnukpv8ly",
+          "kind": "tab",
+          "measure": "41",
+          "course": "1",
+          "fret": "1",
+          "label": "m.41 c1/1"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nvieh97",
+          "kind": "voc",
+          "measure": "41",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "B4",
+          "label": "SI m.41 B4"
+        },
+        {
+          "id": "n1j33d92",
+          "kind": "voc",
+          "measure": "41",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.41 G4"
+        },
+        {
+          "id": "n1i2cmo1",
+          "kind": "voc",
+          "measure": "41",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "B4",
+          "label": "SI m.41 B4"
+        },
+        {
+          "id": "n92qdqk",
+          "kind": "voc",
+          "measure": "42",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "A4",
+          "label": "SI m.42 A4"
+        },
+        {
+          "id": "n1yymfv4",
+          "kind": "voc",
+          "measure": "42",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.42 G4"
+        },
+        {
+          "id": "n1dtgqkr",
+          "kind": "voc",
+          "measure": "42",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F♯4",
+          "label": "SI m.42 F♯4"
+        },
+        {
+          "id": "n1jqisyo",
+          "kind": "voc",
+          "measure": "42",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "G4",
+          "label": "SI m.42 G4"
+        },
+        {
+          "id": "nbpyqre",
+          "kind": "voc",
+          "measure": "42",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "G4",
+          "label": "SI m.42 G4"
+        }
+      ],
+      "activity": "Dissonanzen neu anschlagen",
+      "comment": "",
+      "createdAt": "2026-05-18T06:33:48.753Z"
+    },
+    {
+      "id": "a-c3q3fdov",
+      "tab": [
+        {
+          "id": "tn983amb3",
+          "kind": "tab",
+          "measure": "47",
+          "course": "2",
+          "fret": "1",
+          "label": "m.47 c2/1"
+        },
+        {
+          "id": "tn2kyt5gq",
+          "kind": "tab",
+          "measure": "47",
+          "course": "4",
+          "fret": "0",
+          "label": "m.47 c4/0"
+        },
+        {
+          "id": "tnexih1xd",
+          "kind": "tab",
+          "measure": "47",
+          "course": "2",
+          "fret": "1",
+          "label": "m.47 c2/1"
+        },
+        {
+          "id": "tndy571vx",
+          "kind": "tab",
+          "measure": "47",
+          "course": "2",
+          "fret": "0",
+          "label": "m.47 c2/0"
+        },
+        {
+          "id": "tnnz0nxu4",
+          "kind": "tab",
+          "measure": "47",
+          "course": "4",
+          "fret": "0",
+          "label": "m.47 c4/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "n12eko4t",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F4",
+          "label": "SI m.47 F4"
+        },
+        {
+          "id": "ng9zq35",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "G4",
+          "label": "SI m.47 G4"
+        },
+        {
+          "id": "n1vicbay",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "E4",
+          "label": "SI m.47 E4"
+        }
+      ],
+      "activity": "Dissonanzen neu anschlagen",
+      "comment": "",
+      "createdAt": "2026-05-18T06:35:14.511Z"
+    },
+    {
+      "id": "a-5zza1nga",
+      "tab": [
+        {
+          "id": "tnpzf761h",
+          "kind": "tab",
+          "measure": "47",
+          "course": "6",
+          "fret": "3",
+          "label": "m.47 c6/3"
+        },
+        {
+          "id": "tn3iedd07",
+          "kind": "tab",
+          "measure": "47",
+          "course": "11",
+          "fret": "0",
+          "label": "m.47 c11/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nd58xx1",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.47 C4"
+        }
+      ],
+      "activity": "nachschlagender Bass",
+      "comment": "",
+      "createdAt": "2026-05-18T06:35:39.510Z"
+    },
+    {
+      "id": "a-a6cudwe1",
+      "tab": [
+        {
+          "id": "tn3iedd07",
+          "kind": "tab",
+          "measure": "47",
+          "course": "11",
+          "fret": "0",
+          "label": "m.47 c11/0"
+        },
+        {
+          "id": "tnnz0nxu4",
+          "kind": "tab",
+          "measure": "47",
+          "course": "4",
+          "fret": "0",
+          "label": "m.47 c4/0"
+        },
+        {
+          "id": "tndy571vx",
+          "kind": "tab",
+          "measure": "47",
+          "course": "2",
+          "fret": "0",
+          "label": "m.47 c2/0"
+        },
+        {
+          "id": "tnct49lny",
+          "kind": "tab",
+          "measure": "47",
+          "course": "1",
+          "fret": "1",
+          "label": "m.47 c1/1"
+        },
+        {
+          "id": "tn9zr3rzn",
+          "kind": "tab",
+          "measure": "48",
+          "course": "8",
+          "fret": "0",
+          "label": "m.48 c8/0"
+        },
+        {
+          "id": "tn9l3h03z",
+          "kind": "tab",
+          "measure": "48",
+          "course": "5",
+          "fret": "3",
+          "label": "m.48 c5/3"
+        },
+        {
+          "id": "tnb5gro9x",
+          "kind": "tab",
+          "measure": "48",
+          "course": "1",
+          "fret": "0",
+          "label": "m.48 c1/0"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "nd58xx1",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "C4",
+          "label": "T m.47 C4"
+        },
+        {
+          "id": "n1hp8nol",
+          "kind": "voc",
+          "measure": "48",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "F3",
+          "label": "T m.48 F3"
+        },
+        {
+          "id": "n1vicbay",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "E4",
+          "label": "SI m.47 E4"
+        },
+        {
+          "id": "n1mod1os",
+          "kind": "voc",
+          "measure": "48",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "A4",
+          "label": "SI m.48 A4"
+        },
+        {
+          "id": "n1xxdd7x",
+          "kind": "voc",
+          "measure": "48",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "F4",
+          "label": "SI m.48 F4"
+        },
+        {
+          "id": "ng9zq35",
+          "kind": "voc",
+          "measure": "47",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "G4",
+          "label": "SI m.47 G4"
+        }
+      ],
+      "activity": "durchgehende Septime",
+      "comment": "",
+      "createdAt": "2026-05-18T06:46:14.247Z",
+      "updatedAt": "2026-05-18T06:55:46.026Z"
+    },
+    {
+      "id": "a-4ltx3a0u",
+      "tab": [
+        {
+          "id": "tn1ajo091",
+          "kind": "tab",
+          "measure": "27",
+          "course": "5",
+          "fret": "0",
+          "label": "m.27 c5/0"
+        },
+        {
+          "id": "tniob0nlw",
+          "kind": "tab",
+          "measure": "27",
+          "course": "2",
+          "fret": "0",
+          "label": "m.27 c2/0"
+        },
+        {
+          "id": "tn3b9so0u",
+          "kind": "tab",
+          "measure": "27",
+          "course": "2",
+          "fret": "1",
+          "label": "m.27 c2/1"
+        },
+        {
+          "id": "tnqpwbsf3",
+          "kind": "tab",
+          "measure": "27",
+          "course": "2",
+          "fret": "3",
+          "label": "m.27 c2/3"
+        },
+        {
+          "id": "tnoqgvzhq",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "0",
+          "label": "m.27 c1/0"
+        },
+        {
+          "id": "tnqnsn2s8",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "1",
+          "label": "m.27 c1/1"
+        },
+        {
+          "id": "tn5gzpl1q",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "3",
+          "label": "m.27 c1/3"
+        },
+        {
+          "id": "tn4ta5ivr",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "0",
+          "label": "m.27 c1/0"
+        },
+        {
+          "id": "tn3bfxb4y",
+          "kind": "tab",
+          "measure": "27",
+          "course": "1",
+          "fret": "5",
+          "label": "m.27 c1/5"
+        }
+      ],
+      "vocal": [
+        {
+          "id": "npor4we",
+          "kind": "voc",
+          "measure": "27",
+          "staff": "4",
+          "staffLabel": "Tenor",
+          "pitch": "D4",
+          "label": "T m.27 D4"
+        },
+        {
+          "id": "n1taiane",
+          "kind": "voc",
+          "measure": "27",
+          "staff": "2",
+          "staffLabel": "Soprano II",
+          "pitch": "A4",
+          "label": "SI m.27 A4"
+        },
+        {
+          "id": "nxxqw43",
+          "kind": "voc",
+          "measure": "27",
+          "staff": "1",
+          "staffLabel": "Soprano I",
+          "pitch": "D5",
+          "label": "SI m.27 D5"
+        },
+        {
+          "id": "nwpemfh",
+          "kind": "voc",
+          "measure": "27",
+          "staff": "3",
+          "staffLabel": "Alto",
+          "pitch": "F4",
+          "label": "A m.27 F4"
+        }
+      ],
+      "activity": "Diminution über d",
+      "comment": "",
+      "createdAt": "2026-05-18T07:37:30.466Z"
+    }
+  ]
+}

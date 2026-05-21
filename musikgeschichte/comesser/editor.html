@@ -1,0 +1,965 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Olivetis — Kapsperger tablature annotator</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+        --bg: #fafaf7;
+        --fg: #1a1a1a;
+        --muted: #666;
+        --border: #e2e0d8;
+        --panel: #f4f2eb;
+        --accent: #b8860b;
+        --accent-bg: rgba(184, 134, 11, 0.18);
+        --hit-fill: rgba(184, 134, 11, 0.08);
+        --hit-fill-hover: rgba(184, 134, 11, 0.3);
+        --hull: #4f7ac7;
+        --hull-fill: rgba(79, 122, 199, 0.22);
+        --voc: #2d8a6c;
+        --voc-bg: rgba(45, 138, 108, 0.18);
+        --warn: #c04040;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root {
+          --bg: #1a1a18;
+          --fg: #ececec;
+          --muted: #999;
+          --border: #2e2c28;
+          --panel: #252521;
+          --accent: #e0a020;
+          --accent-bg: rgba(224, 160, 32, 0.25);
+          --hit-fill: rgba(224, 160, 32, 0.08);
+          --hit-fill-hover: rgba(224, 160, 32, 0.35);
+          --hull: #6f95d8;
+          --hull-fill: rgba(111, 149, 216, 0.25);
+          --voc: #5cb795;
+          --voc-bg: rgba(92, 183, 149, 0.22);
+        }
+      }
+      * { box-sizing: border-box; }
+      html, body { margin: 0; padding: 0; background: var(--bg); color: var(--fg); font: 14px/1.4 system-ui, -apple-system, sans-serif; height: 100%; }
+      body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+      header {
+        padding: 8px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex; align-items: baseline; gap: 14px;
+        flex-shrink: 0;
+      }
+      h1 { margin: 0; font-size: 14px; font-weight: 600; }
+      h2 { margin: 0 0 8px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+      .meta { color: var(--muted); font-size: 12px; }
+      nav { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+      button {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--fg);
+        padding: 4px 10px;
+        border-radius: 4px;
+        cursor: pointer;
+        font: inherit;
+      }
+      button:hover { border-color: var(--muted); }
+      button:disabled { opacity: 0.4; cursor: not-allowed; }
+      button.primary { background: var(--accent); color: white; border-color: var(--accent); }
+      button.primary:hover { filter: brightness(1.1); }
+      button.warn { color: var(--warn); border-color: var(--warn); }
+      #page-indicator { color: var(--muted); font-variant-numeric: tabular-nums; min-width: 56px; text-align: center; }
+
+      label.toggle { display: inline-flex; align-items: center; gap: 4px; font-size: 12px; color: var(--muted); cursor: pointer; }
+      label.toggle input { margin: 0; }
+
+      main {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        flex: 1;
+        overflow: hidden;
+      }
+      #score-wrap { overflow: auto; padding: 16px; }
+      #score { max-width: 1400px; margin: 0 auto; position: relative; }
+      #score svg { width: 100%; height: auto; display: block; }
+      #status { color: var(--muted); padding: 40px 20px; text-align: center; }
+
+      /* hit overlays */
+      .tab-hit { fill: var(--hit-fill); stroke: none; cursor: pointer; transition: fill 0.1s; }
+      .tab-hit:hover { fill: var(--hit-fill-hover); }
+      .tab-hit.selected { fill: var(--accent-bg); stroke: none; }
+      .annot-hull { fill: var(--hull-fill); stroke: none; pointer-events: all; cursor: pointer; transition: fill-opacity 0.1s; }
+      .annot-group:hover .annot-hull { fill-opacity: 1.6; }
+      .annot-hull.editing { fill-opacity: 1.8; }
+      .vocal-marker { fill: var(--voc-bg); stroke: none; pointer-events: all; cursor: pointer; opacity: 0.55; transition: opacity 0.15s; }
+      .annot-group:hover .vocal-marker, .annot-group.editing .vocal-marker { opacity: 1; }
+      /* highlight the underlying note glyph when selected */
+      .note-sel-tab, .note-sel-tab * { fill: var(--accent) !important; stroke: var(--accent) !important; }
+      .note-sel-voc, .note-sel-voc * { fill: var(--voc) !important; stroke: var(--voc) !important; }
+      /* vocal notes get a subtle hover affordance */
+      #score svg .note { cursor: pointer; }
+      /* hide overlays when "show overlays" off */
+      .hide-overlays .tab-hit:not(.selected) { fill: transparent; }
+      .hide-overlays .tab-hit:not(.selected):hover { fill: var(--hit-fill-hover); }
+
+      aside {
+        border-left: 1px solid var(--border);
+        background: var(--panel);
+        overflow-y: auto;
+        padding: 14px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .group { display: flex; flex-direction: column; gap: 6px; }
+      .group-header { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+      .group-header h2 { margin: 0; }
+      .chips { display: flex; flex-wrap: wrap; gap: 4px; min-height: 28px; padding: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: 4px; }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        gap: 4px;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-variant-numeric: tabular-nums;
+        cursor: pointer;
+        background: var(--accent-bg);
+        color: var(--accent);
+      }
+      .chip.voc { background: var(--voc-bg); color: var(--voc); }
+      .chip:hover { filter: brightness(1.1); }
+      .chip-empty { color: var(--muted); font-style: italic; font-size: 12px; padding: 4px 2px; }
+
+      label { font-size: 12px; color: var(--muted); }
+      input[type="text"], textarea, select {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        color: var(--fg);
+        padding: 6px 8px;
+        border-radius: 4px;
+        font: inherit;
+        width: 100%;
+      }
+      textarea { resize: vertical; min-height: 50px; font-family: inherit; }
+      input:focus, textarea:focus { outline: 2px solid var(--accent); outline-offset: -1px; }
+
+      #annot-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 6px; }
+      .annot {
+        padding: 8px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 4px;
+        font-size: 12px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .annot-row { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+      .annot-activity { font-weight: 600; }
+      .annot-comment { color: var(--muted); font-style: italic; }
+      .annot-actions { margin-left: auto; display: flex; gap: 4px; }
+      .annot-actions button { padding: 2px 6px; font-size: 11px; }
+      .annot:hover { border-color: var(--muted); }
+      .annot.active { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+
+      .footer-bar { padding: 10px 16px; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; gap: 8px; align-items: center; }
+      .help { color: var(--muted); font-size: 11px; margin-left: auto; }
+      kbd { padding: 1px 4px; border: 1px solid var(--border); border-radius: 3px; font-family: ui-monospace, monospace; font-size: 10px; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <h1 id="title">Score</h1>
+      <span class="meta" id="composer"></span>
+      <label class="toggle"><input type="checkbox" id="show-overlays" checked /> show hit areas</label>
+      <nav>
+        <button id="prev">‹ Prev</button>
+        <span id="page-indicator">— / —</span>
+        <button id="next">Next ›</button>
+      </nav>
+    </header>
+
+    <main>
+      <div id="score-wrap">
+        <div id="score">
+          <div id="status">Loading Verovio…</div>
+        </div>
+      </div>
+
+      <aside>
+        <div class="group">
+          <div class="group-header">
+            <h2>Tab notes</h2>
+            <button id="clear-tab">Clear</button>
+          </div>
+          <div id="tab-selection" class="chips"><span class="chip-empty">click notes in tab staff…</span></div>
+        </div>
+
+        <div class="group">
+          <div class="group-header">
+            <h2>Vocal notes (optional)</h2>
+            <button id="clear-voc">Clear</button>
+          </div>
+          <div id="voc-selection" class="chips"><span class="chip-empty">click notes in vocal staves…</span></div>
+        </div>
+
+        <div class="group">
+          <label for="activity">Activity</label>
+          <input id="activity" type="text" list="activities" placeholder="e.g. diminution, upbeat figure…" />
+          <datalist id="activities">
+            <option>diminution</option>
+            <option>upbeat figure</option>
+            <option>ornamentation</option>
+            <option>added passing tone</option>
+            <option>cadential figure</option>
+            <option>chord realization</option>
+            <option>voice reduction</option>
+            <option>voice omission</option>
+            <option>octave transposition</option>
+            <option>rhythmic alteration</option>
+            <option>suspension resolution</option>
+          </datalist>
+        </div>
+
+        <div class="group">
+          <label for="comment">Comment (optional)</label>
+          <textarea id="comment" placeholder="notes about this arrangement choice…"></textarea>
+        </div>
+
+        <div style="display: flex; gap: 6px;">
+          <button id="save" class="primary" style="flex: 1;">Save annotation</button>
+          <button id="copy-id" style="display:none;" title="Copy current annotation id">Copy id</button>
+          <button id="cancel-edit" style="display:none;">Cancel edit</button>
+        </div>
+
+        <div class="group">
+          <div class="group-header">
+            <h2>Annotations (<span id="count">0</span>)</h2>
+            <div style="display: flex; gap: 4px;">
+              <button id="import-btn">Import</button>
+              <button id="export-btn">Export</button>
+            </div>
+          </div>
+          <ul id="annot-list"></ul>
+        </div>
+
+        <input type="file" id="file-input" accept="application/json" hidden />
+      </aside>
+    </main>
+
+    <div class="footer-bar">
+      <span class="meta" id="autosave-status">autosaved</span>
+      <span class="help">Click hit areas to select tab notes. <kbd>Esc</kbd> clears. <kbd>⌘/Ctrl+Enter</kbd> saves.</span>
+    </div>
+
+    <script type="module">
+      const MEI_URL = 'comesser-merged.mei';
+      const STORAGE_KEY = 'olivetis-annotations';
+
+      const $ = (sel) => document.querySelector(sel);
+      const scoreEl = $('#score');
+      const scoreWrap = $('#score-wrap');
+      const pageIndicator = $('#page-indicator');
+      const prevBtn = $('#prev');
+      const nextBtn = $('#next');
+      const tabSelEl = $('#tab-selection');
+      const vocSelEl = $('#voc-selection');
+      const activityEl = $('#activity');
+      const commentEl = $('#comment');
+      const saveBtn = $('#save');
+      const cancelEditBtn = $('#cancel-edit');
+      const copyIdBtn = $('#copy-id');
+      const annotListEl = $('#annot-list');
+      const countEl = $('#count');
+      const autosaveEl = $('#autosave-status');
+      const overlaysToggle = $('#show-overlays');
+
+      let tk = null;
+      let currentPage = 1;
+      let pageCount = 1;
+
+      // note id -> { kind: 'tab'|'voc', measure, label, … }
+      const noteInfo = new Map();
+      const tabNotes = new Map();  // subset of noteInfo, kind='tab'
+      const vocNotes = new Map();  // subset of noteInfo, kind='voc'
+      const selection = { tab: new Set(), voc: new Set() };
+      let annotations = [];
+      let editingId = null;
+
+      function applyVocalStaffScale(meiText, scale) {
+        const doc = new DOMParser().parseFromString(meiText, 'application/xml');
+        const ns = 'http://www.music-encoding.org/ns/mei';
+        for (const sd of doc.getElementsByTagNameNS(ns, 'staffDef')) {
+          if (sd.getAttribute('n') !== '6') sd.setAttribute('scale', scale);
+        }
+        return new XMLSerializer().serializeToString(doc);
+      }
+
+      // ---------- MEI parsing ----------
+      function parseMei(meiText) {
+        const doc = new DOMParser().parseFromString(meiText, 'application/xml');
+        const ns = 'http://www.music-encoding.org/ns/mei';
+
+        const staffLabels = {};
+        for (const sd of doc.getElementsByTagNameNS(ns, 'staffDef')) {
+          const n = sd.getAttribute('n');
+          const lbl = sd.getElementsByTagNameNS(ns, 'label')[0]?.textContent?.trim();
+          if (n) staffLabels[n] = lbl || `Staff ${n}`;
+        }
+
+        for (const measure of doc.getElementsByTagNameNS(ns, 'measure')) {
+          const mNum = measure.getAttribute('n');
+          for (const staff of measure.getElementsByTagNameNS(ns, 'staff')) {
+            const sN = staff.getAttribute('n');
+            const isTab = sN === '6';
+            for (const note of staff.getElementsByTagNameNS(ns, 'note')) {
+              const id = note.getAttribute('xml:id') || note.getAttributeNS('http://www.w3.org/XML/1998/namespace', 'id');
+              if (!id) continue;
+              let info;
+              if (isTab) {
+                const course = note.getAttribute('tab.course');
+                const fret = note.getAttribute('tab.fret');
+                info = { kind: 'tab', measure: mNum, course, fret, label: `m.${mNum} c${course}/${fret}` };
+                tabNotes.set(id, info);
+              } else {
+                const pname = note.getAttribute('pname');
+                const octv = note.getAttribute('oct');
+                const accid = note.getAttribute('accid') || note.getElementsByTagNameNS(ns, 'accid')[0]?.getAttribute('accid') || '';
+                const accSym = { s: '♯', f: '♭', n: '♮', x: '𝄪', ff: '♭♭' }[accid] || '';
+                const pitch = pname ? `${pname.toUpperCase()}${accSym}${octv ?? ''}` : '?';
+                const sLbl = (staffLabels[sN] || ('S' + sN)).replace(/^\[(.+)\]$/, '$1');
+                const abbr = sLbl.split(/\s+/).map(w => w[0]).join('').slice(0, 3);
+                info = { kind: 'voc', measure: mNum, staff: sN, staffLabel: sLbl, pitch, label: `${abbr} m.${mNum} ${pitch}` };
+                vocNotes.set(id, info);
+              }
+              noteInfo.set(id, info);
+            }
+          }
+        }
+      }
+
+      // ---------- overlays ----------
+      // Note id -> rendered rect in root SVG user units (recomputed each render).
+      const renderedRects = new Map();
+
+      function computeRenderedRects() {
+        renderedRects.clear();
+        const svg = scoreEl.querySelector('svg');
+        if (!svg) return null;
+        const svgRect = svg.getBoundingClientRect();
+        if (!svgRect.width) return null;
+        const vb = svg.viewBox && svg.viewBox.baseVal;
+        const hasVB = vb && vb.width > 0;
+        const sx = hasVB ? vb.width / svgRect.width : 1;
+        const sy = hasVB ? vb.height / svgRect.height : 1;
+        for (const id of noteInfo.keys()) {
+          const noteEl = svg.querySelector(`[id="${CSS.escape(id)}"]`);
+          if (!noteEl) continue;
+          const r = noteEl.getBoundingClientRect();
+          if (!r.width && !r.height) continue;
+          renderedRects.set(id, {
+            x: (r.left - svgRect.left) * sx,
+            y: (r.top - svgRect.top) * sy,
+            w: r.width * sx,
+            h: r.height * sy,
+            system: noteEl.closest('.system') || svg,
+          });
+        }
+        return svg;
+      }
+
+      // Andrew's monotone-chain convex hull
+      function convexHull(points) {
+        if (points.length <= 1) return points.slice();
+        const pts = points.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+        const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+        const lo = [];
+        for (const p of pts) {
+          while (lo.length >= 2 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
+          lo.push(p);
+        }
+        const up = [];
+        for (let i = pts.length - 1; i >= 0; i--) {
+          const p = pts[i];
+          while (up.length >= 2 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop();
+          up.push(p);
+        }
+        lo.pop(); up.pop();
+        return lo.concat(up);
+      }
+
+      // expand hull outward from its centroid
+      function expandHull(hull, amount) {
+        if (!hull.length) return hull;
+        const cx = hull.reduce((s, p) => s + p[0], 0) / hull.length;
+        const cy = hull.reduce((s, p) => s + p[1], 0) / hull.length;
+        return hull.map(([x, y]) => {
+          const dx = x - cx, dy = y - cy;
+          const len = Math.hypot(dx, dy) || 1;
+          return [x + dx / len * amount, y + dy / len * amount];
+        });
+      }
+
+      // Chaikin's corner-cutting: smooth a closed polygon
+      function chaikin(poly, iters) {
+        if (poly.length < 3) return poly;
+        let pts = poly;
+        for (let k = 0; k < iters; k++) {
+          const next = [];
+          for (let i = 0; i < pts.length; i++) {
+            const a = pts[i];
+            const b = pts[(i + 1) % pts.length];
+            next.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]]);
+            next.push([0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]);
+          }
+          pts = next;
+        }
+        return pts;
+      }
+
+      function buildOverlays() {
+        const svg = computeRenderedRects();
+        if (!svg) return;
+        svg.querySelectorAll('.annot-hull-layer, .tab-hit-layer').forEach(n => n.remove());
+
+        // 1. annotation hulls, behind hit areas
+        const hullLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        hullLayer.setAttribute('class', 'annot-hull-layer');
+        svg.appendChild(hullLayer);
+        const SVGNS = 'http://www.w3.org/2000/svg';
+
+        // Build a smooth rounded blob shape for a set of glyph rects
+        function blobFor(rects, pad, expand, iters) {
+          const points = [];
+          for (const r of rects) {
+            points.push([r.x - pad, r.y - pad]);
+            points.push([r.x + r.w / 2, r.y - pad]);
+            points.push([r.x + r.w + pad, r.y - pad]);
+            points.push([r.x + r.w + pad, r.y + r.h / 2]);
+            points.push([r.x + r.w + pad, r.y + r.h + pad]);
+            points.push([r.x + r.w / 2, r.y + r.h + pad]);
+            points.push([r.x - pad, r.y + r.h + pad]);
+            points.push([r.x - pad, r.y + r.h / 2]);
+          }
+          if (!points.length) return null;
+          const hull = convexHull(points);
+          const expanded = expandHull(hull, expand);
+          const smooth = chaikin(expanded, iters);
+          if (smooth.length >= 3) {
+            const el = document.createElementNS(SVGNS, 'polygon');
+            el.setAttribute('points', smooth.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' '));
+            return el;
+          }
+          // fallback: 1-note generous rect
+          const xs = points.map(p => p[0]); const ys = points.map(p => p[1]);
+          const minx = Math.min(...xs) - expand, miny = Math.min(...ys) - expand;
+          const maxx = Math.max(...xs) + expand, maxy = Math.max(...ys) + expand;
+          const el = document.createElementNS(SVGNS, 'rect');
+          el.setAttribute('x', minx); el.setAttribute('y', miny);
+          el.setAttribute('width', maxx - minx); el.setAttribute('height', maxy - miny);
+          el.setAttribute('rx', Math.min(20, (maxx - minx) / 2, (maxy - miny) / 2));
+          return el;
+        }
+
+        for (const a of annotations) {
+          const group = document.createElementNS(SVGNS, 'g');
+          group.setAttribute('class', 'annot-group' + (a.id === editingId ? ' editing' : ''));
+          group.setAttribute('data-annot-id', a.id);
+
+          // hull from tab notes only — split into one blob per system
+          // so a system break doesn't draw a giant hull across staves
+          const bySystem = new Map();
+          for (const n of (a.tab || a.notes || [])) {
+            const r = renderedRects.get(n.id);
+            if (!r) continue;
+            let arr = bySystem.get(r.system);
+            if (!arr) { arr = []; bySystem.set(r.system, arr); }
+            arr.push(r);
+          }
+          for (const rects of bySystem.values()) {
+            const hullEl = blobFor(rects, 3, 5, 3);
+            if (!hullEl) continue;
+            hullEl.setAttribute('class', 'annot-hull' + (a.id === editingId ? ' editing' : ''));
+            hullEl.setAttribute('data-annot-id', a.id);
+            const t = document.createElementNS(SVGNS, 'title');
+            t.textContent = a.activity + (a.comment ? ' — ' + a.comment : '');
+            hullEl.appendChild(t);
+            group.appendChild(hullEl);
+          }
+
+          // one combined vocal blob per system (so notes across staves are grouped)
+          const vocBySystem = new Map();
+          for (const n of (a.vocal || [])) {
+            const r = renderedRects.get(n.id);
+            if (!r) continue;
+            let arr = vocBySystem.get(r.system);
+            if (!arr) { arr = []; vocBySystem.set(r.system, arr); }
+            arr.push(r);
+          }
+          for (const rects of vocBySystem.values()) {
+            const m = blobFor(rects, 4, 5, 3);
+            if (!m) continue;
+            m.setAttribute('class', 'vocal-marker');
+            m.setAttribute('data-annot-id', a.id);
+            const t = document.createElementNS(SVGNS, 'title');
+            t.textContent = a.activity + (a.comment ? ' — ' + a.comment : '');
+            m.appendChild(t);
+            group.appendChild(m);
+          }
+          if (group.childNodes.length) hullLayer.appendChild(group);
+        }
+
+        // 2. hit overlays for all tab notes (incl. ones already in an annotation,
+        // so a note can be added to a second annotation)
+        const hitLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        hitLayer.setAttribute('class', 'tab-hit-layer');
+        svg.appendChild(hitLayer);
+        for (const [id, r] of renderedRects) {
+          if (!tabNotes.has(id)) continue;
+          const padX = Math.max(r.w * 0.15, 6);
+          const padY = Math.max(r.h * 0.15, 6);
+          const rect = document.createElementNS('http://www.w3.org/2000/svg', 'rect');
+          rect.setAttribute('x', r.x - padX);
+          rect.setAttribute('y', r.y - padY);
+          rect.setAttribute('width', r.w + padX * 2);
+          rect.setAttribute('height', r.h + padY * 2);
+          rect.setAttribute('rx', 6);
+          rect.setAttribute('class', 'tab-hit');
+          rect.setAttribute('data-note-id', id);
+          if (selection.tab.has(id)) rect.classList.add('selected');
+          hitLayer.appendChild(rect);
+        }
+        applyGlyphHighlights();
+      }
+
+      function applyGlyphHighlights() {
+        const svg = scoreEl.querySelector('svg');
+        if (!svg) return;
+        svg.querySelectorAll('.note-sel-tab, .note-sel-voc').forEach(n => n.classList.remove('note-sel-tab', 'note-sel-voc'));
+        for (const id of selection.tab) {
+          const el = svg.querySelector(`[id="${CSS.escape(id)}"]`);
+          if (el) el.classList.add('note-sel-tab');
+        }
+        for (const id of selection.voc) {
+          const el = svg.querySelector(`[id="${CSS.escape(id)}"]`);
+          if (el) el.classList.add('note-sel-voc');
+        }
+        svg.querySelectorAll('.tab-hit').forEach(h => {
+          const id = h.getAttribute('data-note-id');
+          h.classList.toggle('selected', selection.tab.has(id));
+        });
+      }
+
+      // ---------- selection ----------
+      function toggleNote(id) {
+        const info = noteInfo.get(id);
+        if (!info) return;
+        const set = info.kind === 'tab' ? selection.tab : selection.voc;
+        if (set.has(id)) set.delete(id);
+        else set.add(id);
+        applyGlyphHighlights();
+        renderChips();
+      }
+
+      function clearSel(kind) {
+        if (!kind) { selection.tab.clear(); selection.voc.clear(); }
+        else selection[kind].clear();
+        applyGlyphHighlights();
+        renderChips();
+      }
+
+      function renderChips() {
+        function paint(container, set, kind, emptyText) {
+          container.innerHTML = '';
+          if (!set.size) {
+            const e = document.createElement('span'); e.className = 'chip-empty'; e.textContent = emptyText;
+            container.appendChild(e); return;
+          }
+          const items = [...set].map(id => ({ id, ...noteInfo.get(id) }))
+            .sort((a, b) => (+a.measure - +b.measure) || (a.kind === 'tab' ? (+a.course - +b.course) : (+a.staff - +b.staff)));
+          for (const it of items) {
+            const chip = document.createElement('span');
+            chip.className = 'chip' + (kind === 'voc' ? ' voc' : '');
+            chip.textContent = it.label;
+            chip.title = `Click to remove • ${it.id}`;
+            chip.addEventListener('click', () => toggleNote(it.id));
+            container.appendChild(chip);
+          }
+        }
+        paint(tabSelEl, selection.tab, 'tab', 'click notes in tab staff…');
+        paint(vocSelEl, selection.voc, 'voc', 'click notes in vocal staves…');
+      }
+
+      // ---------- annotations ----------
+      function loadFromStorage() {
+        try {
+          const raw = localStorage.getItem(STORAGE_KEY);
+          if (raw) {
+            const obj = JSON.parse(raw);
+            annotations = obj.annotations || [];
+          }
+        } catch (e) { console.warn('load failed', e); }
+      }
+
+      function saveToStorage() {
+        try {
+          localStorage.setItem(STORAGE_KEY, JSON.stringify({
+            version: 3,
+            meiFile: MEI_URL,
+            annotations,
+          }));
+          autosaveEl.textContent = 'autosaved ' + new Date().toLocaleTimeString();
+        } catch (e) {
+          autosaveEl.textContent = 'autosave failed';
+        }
+      }
+
+      function makeId() {
+        return 'a-' + Math.random().toString(36).slice(2, 10);
+      }
+
+      function snapshotNote(id) {
+        return { id, ...noteInfo.get(id) };
+      }
+
+      function saveAnnotation() {
+        const activity = activityEl.value.trim();
+        if (!activity) { alert('Type an activity name.'); return; }
+        if (!selection.tab.size) { alert('Select at least one tab note.'); return; }
+        const snap = {
+          tab: [...selection.tab].map(snapshotNote),
+          vocal: [...selection.voc].map(snapshotNote),
+          activity,
+          comment: commentEl.value.trim(),
+        };
+        if (editingId) {
+          const i = annotations.findIndex(a => a.id === editingId);
+          if (i >= 0) annotations[i] = { ...annotations[i], ...snap, updatedAt: new Date().toISOString() };
+          editingId = null;
+          cancelEditBtn.style.display = 'none';
+          copyIdBtn.style.display = 'none';
+          saveBtn.textContent = 'Save annotation';
+        } else {
+          annotations.push({ id: makeId(), ...snap, createdAt: new Date().toISOString() });
+        }
+        clearForm();
+        renderAnnotations();
+        saveToStorage();
+        buildOverlays();
+      }
+
+      function clearForm() {
+        clearSel();
+        activityEl.value = '';
+        commentEl.value = '';
+        activityEl.focus();
+      }
+
+      function editAnnotation(id) {
+        const a = annotations.find(x => x.id === id);
+        if (!a) return;
+        editingId = id;
+        selection.tab.clear(); selection.voc.clear();
+        for (const n of (a.tab || a.notes || [])) selection.tab.add(n.id);
+        for (const n of (a.vocal || [])) selection.voc.add(n.id);
+        activityEl.value = a.activity;
+        commentEl.value = a.comment || '';
+        applyGlyphHighlights();
+        renderChips();
+        renderAnnotations();
+        buildOverlays();
+        cancelEditBtn.style.display = '';
+        copyIdBtn.style.display = '';
+        copyIdBtn.textContent = 'Copy id';
+        saveBtn.textContent = 'Update';
+        scrollToFirstSelected();
+      }
+
+      function scrollToFirstSelected() {
+        const first = [...selection.tab, ...selection.voc][0];
+        if (!first) return;
+        let el = scoreEl.querySelector(`[id="${CSS.escape(first)}"]`);
+        if (!el) {
+          try {
+            const pg = tk.getPageWithElement(first);
+            if (pg && pg !== currentPage) { currentPage = pg; render(); }
+          } catch {}
+        }
+        requestAnimationFrame(() => {
+          el = scoreEl.querySelector(`[id="${CSS.escape(first)}"]`);
+          if (!el) return;
+          const elRect = el.getBoundingClientRect();
+          const wrapRect = scoreWrap.getBoundingClientRect();
+          // already visible — leave the scroll alone
+          if (elRect.top >= wrapRect.top && elRect.bottom <= wrapRect.bottom) return;
+          const elTopInWrap = elRect.top - wrapRect.top + scoreWrap.scrollTop;
+          const target = elTopInWrap - wrapRect.height / 2 + elRect.height / 2;
+          scoreWrap.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+        });
+      }
+
+      function deleteAnnotation(id) {
+        if (!confirm('Delete this annotation?')) return;
+        annotations = annotations.filter(a => a.id !== id);
+        if (editingId === id) {
+          editingId = null; clearForm();
+          cancelEditBtn.style.display = 'none';
+          copyIdBtn.style.display = 'none';
+          saveBtn.textContent = 'Save annotation';
+        }
+        renderAnnotations();
+        saveToStorage();
+        buildOverlays();
+      }
+
+      function renderAnnotations() {
+        countEl.textContent = annotations.length;
+        annotListEl.innerHTML = '';
+        for (const a of annotations) {
+          const li = document.createElement('li');
+          li.className = 'annot' + (a.id === editingId ? ' active' : '');
+
+          const head = document.createElement('div');
+          head.className = 'annot-row';
+          const act = document.createElement('span');
+          act.className = 'annot-activity';
+          act.textContent = a.activity;
+          head.appendChild(act);
+          const actions = document.createElement('div');
+          actions.className = 'annot-actions';
+          const editBtn = document.createElement('button');
+          editBtn.textContent = 'edit';
+          editBtn.addEventListener('click', () => editAnnotation(a.id));
+          actions.appendChild(editBtn);
+          const delBtn = document.createElement('button');
+          delBtn.textContent = '×';
+          delBtn.title = 'Delete';
+          delBtn.addEventListener('click', () => deleteAnnotation(a.id));
+          actions.appendChild(delBtn);
+          head.appendChild(actions);
+          li.appendChild(head);
+
+          const tabNotesArr = a.tab || a.notes || [];
+          if (tabNotesArr.length) {
+            const row = document.createElement('div');
+            row.className = 'annot-row';
+            for (const n of tabNotesArr) {
+              const c = document.createElement('span');
+              c.className = 'chip';
+              c.textContent = n.label || `m.${n.measure} c${n.course}/${n.fret}`;
+              row.appendChild(c);
+            }
+            li.appendChild(row);
+          }
+          const vocArr = a.vocal || [];
+          if (vocArr.length) {
+            const row = document.createElement('div');
+            row.className = 'annot-row';
+            for (const n of vocArr) {
+              const c = document.createElement('span');
+              c.className = 'chip voc';
+              c.textContent = n.label || `m.${n.measure} ${n.pitch}`;
+              row.appendChild(c);
+            }
+            li.appendChild(row);
+          }
+          if (a.comment) {
+            const c = document.createElement('div');
+            c.className = 'annot-comment';
+            c.textContent = a.comment;
+            li.appendChild(c);
+          }
+          annotListEl.appendChild(li);
+        }
+      }
+
+      // ---------- export / import ----------
+      function exportJson() {
+        const payload = {
+          version: 3,
+          meiFile: MEI_URL,
+          exportedAt: new Date().toISOString(),
+          annotations,
+        };
+        const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `kapsberger-annotations-${new Date().toISOString().slice(0,10)}.json`;
+        document.body.appendChild(a); a.click(); a.remove();
+        URL.revokeObjectURL(url);
+      }
+
+      function importJson(file) {
+        const r = new FileReader();
+        r.onload = () => {
+          try {
+            const obj = JSON.parse(r.result);
+            if (!Array.isArray(obj.annotations)) throw new Error('No annotations array');
+            const merge = confirm(`Import ${obj.annotations.length} annotations?\nOK = merge with current, Cancel = replace.`);
+            // normalize v1 → v2 (drop original, rename tab → notes)
+            const norm = obj.annotations.map(a => ({
+              ...a,
+              notes: a.notes || a.tab || [],
+            }));
+            if (merge) {
+              const existing = new Set(annotations.map(a => a.id));
+              for (const a of norm) if (!existing.has(a.id)) annotations.push(a);
+            } else {
+              annotations = norm;
+            }
+            renderAnnotations();
+            saveToStorage();
+          } catch (e) { alert('Import failed: ' + e.message); }
+        };
+        r.readAsText(file);
+      }
+
+      // ---------- render ----------
+      function render() {
+        const svg = tk.renderToSVG(currentPage);
+        scoreEl.innerHTML = svg;
+        pageIndicator.textContent = `${currentPage} / ${pageCount}`;
+        prevBtn.disabled = currentPage <= 1;
+        nextBtn.disabled = currentPage >= pageCount;
+        // wait one frame so getBoundingClientRect reflects layout
+        requestAnimationFrame(buildOverlays);
+      }
+
+      function onScoreClick(ev) {
+        const t = ev.target;
+        const hit = t.closest && t.closest('.tab-hit');
+        if (hit) {
+          const id = hit.getAttribute('data-note-id');
+          if (id) toggleNote(id);
+          return;
+        }
+        const annotEl = t.closest && t.closest('.annot-hull, .vocal-marker');
+        if (annotEl) {
+          const aid = annotEl.getAttribute('data-annot-id');
+          if (aid) editAnnotation(aid);
+          return;
+        }
+        // vocal notes: click the note glyph directly
+        const noteG = t.closest && t.closest('.note');
+        if (noteG) {
+          const id = noteG.getAttribute('id');
+          if (id && vocNotes.has(id)) toggleNote(id);
+        }
+      }
+
+      function layout() {
+        if (!tk) return;
+        const width = scoreWrap.clientWidth - 32;
+        tk.setOptions({
+          pageWidth: Math.max(600, width) * 2,
+          pageHeight: 60000,
+          scale: 40,
+          adjustPageHeight: true,
+          breaks: 'auto',
+          footer: 'none',
+          header: 'none',
+          spacingStaff: 9,
+          spacingSystem: 4,
+        });
+        tk.redoLayout();
+        pageCount = tk.getPageCount();
+        if (currentPage > pageCount) currentPage = pageCount;
+        render();
+      }
+
+      const setStatus = (msg) => { scoreEl.innerHTML = `<div id="status">${msg}</div>`; };
+
+      // ---------- wire up ----------
+      $('#clear-tab').addEventListener('click', () => clearSel('tab'));
+      $('#clear-voc').addEventListener('click', () => clearSel('voc'));
+      saveBtn.addEventListener('click', saveAnnotation);
+      cancelEditBtn.addEventListener('click', () => {
+        editingId = null;
+        clearForm();
+        cancelEditBtn.style.display = 'none';
+        copyIdBtn.style.display = 'none';
+        saveBtn.textContent = 'Save annotation';
+        renderAnnotations();
+        buildOverlays();
+      });
+      copyIdBtn.addEventListener('click', async () => {
+        if (!editingId) return;
+        try {
+          await navigator.clipboard.writeText(editingId);
+          copyIdBtn.textContent = 'Copied ✓';
+        } catch {
+          const ta = document.createElement('textarea');
+          ta.value = editingId;
+          document.body.appendChild(ta);
+          ta.select();
+          document.execCommand('copy');
+          ta.remove();
+          copyIdBtn.textContent = 'Copied ✓';
+        }
+        setTimeout(() => { copyIdBtn.textContent = 'Copy id'; }, 1200);
+      });
+      $('#export-btn').addEventListener('click', exportJson);
+      $('#import-btn').addEventListener('click', () => $('#file-input').click());
+      $('#file-input').addEventListener('change', (e) => { if (e.target.files[0]) importJson(e.target.files[0]); });
+
+      overlaysToggle.addEventListener('change', () => {
+        scoreEl.classList.toggle('hide-overlays', !overlaysToggle.checked);
+      });
+
+      document.addEventListener('keydown', (e) => {
+        if (document.activeElement === activityEl || document.activeElement === commentEl) return;
+        if (e.key === 'Escape') clearSel();
+        if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') saveAnnotation();
+      });
+
+      scoreEl.addEventListener('click', onScoreClick);
+      prevBtn.addEventListener('click', () => { if (currentPage > 1) { currentPage--; render(); } });
+      nextBtn.addEventListener('click', () => { if (currentPage < pageCount) { currentPage++; render(); } });
+
+      try {
+        const s = document.createElement('script');
+        s.src = 'https://www.verovio.org/javascript/develop/verovio-toolkit-wasm.js';
+        s.defer = true;
+        document.head.appendChild(s);
+        await new Promise((res, rej) => { s.onload = res; s.onerror = rej; });
+
+        setStatus('Initializing engraver…');
+        tk = await new Promise((resolve) => {
+          window.verovio.module.onRuntimeInitialized = () => resolve(new window.verovio.toolkit());
+        });
+
+        setStatus('Fetching score…');
+        const rawMei = await fetch(MEI_URL).then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status} loading ${MEI_URL}`);
+          return r.text();
+        });
+
+        // Scale the 5 vocal staves down relative to the tab staff
+        const mei = applyVocalStaffScale(rawMei, '70%');
+
+        parseMei(mei);
+        tk.loadData(mei);
+
+        const doc = new DOMParser().parseFromString(mei, 'application/xml');
+        const ns = 'http://www.music-encoding.org/ns/mei';
+        const title = doc.getElementsByTagNameNS(ns, 'title')[0]?.textContent?.trim();
+        const composer = doc.querySelector('persName[role="composer"]')?.textContent?.trim();
+        if (title) document.getElementById('title').textContent = title;
+        if (composer) document.getElementById('composer').textContent = composer;
+
+        loadFromStorage();
+        renderAnnotations();
+
+        layout();
+
+        window.addEventListener('resize', () => {
+          clearTimeout(window.__rl);
+          window.__rl = setTimeout(layout, 150);
+        });
+      } catch (err) {
+        setStatus(`Error: ${err.message}`);
+        console.error(err);
+      }
+    </script>
+  </body>
+</html>

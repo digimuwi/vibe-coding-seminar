@@ -1,0 +1,30 @@
+{
+  "title": "Introduction",
+  "description": "In his Libro terzo d'intavolatura di chitarone (Rome, 1626), Giovanni Girolamo Kapsperger included an intabulation of the five-voice madrigal “Come esser può ch'io viva” by Carlo Gesualdo. This is an interactive study of the techniques he used to translate Gesualdo's vocal polyphony into solo a theorbo piece.\n\nUse the Next / Prev buttons (or the arrow keys) to step through the categories of figures. Each step highlights one representative example by default — click the other instances on the right to compare them.",
+  "steps": [
+    {
+      "title": "Cadences",
+      "text": "In cadences, Kapsperger is often using reflexes that also occur in his own solo pieces. \nOne idiomatic device is the cadential groppo — a rapid turn around the leading note ([m. 20](#a-l3lk7wxe), [m. 32](#a-eihiih7v), [m. 8](#a-7mlwl0z4)), and once around the third of ultima ([m. 5](#a-mglg67mr)). \nSometimes that cadential groppo is thickened into a double groppo in parallel sixths, where the lower voice takes the tenor clause ([m. 15](#a-2qnqmahw)). An interesting case of case of a diminuished realisation of the resolution of a 6/4 chord in parallel sixths can be found in [m. 25](#a-zumv6e9c).\nOften, Kapsperger inserts a passing seventh right before the ultima ([m. 40](#a-lu9274rn), [m. 47](#a-a6cudwe1)), most of the times in combination with the cadential groppo ([m. 34](#a-t03htpa0), [m. 44](#a-w7qetcx8), [m. 12](#a-wqg9vtgn), [m. 53](#a-jgv0z3pq), [m. 30](#a-xpv1gg49) – note that at this last instance, the seventh is not even resolved in the right place). Gesualdo never writes a passing seventh before the ultima. This practise is aligned with what we see with other basso continuo sources of the time (cf. e.g. Caccini's basses).\n"
+    },
+    {
+      "title": "Campanella",
+      "text": "Kapsperger makes use of rapid, up-beat campanella scales leading directly into a melody or bass note ([m. 4](#a-7gmmoiza), [m. 6](#a-71fvo4ub), [m. 17](#a-yreztjqx), [m. 30](#a-ovcaojk4)). Coming from above, one sometimes finds a little hook before the final note, e.g. in [m. 2](#a-p6qebx9a) and [m. 57](#a-2wnj0hvw). Note how in the scale in [m. 4](#a-vem912ru), Kapsperger waits briefly before the target note, which also is in line with other sources of the time (cf. e.g. Carlo G)."
+    },
+    {
+      "title": "Single-string figures",
+      "text": "Kapsperger has a preference for rapid and often slurred figures on a single string - lying in the hand.\nOften, this figure resembles a Cercar della nota, reaching up from the lower third to the target note. These gestures frequently occur multiple times in the same place, creating a sort of dialogic effect ([m. 9](#a-87ep0crd), [m. 9](#a-8ffp98o1), [m. 10](#a-7flzyoru), [m. 10](#a-6d7cg9pd)). There is also a cadential variant that combines cercar with a groppo ([m. 7](#a-755vyapc)).\nAnother single-string figure is a turn-like decoration of a single structural note. Also that note occurs frequently in groups: ([m. 6](#a-hc5lvhjm), [m. 11](#a-mlsjlgio), [m. 11](#a-6b54vmtx), [m. 11](#a-rz02zwp1), [m. 11](#a-feu7xktb)).\nAlso a vertical thirds can be turned into a single-string figure, see e.g. [m. 30](#a-2t1g73dg)."
+    },
+    {
+      "title": "Trailing bass and arpeggio",
+      "text": "Kapsperger loves trailing basses (nachschlagende Bässe) - cf. e.g. [m. 2](#a-da816qd1), [m. 3](#a-aqdqp576), [m. 8](#a-j8dhydx5), [m. 21](#a-1m6tv8za), [m. 25](#a-z9kslxg9), [m. 47](#a-5zza1nga). It is also a typically plucked instrument habit to arpeggiate simultanous chords ([m. 52](#a-z8rzz4l9), [m. 53](#a-c9mdgb4i), [m. 9](#a-0pasl0qp)) and to re-struck tied notes ([m. 41](#a-48ih49ay), [m. 47](#a-c3q3fdov))."
+    },
+    {
+      "title": "Diminution",
+      "text": "When simultanous notes are being arpeggiated, there is new room for diminutions, be they simple ([m. 23](#a-wjar51yv)) or wild ([m. 18](#a-481epf6l)).\nWhen the possibility arrives, Kapsperger fills up Gesualdo's melodic thirds: sometimes plainly ([m. 14](#a-4ebqxkw0), [m. 40](#a-i64eyo8k), [m. 47](#a-4n341xz0)), but often with a passing notes which itself is ornamented, using a cercar ([m. 19](#a-0n26nahk)) or a groppo ([m. 3](#a-6787ppg9), [m. 6](#a-p62zg87s)).\nAlso melodic fourths are being filled-up with passing notes: upwards in a plain manner ([m. 31](#a-th5twrkc)), but downwards more sophisticatedly ([m. 34](#a-9dsqlni9), [m. 34](#a-2w8vv8ns)).\nDiminutions over major or minor root chords can be rather intriguiging, e.g. in [m. 27](#a-4ltx3a0u)."
+    },
+    {
+      "title": "Omissions",
+      "text": "For the sake of virtuosic theorbo figures, as e.g. the group of single-string figures or campanella effects, Kapsperger is generously leaving out notes (cf. e.g. [m.24](#a-27jbp2u7)). When two of Gesualdo's voices move in parallel thirds, Kapsperger uses them an neglects everything, see e.g. [m.55](#a-3k370ql9)."
+    }
+  ]
+}

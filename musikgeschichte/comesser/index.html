@@ -1,0 +1,1445 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="cache-control" content="no-store, must-revalidate" />
+    <meta http-equiv="pragma" content="no-cache" />
+    <title>Olivetis — Kapsperger tablature viewer</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&display=swap" />
+    <style>
+      :root {
+        color-scheme: light;
+        /* Clean white-paper palette — neutral, ink on white. */
+        --bg: #ffffff;
+        --fg: #1a1a1a;
+        --muted: #707070;
+        --border: #d8d8d8;
+        --panel: #f7f7f6;
+        --ink: #1a1a1a;
+        --accent: #2c4a7c;        /* deep ink-blue for emphasis */
+        --accent-bg: rgba(44, 74, 124, 0.10);
+        --hull: #4a5a78;          /* slate */
+        --hull-fill: rgba(74, 90, 120, 0.16);
+        --voc: #3b6f3b;           /* ink-green */
+        --voc-bg: rgba(59, 111, 59, 0.14);
+        --warn: #8b3a3a;
+      }
+      :root {
+        --serif: 'EB Garamond', Garamond, 'Adobe Garamond Pro', 'Hoefler Text', Georgia, 'Times New Roman', Times, serif;
+        --sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Inter, system-ui, sans-serif;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0; padding: 0; background: var(--bg); color: var(--fg);
+        font: 17px/1.55 var(--serif);
+        height: 100%;
+        text-rendering: optimizeLegibility;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: 'kern' 1, 'liga' 1, 'onum' 1;
+      }
+      body { display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+      header {
+        padding: 20px 32px 16px;
+        border-bottom: 1px solid var(--border);
+        display: flex; align-items: baseline; gap: 16px;
+        flex-shrink: 0;
+      }
+      .title-block { display: flex; flex-direction: column; gap: 4px; }
+      h1 {
+        margin: 0;
+        font-family: var(--serif);
+        font-size: 26px;
+        font-weight: 600;
+        letter-spacing: 0;
+        line-height: 1.15;
+      }
+      .subtitle {
+        font-family: var(--serif);
+        font-size: 15px;
+        font-style: normal;
+        color: var(--muted);
+        line-height: 1.4;
+      }
+      .subtitle em { font-style: italic; }
+      .byline {
+        margin-left: auto;
+        align-self: flex-end;
+        font: italic 12px/1.4 var(--serif);
+        color: var(--muted);
+        white-space: nowrap;
+      }
+      h2 {
+        margin: 0 0 8px;
+        font-family: var(--serif);
+        font-style: italic;
+        font-size: 13px;
+        font-weight: 400;
+        letter-spacing: 0.02em;
+        color: var(--muted);
+      }
+      h3 { font-family: var(--serif); font-weight: 600; }
+      .meta { color: var(--muted); font-size: 15px; font-style: italic; }
+      nav { margin-left: auto; display: flex; gap: 6px; align-items: center; }
+      /* Buttons in this view should feel like marginalia, not chrome. */
+      button {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--fg);
+        padding: 4px 12px;
+        /* Hand-drawn irregular corners. */
+        border-radius: 6px 8px 5px 9px / 7px 5px 8px 6px;
+        cursor: pointer;
+        font: 14px/1 var(--serif);
+        transition: background 0.15s, border-color 0.15s;
+      }
+      button:hover { background: var(--accent-bg); border-color: var(--accent); }
+      button:disabled { opacity: 0.35; cursor: not-allowed; }
+
+      main {
+        display: grid;
+        grid-template-columns: 1fr 460px;
+        flex: 1;
+        overflow: hidden;
+      }
+      #score-wrap { overflow: auto; padding: 16px; }
+      #score { max-width: 1400px; margin: 0 auto; position: relative; }
+      #score svg { width: 100%; height: auto; display: block; }
+      #status { color: var(--muted); padding: 40px 20px; text-align: center; }
+
+      /* Mobile / narrow-window layout: stack score and tour vertically. */
+      @media (max-width: 820px) {
+        body { height: auto; min-height: 100vh; overflow: visible; }
+        html, body { font-size: 16px; }
+        header { padding: 14px 16px 10px; flex-wrap: wrap; gap: 8px; }
+        h1 { font-size: 21px; }
+        .meta { font-size: 13px; }
+        main {
+          display: flex;
+          flex-direction: column;
+          overflow: visible;
+          flex: none;
+        }
+        #score-wrap { overflow: visible; padding: 12px; max-height: 60vh; overflow-y: auto; }
+        aside {
+          border-left: none;
+          border-top: 1px solid var(--border);
+          padding: 16px;
+        }
+        #tour { padding: 16px; }
+        #tour-step-title { font-size: 19px; }
+        #tour-text { font-size: 15px; }
+        .footer-bar { padding: 8px 12px; flex-wrap: wrap; }
+        .help { font-size: 11px; }
+      }
+
+      .annot-hull { fill: var(--hull-fill); stroke: none; pointer-events: all; cursor: pointer; transition: fill-opacity 0.25s, opacity 0.25s; }
+      /* Stay semi-transparent even when focused so the notes inside remain readable. */
+      .annot-group:hover .annot-hull, .annot-group.focused .annot-hull { fill-opacity: 0.7; }
+      .vocal-marker { fill: var(--voc-bg); stroke: none; pointer-events: all; cursor: pointer; opacity: 0.55; transition: opacity 0.25s; }
+      .annot-group:hover .vocal-marker, .annot-group.focused .vocal-marker { opacity: 0.85; }
+      .note-sel-tab, .note-sel-tab * { fill: var(--accent) !important; stroke: var(--accent) !important; }
+      .note-sel-voc, .note-sel-voc * { fill: var(--voc) !important; stroke: var(--voc) !important; }
+
+      /* Focus mode: dim everything except (a) the active annotation's notes and
+         (b) the staff lines / clefs / etc. of the measure(s) those notes live in. */
+      #score svg.focus-mode .note,
+      #score svg.focus-mode .rest,
+      #score svg.focus-mode .mRest,
+      #score svg.focus-mode .multiRest,
+      #score svg.focus-mode .mRpt,
+      #score svg.focus-mode .mRpt2,
+      #score svg.focus-mode .halfmRpt,
+      #score svg.focus-mode .beatRpt,
+      #score svg.focus-mode .tupletNum,
+      #score svg.focus-mode .tupletBracket,
+      #score svg.focus-mode .accid,
+      #score svg.focus-mode .artic,
+      #score svg.focus-mode .syl,
+      #score svg.focus-mode .verse,
+      #score svg.focus-mode .barLine,
+      #score svg.focus-mode .clef,
+      #score svg.focus-mode .keySig,
+      #score svg.focus-mode .keyAccid,
+      #score svg.focus-mode .meterSig,
+      #score svg.focus-mode .mNum,
+      #score svg.focus-mode .ledgerLines,
+      #score svg.focus-mode .stem,
+      #score svg.focus-mode .flag,
+      #score svg.focus-mode .dots,
+      #score svg.focus-mode .dynam,
+      #score svg.focus-mode .dir,
+      #score svg.focus-mode .tempo,
+      #score svg.focus-mode .label,
+      #score svg.focus-mode .labelAbbr,
+      #score svg.focus-mode .tabDurSym,
+      #score svg.focus-mode .tie,
+      #score svg.focus-mode .slur,
+      #score svg.focus-mode .hairpin,
+      #score svg.focus-mode .fermata,
+      #score svg.focus-mode .ornam,
+      #score svg.focus-mode .trill,
+      #score svg.focus-mode .mordent,
+      #score svg.focus-mode .turn,
+      #score svg.focus-mode .arpeg,
+      #score svg.focus-mode .breath,
+      #score svg.focus-mode .pedal,
+      #score svg.focus-mode .octave,
+      #score svg.focus-mode .harm,
+      #score svg.focus-mode .fing,
+      #score svg.focus-mode .anchoredText,
+      #score svg.focus-mode .grpSym,
+      #score svg.focus-mode .staff > path,
+      #score svg.focus-mode .system > path,
+      #score svg.focus-mode .staffGrp > path,
+      #score svg.focus-mode .system > rect,
+      #score svg.focus-mode .system > line {
+        opacity: 0.04;
+        transition: opacity 0.25s;
+      }
+      /* Bring back the active annotation's own notes... */
+      #score svg.focus-mode .note.note-in-focus,
+      #score svg.focus-mode .note.note-in-focus .accid,
+      #score svg.focus-mode .note.note-in-focus .artic,
+      #score svg.focus-mode .note.note-in-focus .stem,
+      #score svg.focus-mode .note.note-in-focus .flag,
+      #score svg.focus-mode .note.note-in-focus .dots,
+      #score svg.focus-mode .note.note-in-focus .tabDurSym { opacity: 1; }
+      /* For the in-focus staves: the original full-width staff lines and any in-staff
+         clef/keysig are hidden — we render tight versions in the tight-staff-layer.
+         Barlines and ledger lines in the in-focus measure remain visible. */
+      #score svg.focus-mode .measure.in-focus > .staff.staff-in-focus > path,
+      #score svg.focus-mode .measure.in-focus > .staff.staff-in-focus .clef,
+      #score svg.focus-mode .measure.in-focus > .staff.staff-in-focus .keySig,
+      #score svg.focus-mode .measure.in-focus > .staff.staff-in-focus .keyAccid,
+      #score svg.focus-mode .measure.in-focus > .staff.staff-in-focus .meterSig { opacity: 0; }
+      #score svg.focus-mode .measure.in-focus > .staff.staff-in-focus .ledgerLines { opacity: 1; }
+      #score svg.focus-mode .measure.in-focus > .staff:not(.staff-in-focus) { opacity: 0; transition: opacity 0.25s; }
+      /* Tight overlay layer */
+      #score svg .tight-staff-line { stroke: var(--fg); stroke-width: 0.6; fill: none; opacity: 0.45; }
+      #score svg .tight-staff-clef { opacity: 0.7; }
+      #score svg .focus-arrow { fill: none; stroke: var(--accent); stroke-width: 1.8; opacity: 0.85; }
+      #score svg .focus-arrow-head { fill: var(--accent); stroke: none; opacity: 0.85; }
+      #score svg.focus-mode .annot-group { opacity: 0.04; transition: opacity 0.25s; }
+      #score svg.focus-mode .annot-group.focused { opacity: 1; }
+
+      aside {
+        border-left: 1px solid var(--border);
+        background: var(--bg);
+        overflow-y: auto;
+        padding: 22px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .chip {
+        display: inline-flex;
+        align-items: center;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font: 11px var(--sans);
+        font-variant-numeric: tabular-nums;
+        background: var(--accent-bg);
+        color: var(--accent);
+      }
+      .chip.voc { background: var(--voc-bg); color: var(--voc); }
+
+      #tour {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+      #tour .tour-controls {
+        display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      }
+      #tour .pagination { display: inline-flex; align-items: center; gap: 6px; }
+      #tour .actions { display: inline-flex; align-items: center; gap: 8px; }
+      #tour-counter {
+        color: var(--muted); font-variant-numeric: oldstyle-nums;
+        font: italic 14px/1 var(--serif); text-align: center;
+        min-width: 56px;
+      }
+      .icon-btn {
+        width: 32px; height: 32px;
+        padding: 0;
+        display: inline-flex; align-items: center; justify-content: center;
+        font: 16px/1 var(--serif);
+        color: var(--fg);
+      }
+      .icon-btn[aria-label="Play"] { color: var(--accent); }
+      .icon-btn[aria-label="End tour"] { color: var(--muted); font-size: 13px; }
+      #tour-step-title {
+        margin: 0;
+        font-family: var(--serif);
+        font-size: 22px;
+        font-weight: 600;
+        line-height: 1.2;
+        letter-spacing: 0;
+      }
+      #tour-text {
+        font-family: var(--serif);
+        font-size: 16px;
+        line-height: 1.65;
+        color: var(--fg);
+        white-space: pre-wrap;
+        text-align: justify;
+        hyphens: auto;
+      }
+      #tour-text.placeholder { color: var(--muted); font-style: italic; }
+      .annot-ref {
+        cursor: pointer;
+        color: var(--accent);
+        border-bottom: 1px dotted var(--accent);
+        padding-bottom: 0.5px;
+        white-space: nowrap;
+        transition: background 0.15s;
+      }
+      .annot-ref:hover { background: var(--accent-bg); }
+      .annot-ref.active { background: var(--accent-bg); border-bottom-style: solid; }
+      .tour-empty { color: var(--muted); font-size: 14px; font-style: italic; }
+
+      .footer-bar { padding: 10px 16px; border-top: 1px solid var(--border); flex-shrink: 0; display: flex; gap: 8px; align-items: center; }
+      .help { color: var(--muted); font-size: 11px; margin-left: auto; }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="title-block">
+        <h1>Kapsperger intabulating Gesualdo</h1>
+        <div class="subtitle">A study of «Come esser può ch'io viva», from the <em>Libro terzo d'intavolatura di chitarone</em> (Rome, 1626)</div>
+      </div>
+      <div class="byline">Niels Pfeffer · 2026</div>
+    </header>
+
+    <main>
+      <div id="score-wrap">
+        <div id="score">
+          <div id="status">Loading Verovio…</div>
+        </div>
+      </div>
+
+      <aside>
+        <div id="tour">
+          <div class="tour-controls">
+            <div class="pagination">
+              <button id="tour-prev" class="icon-btn" title="Previous step" aria-label="Previous step">‹</button>
+              <span id="tour-counter">— / —</span>
+              <button id="tour-next" class="icon-btn" title="Next step" aria-label="Next step">›</button>
+            </div>
+            <div class="actions">
+              <button id="tour-end" class="icon-btn" title="End the tour and show the full score" aria-label="End tour">✕</button>
+            </div>
+          </div>
+          <h3 id="tour-step-title"></h3>
+          <div id="tour-text"></div>
+        </div>
+      </aside>
+    </main>
+
+    <div class="footer-bar">
+      <span class="meta" id="annot-source"></span>
+      <span class="help">← / → step the tour. Click an instance (or a hull in the score) to switch the example.</span>
+    </div>
+
+    <script type="module">
+      const MEI_URL = 'comesser-merged.mei';
+      const ANNOT_URL = 'kapsberger-annotations.json';
+      const TOUR_URL = 'tour.json';
+
+      const $ = (sel) => document.querySelector(sel);
+      const scoreEl = $('#score');
+      const scoreWrap = $('#score-wrap');
+      const annotSourceEl = $('#annot-source');
+      const tourStepTitleEl = $('#tour-step-title');
+      const tourTextEl = $('#tour-text');
+      const tourCounterEl = $('#tour-counter');
+      const tourPrevBtn = $('#tour-prev');
+      const tourNextBtn = $('#tour-next');
+      const tourEndBtn = $('#tour-end');
+
+      let tk = null;
+      let currentPage = 1;
+      let pageCount = 1;
+
+      // MIDI / audio state
+      let Tone = null;
+      let midiData = null;       // parsed Midi instance from @tonejs/midi
+      let vocalTrackIdxs = [];
+      let tabTrackIdx = -1;
+      let vocalInstr = null;     // Tone.Sampler or Tone.PolySynth — voice-like
+      let tabInstr = null;       // Tone.Sampler or Tone.PolySynth — plucked
+      let audioReadyPromise = null; // serialises concurrent ensureAudio calls
+      let isPlaying = false;
+      let stopRequested = false;
+
+      const noteInfo = new Map();
+      const tabNotes = new Map();
+      const vocNotes = new Map();
+      const courseOpenMidi = {};   // course n → MIDI pitch of the open string
+      let annotations = [];
+      const annotById = new Map();
+      let activeId = null;      // currently-focused annotation
+      let tour = null;          // { title, description, steps: [...] }
+      let tourIndex = 0;        // 0..steps.length-1
+
+      function applyVocalStaffScale(meiText, scale) {
+        const doc = new DOMParser().parseFromString(meiText, 'application/xml');
+        const ns = 'http://www.music-encoding.org/ns/mei';
+        for (const sd of doc.getElementsByTagNameNS(ns, 'staffDef')) {
+          if (sd.getAttribute('n') !== '6') sd.setAttribute('scale', scale);
+        }
+        return new XMLSerializer().serializeToString(doc);
+      }
+
+      function parseMei(meiText) {
+        const doc = new DOMParser().parseFromString(meiText, 'application/xml');
+        const ns = 'http://www.music-encoding.org/ns/mei';
+
+        const staffLabels = {};
+        for (const sd of doc.getElementsByTagNameNS(ns, 'staffDef')) {
+          const n = sd.getAttribute('n');
+          const lbl = sd.getElementsByTagNameNS(ns, 'label')[0]?.textContent?.trim();
+          if (n) staffLabels[n] = lbl || `Staff ${n}`;
+        }
+
+        // Parse the lute tuning so we can compute per-note pitches from (course, fret).
+        // Without this, picking pitches by time-matching against the MIDI tab track is
+        // arbitrary inside chords — the user might hear a sibling note instead.
+        const PC = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+        const ACC = { s: 1, f: -1, x: 2, ff: -2, n: 0, '': 0 };
+        for (const tuning of doc.getElementsByTagNameNS(ns, 'tuning')) {
+          for (const course of tuning.getElementsByTagNameNS(ns, 'course')) {
+            const cn = course.getAttribute('n');
+            const pname = course.getAttribute('pname')?.toLowerCase();
+            const oct = parseInt(course.getAttribute('oct'));
+            const accid = course.getAttribute('accid') || '';
+            const pc = PC[pname];
+            const acc = ACC[accid] ?? 0;
+            if (cn && pc != null && !isNaN(oct)) {
+              courseOpenMidi[cn] = (oct + 1) * 12 + pc + acc;
+            }
+          }
+        }
+
+        for (const measure of doc.getElementsByTagNameNS(ns, 'measure')) {
+          const mNum = measure.getAttribute('n');
+          for (const staff of measure.getElementsByTagNameNS(ns, 'staff')) {
+            const sN = staff.getAttribute('n');
+            const isTab = sN === '6';
+            for (const note of staff.getElementsByTagNameNS(ns, 'note')) {
+              const id = note.getAttribute('xml:id') || note.getAttributeNS('http://www.w3.org/XML/1998/namespace', 'id');
+              if (!id) continue;
+              let info;
+              if (isTab) {
+                const course = note.getAttribute('tab.course');
+                const fret = note.getAttribute('tab.fret');
+                const open = courseOpenMidi[course];
+                const fretN = parseInt(fret);
+                const midi = (open != null && !isNaN(fretN)) ? open + fretN : null;
+                info = { kind: 'tab', measure: mNum, course, fret, midi, label: `m.${mNum} c${course}/${fret}` };
+                tabNotes.set(id, info);
+              } else {
+                const pname = note.getAttribute('pname');
+                const octv = note.getAttribute('oct');
+                // @accid is the visible accidental; @accid.ges is the gestural (sounding)
+                // accidental — used for musica ficta where the note sounds altered without
+                // a written accidental. For pitch we prefer accid.ges, falling back to accid.
+                const accidVis = note.getAttribute('accid') || note.getElementsByTagNameNS(ns, 'accid')[0]?.getAttribute('accid') || '';
+                const accidGes = note.getAttribute('accid.ges') || '';
+                const soundingAccid = accidGes || accidVis;
+                const accSym = { s: '♯', f: '♭', n: '♮', x: '𝄪', ff: '♭♭' }[accidVis] || '';
+                const pitch = pname ? `${pname.toUpperCase()}${accSym}${octv ?? ''}` : '?';
+                const sLbl = (staffLabels[sN] || ('S' + sN)).replace(/^\[(.+)\]$/, '$1');
+                const abbr = sLbl.split(/\s+/).map(w => w[0]).join('').slice(0, 3);
+                info = { kind: 'voc', measure: mNum, staff: sN, staffLabel: sLbl, pname, oct: octv, accid: soundingAccid, accidVis, pitch, label: `${abbr} m.${mNum} ${pitch}` };
+                vocNotes.set(id, info);
+              }
+              noteInfo.set(id, info);
+            }
+          }
+        }
+      }
+
+      const renderedRects = new Map();
+
+      function computeRenderedRects() {
+        renderedRects.clear();
+        const svg = scoreEl.querySelector('svg');
+        if (!svg) return null;
+        const svgRect = svg.getBoundingClientRect();
+        if (!svgRect.width) return null;
+        const vb = svg.viewBox && svg.viewBox.baseVal;
+        const hasVB = vb && vb.width > 0;
+        const sx = hasVB ? vb.width / svgRect.width : 1;
+        const sy = hasVB ? vb.height / svgRect.height : 1;
+        for (const id of noteInfo.keys()) {
+          const noteEl = svg.querySelector(`[id="${CSS.escape(id)}"]`);
+          if (!noteEl) continue;
+          const r = noteEl.getBoundingClientRect();
+          if (!r.width && !r.height) continue;
+          renderedRects.set(id, {
+            x: (r.left - svgRect.left) * sx,
+            y: (r.top - svgRect.top) * sy,
+            w: r.width * sx,
+            h: r.height * sy,
+            system: noteEl.closest('.system') || svg,
+          });
+        }
+        return svg;
+      }
+
+      function convexHull(points) {
+        if (points.length <= 1) return points.slice();
+        const pts = points.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
+        const cross = (o, a, b) => (a[0] - o[0]) * (b[1] - o[1]) - (a[1] - o[1]) * (b[0] - o[0]);
+        const lo = [];
+        for (const p of pts) {
+          while (lo.length >= 2 && cross(lo[lo.length - 2], lo[lo.length - 1], p) <= 0) lo.pop();
+          lo.push(p);
+        }
+        const up = [];
+        for (let i = pts.length - 1; i >= 0; i--) {
+          const p = pts[i];
+          while (up.length >= 2 && cross(up[up.length - 2], up[up.length - 1], p) <= 0) up.pop();
+          up.push(p);
+        }
+        lo.pop(); up.pop();
+        return lo.concat(up);
+      }
+
+      function expandHull(hull, amount) {
+        if (!hull.length) return hull;
+        const cx = hull.reduce((s, p) => s + p[0], 0) / hull.length;
+        const cy = hull.reduce((s, p) => s + p[1], 0) / hull.length;
+        return hull.map(([x, y]) => {
+          const dx = x - cx, dy = y - cy;
+          const len = Math.hypot(dx, dy) || 1;
+          return [x + dx / len * amount, y + dy / len * amount];
+        });
+      }
+
+      function chaikin(poly, iters) {
+        if (poly.length < 3) return poly;
+        let pts = poly;
+        for (let k = 0; k < iters; k++) {
+          const next = [];
+          for (let i = 0; i < pts.length; i++) {
+            const a = pts[i];
+            const b = pts[(i + 1) % pts.length];
+            next.push([0.75 * a[0] + 0.25 * b[0], 0.75 * a[1] + 0.25 * b[1]]);
+            next.push([0.25 * a[0] + 0.75 * b[0], 0.25 * a[1] + 0.75 * b[1]]);
+          }
+          pts = next;
+        }
+        return pts;
+      }
+
+      function buildOverlays() {
+        const svg = computeRenderedRects();
+        if (!svg) return;
+        svg.querySelectorAll('.annot-hull-layer').forEach(n => n.remove());
+
+        const hullLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+        hullLayer.setAttribute('class', 'annot-hull-layer');
+        svg.appendChild(hullLayer);
+        const SVGNS = 'http://www.w3.org/2000/svg';
+
+        function blobFor(rects, pad, expand, iters) {
+          const points = [];
+          for (const r of rects) {
+            points.push([r.x - pad, r.y - pad]);
+            points.push([r.x + r.w / 2, r.y - pad]);
+            points.push([r.x + r.w + pad, r.y - pad]);
+            points.push([r.x + r.w + pad, r.y + r.h / 2]);
+            points.push([r.x + r.w + pad, r.y + r.h + pad]);
+            points.push([r.x + r.w / 2, r.y + r.h + pad]);
+            points.push([r.x - pad, r.y + r.h + pad]);
+            points.push([r.x - pad, r.y + r.h / 2]);
+          }
+          if (!points.length) return null;
+          const hull = convexHull(points);
+          const expanded = expandHull(hull, expand);
+          const smooth = chaikin(expanded, iters);
+          if (smooth.length >= 3) {
+            const el = document.createElementNS(SVGNS, 'polygon');
+            el.setAttribute('points', smooth.map(p => p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' '));
+            return el;
+          }
+          const xs = points.map(p => p[0]); const ys = points.map(p => p[1]);
+          const minx = Math.min(...xs) - expand, miny = Math.min(...ys) - expand;
+          const maxx = Math.max(...xs) + expand, maxy = Math.max(...ys) + expand;
+          const el = document.createElementNS(SVGNS, 'rect');
+          el.setAttribute('x', minx); el.setAttribute('y', miny);
+          el.setAttribute('width', maxx - minx); el.setAttribute('height', maxy - miny);
+          el.setAttribute('rx', Math.min(20, (maxx - minx) / 2, (maxy - miny) / 2));
+          return el;
+        }
+
+        for (const a of annotations) {
+          const group = document.createElementNS(SVGNS, 'g');
+          group.setAttribute('class', 'annot-group' + (a.id === activeId ? ' focused' : ''));
+          group.setAttribute('data-annot-id', a.id);
+
+          const bySystem = new Map();
+          for (const n of (a.tab || a.notes || [])) {
+            const r = renderedRects.get(n.id);
+            if (!r) continue;
+            let arr = bySystem.get(r.system);
+            if (!arr) { arr = []; bySystem.set(r.system, arr); }
+            arr.push(r);
+          }
+          for (const rects of bySystem.values()) {
+            const hullEl = blobFor(rects, 3, 5, 3);
+            if (!hullEl) continue;
+            hullEl.setAttribute('class', 'annot-hull');
+            hullEl.setAttribute('data-annot-id', a.id);
+            const t = document.createElementNS(SVGNS, 'title');
+            t.textContent = a.activity + (a.comment ? ' — ' + a.comment : '');
+            hullEl.appendChild(t);
+            group.appendChild(hullEl);
+          }
+
+          const vocBySystem = new Map();
+          for (const n of (a.vocal || [])) {
+            const r = renderedRects.get(n.id);
+            if (!r) continue;
+            let arr = vocBySystem.get(r.system);
+            if (!arr) { arr = []; vocBySystem.set(r.system, arr); }
+            arr.push(r);
+          }
+          for (const rects of vocBySystem.values()) {
+            const m = blobFor(rects, 4, 5, 3);
+            if (!m) continue;
+            m.setAttribute('class', 'vocal-marker');
+            m.setAttribute('data-annot-id', a.id);
+            const t = document.createElementNS(SVGNS, 'title');
+            t.textContent = a.activity + (a.comment ? ' — ' + a.comment : '');
+            m.appendChild(t);
+            group.appendChild(m);
+          }
+          if (group.childNodes.length) hullLayer.appendChild(group);
+        }
+
+        applyGlyphHighlights();
+        buildFocusOverlay(svg);
+      }
+
+      // Returns the staff's index within its parent measure (0-based, only counts .staff children)
+      function staffIndexInMeasure(staff) {
+        const measure = staff.parentElement;
+        let idx = 0;
+        for (const ch of measure.children) {
+          if (ch.classList && ch.classList.contains('staff')) {
+            if (ch === staff) return idx;
+            idx++;
+          }
+        }
+        return -1;
+      }
+
+      // Find the clef element that introduces this staff at the start of its system.
+      function findClefForStaff(staff) {
+        const measure = staff.parentElement;
+        const system = measure.closest('.system');
+        if (!system) return null;
+        const idx = staffIndexInMeasure(staff);
+        if (idx < 0) return null;
+        // Iterate measures in document order until we find a .clef in the staff at this index.
+        for (const m of system.querySelectorAll('.measure')) {
+          let stIdx = 0;
+          for (const ch of m.children) {
+            if (!ch.classList || !ch.classList.contains('staff')) continue;
+            if (stIdx === idx) {
+              const c = ch.querySelector(':scope > .clef');
+              if (c) return c;
+            }
+            stIdx++;
+          }
+        }
+        return null;
+      }
+
+      function buildFocusOverlay(svg) {
+        svg.querySelectorAll('.tight-staff-layer, .focus-arrow-layer, .focus-arrow-defs').forEach(n => n.remove());
+        if (!svg.classList.contains('focus-mode')) return;
+        const SVGNS = 'http://www.w3.org/2000/svg';
+
+        // Verovio nests its music inside <svg class="definition-scale"> which has its own
+        // coord system. Our overlay layers are children of the OUTER svg, where 1 user-unit
+        // ≈ 1 CSS pixel. So we convert everything via viewport rects.
+        const svgRect = svg.getBoundingClientRect();
+        const toOuter = (rect) => ({
+          x: rect.left - svgRect.left,
+          y: rect.top - svgRect.top,
+          w: rect.width,
+          h: rect.height
+        });
+
+        const tightLayer = document.createElementNS(SVGNS, 'g');
+        tightLayer.setAttribute('class', 'tight-staff-layer');
+        svg.appendChild(tightLayer);
+
+        // Group focused staves by (system, staff-index-in-measure) so an annotation
+        // crossing measures yields a single continuous tight staff per logical voice.
+        const groups = new Map(); // key -> { staves: [staff,...], systemEl }
+        for (const staff of svg.querySelectorAll('.measure.in-focus > .staff.staff-in-focus')) {
+          const measure = staff.parentElement;
+          const system = measure.closest('.system') || svg;
+          const idx = staffIndexInMeasure(staff);
+          if (idx < 0) continue;
+          const key = `${system.getAttribute('id') || 'sys'}::${idx}`;
+          let g = groups.get(key);
+          if (!g) { g = { staves: [], systemEl: system }; groups.set(key, g); }
+          g.staves.push(staff);
+        }
+
+        for (const { staves } of groups.values()) {
+          // x-extent: union of all focused notes across the merged staves
+          let minX = Infinity, maxX = -Infinity;
+          for (const staff of staves) {
+            for (const noteEl of staff.querySelectorAll('.note-in-focus')) {
+              const r = toOuter(noteEl.getBoundingClientRect());
+              if (!r.w) continue;
+              minX = Math.min(minX, r.x);
+              maxX = Math.max(maxX, r.x + r.w);
+            }
+          }
+          if (minX === Infinity) continue;
+
+          // y for each staff line: read from the first staff's original lines (geometry is
+          // consistent across measures of the same logical staff in a system).
+          const stafflines = [...staves[0].children].filter(c => c.tagName === 'path');
+          if (!stafflines.length) continue;
+
+          const padX = 18;
+          const x1 = minX - padX;
+          const x2 = maxX + padX;
+
+          const g = document.createElementNS(SVGNS, 'g');
+          g.setAttribute('class', 'tight-staff');
+
+          for (const line of stafflines) {
+            const lr = line.getBoundingClientRect();
+            if (!lr.width) continue;
+            const y = (lr.top + lr.height / 2) - svgRect.top;
+            const el = document.createElementNS(SVGNS, 'line');
+            el.setAttribute('class', 'tight-staff-line');
+            el.setAttribute('x1', x1.toFixed(1));
+            el.setAttribute('y1', y.toFixed(1));
+            el.setAttribute('x2', x2.toFixed(1));
+            el.setAttribute('y2', y.toFixed(1));
+            g.appendChild(el);
+          }
+
+          // Single clef at the leftmost position.
+          const clef = findClefForStaff(staves[0]);
+          if (clef) {
+            try {
+              const cRect = toOuter(clef.getBoundingClientRect());
+              if (cRect.w > 0) {
+                const screenCTM = clef.getScreenCTM();
+                const svgScreenCTM = svg.getScreenCTM();
+                const T = svgScreenCTM.inverse().multiply(screenCTM);
+                const targetLeft = x1 - cRect.w - 6;
+                const dx = targetLeft - cRect.x;
+                const clone = clef.cloneNode(true);
+                clone.setAttribute('class', 'tight-staff-clef');
+                clone.removeAttribute('id');
+                clone.setAttribute('transform',
+                  `translate(${dx.toFixed(2)} 0) matrix(${T.a} ${T.b} ${T.c} ${T.d} ${T.e} ${T.f})`);
+                g.appendChild(clone);
+              }
+            } catch (e) { console.warn('clef clone failed', e); }
+          }
+
+          tightLayer.appendChild(g);
+        }
+
+        // Arrow from vocal hull → tab hull for the focused annotation, if both exist.
+        const focusedGroup = svg.querySelector('.annot-group.focused');
+        if (focusedGroup) {
+          const tabHulls = [...focusedGroup.querySelectorAll('.annot-hull')];
+          const vocHulls = [...focusedGroup.querySelectorAll('.vocal-marker')];
+          if (tabHulls.length && vocHulls.length) {
+            const arrowDefs = document.createElementNS(SVGNS, 'defs');
+            arrowDefs.setAttribute('class', 'focus-arrow-defs');
+            // Use a path-based arrowhead so we can keep its size in user units.
+            svg.appendChild(arrowDefs);
+
+            const arrowLayer = document.createElementNS(SVGNS, 'g');
+            arrowLayer.setAttribute('class', 'focus-arrow-layer');
+            svg.appendChild(arrowLayer);
+
+            const vocBB = vocHulls[0].getBBox();
+            const tabBB = tabHulls[0].getBBox();
+            // Start: bottom-center of vocal hull. End: top-center of tab hull.
+            const sx = vocBB.x + vocBB.width / 2;
+            const sy = vocBB.y + vocBB.height;
+            const ex = tabBB.x + tabBB.width / 2;
+            const ey = tabBB.y;
+            if (ey > sy + 6) {
+              const dy = ey - sy;
+              // Sweep horizontally a bit so it feels like a swung gesture, not a straight line.
+              const sweep = Math.min(120, dy * 0.6);
+              const c1x = sx + sweep;
+              const c1y = sy + dy * 0.25;
+              const c2x = ex - sweep;
+              const c2y = ey - dy * 0.25;
+
+              const path = document.createElementNS(SVGNS, 'path');
+              path.setAttribute('class', 'focus-arrow');
+              path.setAttribute('d', `M ${sx.toFixed(1)} ${sy.toFixed(1)} C ${c1x.toFixed(1)} ${c1y.toFixed(1)}, ${c2x.toFixed(1)} ${c2y.toFixed(1)}, ${ex.toFixed(1)} ${ey.toFixed(1)}`);
+              arrowLayer.appendChild(path);
+
+              // Arrowhead: a small triangle aligned with the curve's terminal tangent.
+              // Terminal tangent direction = end - second control point.
+              const tdx = ex - c2x, tdy = ey - c2y;
+              const tlen = Math.hypot(tdx, tdy) || 1;
+              const ux = tdx / tlen, uy = tdy / tlen;
+              // perpendicular
+              const px = -uy, py = ux;
+              const ahLen = 9, ahWid = 6;
+              const baseX = ex - ux * ahLen;
+              const baseY = ey - uy * ahLen;
+              const leftX = baseX + px * ahWid / 2;
+              const leftY = baseY + py * ahWid / 2;
+              const rightX = baseX - px * ahWid / 2;
+              const rightY = baseY - py * ahWid / 2;
+              const head = document.createElementNS(SVGNS, 'polygon');
+              head.setAttribute('class', 'focus-arrow-head');
+              head.setAttribute('points',
+                `${ex.toFixed(1)},${ey.toFixed(1)} ${leftX.toFixed(1)},${leftY.toFixed(1)} ${rightX.toFixed(1)},${rightY.toFixed(1)}`);
+              arrowLayer.appendChild(head);
+            }
+          }
+        }
+      }
+
+      function applyGlyphHighlights() {
+        const svg = scoreEl.querySelector('svg');
+        if (!svg) return;
+        svg.querySelectorAll('.note-sel-tab, .note-sel-voc, .note-in-focus')
+          .forEach(n => n.classList.remove('note-sel-tab', 'note-sel-voc', 'note-in-focus'));
+        svg.querySelectorAll('.measure.in-focus').forEach(n => n.classList.remove('in-focus'));
+        svg.querySelectorAll('.staff.staff-in-focus').forEach(n => n.classList.remove('staff-in-focus'));
+        if (!activeId) {
+          svg.classList.remove('focus-mode');
+          return;
+        }
+        const a = annotById.get(activeId);
+        if (!a) { svg.classList.remove('focus-mode'); return; }
+
+        const measures = new Set();
+        const staves = new Set();
+        let any = false;
+        const markNote = (n, cls) => {
+          const el = svg.querySelector(`[id="${CSS.escape(n.id)}"]`);
+          if (!el) return;
+          el.classList.add(cls, 'note-in-focus');
+          const m = el.closest('.measure');
+          if (m) measures.add(m);
+          const st = el.closest('.staff');
+          if (st) staves.add(st);
+          any = true;
+        };
+        for (const n of (a.tab || a.notes || [])) markNote(n, 'note-sel-tab');
+        for (const n of (a.vocal || [])) markNote(n, 'note-sel-voc');
+        for (const m of measures) m.classList.add('in-focus');
+        for (const st of staves) st.classList.add('staff-in-focus');
+        svg.classList.toggle('focus-mode', any);
+      }
+
+      function setActive(id, opts = {}) {
+        activeId = id;
+        // Refresh inline-reference highlighting in the tour text.
+        for (const ref of tourTextEl.querySelectorAll('.annot-ref')) {
+          ref.classList.toggle('active', ref.dataset.annotId === id);
+        }
+        buildOverlays();
+        // Cancel any ongoing playback when the active example changes.
+        if (isPlaying) stopPlayback();
+        if (id && opts.scroll !== false) {
+          scrollToAnnotation(annotById.get(id));
+        }
+        // Auto-play the annotation. The first time this fires for a session it may be a
+        // no-op because browsers require a user gesture to unlock the audio context — but
+        // the act of clicking an instance / hull is itself a gesture, so it should work.
+        if (id) {
+          playActiveAnnotation().catch(e => console.warn('playback failed', e));
+        }
+        refreshNavButtons();
+      }
+
+      // Scroll so the union bbox of all the annotation's notes (vocal + tab) sits in
+      // the vertical center of the viewport — so the vocal hull, the connecting arrow,
+      // and the tab hull are all framed together rather than just the lower one.
+      function scrollToAnnotation(a) {
+        if (!a) return;
+        const allNotes = [...(a.tab || a.notes || []), ...(a.vocal || [])];
+        if (!allNotes.length) return;
+
+        // Make sure we're on the right page first (uses the first note as anchor).
+        const firstId = allNotes[0].id;
+        if (!scoreEl.querySelector(`[id="${CSS.escape(firstId)}"]`)) {
+          try {
+            const pg = tk.getPageWithElement(firstId);
+            if (pg && pg !== currentPage) { currentPage = pg; render(); }
+          } catch {}
+        }
+
+        // setTimeout (not rAF) so it still fires when the tab is in the background.
+        setTimeout(() => {
+          const wrapRect = scoreWrap.getBoundingClientRect();
+          let minTop = Infinity, maxBottom = -Infinity;
+          for (const n of allNotes) {
+            const el = scoreEl.querySelector(`[id="${CSS.escape(n.id)}"]`);
+            if (!el) continue;
+            const r = el.getBoundingClientRect();
+            if (!r.height) continue;
+            minTop = Math.min(minTop, r.top);
+            maxBottom = Math.max(maxBottom, r.bottom);
+          }
+          if (minTop === Infinity) return;
+          // If the whole region already fits in the viewport, leave the scroll alone.
+          if (minTop >= wrapRect.top && maxBottom <= wrapRect.bottom) return;
+          const regionMid = (minTop + maxBottom) / 2;
+          const wrapMid = wrapRect.top + wrapRect.height / 2;
+          const target = scoreWrap.scrollTop + (regionMid - wrapMid);
+          scoreWrap.scrollTo({ top: Math.max(0, target), behavior: 'smooth' });
+        }, 50);
+      }
+
+      // ---------- tour ----------
+      function gotoTourStep(i) {
+        if (!tour || !tour.steps || !tour.steps.length) return;
+        if (i < 0) {
+          // Intro / ended state: full score, no focus.
+          tourIndex = -1;
+          setActive(null);
+          renderTourStep();
+          return;
+        }
+        tourIndex = Math.max(0, Math.min(tour.steps.length - 1, i));
+        const step = tour.steps[tourIndex];
+        const ids = stepAnnotationIds(step).filter(id => annotById.has(id));
+        renderTourStep();
+        setActive(ids[0] || null);
+      }
+
+      // Extract annotation references from a step's text (the inline `[#id]` and
+      // `[label](#id)` forms). Returns unique IDs in the order they appear.
+      const ANNOT_REF_RE = /\[([^\]]+)\]\(#([a-zA-Z0-9-_]+)\)|\[#([a-zA-Z0-9-_]+)\]/g;
+      function stepAnnotationIds(step) {
+        if (!step?.text) return [];
+        const seen = new Set();
+        const out = [];
+        ANNOT_REF_RE.lastIndex = 0;
+        let m;
+        while ((m = ANNOT_REF_RE.exec(step.text)) !== null) {
+          const id = m[2] || m[3];
+          if (!seen.has(id)) { seen.add(id); out.push(id); }
+        }
+        return out;
+      }
+
+      function endTour() { gotoTourStep(-1); }
+
+      function currentStepIds() {
+        if (!tour?.steps?.length || tourIndex < 0) return [];
+        return stepAnnotationIds(tour.steps[tourIndex]).filter(id => annotById.has(id));
+      }
+
+      // Forward: advance to the next instance within the current step; if we're on
+      // the last instance, advance to the next step (which lands on its first
+      // instance via gotoTourStep).
+      function tourNext() {
+        if (!tour?.steps?.length) return;
+        if (tourIndex < 0) { gotoTourStep(0); return; }
+        const ids = currentStepIds();
+        const idx = ids.indexOf(activeId);
+        if (idx >= 0 && idx < ids.length - 1) {
+          setActive(ids[idx + 1]);
+        } else if (tourIndex < tour.steps.length - 1) {
+          gotoTourStep(tourIndex + 1);
+        }
+      }
+
+      // Backward: go to the previous instance within the current step; if we're on
+      // the first instance (or none), move to the previous step and land on its
+      // LAST instance. From step 0's first instance, return to the intro.
+      function tourPrev() {
+        if (!tour?.steps?.length) return;
+        if (tourIndex < 0) return;
+        const ids = currentStepIds();
+        const idx = ids.indexOf(activeId);
+        if (idx > 0) {
+          setActive(ids[idx - 1]);
+        } else if (tourIndex === 0) {
+          gotoTourStep(-1);
+        } else {
+          const prevIdx = tourIndex - 1;
+          const prevIds = stepAnnotationIds(tour.steps[prevIdx]).filter(id => annotById.has(id));
+          tourIndex = prevIdx;
+          renderTourStep();
+          setActive(prevIds[prevIds.length - 1] || null);
+        }
+      }
+
+      function refreshNavButtons() {
+        if (!tour?.steps?.length) return;
+        if (tourIndex < 0) {
+          tourPrevBtn.disabled = true;
+          tourNextBtn.disabled = false;
+          return;
+        }
+        tourPrevBtn.disabled = false;
+        const ids = currentStepIds();
+        const idx = ids.indexOf(activeId);
+        const onLastStep = tourIndex >= tour.steps.length - 1;
+        const onLastInstance = ids.length === 0 || idx === ids.length - 1;
+        tourNextBtn.disabled = onLastStep && onLastInstance;
+      }
+
+      function renderTourStep() {
+        if (!tour || !tour.steps || !tour.steps.length) {
+          tourStepTitleEl.textContent = '';
+          tourTextEl.textContent = 'No tour steps. Add some to tour.json.';
+          tourTextEl.classList.add('placeholder');
+          tourCounterEl.textContent = '— / —';
+          tourPrevBtn.disabled = true;
+          tourNextBtn.disabled = true;
+          tourEndBtn.disabled = true;
+          return;
+        }
+        if (tourIndex < 0) {
+          tourStepTitleEl.textContent = tour.title || 'Tour';
+          renderTourText(tour.description || 'Press Next to begin.', !tour.description);
+          tourCounterEl.textContent = `— / ${tour.steps.length}`;
+          tourPrevBtn.disabled = true;
+          tourNextBtn.disabled = false;
+          tourEndBtn.disabled = true;
+          return;
+        }
+        const step = tour.steps[tourIndex];
+        tourStepTitleEl.textContent = step.title || `Step ${tourIndex + 1}`;
+        renderTourText(step.text || '(no text)', !step.text);
+        tourCounterEl.textContent = `${tourIndex + 1} / ${tour.steps.length}`;
+        tourEndBtn.disabled = false;
+        refreshNavButtons();
+      }
+
+      // Tour-text supports inline annotation references in two forms:
+      //   [link text](#a-xxxxxx) — markdown-style with custom link text
+      //   [#a-xxxxxx]            — bare reference; uses the annotation's measure label
+      // Clicking a reference activates that annotation (and switches step if needed).
+      function renderTourText(text, isPlaceholder) {
+        tourTextEl.classList.toggle('placeholder', !!isPlaceholder);
+        tourTextEl.innerHTML = '';
+        // Combined regex: alternation of two forms.
+        const pattern = /\[([^\]]+)\]\(#([a-zA-Z0-9-_]+)\)|\[#([a-zA-Z0-9-_]+)\]/g;
+        let lastIdx = 0, m;
+        while ((m = pattern.exec(text)) !== null) {
+          if (m.index > lastIdx) {
+            tourTextEl.appendChild(document.createTextNode(text.slice(lastIdx, m.index)));
+          }
+          const id = m[2] || m[3];
+          const a = annotById.get(id);
+          let label;
+          if (m[1]) label = m[1];
+          else if (a) {
+            const measure = (a.tab || a.notes || [])[0]?.measure || (a.vocal || [])[0]?.measure;
+            label = `m. ${measure}`;
+          } else label = `#${id}`;
+          const ref = document.createElement('span');
+          ref.className = 'annot-ref' + (id === activeId ? ' active' : '');
+          ref.textContent = label;
+          ref.dataset.annotId = id;
+          ref.title = a ? `${a.activity}${a.comment ? ' — ' + a.comment : ''}` : `Unknown annotation: ${id}`;
+          if (a) {
+            ref.addEventListener('click', (ev) => {
+              ev.stopPropagation();
+              setActive(id);
+            });
+          } else {
+            ref.style.color = 'var(--warn)';
+            ref.style.borderBottomColor = 'var(--warn)';
+          }
+          tourTextEl.appendChild(ref);
+          lastIdx = pattern.lastIndex;
+        }
+        if (lastIdx < text.length) {
+          tourTextEl.appendChild(document.createTextNode(text.slice(lastIdx)));
+        }
+      }
+
+      function render() {
+        const svg = tk.renderToSVG(currentPage);
+        scoreEl.innerHTML = svg;
+        requestAnimationFrame(buildOverlays);
+      }
+
+      function onScoreClick(ev) {
+        const t = ev.target;
+        const annotEl = t.closest && t.closest('.annot-hull, .vocal-marker');
+        if (!annotEl) {
+          // Clicked outside any annotation → end the tour (back to full-score view).
+          if (tourIndex >= 0) endTour();
+          return;
+        }
+        const aid = annotEl.getAttribute('data-annot-id');
+        if (!aid) return;
+        // Jump to the tour step that contains this annotation, if any
+        if (tour && tour.steps) {
+          const stepIdx = tour.steps.findIndex(s => stepAnnotationIds(s).includes(aid));
+          if (stepIdx >= 0 && stepIdx !== tourIndex) {
+            tourIndex = stepIdx;
+            renderTourStep();
+          }
+        }
+        setActive(aid);
+      }
+
+      function layout() {
+        if (!tk) return;
+        const width = scoreWrap.clientWidth - 32;
+        tk.setOptions({
+          pageWidth: Math.max(600, width) * 2,
+          pageHeight: 60000,
+          scale: 40,
+          adjustPageHeight: true,
+          breaks: 'auto',
+          footer: 'none',
+          header: 'none',
+          spacingStaff: 9,
+          spacingSystem: 4,
+        });
+        tk.redoLayout();
+        pageCount = tk.getPageCount();
+        if (currentPage > pageCount) currentPage = pageCount;
+        render();
+      }
+
+      const setStatus = (msg) => { scoreEl.innerHTML = `<div id="status">${msg}</div>`; };
+
+      // ---------- MIDI playback ----------
+      // We don't actually need Verovio's MIDI export — for accurate, hull-only playback
+      // we synthesise the annotation's own notes directly. Vocal pitches come from MEI
+      // (pname/oct/accid stored in noteInfo); tab pitches come from Verovio's MIDI lookup
+      // since deriving them from course/fret would require parsing the staff tuning.
+      const noteIdToPitch = new Map();    // noteId → MIDI pitch number
+      const noteIdToTime = new Map();     // noteId → seconds (start time per Verovio)
+      const noteIdToDuration = new Map(); // noteId → seconds
+
+      const PITCH_CLASS = { c: 0, d: 2, e: 4, f: 5, g: 7, a: 9, b: 11 };
+      const ACC_OFFSET = { s: 1, f: -1, x: 2, ff: -2, n: 0, '': 0 };
+
+      function vocalInfoToMidiPitch(info) {
+        const pc = PITCH_CLASS[info.pname?.toLowerCase()];
+        const oct = parseInt(info.oct);
+        const acc = ACC_OFFSET[info.accid || ''] ?? 0;
+        if (pc == null || isNaN(oct)) return null;
+        return (oct + 1) * 12 + pc + acc;
+      }
+
+      async function setupMidi() {
+        if (midiData || !tk) return;
+        try {
+          const MidiModule = await import('https://cdn.jsdelivr.net/npm/@tonejs/midi@2.0.28/+esm');
+          const b64 = tk.renderToMIDI();
+          if (!b64) { console.warn('Verovio returned no MIDI'); return; }
+          const bytes = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+          midiData = new MidiModule.Midi(bytes);
+          // Identify the tab track (chitarrone/lute/etc). Fall back to last non-empty track.
+          let tabIdx = -1;
+          for (let i = 0; i < midiData.tracks.length; i++) {
+            const n = (midiData.tracks[i].name || '').toLowerCase();
+            if (/chit|tab|lute|theorbo|tiorba|kapsperger/.test(n)) { tabIdx = i; break; }
+          }
+          if (tabIdx < 0) {
+            const withNotes = midiData.tracks
+              .map((t, i) => ({ i, count: t.notes.length }))
+              .filter(t => t.count > 0);
+            if (withNotes.length) tabIdx = withNotes[withNotes.length - 1].i;
+          }
+          tabTrackIdx = tabIdx;
+          vocalTrackIdxs = midiData.tracks
+            .map((_, i) => i)
+            .filter(i => i !== tabIdx && midiData.tracks[i].notes.length > 0);
+
+          // Build per-note time + pitch maps so playActiveAnnotation can play just the
+          // notes that belong to the active hull — not everything in the time window.
+          for (const [id, info] of noteInfo) {
+            let tMs;
+            try { tMs = tk.getTimeForElement(id); } catch {}
+            if (typeof tMs !== 'number' || tMs < 0) continue;
+            const tSec = tMs / 1000;
+            noteIdToTime.set(id, tSec);
+
+            if (info.kind === 'voc') {
+              const p = vocalInfoToMidiPitch(info);
+              if (p != null) noteIdToPitch.set(id, p);
+              // Duration: best-effort via matching MIDI note on any vocal track at this time + pitch.
+              for (const ti of vocalTrackIdxs) {
+                const n = midiData.tracks[ti].notes.find(n =>
+                  Math.abs(n.time - tSec) < 0.015 && n.midi === p);
+                if (n) { noteIdToDuration.set(id, n.duration); break; }
+              }
+            } else if (info.kind === 'tab') {
+              // Pitch comes from (course, fret) + tuning (computed in parseMei).
+              // This way the user always hears exactly the note they annotated, even
+              // when it's part of a chord with several simultaneous tab notes.
+              if (info.midi != null) noteIdToPitch.set(id, info.midi);
+              if (tabTrackIdx >= 0 && info.midi != null) {
+                const match = midiData.tracks[tabTrackIdx].notes.find(n =>
+                  Math.abs(n.time - tSec) < 0.015 && n.midi === info.midi);
+                noteIdToDuration.set(id, match ? match.duration : 0.5);
+              } else {
+                noteIdToDuration.set(id, 0.5);
+              }
+            }
+          }
+        } catch (e) {
+          console.warn('MIDI setup failed:', e);
+        }
+      }
+
+      async function ensureAudio() {
+        if (audioReadyPromise) return audioReadyPromise;
+        audioReadyPromise = (async () => {
+          if (!Tone) {
+            const m = await import('https://cdn.jsdelivr.net/npm/tone@15.0.4/+esm');
+            Tone = m.default || m;
+          }
+          if (Tone.context && Tone.context.state !== 'running') await Tone.start();
+
+          // Sampled instruments via tonejs-instruments. The CDN doesn't have voice
+          // samples, so we substitute: clarinet for the vocal lines (warm, wooden,
+          // voice-like formants — the closest wood-wind on this CDN), and harp for
+          // the theorbo (lighter, more sustaining plucked sound than the guitar).
+          const SAMPLE_BASE = 'https://nbrosowsky.github.io/tonejs-instruments/samples/';
+          const make = (folder, urls, opts = {}) =>
+            new Tone.Sampler({ urls, baseUrl: SAMPLE_BASE + folder, release: 1, ...opts }).toDestination();
+
+          let usingSamples = true;
+          try {
+            vocalInstr = make('clarinet/', {
+              'D3': 'D3.mp3', 'F3': 'F3.mp3',
+              'D4': 'D4.mp3', 'F4': 'F4.mp3',
+              'D5': 'D5.mp3', 'F5': 'F5.mp3'
+            }, { release: 0.5 });
+            vocalInstr.volume.value = -10;
+
+            tabInstr = make('harp/', {
+              'A2': 'A2.mp3', 'C3': 'C3.mp3', 'E3': 'E3.mp3', 'G3': 'G3.mp3',
+              'D4': 'D4.mp3', 'F4': 'F4.mp3',
+              'A4': 'A4.mp3', 'C5': 'C5.mp3', 'E5': 'E5.mp3', 'G5': 'G5.mp3'
+            }, { release: 0.7 });
+            tabInstr.volume.value = -6;
+
+            // Race against a timeout. Tone.loaded() resolves silently even if
+            // individual samples 404, so we additionally verify by triggering on
+            // a known pitch and listening for a buffer-missing error below.
+            await Promise.race([
+              Tone.loaded(),
+              new Promise((_, rej) => setTimeout(() => rej(new Error('sample load timeout')), 8000))
+            ]);
+            // Sanity check: make sure at least one buffer actually loaded.
+            const probe = (s) => {
+              try { s.triggerAttackRelease('A4', 0.01, Tone.now() + 0.001, 0); return true; }
+              catch (e) { return false; }
+            };
+            if (!probe(vocalInstr) || !probe(tabInstr)) {
+              throw new Error('samplers loaded but buffers empty');
+            }
+          } catch (e) {
+            console.warn('Sampler unusable, falling back to synthesised instruments:', e);
+            usingSamples = false;
+            try { vocalInstr?.dispose(); } catch {}
+            try { tabInstr?.dispose(); } catch {}
+            vocalInstr = new Tone.PolySynth(Tone.Synth, {
+              oscillator: { type: 'sine' },
+              envelope: { attack: 0.06, decay: 0.15, sustain: 0.65, release: 0.7 }
+            }).toDestination();
+            vocalInstr.volume.value = -10;
+            tabInstr = new Tone.PolySynth(Tone.PluckSynth, {
+              attackNoise: 0.6, dampening: 4500, resonance: 0.96
+            }).toDestination();
+            tabInstr.volume.value = -8;
+          }
+          return { vocal: vocalInstr, tab: tabInstr };
+        })();
+        return audioReadyPromise;
+      }
+
+      function stopPlayback() {
+        stopRequested = true;
+        if (Tone) {
+          try {
+            Tone.Transport.stop();
+            Tone.Transport.cancel(0);
+            Tone.Transport.position = 0;
+          } catch {}
+        }
+        try { vocalInstr?.releaseAll?.(); } catch {}
+        try { tabInstr?.releaseAll?.(); } catch {}
+        isPlaying = false;
+      }
+
+      function midiToFreq(m) { return 440 * Math.pow(2, (m - 69) / 12); }
+
+      // Play just the annotation's hull notes: vocal first, 1s pause, then tab.
+      // Auto-fires when an instance becomes active (after the user has interacted at least
+      // once, since browsers require a user gesture to unlock the audio context).
+      async function playActiveAnnotation() {
+        if (isPlaying) stopPlayback();
+        if (!midiData) await setupMidi();
+        if (!midiData || !activeId) return;
+        const a = annotById.get(activeId);
+        if (!a) return;
+        const tabNotes = a.tab || a.notes || [];
+        const vocNotes = a.vocal || [];
+
+        const buildPhase = (anns) => anns
+          .map(n => ({
+            id: n.id,
+            time: noteIdToTime.get(n.id),
+            pitch: noteIdToPitch.get(n.id),
+            duration: noteIdToDuration.get(n.id) || 0.5
+          }))
+          .filter(p => p.time != null && p.pitch != null);
+
+        const vocalPhase = buildPhase(vocNotes);
+        const tabPhase = buildPhase(tabNotes);
+        if (!vocalPhase.length && !tabPhase.length) return;
+
+        let audio;
+        try { audio = await ensureAudio(); }
+        catch { return; }  // user gesture missing; silently skip
+
+        // Reset Transport so this play starts cleanly with no leftover events.
+        Tone.Transport.stop();
+        Tone.Transport.cancel(0);
+        Tone.Transport.position = 0;
+
+        stopRequested = false;
+        isPlaying = true;
+
+        const PAUSE = 1.0; // seconds between vocal and tab phases
+        const LEAD_IN = 0.15;
+        let cursor = LEAD_IN;
+
+        const playPhase = (phase, instrument) => {
+          if (!phase.length) return 0;
+          const t0 = Math.min(...phase.map(p => p.time));
+          let phaseEnd = 0;
+          for (const p of phase) {
+            const at = cursor + (p.time - t0);
+            const dur = Math.max(0.2, p.duration);
+            // Schedule via Transport so a single Transport.cancel(0) wipes the
+            // queue if the user clicks another annotation mid-playback.
+            Tone.Transport.scheduleOnce((time) => {
+              instrument.triggerAttackRelease(midiToFreq(p.pitch), dur, time, 0.8);
+            }, at);
+            phaseEnd = Math.max(phaseEnd, (p.time - t0) + dur);
+          }
+          cursor += phaseEnd;
+          return phaseEnd;
+        };
+
+        playPhase(vocalPhase, audio.vocal);
+        if (vocalPhase.length && tabPhase.length) cursor += PAUSE;
+        playPhase(tabPhase, audio.tab);
+
+        const totalSec = cursor;
+        // Schedule the "playback finished" signal on the Transport too — that way
+        // it's cancelled along with the notes if the user interrupts.
+        Tone.Transport.scheduleOnce(() => { isPlaying = false; }, totalSec + 0.05);
+        Tone.Transport.start();
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (!tour || !tour.steps || !tour.steps.length) return;
+        if (e.key === 'Escape' && tourIndex >= 0) endTour();
+        else if (e.key === 'ArrowRight') tourNext();
+        else if (e.key === 'ArrowLeft') tourPrev();
+      });
+
+      scoreEl.addEventListener('click', onScoreClick);
+      tourPrevBtn.addEventListener('click', tourPrev);
+      tourNextBtn.addEventListener('click', tourNext);
+      tourEndBtn.addEventListener('click', endTour);
+
+      try {
+        const s = document.createElement('script');
+        s.src = 'https://www.verovio.org/javascript/develop/verovio-toolkit-wasm.js';
+        s.defer = true;
+        document.head.appendChild(s);
+        await new Promise((res, rej) => { s.onload = res; s.onerror = rej; });
+
+        setStatus('Initializing engraver…');
+        tk = await new Promise((resolve) => {
+          window.verovio.module.onRuntimeInitialized = () => resolve(new window.verovio.toolkit());
+        });
+
+        setStatus('Fetching score…');
+        const cacheBust = '?v=' + Date.now();
+        const rawMei = await fetch(MEI_URL + cacheBust).then((r) => {
+          if (!r.ok) throw new Error(`HTTP ${r.status} loading ${MEI_URL}`);
+          return r.text();
+        });
+
+        const mei = applyVocalStaffScale(rawMei, '70%');
+
+        parseMei(mei);
+        tk.loadData(mei);
+
+        // Generate MIDI in the background — non-blocking.
+        setupMidi().catch(e => console.warn('MIDI init failed', e));
+
+        // Title is now hard-coded in the markup with the fuller musicological framing.
+
+        try {
+          const annotResp = await fetch(ANNOT_URL + cacheBust);
+          if (annotResp.ok) {
+            const obj = await annotResp.json();
+            annotations = Array.isArray(obj.annotations) ? obj.annotations : [];
+            for (const a of annotations) annotById.set(a.id, a);
+            const when = obj.exportedAt ? new Date(obj.exportedAt).toLocaleString() : '';
+            annotSourceEl.textContent = `${ANNOT_URL}${when ? ' — exported ' + when : ''}`;
+          } else {
+            annotSourceEl.textContent = `No annotations (${ANNOT_URL}: HTTP ${annotResp.status})`;
+          }
+        } catch (e) {
+          annotSourceEl.textContent = `Failed to load ${ANNOT_URL}: ${e.message}`;
+        }
+
+        try {
+          const tourResp = await fetch(TOUR_URL + cacheBust);
+          if (tourResp.ok) tour = await tourResp.json();
+        } catch (e) {
+          console.warn(`Failed to load ${TOUR_URL}:`, e);
+        }
+        // Warn if any annotation isn't in the tour
+        if (tour && tour.steps) {
+          const inTour = new Set();
+          for (const s of tour.steps) for (const id of stepAnnotationIds(s)) inTour.add(id);
+          const orphans = annotations.filter(a => !inTour.has(a.id));
+          if (orphans.length) console.warn('Annotations not in any tour step:', orphans.map(a => a.id));
+        }
+        gotoTourStep(-1);  // start at the intro; Next moves into step 1
+
+        layout();
+
+        window.addEventListener('resize', () => {
+          clearTimeout(window.__rl);
+          window.__rl = setTimeout(layout, 150);
+        });
+      } catch (err) {
+        setStatus(`Error: ${err.message}`);
+        console.error(err);
+      }
+    </script>
+  </body>
+</html>
