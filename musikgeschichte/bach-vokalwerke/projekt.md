@@ -6,6 +6,6 @@ start: index.html
 ---
 Eine interaktive Landkarte, die die Lebens- und Wirkungsstationen Johann
 Sebastian Bachs (Eisenach, Ohrdruf, Lüneburg, Arnstadt, Mühlhausen, Weimar,
-Köthen, Leipzig) mit seinen dort entstandenen Vokalwerken verbindet. Zu jedem
-Werk gibt es ein Hörbeispiel aus dem Gesamtaufnahme-Projekt der
-J. S. Bach-Stiftung (YouTube-Kanal @Bachstiftung).
+Köthen, Leipzig) mit seinen dort entstandenen Vokalwerken verbindet. Ein
+Zeitstrahl ordnet die Werke chronologisch ein und verknüpft sie mit den
+biografischen Stationen.
