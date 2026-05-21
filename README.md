@@ -7,10 +7,10 @@ entstanden sind.
 
 Alle Projekte sind hier zu sehen und direkt zu öffnen:
 
-**https://digimuwi.github.io/vibe-coding-seminar/**
+**https://digimuwi.uni-tuebingen.de/vibe-coding-seminar/**
 
-Die Seite wird bei jedem Push automatisch neu gebaut (GitHub Actions →
-GitHub Pages).
+Die Seite wird bei jedem Push automatisch neu gebaut und auf den Uni-Server
+geladen (GitHub Actions → `rsync`).
 
 ## 📂 Aufbau
 

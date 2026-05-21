@@ -121,8 +121,9 @@ keine Konflikte gibt:
 
 - Bei jedem `git push` auf `main` läuft automatisch GitHub Actions
   (`.github/workflows/deploy.yml`), baut die Übersicht mit
-  `tools/build-site.mjs` und veröffentlicht sie auf **GitHub Pages**:
-  **https://digimuwi.github.io/vibe-coding-seminar/**
+  `tools/build-site.mjs` und lädt sie per `rsync` auf den Uni-Server – genau
+  wie das `digimuwi/homepage`-Repository. Live unter:
+  **https://digimuwi.uni-tuebingen.de/vibe-coding-seminar/**
 - Du musst die Website **nicht von Hand** bearbeiten. Es genügt, einen
   Projektordner mit `projekt.md` anzulegen und zu pushen – das Projekt erscheint
   dann von selbst.
