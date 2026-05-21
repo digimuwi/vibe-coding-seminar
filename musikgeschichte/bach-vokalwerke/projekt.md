@@ -1,6 +1,6 @@
 ---
 titel: Bachs Vokalwerke – Eine musikalische Reise
-studierende:
+studierende: Philipp Schreiner
 typ: web
 start: index.html
 ---
