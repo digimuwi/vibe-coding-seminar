@@ -1,0 +1,29 @@
+name: (temporär) Server-Struktur ansehen
+
+# Read-only-Diagnose: per SSH einloggen und Ordnerstruktur auflisten,
+# um den richtigen Zielordner für den Deploy zu bestimmen.
+# Wird nach Gebrauch wieder gelöscht.
+on:
+  workflow_dispatch:
+
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - name: sshpass installieren
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Struktur auflisten (nur lesen)
+        run: |
+          sshpass -p "${{ secrets.SSHPASSWORD }}" \
+            ssh -p ${{ secrets.SSHPORT }} -o StrictHostKeyChecking=no \
+            "${{ secrets.SSHUSER }}@${{ secrets.SSHHOST }}" 'bash -s' <<'EOF'
+          echo "=== whoami / pwd ==="; whoami; pwd
+          echo "=== home (~) ==="; ls -la ~ 2>/dev/null
+          echo "=== suche nach 'start' (homepage) ==="; find ~ -maxdepth 5 -type d -name start 2>/dev/null
+          echo "=== suche nach index.html in der Naehe ==="; find ~ -maxdepth 4 -name index.html 2>/dev/null | head -30
+          echo "=== uebliche Web-Wurzeln ==="
+          for d in ~/public_html ~/html ~/www ~/htdocs ~/web /var/www /var/www/html; do
+            echo "-- $d --"; ls -la "$d" 2>/dev/null
+          done
+          EOF
