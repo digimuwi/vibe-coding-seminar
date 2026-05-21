@@ -18,12 +18,10 @@ jobs:
           sshpass -p "${{ secrets.SSHPASSWORD }}" \
             ssh -p ${{ secrets.SSHPORT }} -o StrictHostKeyChecking=no \
             "${{ secrets.SSHUSER }}@${{ secrets.SSHHOST }}" 'bash -s' <<'EOF'
-          echo "=== whoami / pwd ==="; whoami; pwd
-          echo "=== home (~) ==="; ls -la ~ 2>/dev/null
-          echo "=== suche nach 'start' (homepage) ==="; find ~ -maxdepth 5 -type d -name start 2>/dev/null
-          echo "=== suche nach index.html in der Naehe ==="; find ~ -maxdepth 4 -name index.html 2>/dev/null | head -30
-          echo "=== uebliche Web-Wurzeln ==="
-          for d in ~/public_html ~/html ~/www ~/htdocs ~/web /var/www /var/www/html; do
-            echo "-- $d --"; ls -la "$d" 2>/dev/null
-          done
+          H=$(readlink -f ~ 2>/dev/null || echo ~)
+          echo "=== HOME aufgeloest ==="; echo "$H"
+          echo "=== Inhalt HOME ==="; ls -la "$H" 2>/dev/null
+          echo "=== Unterordner (Tiefe 2) ==="; find "$H" -maxdepth 2 -type d 2>/dev/null | head -80
+          echo "=== index.html (Tiefe 3) ==="; find "$H" -maxdepth 3 -name index.html 2>/dev/null | head -50
+          echo "=== Ordner 'start' (homepage) ==="; find "$H" -maxdepth 4 -type d -name start 2>/dev/null
           EOF
