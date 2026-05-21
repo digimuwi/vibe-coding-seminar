@@ -121,7 +121,7 @@ keine Konflikte gibt:
   (`.github/workflows/deploy.yml`), baut die Übersicht mit
   `tools/build-site.mjs` und lädt sie per `rsync` auf den Uni-Server – genau
   wie das `digimuwi/homepage`-Repository. Live unter:
-  **https://digimuwi.uni-tuebingen.de/vibe-coding-seminar/**
+  **https://www.digimuwi.uni-tuebingen.de/vibe-coding-seminar/**
 - Du musst die Website **nicht von Hand** bearbeiten. Es genügt, einen
   Projektordner mit `projekt.md` anzulegen und zu pushen – das Projekt erscheint
   dann von selbst.
