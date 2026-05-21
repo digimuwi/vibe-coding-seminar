@@ -1,25 +1,23 @@
 name: Website bauen & veröffentlichen
 
-# Baut bei jedem Push auf main die Projekt-Übersicht und veröffentlicht sie
-# auf GitHub Pages. Läuft auch manuell über den "Run workflow"-Knopf.
+# Baut bei jedem Push auf main die Projekt-Übersicht (tools/build-site.mjs)
+# und lädt sie per rsync auf den Uni-Server (digimuwi.uni-tuebingen.de) –
+# genau wie das digimuwi/homepage-Repository.
+#
+# Benötigte Secrets (Repository- oder Organisations-Ebene):
+#   SSHHOST           Servername/Adresse
+#   SSHPORT           SSH-Port
+#   SSHUSER           SSH-Benutzername
+#   SSHPASSWORD       SSH-Passwort
+#   SERVER_DIRECTORY  Zielordner auf dem Server NUR für diese Seite
+#                     (eigener Unterordner, NICHT der der Homepage!)
 on:
   push:
     branches: [main]
   workflow_dispatch:
 
-# Rechte, die der GitHub-Pages-Deploy braucht.
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Es soll immer nur ein Deploy gleichzeitig laufen; neuere ersetzen ältere.
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - name: Repository auschecken
@@ -30,26 +28,17 @@ jobs:
         with:
           node-version: 22
 
-      - name: GitHub Pages vorbereiten (aktiviert Pages automatisch)
-        uses: actions/configure-pages@v5
-        with:
-          enablement: true
-
       - name: Website generieren
         run: node tools/build-site.mjs
 
-      - name: Ergebnis als Pages-Artefakt hochladen
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: _site
+      - name: sshpass installieren
+        run: sudo apt-get update && sudo apt-get install -y sshpass
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - name: Auf GitHub Pages veröffentlichen
-        id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Per rsync auf den Uni-Server hochladen
+        run: |
+          sshpass -p "${{ secrets.SSHPASSWORD }}" \
+            rsync -arvz \
+              -e "ssh -p ${{ secrets.SSHPORT }} -o StrictHostKeyChecking=no" \
+              --progress \
+              ./_site/ \
+              "${{ secrets.SSHUSER }}@${{ secrets.SSHHOST }}:${{ secrets.SERVER_DIRECTORY }}"
