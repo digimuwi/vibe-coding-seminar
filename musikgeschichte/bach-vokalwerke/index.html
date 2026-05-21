@@ -94,10 +94,11 @@
       min-height: 0;
     }
 
-    .info-panel { height: 340px; }
+    .info-panel { height: 540px; }
 
     @media (max-width: 900px) {
       .main { grid-template-columns: 1fr; }
+      .info-panel { height: auto; min-height: 340px; max-height: 80vh; }
     }
 
     /* ========== MAP ========== */
@@ -236,6 +237,60 @@
       line-height: 1.45;
     }
     .funfact strong { color: #8b6914; }
+
+    /* ========== HÖRBEISPIEL ========== */
+    .listen {
+      margin-top: 16px;
+      background: #f0e6ff;
+      border-radius: 12px;
+      padding: 12px;
+    }
+    .listen h3 {
+      font-size: 0.95rem;
+      color: #5b3a9d;
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .listen .excerpt-note {
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+      font-style: italic;
+      margin-bottom: 8px;
+    }
+    .listen .video-frame {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      border-radius: 10px;
+      overflow: hidden;
+      background: #000;
+    }
+    .listen iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    .listen .source {
+      margin-top: 8px;
+      font-size: 0.78rem;
+      color: var(--ink-soft);
+    }
+    .listen .source a {
+      color: #5b3a9d;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    .listen .source a:hover { text-decoration: underline; }
+    .listen.no-audio {
+      background: #f5f1fa;
+      color: var(--ink-soft);
+      font-size: 0.9rem;
+      line-height: 1.45;
+    }
 
     .info-card .station-works h3 {
       font-size: 1rem;
@@ -475,6 +530,7 @@
       <ul>
         <li>🗺️ <strong>Auf der Karte</strong> die acht Städte erkunden, in denen Bach gelebt hat</li>
         <li>🕰️ <strong>Auf dem Zeitstrahl</strong> seine wichtigsten Vokalwerke entdecken</li>
+        <li>🎧 <strong>Hörbeispiele</strong> zu jedem Werk direkt anhören – Aufnahmen der J. S. Bach-Stiftung</li>
         <li>👆 <strong>Klicke auf einen Punkt</strong>, um mehr zu erfahren</li>
       </ul>
       <p>Vokalwerke sind Musikstücke, in denen Menschen <strong>singen</strong>. Bach hat Kantaten, Passionen, Oratorien und Messen geschrieben.</p>
@@ -605,98 +661,112 @@
         title: 'Christ lag in Todes Banden',
         type: 'Osterkantate',
         text: 'Eine seiner frühesten Kantaten zum Osterfest. Bach war erst 22 Jahre alt!',
-        fun: 'Die Melodie kommt von Martin Luther - schon 200 Jahre vor Bach!'
+        fun: 'Die Melodie kommt von Martin Luther - schon 200 Jahre vor Bach!',
+        youtube: { id: '3ffg4mU7FNE', kind: 'full' }
       },
       {
         bwv: 106, year: 1708, station: 'muehlhausen',
         title: 'Actus Tragicus - Gottes Zeit ist die allerbeste Zeit',
         type: 'Trauerkantate',
         text: 'Diese traurige und wunderschöne Kantate komponierte Bach für eine Beerdigung.',
-        fun: 'Das Werk gilt als eines der schönsten der gesamten Kirchenmusik - obwohl Bach erst 23 war.'
+        fun: 'Das Werk gilt als eines der schönsten der gesamten Kirchenmusik - obwohl Bach erst 23 war.',
+        youtube: { id: 'm1la8remdY0', kind: 'full' }
       },
       {
         bwv: 71, year: 1708, station: 'muehlhausen',
         title: 'Gott ist mein König',
         type: 'Ratswahlkantate',
         text: 'Diese Kantate schrieb Bach für die Wahl des neuen Stadtrats.',
-        fun: 'Das war das einzige Bach-Werk, das zu seinen Lebzeiten als gedrucktes Notenheft erschien!'
+        fun: 'Das war das einzige Bach-Werk, das zu seinen Lebzeiten als gedrucktes Notenheft erschien!',
+        youtube: null
       },
       {
         bwv: 21, year: 1714, station: 'weimar',
         title: 'Ich hatte viel Bekümmernis',
         type: 'Kantate',
         text: 'Eine große Kantate über Trauer, die sich am Ende in Freude verwandelt.',
-        fun: 'Bach wurde zum Konzertmeister befördert - dafür musste er einmal im Monat eine neue Kantate schreiben!'
+        fun: 'Bach wurde zum Konzertmeister befördert - dafür musste er einmal im Monat eine neue Kantate schreiben!',
+        youtube: { id: 'rNgQ8tK08EU', kind: 'full' }
       },
       {
         bwv: 147, year: 1716, station: 'weimar',
         title: 'Herz und Mund und Tat und Leben',
         type: 'Kantate',
         text: 'Aus dieser Kantate stammt die berühmte Melodie "Jesus bleibet meine Freude" - die kennen viele Leute!',
-        fun: 'Diese Melodie hörst du heute oft auf Hochzeiten - sie ist eine der bekanntesten Melodien Bachs.'
+        fun: 'Diese Melodie hörst du heute oft auf Hochzeiten - sie ist eine der bekanntesten Melodien Bachs.',
+        youtube: { id: 'evnzhg_9frs', kind: 'full' }
       },
       {
         bwv: 245, year: 1724, station: 'leipzig',
         title: 'Johannes-Passion',
         type: 'Passion',
         text: 'Eine Passion erzählt die Geschichte von Jesu Tod. Diese hier dauert ca. 2 Stunden und wird Karfreitag aufgeführt.',
-        fun: 'Bach hat sie sein ganzes Leben lang immer wieder umgeschrieben!'
+        fun: 'Bach hat sie sein ganzes Leben lang immer wieder umgeschrieben!',
+        youtube: { id: 'bItznjK18v4', kind: 'full' }
       },
       {
         bwv: 243, year: 1723, station: 'leipzig',
         title: 'Magnificat',
         type: 'Lobgesang',
         text: 'Ein lateinischer Lobgesang Marias - kurz, festlich und voller Trompeten und Pauken.',
-        fun: 'Bach komponierte das Werk zu Weihnachten. Später schrieb er es für die Tonart D-Dur um.'
+        fun: 'Bach komponierte das Werk zu Weihnachten. Später schrieb er es für die Tonart D-Dur um.',
+        youtube: null
       },
       {
         bwv: 244, year: 1727, station: 'leipzig',
         title: 'Matthäus-Passion',
         type: 'Passion',
         text: 'Bachs größtes Werk! Ein riesiges Stück mit Doppelchor und zwei Orchestern - fast 3 Stunden lang.',
-        fun: 'Nach Bachs Tod wurde das Werk fast 100 Jahre vergessen, bis Felix Mendelssohn es 1829 wieder aufführte!'
+        fun: 'Nach Bachs Tod wurde das Werk fast 100 Jahre vergessen, bis Felix Mendelssohn es 1829 wieder aufführte!',
+        youtube: { id: '1kGhze52XpY', kind: 'excerpt', label: 'Eröffnungschor „Kommt, ihr Töchter"' }
       },
       {
         bwv: 225, year: 1727, station: 'leipzig',
         title: 'Singet dem Herrn ein neues Lied',
         type: 'Motette',
         text: 'Eine Motette nur für Chor (ohne Soloinstrumente). Sehr fröhlich und virtuos!',
-        fun: 'Mozart hörte diese Motette 1789 in Leipzig und war so begeistert, dass er rief: "Hier ist doch endlich einmal etwas, woraus sich was lernen lässt!"'
+        fun: 'Mozart hörte diese Motette 1789 in Leipzig und war so begeistert, dass er rief: "Hier ist doch endlich einmal etwas, woraus sich was lernen lässt!"',
+        youtube: null
       },
       {
         bwv: 140, year: 1731, station: 'leipzig',
         title: 'Wachet auf, ruft uns die Stimme',
         type: 'Kantate',
         text: 'Eine festliche Kantate zur Adventszeit - mit einer der schönsten Melodien Bachs.',
-        fun: 'Diese Kantate gehört bis heute zu den beliebtesten Werken Bachs.'
+        fun: 'Diese Kantate gehört bis heute zu den beliebtesten Werken Bachs.',
+        youtube: { id: '_B9eGXDKae0', kind: 'full' }
       },
       {
         bwv: 232, year: 1733, station: 'leipzig',
         title: 'Messe in h-Moll',
         type: 'Messe',
         text: 'Bachs größte Kirchenmusik - eine lateinische Messe für riesige Besetzung. Bach arbeitete fast 25 Jahre daran!',
-        fun: 'Bach hat die Messe nie vollständig live gehört. Sie ist sein "musikalisches Vermächtnis" geworden.'
+        fun: 'Bach hat die Messe nie vollständig live gehört. Sie ist sein "musikalisches Vermächtnis" geworden.',
+        youtube: { id: '9Y5Z3vvDi3c', kind: 'excerpt', label: 'Ausschnitt aus der CD-Produktion' }
       },
       {
         bwv: 248, year: 1734, station: 'leipzig',
         title: 'Weihnachtsoratorium',
         type: 'Oratorium',
         text: 'Sechs festliche Kantaten für die Weihnachtszeit - eine für jeden Feiertag von Heiligabend bis Dreikönig.',
-        fun: 'Trompeten und Pauken eröffnen das Werk mit "Jauchzet, frohlocket!" - das hörst du auch heute noch jedes Jahr.'
+        fun: 'Trompeten und Pauken eröffnen das Werk mit "Jauchzet, frohlocket!" - das hörst du auch heute noch jedes Jahr.',
+        youtube: { id: '7dtiCWAkaQA', kind: 'full', label: 'Kantate I „Jauchzet, frohlocket"' }
       },
       {
         bwv: 11, year: 1735, station: 'leipzig',
         title: 'Himmelfahrts-Oratorium - Lobet Gott in seinen Reichen',
         type: 'Oratorium',
         text: 'Ein festliches Oratorium für Christi Himmelfahrt. Mit prächtigen Trompeten!',
-        fun: 'Eine Melodie aus diesem Werk hat Bach später in der h-Moll-Messe wiederverwendet.'
+        fun: 'Eine Melodie aus diesem Werk hat Bach später in der h-Moll-Messe wiederverwendet.',
+        youtube: { id: 'YoIV8ouBb2E', kind: 'full' }
       },
       {
         bwv: 80, year: 1735, station: 'leipzig',
         title: 'Ein feste Burg ist unser Gott',
         type: 'Kantate',
         text: 'Eine Kantate zum Reformationsfest, gebaut auf dem berühmten Choral von Martin Luther.',
-        fun: 'Bachs Sohn fügte später Trompeten und Pauken hinzu - so klingt es noch festlicher!'
+        fun: 'Bachs Sohn fügte später Trompeten und Pauken hinzu - so klingt es noch festlicher!',
+        youtube: { id: 'mEwjYFhOcTs', kind: 'full' }
       }
     ];
 
@@ -870,6 +940,41 @@
       `;
     }
 
+    function listenHtml(w) {
+      if (!w.youtube) {
+        return `
+          <div class="listen no-audio">
+            <h3>🎧 Hörbeispiel</h3>
+            <p>Zu diesem Werk gibt es (noch) keine Aufnahme der J. S. Bach-Stiftung. Auf
+              <a href="https://www.youtube.com/@Bachstiftung" target="_blank" rel="noopener">@Bachstiftung</a>
+              wächst das Archiv aber stetig.</p>
+          </div>
+        `;
+      }
+      const y = w.youtube;
+      const noteLine = y.kind === 'excerpt'
+        ? `<div class="excerpt-note">Ausschnitt${y.label ? ': ' + y.label : ''} – das Gesamtwerk ist sehr lang.</div>`
+        : (y.label ? `<div class="excerpt-note">${y.label}</div>` : '');
+      const watchUrl = `https://www.youtube.com/watch?v=${y.id}`;
+      const embedUrl = `https://www.youtube-nocookie.com/embed/${y.id}?rel=0`;
+      return `
+        <div class="listen">
+          <h3>🎧 Hörbeispiel der J. S. Bach-Stiftung</h3>
+          ${noteLine}
+          <div class="video-frame">
+            <iframe
+              src="${embedUrl}"
+              title="BWV ${w.bwv} – ${w.title.replace(/"/g, '&quot;')}"
+              loading="lazy"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowfullscreen
+              referrerpolicy="strict-origin-when-cross-origin"></iframe>
+          </div>
+          <div class="source">Quelle: <a href="${watchUrl}" target="_blank" rel="noopener">@Bachstiftung auf YouTube</a></div>
+        </div>
+      `;
+    }
+
     function renderWork(w, s) {
       const bachAge = w.year - 1685;
       document.getElementById('info-content').innerHTML = `
@@ -884,6 +989,7 @@
           </div>
           <p class="description">${w.text}</p>
           <div class="funfact"><strong>💡 Wusstest du?</strong> ${w.fun}</div>
+          ${listenHtml(w)}
           <div class="station-works">
             <h3>🎵 Mehr aus ${s.name}</h3>
             <div class="work-link" onclick="selectStation('${s.id}')">
