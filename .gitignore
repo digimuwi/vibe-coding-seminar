@@ -6,3 +6,11 @@
 
 # Local Claude Code settings
 .claude/settings.local.json
+
+# Generierte Website (wird im CI gebaut, nicht eingecheckt)
+_site/
+
+# Abhängigkeiten und Build-Ausgaben (sicherheitshalber repo-weit)
+node_modules/
+dist/
+build/

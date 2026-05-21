@@ -1,0 +1,55 @@
+name: Website bauen & veröffentlichen
+
+# Baut bei jedem Push auf main die Projekt-Übersicht und veröffentlicht sie
+# auf GitHub Pages. Läuft auch manuell über den "Run workflow"-Knopf.
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+# Rechte, die der GitHub-Pages-Deploy braucht.
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Es soll immer nur ein Deploy gleichzeitig laufen; neuere ersetzen ältere.
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Repository auschecken
+        uses: actions/checkout@v4
+
+      - name: Node.js einrichten
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: GitHub Pages vorbereiten (aktiviert Pages automatisch)
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Website generieren
+        run: node tools/build-site.mjs
+
+      - name: Ergebnis als Pages-Artefakt hochladen
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Auf GitHub Pages veröffentlichen
+        id: deployment
+        uses: actions/deploy-pages@v4
