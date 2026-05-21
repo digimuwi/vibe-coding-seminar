@@ -2,7 +2,6 @@
 titel: Music Analyzer
 studierende:
 typ: web
-emoji: 🎼
 bauen: npm
 ausgabe: dist
 ---

@@ -49,7 +49,6 @@ aktuell. Vorlage:
 titel: Mein Projekttitel
 studierende: Vorname Nachname
 typ: web
-emoji: 🎵
 start: index.html
 ---
 Eine kurze Beschreibung in zwei bis vier Sätzen: Was kann das Projekt, worum
@@ -63,7 +62,6 @@ Felder im Kopf (zwischen den `---`-Linien):
 | `titel`       | ja     | Anzeigename auf der Website |
 | `studierende` | ja     | Name(n) der Bearbeiter:innen |
 | `typ`         | ja     | `web`, `mobile` oder `sonstiges` |
-| `emoji`       | nein   | kleines Symbol für die Kachel |
 | `start`       | nein   | Startdatei statischer Web-Apps (Standard: `index.html`) |
 | `live`        | nein   | externe URL, falls die App woanders online ist |
 | `download`    | nein   | Download-Link, z. B. zu einer Android-`.apk` |

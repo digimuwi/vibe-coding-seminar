@@ -2,7 +2,6 @@
 titel: Charles Burney's Musical Tours of Europe
 studierende:
 typ: web
-emoji: 🗺️
 start: index.html
 ---
 An interactive map of the European journeys of the English music historian

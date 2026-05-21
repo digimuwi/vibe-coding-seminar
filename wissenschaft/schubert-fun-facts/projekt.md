@@ -2,7 +2,6 @@
 titel: Schubert Fun Facts
 studierende:
 typ: web
-emoji: 🎹
 start: index.html
 ---
 Eine liebevoll im Stil eines alten Buchs gestaltete Sammlung erstaunlicher und

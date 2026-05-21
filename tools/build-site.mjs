@@ -28,10 +28,10 @@ const BRANCH = 'main';
 // Bekannte Themengebiete mit hübschem Namen + Symbol. Unbekannte Ordner mit
 // Projekten werden ebenfalls aufgenommen (mit ihrem Ordnernamen als Titel).
 const THEMES = {
-  musikanalyse:    { label: 'Musikanalyse',    emoji: '🎼' },
-  musikgeschichte: { label: 'Musikgeschichte', emoji: '📜' },
-  wissenschaft:    { label: 'Wissenschaft',    emoji: '🔬' },
-  praxis:          { label: 'Praxis',          emoji: '🛠️' },
+  musikanalyse:    { label: 'Musikanalyse' },
+  musikgeschichte: { label: 'Musikgeschichte' },
+  wissenschaft:    { label: 'Wissenschaft' },
+  praxis:          { label: 'Praxis' },
 };
 
 // Ordner, die nie als Themengebiet gelten.
@@ -123,7 +123,7 @@ function discoverThemes() {
     .filter((name) => !name.startsWith('.') && !IGNORE_DIRS.has(name) && isDir(path.join(ROOT, name)));
   const themes = [];
   for (const dir of themeDirs) {
-    const meta = THEMES[dir] || { label: dir.charAt(0).toUpperCase() + dir.slice(1), emoji: '📁' };
+    const meta = THEMES[dir] || { label: dir.charAt(0).toUpperCase() + dir.slice(1) };
     const projects = discoverProjects(dir);
     if (projects.length) themes.push({ dir, ...meta, projects });
   }
@@ -161,7 +161,6 @@ function buildProject(themeDir, slug, dir, mdPath) {
     titel: data.titel || slug,
     studierende: data.studierende || data.studierender || data.autor || '',
     typ: (data.typ || '').toLowerCase(),
-    emoji: data.emoji || '',
     live: data.live || '',
     download: data.download || '',
     start: data.start || 'index.html',
@@ -242,11 +241,10 @@ function projectCard(p) {
   const studierende = p.studierende
     ? `<p class="who">${esc(p.studierende)}</p>` : '';
   const note = p.note ? `<p class="note">${esc(p.note)}</p>` : '';
-  const emoji = p.emoji ? `<span class="card-emoji">${esc(p.emoji)}</span>` : '';
 
   return `
     <article class="card">
-      <header class="card-head">${emoji}<h3>${esc(p.titel)}</h3></header>
+      <header class="card-head"><h3>${esc(p.titel)}</h3></header>
       ${studierende}
       <div class="desc">${p.bodyHtml || '<p class="muted">Noch keine Beschreibung.</p>'}</div>
       ${note}
@@ -257,7 +255,7 @@ function projectCard(p) {
 function themeSection(t) {
   return `
     <section class="theme" id="${esc(t.dir)}">
-      <h2><span class="theme-emoji">${esc(t.emoji)}</span> ${esc(t.label)}
+      <h2>${esc(t.label)}
         <span class="count">${t.projects.length}</span></h2>
       <div class="grid">${t.projects.map(projectCard).join('')}</div>
     </section>`;
@@ -265,7 +263,7 @@ function themeSection(t) {
 
 function renderPage(themes, totalProjects) {
   const nav = themes
-    .map((t) => `<a href="#${esc(t.dir)}">${esc(t.emoji)} ${esc(t.label)}</a>`)
+    .map((t) => `<a href="#${esc(t.dir)}">${esc(t.label)}</a>`)
     .join('');
   const sections = themes.length
     ? themes.map(themeSection).join('')
@@ -282,8 +280,8 @@ function renderPage(themes, totalProjects) {
 <meta name="description" content="Projekte aus dem Vibe Coding-Seminar (SoSe 26).">
 <style>
   :root{
-    --paper:#f5ecd7; --card:#fffdf6; --ink:#2b2216; --muted:#7a6f59;
-    --accent:#8a3a2a; --accent2:#b5662f; --rule:#d8c8a4; --shadow:rgba(43,34,22,.12);
+    --paper:#ffffff; --card:#ffffff; --ink:#1b1b1b; --muted:#6b6b6b;
+    --accent:#8a3a2a; --accent2:#b5662f; --rule:#e3e3e3; --shadow:rgba(0,0,0,.07);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -292,12 +290,12 @@ function renderPage(themes, totalProjects) {
     line-height:1.55;}
   a{color:var(--accent)}
   .wrap{max-width:1100px;margin:0 auto;padding:0 20px}
-  header.hero{background:linear-gradient(180deg,#efe3c6,#f5ecd7);
+  header.hero{background:#fff;
     border-bottom:1px solid var(--rule);padding:48px 0 28px;text-align:center}
   header.hero h1{font-family:"Iowan Old Style",Palatino,Georgia,serif;
     font-size:clamp(28px,5vw,46px);margin:0 0 8px;color:var(--accent)}
   header.hero p{margin:0;color:var(--muted);font-size:18px}
-  nav.themes{position:sticky;top:0;z-index:5;background:rgba(245,236,215,.92);
+  nav.themes{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);
     backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
   nav.themes .wrap{display:flex;flex-wrap:wrap;gap:6px;padding:10px 20px}
   nav.themes a{padding:6px 12px;border-radius:999px;text-decoration:none;
@@ -307,21 +305,19 @@ function renderPage(themes, totalProjects) {
   .theme{margin:0 0 44px}
   .theme h2{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:26px;
     border-bottom:2px solid var(--rule);padding-bottom:8px;display:flex;align-items:center;gap:10px}
-  .theme-emoji{font-size:24px}
   .count{margin-left:auto;font-size:13px;font-weight:600;color:var(--muted);
     background:var(--card);border:1px solid var(--rule);border-radius:999px;padding:2px 10px}
   .grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));margin-top:18px}
   .card{background:var(--card);border:1px solid var(--rule);border-radius:14px;
     padding:18px 18px 16px;box-shadow:0 1px 3px var(--shadow);display:flex;flex-direction:column}
   .card-head{display:flex;align-items:center;gap:10px;margin-bottom:2px}
-  .card-emoji{font-size:24px}
   .card h3{margin:0;font-size:19px}
-  .who{margin:4px 0 10px;color:var(--muted);font-size:14px;font-style:italic}
+  .who{margin:6px 0 12px;color:var(--accent);font-size:16px;font-weight:700;letter-spacing:.1px}
   .desc{font-size:15px;flex:1}
   .desc :first-child{margin-top:0}
   .desc h3,.desc h4,.desc h5{margin:.6em 0 .2em;font-size:15px}
-  .desc code{background:#efe6cf;padding:1px 5px;border-radius:5px;font-size:13px}
-  .note{font-size:13px;color:var(--accent);background:#f7e9df;border:1px solid #e6c3ac;
+  .desc code{background:#f1f1f1;padding:1px 5px;border-radius:5px;font-size:13px}
+  .note{font-size:13px;color:var(--accent);background:#f6f6f6;border:1px solid var(--rule);
     border-radius:8px;padding:8px 10px;margin:10px 0 0}
   .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
   .btn{display:inline-block;text-decoration:none;font-size:14px;font-weight:600;

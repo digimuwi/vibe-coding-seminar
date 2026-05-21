@@ -2,7 +2,6 @@
 titel: Mein Projekttitel
 studierende: Vorname Nachname
 typ: web
-emoji: 🎵
 start: index.html
 ---
 Kurze Beschreibung (zwei bis vier Sätze): Worum geht es, was kann das Projekt?

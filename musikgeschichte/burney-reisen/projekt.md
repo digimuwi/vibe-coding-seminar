@@ -2,7 +2,6 @@
 titel: Charles Burneys Musikalische Reisen
 studierende:
 typ: web
-emoji: 🗺️
 start: index.html
 ---
 Eine interaktive Karte zu den Europa-Reisen des englischen Musikgelehrten

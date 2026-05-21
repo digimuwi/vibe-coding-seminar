@@ -2,7 +2,6 @@
 titel: Bachs Vokalwerke – Eine musikalische Reise
 studierende:
 typ: web
-emoji: 🎵
 start: index.html
 ---
 Eine interaktive Landkarte, die die Lebens- und Wirkungsstationen Johann
