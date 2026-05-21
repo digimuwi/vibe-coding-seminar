@@ -1,4 +1,4 @@
-# Graupner-Analyse
+# graupner-Analyse
 
 Dieses Projekt enthält erste Python-Programme zur Auswertung der Metadaten aus der CSV-Datei `Graupner-Saetze_berechnet.CSV`.
 
@@ -10,7 +10,7 @@ Dieses Projekt enthält erste Python-Programme zur Auswertung der Metadaten aus 
 
 ## Verwendung
 
-1. Wechsle in den Ordner `vibe-coding-seminar/musikanalyse/Graupner`
+1. Wechsle in den Ordner `vibe-coding-seminar/musikanalyse/graupner`
 2. Installiere Abhängigkeiten:
    ```bash
    pip install -r requirements.txt
