@@ -1,0 +1,329 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All of Bach – Orgelorte in den Niederlanden</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <style>
+    :root {
+      --akzent: #b8860b;
+      --akzent-dunkel: #7c5c08;
+      --hg: #faf7f1;
+      --text: #2a2520;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--text);
+      background: var(--hg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      padding: 1rem 1.25rem 0.75rem;
+      border-bottom: 1px solid #e7dfce;
+      background: #fffdf7;
+    }
+    header h1 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.4rem;
+      color: var(--akzent-dunkel);
+    }
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      max-width: 70ch;
+    }
+    header a { color: var(--akzent-dunkel); }
+    main {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    #karte {
+      flex: 1;
+      min-height: 60vh;
+    }
+    aside {
+      width: 340px;
+      max-width: 40vw;
+      overflow-y: auto;
+      border-left: 1px solid #e7dfce;
+      background: #fffdf7;
+      padding: 0.75rem 1rem 1.25rem;
+    }
+    aside h2 {
+      font-size: 1rem;
+      margin: 0.5rem 0 0.5rem;
+      color: var(--akzent-dunkel);
+      border-bottom: 1px solid #e7dfce;
+      padding-bottom: 0.25rem;
+    }
+    .ort-liste {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .ort-liste li {
+      padding: 0.5rem 0.4rem;
+      border-bottom: 1px dotted #e0d7c1;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+    .ort-liste li:hover { background: #f5ecd3; }
+    .ort-liste strong { color: var(--akzent-dunkel); }
+    .ort-liste .meta {
+      display: block;
+      font-size: 0.8rem;
+      color: #6b5b3a;
+      margin-top: 0.1rem;
+    }
+    .ort-liste .anzahl {
+      display: inline-block;
+      background: var(--akzent);
+      color: #fff;
+      border-radius: 999px;
+      padding: 0 0.5rem;
+      font-size: 0.75rem;
+      margin-left: 0.25rem;
+      vertical-align: middle;
+    }
+    .popup-titel {
+      font-weight: bold;
+      color: var(--akzent-dunkel);
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .popup-meta {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 0.4rem;
+    }
+    .popup-beschreibung {
+      font-size: 0.85rem;
+      margin-bottom: 0.5rem;
+    }
+    .popup-aufnahmen {
+      font-size: 0.85rem;
+      margin: 0.25rem 0 0;
+      padding-left: 1.1rem;
+    }
+    .popup-aufnahmen li { margin: 0.15rem 0; }
+    .popup-aufnahmen a {
+      color: var(--akzent-dunkel);
+      text-decoration: none;
+    }
+    .popup-aufnahmen a:hover { text-decoration: underline; }
+    footer {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      color: #6b5b3a;
+      background: #fffdf7;
+      border-top: 1px solid #e7dfce;
+    }
+    @media (max-width: 720px) {
+      main { flex-direction: column; }
+      aside { width: 100%; max-width: 100%; max-height: 40vh; border-left: none; border-top: 1px solid #e7dfce; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>All of Bach – Orgelorte in den Niederlanden</h1>
+    <p>
+      Die <em>Nederlandse Bachvereniging</em> nimmt für ihr Projekt
+      <a href="https://www.bachvereniging.nl/en/allofbach" target="_blank" rel="noopener">All of Bach</a>
+      sämtliche Werke Johann Sebastian Bachs auf. Die Orgelwerke werden an
+      historischen Orgeln verschiedener Kirchen aufgenommen – einige in
+      Deutschland, viele aber in den Niederlanden. Diese Karte zeigt die
+      niederländischen Aufnahmeorte. Klicken Sie auf eine Markierung oder einen
+      Eintrag in der Liste, um die dort eingespielten Werke zu sehen.
+    </p>
+  </header>
+  <main>
+    <div id="karte" role="application" aria-label="Karte der Aufnahmeorte"></div>
+    <aside>
+      <h2>Aufnahmeorte</h2>
+      <ul class="ort-liste" id="liste"></ul>
+    </aside>
+  </main>
+  <footer>
+    Kartendaten © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende ·
+    Aufnahme- und Werkdaten: <a href="https://www.bachvereniging.nl/" target="_blank" rel="noopener">Nederlandse Bachvereniging</a> (allofbach.com)
+  </footer>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script>
+    // Daten verifiziert über die jeweiligen Werkseiten auf bachvereniging.nl/en/bwv/...
+    // (Stand: Mai 2026). Nur Aufnahmen mit niederländischem Spielort sind aufgeführt.
+    const orte = [
+      {
+        kirche: "Grote of St-Bavokerk",
+        stadt: "Haarlem",
+        koord: [52.38138, 4.63637],
+        orgel: "Christian Müller, 1738",
+        beschreibung:
+          "Eine der berühmtesten historischen Orgeln Europas mit über 5000 Pfeifen. Händel und der zehnjährige Mozart spielten hier.",
+        aufnahmen: [
+          { bwv: "BWV 614", titel: "Das alte Jahr vergangen ist (Orgelbüchlein)", url: "https://www.bachvereniging.nl/en/bwv/bwv-614" },
+          { bwv: "BWV 527", titel: "Sonate Nr. 3 d-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-527" }
+        ]
+      },
+      {
+        kirche: "Waalse Kerk",
+        stadt: "Amsterdam",
+        koord: [52.37247, 4.89622],
+        orgel: "Christian Müller, 1734",
+        beschreibung:
+          "Stammsitz der Bachvereniging. Gustav Leonhardt war hier 1959–1982 Organist und ließ die Orgel zurückrestaurieren.",
+        aufnahmen: [
+          { bwv: "BWV 535", titel: "Präludium und Fuge g-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-535" },
+          { bwv: "BWV 526", titel: "Sonate Nr. 2 c-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-526" },
+          { bwv: "BWV 651", titel: "Komm, Heiliger Geist, Herre Gott", url: "https://www.bachvereniging.nl/en/bwv/bwv-651" }
+        ]
+      },
+      {
+        kirche: "Martinikerk",
+        stadt: "Groningen",
+        koord: [53.21926, 6.56853],
+        orgel: "Arp Schnitger, 1692",
+        beschreibung:
+          "Eine der größten und klangmächtigsten Orgeln des norddeutschen Barock – ideal für Bachs große Präludien und Fugen.",
+        aufnahmen: [
+          { bwv: "BWV 565", titel: "Toccata und Fuge d-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-565" },
+          { bwv: "BWV 542", titel: "Fantasie und Fuge g-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-542" }
+        ]
+      },
+      {
+        kirche: "Bovenkerk",
+        stadt: "Kampen",
+        koord: [52.55510, 5.91044],
+        orgel: "Albertus Antoni Hinsz, 1742",
+        beschreibung:
+          "Eine der größten historischen Orgeln der Niederlande, eingebaut in eine hohe gotische Hallenkirche.",
+        aufnahmen: [
+          { bwv: "BWV 544", titel: "Präludium und Fuge h-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-544" }
+        ]
+      },
+      {
+        kirche: "Grote Kerk (Groote Kerk)",
+        stadt: "Maassluis",
+        koord: [51.92143, 4.24927],
+        orgel: "Rudolph Garrels, 1732",
+        beschreibung:
+          "Norddeutsch geprägte Barockorgel eines Schüler Arp Schnitgers – sehr passend für Bach.",
+        aufnahmen: [
+          { bwv: "BWV 625", titel: "Christ lag in Todesbanden", url: "https://www.bachvereniging.nl/en/bwv/bwv-625" },
+          { bwv: "BWV 1091", titel: "Das alte Jahr vergangen ist (Neumeister-Choräle)", url: "https://www.bachvereniging.nl/en/bwv/bwv-1091" }
+        ]
+      },
+      {
+        kirche: "Walburgiskerk",
+        stadt: "Zutphen",
+        koord: [52.13994, 6.20186],
+        orgel: "Henrick Bader, 1639/1643",
+        beschreibung:
+          "Eines der ältesten erhaltenen Orgelwerke der Niederlande, klanglich nah an der Bach-Zeit.",
+        aufnahmen: [
+          { bwv: "BWV 618", titel: "O Lamm Gottes, unschuldig", url: "https://www.bachvereniging.nl/en/bwv/bwv-618" },
+          { bwv: "BWV 767", titel: "Partite diverse sopra: O Gott du frommer Gott", url: "https://www.bachvereniging.nl/en/bwv/bwv-767" },
+          { bwv: "BWV 549", titel: "Präludium und Fuge c-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-549" }
+        ]
+      },
+      {
+        kirche: "Jacobikerk",
+        stadt: "Uithuizen",
+        koord: [53.40081, 6.67790],
+        orgel: "Arp Schnitger, ca. 1700",
+        beschreibung:
+          "Kleine, fast unverändert erhaltene Schnitger-Orgel im hohen Norden Groningens.",
+        aufnahmen: [
+          { bwv: "BWV 530", titel: "Sonate Nr. 6 G-Dur", url: "https://www.bachvereniging.nl/en/bwv/bwv-530" }
+        ]
+      },
+      {
+        kirche: "Lutherse Kerk",
+        stadt: "Den Haag",
+        koord: [52.07849, 4.30837],
+        orgel: "Johann Heinrich Hartmann Bätz, 1762",
+        beschreibung:
+          "Späterbarocke Orgel mit feinem, kammermusikalisch flexiblem Klang.",
+        aufnahmen: [
+          { bwv: "BWV 582", titel: "Passacaglia und Fuge c-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-582" }
+        ]
+      }
+    ];
+
+    const karte = L.map("karte", { scrollWheelZoom: true }).setView([52.4, 5.4], 7);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+      attribution:
+        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende'
+    }).addTo(karte);
+
+    const orgelIcon = L.divIcon({
+      className: "orgel-marker",
+      html: '<div style="background:#b8860b;border:2px solid #7c5c08;border-radius:50% 50% 50% 0;width:22px;height:22px;transform:rotate(-45deg);box-shadow:0 1px 4px rgba(0,0,0,0.4);"></div>',
+      iconSize: [22, 22],
+      iconAnchor: [11, 22],
+      popupAnchor: [0, -20]
+    });
+
+    function popupHtml(ort) {
+      const lis = ort.aufnahmen
+        .map(
+          (a) =>
+            `<li><a href="${a.url}" target="_blank" rel="noopener"><strong>${a.bwv}</strong> – ${a.titel} ↗</a></li>`
+        )
+        .join("");
+      return `
+        <div class="popup-titel">${ort.kirche}</div>
+        <div class="popup-meta"><strong>${ort.stadt}</strong> · Orgel: ${ort.orgel}</div>
+        <div class="popup-beschreibung">${ort.beschreibung}</div>
+        <div style="font-size:0.8rem;color:#6b5b3a;margin-top:0.3rem;">Hier aufgenommene Werke:</div>
+        <ul class="popup-aufnahmen">${lis}</ul>
+      `;
+    }
+
+    const liste = document.getElementById("liste");
+    const marker = [];
+
+    orte.forEach((ort) => {
+      const m = L.marker(ort.koord, { icon: orgelIcon })
+        .addTo(karte)
+        .bindPopup(popupHtml(ort), { maxWidth: 320 });
+      marker.push(m);
+
+      const li = document.createElement("li");
+      const n = ort.aufnahmen.length;
+      li.innerHTML = `
+        <strong>${ort.kirche}</strong>
+        <span class="anzahl" title="${n} Aufnahme${n === 1 ? "" : "n"}">${n}</span>
+        <span class="meta">${ort.stadt} · ${ort.orgel}</span>
+      `;
+      li.addEventListener("click", () => {
+        karte.setView(ort.koord, 11, { animate: true });
+        m.openPopup();
+      });
+      liste.appendChild(li);
+    });
+
+    karte.fitBounds(L.featureGroup(marker).getBounds().pad(0.15));
+  </script>
+</body>
+</html>
