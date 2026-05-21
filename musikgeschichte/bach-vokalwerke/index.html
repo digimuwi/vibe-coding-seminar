@@ -272,6 +272,37 @@
     }
     .work-link .wtitle { color: var(--ink); }
 
+    .hoer-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #fff4e0;
+      border: 2px solid #ffd99a;
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.35;
+      transition: all 0.15s;
+    }
+    .hoer-link:hover {
+      background: #ffe9bf;
+      border-color: #f4b860;
+      transform: translateX(3px);
+    }
+    .hoer-link .hoer-icon { flex-shrink: 0; }
+    .hoer-link .hoer-label { font-weight: bold; }
+    .hoer-link .hoer-quelle {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      font-weight: normal;
+      margin-top: 2px;
+      font-style: italic;
+    }
+
     /* ========== TIMELINE ========== */
     .timeline-wrap {
       background: var(--paper);
@@ -609,98 +640,148 @@
         title: 'Christ lag in Todes Banden',
         type: 'Osterkantate',
         text: 'Eine seiner frühesten Kantaten zum Osterfest. Bach war erst 22 Jahre alt!',
-        fun: 'Die Melodie kommt von Martin Luther - schon 200 Jahre vor Bach!'
+        fun: 'Die Melodie kommt von Martin Luther - schon 200 Jahre vor Bach!',
+        hoer: [
+          { label: 'Gesamtaufnahme René Jacobs (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=uQNBDsDdLeE', quelle: 'Netherlands Bach Society' },
+          { label: 'Werkeinführung Rudolf Lutz (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=ux8FtnryzG4', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 106, year: 1708, station: 'muehlhausen',
         title: 'Actus Tragicus - Gottes Zeit ist die allerbeste Zeit',
         type: 'Trauerkantate',
         text: 'Diese traurige und wunderschöne Kantate komponierte Bach für eine Beerdigung.',
-        fun: 'Das Werk gilt als eines der schönsten der gesamten Kirchenmusik - obwohl Bach erst 23 war.'
+        fun: 'Das Werk gilt als eines der schönsten der gesamten Kirchenmusik - obwohl Bach erst 23 war.',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=xXMUpqSyJJo', quelle: 'Netherlands Bach Society' },
+          { label: 'Werkeinführung Ekkehart Reinelt (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=MPvklzHycmQ', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 71, year: 1708, station: 'muehlhausen',
         title: 'Gott ist mein König',
         type: 'Ratswahlkantate',
         text: 'Diese Kantate schrieb Bach für die Wahl des neuen Stadtrats.',
-        fun: 'Das war das einzige Bach-Werk, das zu seinen Lebzeiten als gedrucktes Notenheft erschien!'
+        fun: 'Das war das einzige Bach-Werk, das zu seinen Lebzeiten als gedrucktes Notenheft erschien!',
+        hoer: [
+          { label: 'Gesamtaufnahme Ton Koopman (Amsterdam Baroque)', url: 'https://www.youtube.com/watch?v=B93E0DYIMEU', quelle: 'Amsterdam Baroque Orchestra & Choir' }
+        ]
       },
       {
         bwv: 21, year: 1714, station: 'weimar',
         title: 'Ich hatte viel Bekümmernis',
         type: 'Kantate',
         text: 'Eine große Kantate über Trauer, die sich am Ende in Freude verwandelt.',
-        fun: 'Bach wurde zum Konzertmeister befördert - dafür musste er einmal im Monat eine neue Kantate schreiben!'
+        fun: 'Bach wurde zum Konzertmeister befördert - dafür musste er einmal im Monat eine neue Kantate schreiben!',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=rNgQ8tK08EU', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=39p2SzQBtk0', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 147, year: 1716, station: 'weimar',
         title: 'Herz und Mund und Tat und Leben',
         type: 'Kantate',
         text: 'Aus dieser Kantate stammt die berühmte Melodie "Jesus bleibet meine Freude" - die kennen viele Leute!',
-        fun: 'Diese Melodie hörst du heute oft auf Hochzeiten - sie ist eine der bekanntesten Melodien Bachs.'
+        fun: 'Diese Melodie hörst du heute oft auf Hochzeiten - sie ist eine der bekanntesten Melodien Bachs.',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=evnzhg_9frs', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 245, year: 1724, station: 'leipzig',
         title: 'Johannes-Passion',
         type: 'Passion',
         text: 'Eine Passion erzählt die Geschichte von Jesu Tod. Diese hier dauert ca. 2 Stunden und wird Karfreitag aufgeführt.',
-        fun: 'Bach hat sie sein ganzes Leben lang immer wieder umgeschrieben!'
+        fun: 'Bach hat sie sein ganzes Leben lang immer wieder umgeschrieben!',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=zMf9XDQBAaI', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 243, year: 1723, station: 'leipzig',
         title: 'Magnificat',
         type: 'Lobgesang',
         text: 'Ein lateinischer Lobgesang Marias - kurz, festlich und voller Trompeten und Pauken.',
-        fun: 'Bach komponierte das Werk zu Weihnachten. Später schrieb er es für die Tonart D-Dur um.'
+        fun: 'Bach komponierte das Werk zu Weihnachten. Später schrieb er es für die Tonart D-Dur um.',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=EsUWG2axB3w', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 244, year: 1727, station: 'leipzig',
         title: 'Matthäus-Passion',
         type: 'Passion',
         text: 'Bachs größtes Werk! Ein riesiges Stück mit Doppelchor und zwei Orchestern - fast 3 Stunden lang.',
-        fun: 'Nach Bachs Tod wurde das Werk fast 100 Jahre vergessen, bis Felix Mendelssohn es 1829 wieder aufführte!'
+        fun: 'Nach Bachs Tod wurde das Werk fast 100 Jahre vergessen, bis Felix Mendelssohn es 1829 wieder aufführte!',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=ZwVW1ttVhuQ', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 225, year: 1727, station: 'leipzig',
         title: 'Singet dem Herrn ein neues Lied',
         type: 'Motette',
         text: 'Eine Motette nur für Chor (ohne Soloinstrumente). Sehr fröhlich und virtuos!',
-        fun: 'Mozart hörte diese Motette 1789 in Leipzig und war so begeistert, dass er rief: "Hier ist doch endlich einmal etwas, woraus sich was lernen lässt!"'
+        fun: 'Mozart hörte diese Motette 1789 in Leipzig und war so begeistert, dass er rief: "Hier ist doch endlich einmal etwas, woraus sich was lernen lässt!"',
+        hoer: [
+          { label: 'Gesamtaufnahme MacLeod (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=6aaESm5ySWU', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 140, year: 1731, station: 'leipzig',
         title: 'Wachet auf, ruft uns die Stimme',
         type: 'Kantate',
         text: 'Eine festliche Kantate zur Adventszeit - mit einer der schönsten Melodien Bachs.',
-        fun: 'Diese Kantate gehört bis heute zu den beliebtesten Werken Bachs.'
+        fun: 'Diese Kantate gehört bis heute zu den beliebtesten Werken Bachs.',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=_B9eGXDKae0', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=FVePdTt_VQo', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 232, year: 1733, station: 'leipzig',
         title: 'Messe in h-Moll',
         type: 'Messe',
         text: 'Bachs größte Kirchenmusik - eine lateinische Messe für riesige Besetzung. Bach arbeitete fast 25 Jahre daran!',
-        fun: 'Bach hat die Messe nie vollständig live gehört. Sie ist sein "musikalisches Vermächtnis" geworden.'
+        fun: 'Bach hat die Messe nie vollständig live gehört. Sie ist sein "musikalisches Vermächtnis" geworden.',
+        hoer: [
+          { label: 'Gaechinger Cantorey · Rademann (Bachakademie)', url: 'https://www.youtube.com/watch?v=VUc-yZJcEjk', quelle: 'Bachakademie Stuttgart' },
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/playlist?list=PLdDw5fabY6VRA02yo06R82qEWsTsymNnf', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 248, year: 1734, station: 'leipzig',
         title: 'Weihnachtsoratorium',
         type: 'Oratorium',
         text: 'Sechs festliche Kantaten für die Weihnachtszeit - eine für jeden Feiertag von Heiligabend bis Dreikönig.',
-        fun: 'Trompeten und Pauken eröffnen das Werk mit "Jauchzet, frohlocket!" - das hörst du auch heute noch jedes Jahr.'
+        fun: 'Trompeten und Pauken eröffnen das Werk mit "Jauchzet, frohlocket!" - das hörst du auch heute noch jedes Jahr.',
+        hoer: [
+          { label: 'Teile I–III & VI – Gaechinger Cantorey · Rademann (Bachakademie)', url: 'https://www.youtube.com/watch?v=6uXtbz-xwGU', quelle: 'Bachakademie Stuttgart' },
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=-4Anu6qvhrM', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 11, year: 1735, station: 'leipzig',
         title: 'Himmelfahrts-Oratorium - Lobet Gott in seinen Reichen',
         type: 'Oratorium',
         text: 'Ein festliches Oratorium für Christi Himmelfahrt. Mit prächtigen Trompeten!',
-        fun: 'Eine Melodie aus diesem Werk hat Bach später in der h-Moll-Messe wiederverwendet.'
+        fun: 'Eine Melodie aus diesem Werk hat Bach später in der h-Moll-Messe wiederverwendet.',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=YoIV8ouBb2E', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=qiapOmHhF_8', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 80, year: 1735, station: 'leipzig',
         title: 'Ein feste Burg ist unser Gott',
         type: 'Kantate',
         text: 'Eine Kantate zum Reformationsfest, gebaut auf dem berühmten Choral von Martin Luther.',
-        fun: 'Bachs Sohn fügte später Trompeten und Pauken hinzu - so klingt es noch festlicher!'
+        fun: 'Bachs Sohn fügte später Trompeten und Pauken hinzu - so klingt es noch festlicher!',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=mEwjYFhOcTs', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=H_B46Z5fRbY', quelle: 'J. S. Bach-Stiftung' }
+        ]
       }
     ];
 
@@ -876,6 +957,20 @@
 
     function renderWork(w, s) {
       const bachAge = w.year - 1685;
+      const hoerHtml = (w.hoer && w.hoer.length > 0)
+        ? `<div class="station-works">
+             <h3>🎧 Hörbeispiele</h3>
+             ${w.hoer.map(h => `
+               <a class="hoer-link" href="${h.url}" target="_blank" rel="noopener noreferrer">
+                 <span class="hoer-icon">▶️</span>
+                 <span>
+                   <span class="hoer-label">${h.label}</span>
+                   <span class="hoer-quelle">Quelle: ${h.quelle} (YouTube)</span>
+                 </span>
+               </a>
+             `).join('')}
+           </div>`
+        : '';
       document.getElementById('info-content').innerHTML = `
         <div class="info-card">
           <span class="badge" style="background:${s.colorHex}">BWV ${w.bwv}</span>
@@ -888,6 +983,7 @@
           </div>
           <p class="description">${w.text}</p>
           <div class="funfact"><strong>💡 Wusstest du?</strong> ${w.fun}</div>
+          ${hoerHtml}
           <div class="station-works">
             <h3>🎵 Mehr aus ${s.name}</h3>
             <div class="work-link" onclick="selectStation('${s.id}')">
