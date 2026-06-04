@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historische Stimmungen</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:              #12171f;
+      --surface:         #1c2330;
+      --surface2:        #232d3d;
+      --border:          #2e3a4a;
+      --accent:          #c8954a;
+      --accent-light:    #e8c070;
+      --text:            #d4c9b8;
+      --text-muted:      #8a7f70;
+      --white-key:       #f2ede4;
+      --white-key-hover: #e8dfc8;
+      --white-key-act:   #d4aa5a;
+      --black-key:       #18120e;
+      --black-key-hover: #2a211a;
+      --black-key-act:   #9a7030;
+    }
+
+    body {
+      font-family: Georgia, 'Times New Roman', serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 28px 16px 48px;
+      gap: 22px;
+    }
+
+    /* ── Header ── */
+    header { text-align: center; }
+    h1 {
+      font-size: 1.85rem;
+      color: var(--accent-light);
+      letter-spacing: .04em;
+      margin-bottom: 5px;
+    }
+    .subtitle {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: .9rem;
+    }
+
+    /* ── Controls card ── */
+    .controls {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px 24px;
+      width: 100%;
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .control-row {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+    }
+    .control-label {
+      font-size: .78rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      white-space: nowrap;
+      width: 88px;
+      padding-top: 3px;
+    }
+
+    /* Kammerton */
+    .kammerton-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    input[type="number"] {
+      background: var(--surface2);
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 6px;
+      padding: 5px 10px;
+      font-size: 1rem;
+      font-family: monospace;
+      width: 76px;
+      -moz-appearance: textfield;
+    }
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button { -webkit-appearance: none; }
+    input[type="number"]:focus { outline: none; border-color: var(--accent); }
+    .ref-note { color: var(--accent-light); font-style: italic; }
+
+    /* Tuning options */
+    .tuning-options {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      flex: 1;
+    }
+    .tuning-option {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
+      transition: background .12s;
+    }
+    .tuning-option:hover { background: var(--surface2); }
+    .tuning-option input[type="radio"] {
+      accent-color: var(--accent);
+      width: 14px; height: 14px;
+      flex-shrink: 0;
+      cursor: pointer;
+    }
+    .tuning-name { font-size: .9rem; }
+    .tuning-year {
+      font-size: .76rem;
+      color: var(--text-muted);
+      margin-left: auto;
+      white-space: nowrap;
+    }
+
+    /* ── Description ── */
+    .description {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 13px 18px;
+      width: 100%;
+      max-width: 580px;
+      font-size: .88rem;
+      line-height: 1.65;
+      color: var(--text);
+      min-height: 54px;
+    }
+
+    /* ── Keyboard ── */
+    .keyboard-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 18px 22px 22px;
+      overflow-x: auto;
+    }
+    .keyboard {
+      position: relative;
+      display: flex;
+      height: 190px;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    .key { cursor: pointer; }
+
+    .key.white {
+      width: 56px;
+      height: 180px;
+      background: var(--white-key);
+      border: 1px solid #999;
+      border-top: none;
+      border-radius: 0 0 6px 6px;
+      position: relative;
+      z-index: 1;
+      flex-shrink: 0;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 8px;
+      font-size: 11px;
+      color: #777;
+      transition: background .05s;
+    }
+    .key.white:hover  { background: var(--white-key-hover); }
+    .key.white.active { background: var(--white-key-act); color: #444; }
+
+    .key.black {
+      position: absolute;
+      top: 0;
+      width: 36px;
+      height: 112px;
+      background: var(--black-key);
+      border-radius: 0 0 5px 5px;
+      z-index: 2;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 7px;
+      font-size: 9px;
+      color: #888;
+      box-shadow: 2px 4px 10px rgba(0,0,0,.55);
+      transition: background .05s;
+    }
+    .key.black:hover  { background: var(--black-key-hover); }
+    .key.black.active { background: var(--black-key-act); color: #ddd; box-shadow: 1px 2px 5px rgba(0,0,0,.5); }
+
+    /* ── Note display ── */
+    .note-display {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 28px;
+      min-width: 300px;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+    .note-display.empty {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: .88rem;
+    }
+    .note-display.filled {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+    .info-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2px 16px;
+    }
+    .info-cell + .info-cell { border-left: 1px solid var(--border); }
+    .info-val {
+      font-size: 1.25rem;
+      color: var(--accent-light);
+    }
+    .info-lbl {
+      font-size: .68rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: 3px;
+    }
+
+    .cents-hint {
+      font-size: .75rem;
+      color: var(--text-muted);
+      font-style: italic;
+      text-align: center;
+    }
+
+    /* ── Footer ── */
+    footer {
+      color: var(--text-muted);
+      font-size: .78rem;
+      font-style: italic;
+      text-align: center;
+      margin-top: 6px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Historische Stimmungen</h1>
+  <p class="subtitle">Fünf Stimmungssysteme im klingenden Vergleich</p>
+</header>
+
+<div class="controls">
+  <div class="control-row">
+    <span class="control-label">Kammerton</span>
+    <div class="kammerton-group">
+      <input type="number" id="kammerton" value="440" min="350" max="520" step="0.5">
+      <span>Hz &nbsp;</span>
+      <span class="ref-note">a′</span>
+    </div>
+  </div>
+  <div class="control-row">
+    <span class="control-label">Stimmung</span>
+    <div class="tuning-options" id="tuningOptions"></div>
+  </div>
+</div>
+
+<div class="description" id="description"></div>
+
+<div class="keyboard-wrap">
+  <div class="keyboard" id="keyboard">
+    <!-- White keys: C D E F G A H C' -->
+    <div class="key white" data-note="0" ><span>c′</span></div>
+    <div class="key white" data-note="2" ><span>d′</span></div>
+    <div class="key white" data-note="4" ><span>e′</span></div>
+    <div class="key white" data-note="5" ><span>f′</span></div>
+    <div class="key white" data-note="7" ><span>g′</span></div>
+    <div class="key white" data-note="9" ><span>a′</span></div>
+    <div class="key white" data-note="11"><span>h′</span></div>
+    <div class="key white" data-note="12"><span>c″</span></div>
+    <!-- Black keys: Cis Es Fis As B  (white key = 56 px, black half-width = 18 px) -->
+    <div class="key black" data-note="1"  style="left:  38px"><span>cis</span></div>
+    <div class="key black" data-note="3"  style="left:  94px"><span>es</span></div>
+    <div class="key black" data-note="6"  style="left: 206px"><span>fis</span></div>
+    <div class="key black" data-note="8"  style="left: 262px"><span>as</span></div>
+    <div class="key black" data-note="10" style="left: 318px"><span>b</span></div>
+  </div>
+</div>
+
+<div class="note-display empty" id="noteDisplay">
+  Taste drücken zum Klingen bringen …
+</div>
+<div class="cents-hint">¢ = Abweichung in Cent von der gleichstufigen Stimmung (100 ¢ = 1 Halbton)</div>
+
+<footer>Historische Stimmungen · Saskia · Seminar Vibe Coding SoSe 26 · Universität Tübingen</footer>
+
+<script>
+// ── Stimmungssysteme ─────────────────────────────────────────────────────────
+// Verhältnisse relativ zu C (Index 0 = C, 1 = Cis, …, 11 = H, 12 = c'')
+
+const TUNINGS = [
+  {
+    id: 'pythagorean',
+    name: 'Pythagoreisch',
+    year: 'ca. 500 v. Chr.',
+    desc: 'Aufgebaut aus reinen Quinten (3:2). Quinten klingen vollkommen, '
+        + 'große Terzen (81:64) jedoch spürbar scharf. '
+        + 'Das älteste systematische Stimmungssystem – benannt nach Pythagoras, aber weit älter.',
+    ratios: [
+      1,           // C
+      2187/2048,   // Cis
+      9/8,         // D
+      32/27,       // Es
+      81/64,       // E
+      4/3,         // F
+      729/512,     // Fis
+      3/2,         // G
+      128/81,      // As
+      27/16,       // A
+      16/9,        // B  (= Bb)
+      243/128,     // H  (= B♮)
+    ]
+  },
+  {
+    id: 'just',
+    name: 'Rein (Just Intonation)',
+    year: 'Renaissance, ca. 1000–1500',
+    desc: 'Basiert auf reinen Terzen (5:4) und reinen Quinten (3:2). '
+        + 'Konsonanzen klingen sehr rein und schwebungsfrei – ideal für Vokalmusik ohne feste Stimmung. '
+        + 'Chromatische Modulationen sind problematisch, da verschiedene "Arten" derselben Note entstehen.',
+    ratios: [
+      1,     // C
+      16/15, // Cis
+      9/8,   // D
+      6/5,   // Es
+      5/4,   // E
+      4/3,   // F
+      45/32, // Fis
+      3/2,   // G
+      8/5,   // As
+      5/3,   // A
+      9/5,   // B
+      15/8,  // H
+    ]
+  },
+  {
+    id: 'meantone',
+    name: 'Mitteltönig (¼-Komma)',
+    year: 'ca. 1520–1700',
+    desc: 'Die Quinte wird leicht verkleinert (um ¼ des syntonischen Kommas), '
+        + 'damit die großen Terzen rein klingen (5:4). '
+        + 'In Tonarten mit wenigen Vorzeichen klingt sie hervorragend; '
+        + 'in anderen entsteht die berüchtigte Wolfsquinte (As–Cis).',
+    ratios: (() => {
+      const pw = (b, e) => Math.pow(b, e);
+      return [
+        1,                    // C  (0 Quinten)
+        pw(5, 7/4) / 16,     // Cis (+7)
+        Math.sqrt(5) / 2,    // D  (+2)
+        4 / pw(5, 3/4),      // Es (−3)
+        5 / 4,               // E  (+4)
+        2 / pw(5, 1/4),      // F  (−1)
+        pw(5, 3/2) / 8,      // Fis (+6)
+        pw(5, 1/4),          // G  (+1)
+        8 / 5,               // As (−4)
+        pw(5, 3/4) / 2,      // A  (+3)
+        4 / Math.sqrt(5),    // B  (−2)
+        pw(5, 5/4) / 4,      // H  (+5)
+      ];
+    })()
+  },
+  {
+    id: 'werckmeister',
+    name: 'Wohltemperiert (Werckmeister III)',
+    year: '1691',
+    desc: 'Andreas Werckmeister verteilte das pythagoreische Komma auf vier Quinten '
+        + '(C–G, G–D, D–A, H–Fis). Alle Tonarten sind spielbar, klingen aber '
+        + 'unterschiedlich charaktervoll – manche klar und hell, andere dunkler und weicher. '
+        + 'Gilt als mögliche Vorlage für Bachs Wohltemperiertes Klavier.',
+    // Cent-Werte → Verhältnisse
+    ratios: [0, 90.225, 192.18, 294.135, 390.225, 498.045,
+             588.27, 696.09, 792.18, 888.27, 996.09, 1092.18]
+             .map(c => Math.pow(2, c / 1200))
+  },
+  {
+    id: 'equal',
+    name: 'Gleichstufig',
+    year: 'ca. 1800 (allgemein verbreitet)',
+    desc: 'Alle zwölf Halbtonschritte sind identisch (2^(1⁄12) ≈ 1,05946). '
+        + 'Freie Modulation in alle Tonarten ist möglich, da alle Tonarten gleich klingen. '
+        + 'Nur die Oktave (2:1) ist rein; alle anderen Intervalle sind leicht verstimmt. '
+        + 'Heute weltweit die gebräuchliche Stimmung.',
+    ratios: Array.from({ length: 12 }, (_, i) => Math.pow(2, i / 12))
+  }
+];
+
+const NOTE_NAMES = ['c′','cis′','d′','es′','e′','f′','fis′','g′','as′','a′','b′','h′','c″'];
+const A_IDX = 9; // A ist Index 9 (C=0)
+
+// ── Zustand ──────────────────────────────────────────────────────────────────
+
+let tuning    = TUNINGS[0];
+let kammerton = 440;
+let audioCtx  = null;
+let activeNode = null; // { oscs, gain }
+
+// ── Audio ────────────────────────────────────────────────────────────────────
+
+function ctx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+  return audioCtx;
+}
+
+function startSound(freq) {
+  stopSound();
+  const ac = ctx();
+  const now = ac.currentTime;
+
+  const masterGain = ac.createGain();
+  const filter = ac.createBiquadFilter();
+  filter.type = 'lowpass';
+  filter.frequency.value = Math.min(freq * 9, 9000);
+  filter.Q.value = 0.6;
+  masterGain.connect(filter);
+  filter.connect(ac.destination);
+
+  // Obertöne für klavierähnlichen Klang
+  const partials = [
+    { m: 1,   g: 0.58 },
+    { m: 2,   g: 0.18 },
+    { m: 3,   g: 0.09 },
+    { m: 4,   g: 0.05 },
+    { m: 5,   g: 0.02 },
+  ];
+  const oscs = partials.map(({ m, g }) => {
+    const osc  = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type = 'sine';
+    osc.frequency.value = freq * m;
+    gain.gain.value = g;
+    osc.connect(gain);
+    gain.connect(masterGain);
+    osc.start(now);
+    return osc;
+  });
+
+  // Hüllkurve: Anschlag → Abfall → Halten
+  masterGain.gain.setValueAtTime(0, now);
+  masterGain.gain.linearRampToValueAtTime(0.75, now + 0.007);
+  masterGain.gain.exponentialRampToValueAtTime(0.38, now + 0.12);
+  masterGain.gain.exponentialRampToValueAtTime(0.28, now + 0.55);
+
+  activeNode = { oscs, gain: masterGain };
+}
+
+function stopSound() {
+  if (!activeNode) return;
+  const { oscs, gain } = activeNode;
+  const ac = ctx();
+  const now = ac.currentTime;
+  const cur = Math.max(gain.gain.value, 0.0001);
+  gain.gain.cancelScheduledValues(now);
+  gain.gain.setValueAtTime(cur, now);
+  gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.32);
+  oscs.forEach(o => { try { o.stop(now + 0.32); } catch (_) {} });
+  activeNode = null;
+}
+
+// ── Frequenzberechnung ───────────────────────────────────────────────────────
+
+function getFreq(noteIdx) {
+  const cFreq = kammerton / tuning.ratios[A_IDX];
+  if (noteIdx === 12) return cFreq * 2;
+  return cFreq * tuning.ratios[noteIdx];
+}
+
+function getCents(noteIdx, freq) {
+  // Vergleich mit gleichstufiger Stimmung (Kammerton = A)
+  const eqFreq = (kammerton / Math.pow(2, 9 / 12)) * Math.pow(2, noteIdx / 12);
+  return 1200 * Math.log2(freq / eqFreq);
+}
+
+// ── Anzeige ──────────────────────────────────────────────────────────────────
+
+function showNote(noteIdx, freq) {
+  const cents = getCents(noteIdx, freq);
+  const sign  = cents >= 0 ? '+' : '';
+  const el = document.getElementById('noteDisplay');
+  el.className = 'note-display filled';
+  el.innerHTML =
+    `<div class="info-cell">
+       <div class="info-val">${NOTE_NAMES[noteIdx]}</div>
+       <div class="info-lbl">Note</div>
+     </div>
+     <div class="info-cell">
+       <div class="info-val">${freq.toFixed(2)} Hz</div>
+       <div class="info-lbl">Frequenz</div>
+     </div>
+     <div class="info-cell">
+       <div class="info-val">${sign}${cents.toFixed(1)} ¢</div>
+       <div class="info-lbl">Abweichung</div>
+     </div>`;
+}
+
+function clearNote() {
+  const el = document.getElementById('noteDisplay');
+  el.className = 'note-display empty';
+  el.textContent = 'Taste drücken zum Klingen bringen …';
+}
+
+// ── Tastatur-Interaktion ─────────────────────────────────────────────────────
+
+function setupKeyboard() {
+  const kb = document.getElementById('keyboard');
+  let pressed = null;
+
+  function press(key) {
+    if (!key?.dataset.note) return;
+    if (pressed !== null) release();
+    pressed = parseInt(key.dataset.note);
+    key.classList.add('active');
+    const freq = getFreq(pressed);
+    startSound(freq);
+    showNote(pressed, freq);
+  }
+
+  function release() {
+    if (pressed === null) return;
+    kb.querySelector(`[data-note="${pressed}"]`)?.classList.remove('active');
+    stopSound();
+    clearNote();
+    pressed = null;
+  }
+
+  // Maus
+  kb.addEventListener('mousedown', e => {
+    e.preventDefault();
+    press(e.target.closest('[data-note]'));
+  });
+  document.addEventListener('mouseup', release);
+
+  // Touch
+  kb.addEventListener('touchstart', e => {
+    e.preventDefault();
+    const t = e.touches[0];
+    press(document.elementFromPoint(t.clientX, t.clientY)?.closest('[data-note]'));
+  }, { passive: false });
+  kb.addEventListener('touchend', e => {
+    e.preventDefault();
+    release();
+  }, { passive: false });
+}
+
+// ── Stimmungsauswahl aufbauen ─────────────────────────────────────────────────
+
+function buildTuningOptions() {
+  const container = document.getElementById('tuningOptions');
+  TUNINGS.forEach((t, i) => {
+    const lbl = document.createElement('label');
+    lbl.className = 'tuning-option';
+    lbl.innerHTML =
+      `<input type="radio" name="tuning" value="${t.id}"${i === 0 ? ' checked' : ''}>
+       <span class="tuning-name">${t.name}</span>
+       <span class="tuning-year">${t.year}</span>`;
+    lbl.querySelector('input').addEventListener('change', () => {
+      tuning = t;
+      document.getElementById('description').textContent = t.desc;
+    });
+    container.appendChild(lbl);
+  });
+}
+
+// ── Start ─────────────────────────────────────────────────────────────────────
+
+document.getElementById('kammerton').addEventListener('input', e => {
+  const v = parseFloat(e.target.value);
+  if (v > 0) kammerton = v;
+});
+
+buildTuningOptions();
+document.getElementById('description').textContent = TUNINGS[0].desc;
+setupKeyboard();
+</script>
+</body>
+</html>

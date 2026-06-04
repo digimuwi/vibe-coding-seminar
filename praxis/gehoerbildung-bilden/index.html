@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gehörbildung bilden</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>Gehörbildung bilden</h1>
+    <p class="subtitle">Prototyp – Klaviatur einer Oktave (c<sup>1</sup> – c<sup>2</sup>)</p>
+  </header>
+
+  <main>
+    <div class="mode-selector" role="tablist" aria-label="Modus">
+      <button class="mode-btn active" data-mode="normal" role="tab" aria-selected="true">Normal</button>
+      <button class="mode-btn" data-mode="intervalle" role="tab" aria-selected="false">Intervalle</button>
+    </div>
+
+    <div class="keyboard" id="keyboard" role="group" aria-label="Klaviatur">
+      <!-- Tasten werden via JS gerendert -->
+    </div>
+
+    <div class="info-area" id="info-area" aria-live="polite"></div>
+
+    <p class="hint" id="hint"></p>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

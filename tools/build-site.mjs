@@ -172,6 +172,10 @@ function buildProject(themeDir, slug, dir, mdPath) {
     note: '',        // optionaler Hinweis (z.B. Build fehlgeschlagen)
   };
 
+  // Suchtext für den Live-Filter auf der Website (Titel, Name, Beschreibung).
+  proj.search = `${proj.titel} ${proj.studierende} ${body}`
+    .toLowerCase().replace(/\s+/g, ' ').trim();
+
   const publicRel = path.posix.join('p', themeDir, slug);
   const publicDir = path.join(OUT, 'p', themeDir, slug);
 
@@ -227,26 +231,37 @@ function tryBuild(proj) {
 //  HTML rendern
 // ---------------------------------------------------------------------------
 
+const TYP_LABEL = { web: 'Web-App', mobile: 'Handy-App', sonstiges: 'Sonstiges' };
+
 function projectCard(p) {
   const buttons = [];
   if (p.appUrl) {
     const ext = p.external ? ' target="_blank" rel="noopener"' : '';
-    buttons.push(`<a class="btn btn-primary" href="${esc(p.appUrl)}"${ext}>▶ App öffnen</a>`);
+    buttons.push(`<a class="btn btn-primary" href="${esc(p.appUrl)}"${ext}>App öffnen</a>`);
   }
   if (p.download) {
-    buttons.push(`<a class="btn" href="${esc(p.download)}" target="_blank" rel="noopener">⬇ Download</a>`);
+    buttons.push(`<a class="btn" href="${esc(p.download)}" target="_blank" rel="noopener">Download</a>`);
   }
-  buttons.push(`<a class="btn btn-ghost" href="${esc(p.codeUrl)}" target="_blank" rel="noopener">&lt;/&gt; Code ansehen</a>`);
+  buttons.push(`<a class="btn btn-ghost" href="${esc(p.codeUrl)}" target="_blank" rel="noopener">Code ansehen</a>`);
+
+  // Kleine Abzeichen für schnelles Scannen: Typ + Verfügbarkeit.
+  const tags = [];
+  if (p.typ && TYP_LABEL[p.typ]) tags.push(`<span class="tag">${TYP_LABEL[p.typ]}</span>`);
+  if (p.appUrl) tags.push(`<span class="tag tag-live">${p.external ? 'Live' : 'App'}</span>`);
+  else tags.push(`<span class="tag tag-code">nur Code</span>`);
+  const tagRow = `<div class="tags">${tags.join('')}</div>`;
 
   const studierende = p.studierende
     ? `<p class="who">${esc(p.studierende)}</p>` : '';
   const note = p.note ? `<p class="note">${esc(p.note)}</p>` : '';
 
   return `
-    <article class="card">
+    <article class="card" data-theme="${esc(p.themeDir)}" data-search="${esc(p.search)}">
       <header class="card-head"><h3>${esc(p.titel)}</h3></header>
       ${studierende}
+      ${tagRow}
       <div class="desc">${p.bodyHtml || '<p class="muted">Noch keine Beschreibung.</p>'}</div>
+      <button class="more" type="button" hidden>weiterlesen</button>
       ${note}
       <div class="actions">${buttons.join('')}</div>
     </article>`;
@@ -254,7 +269,7 @@ function projectCard(p) {
 
 function themeSection(t) {
   return `
-    <section class="theme" id="${esc(t.dir)}">
+    <section class="theme" id="${esc(t.dir)}" data-theme="${esc(t.dir)}">
       <h2>${esc(t.label)}
         <span class="count">${t.projects.length}</span></h2>
       <div class="grid">${t.projects.map(projectCard).join('')}</div>
@@ -262,9 +277,11 @@ function themeSection(t) {
 }
 
 function renderPage(themes, totalProjects) {
-  const nav = themes
-    .map((t) => `<a href="#${esc(t.dir)}">${esc(t.label)}</a>`)
-    .join('');
+  const chips = [
+    `<button class="chip is-active" data-filter="alle">Alle <span class="chip-n">${totalProjects}</span></button>`,
+    ...themes.map((t) =>
+      `<button class="chip" data-filter="${esc(t.dir)}">${esc(t.label)} <span class="chip-n">${t.projects.length}</span></button>`),
+  ].join('');
   const sections = themes.length
     ? themes.map(themeSection).join('')
     : `<p class="empty">Noch keine Projekte. Lege einen Projektordner mit einer
@@ -295,12 +312,20 @@ function renderPage(themes, totalProjects) {
   header.hero h1{font-family:"Iowan Old Style",Palatino,Georgia,serif;
     font-size:clamp(28px,5vw,46px);margin:0 0 8px;color:var(--accent)}
   header.hero p{margin:0;color:var(--muted);font-size:18px}
+  .search{margin:18px auto 0;max-width:460px}
+  .search input{width:100%;font-size:16px;padding:11px 16px;border-radius:999px;
+    border:1px solid var(--rule);background:#fff;color:var(--ink)}
+  .search input:focus{outline:none;border-color:var(--accent2);
+    box-shadow:0 0 0 3px rgba(181,102,47,.15)}
   nav.themes{position:sticky;top:0;z-index:5;background:rgba(255,255,255,.92);
     backdrop-filter:blur(6px);border-bottom:1px solid var(--rule)}
   nav.themes .wrap{display:flex;flex-wrap:wrap;gap:6px;padding:10px 20px}
-  nav.themes a{padding:6px 12px;border-radius:999px;text-decoration:none;
-    font-size:14px;color:var(--ink);border:1px solid transparent}
-  nav.themes a:hover{border-color:var(--rule);background:var(--card)}
+  .chip{font:inherit;cursor:pointer;padding:6px 14px;border-radius:999px;
+    font-size:14px;color:var(--ink);border:1px solid var(--rule);background:#fff}
+  .chip:hover{border-color:var(--accent2)}
+  .chip.is-active{background:var(--accent);border-color:var(--accent);color:#fff}
+  .chip-n{font-size:12px;font-weight:600;opacity:.7;margin-left:2px}
+  .chip.is-active .chip-n{opacity:.85}
   main{padding:32px 0 64px}
   .theme{margin:0 0 44px}
   .theme h2{font-family:"Iowan Old Style",Palatino,Georgia,serif;font-size:26px;
@@ -312,11 +337,29 @@ function renderPage(themes, totalProjects) {
     padding:18px 18px 16px;box-shadow:0 1px 3px var(--shadow);display:flex;flex-direction:column}
   .card-head{display:flex;align-items:center;gap:10px;margin-bottom:2px}
   .card h3{margin:0;font-size:19px}
-  .who{margin:6px 0 12px;color:var(--accent);font-size:16px;font-weight:700;letter-spacing:.1px}
-  .desc{font-size:15px;flex:1}
+  .who{margin:6px 0 8px;color:var(--accent);font-size:16px;font-weight:700;letter-spacing:.1px}
+  .tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+  .tag{font-size:12px;font-weight:600;padding:2px 9px;border-radius:999px;
+    background:#f3f0ee;color:var(--muted);border:1px solid var(--rule)}
+  .tag-live{background:#eef4ee;color:#3a6b3a;border-color:#cfe0cf}
+  .tag-code{background:#f4f1ec;color:#8a6d3b;border-color:#e6ddc9}
+  .desc{font-size:15px;flex:1;position:relative}
   .desc :first-child{margin-top:0}
+  .desc :last-child{margin-bottom:0}
   .desc h3,.desc h4,.desc h5{margin:.6em 0 .2em;font-size:15px}
   .desc code{background:#f1f1f1;padding:1px 5px;border-radius:5px;font-size:13px}
+  /* Beschreibung einklappen, damit alle Karten ähnlich hoch und scanbar sind.
+     Nur aktiv, wenn JavaScript läuft (Klasse .js am <html>). */
+  .js .desc{max-height:11em;overflow:hidden}
+  .js .desc::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3.2em;
+    background:linear-gradient(rgba(255,255,255,0),#fff)}
+  .js .card.is-open .desc{max-height:none}
+  .js .card.is-open .desc::after{display:none}
+  .more{display:none;align-self:flex-start;margin:6px 0 0;padding:2px 0;
+    font:inherit;font-size:14px;font-weight:600;cursor:pointer;
+    background:none;border:none;color:var(--accent)}
+  .js .more:not([hidden]){display:inline-block}
+  .more:hover{color:var(--accent2);text-decoration:underline}
   .note{font-size:13px;color:var(--accent);background:#f6f6f6;border:1px solid var(--rule);
     border-radius:8px;padding:8px 10px;margin:10px 0 0}
   .actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
@@ -338,15 +381,73 @@ function renderPage(themes, totalProjects) {
     <div class="wrap">
       <h1>Vibe Coding-Seminar</h1>
       <p>Projekte aus dem Seminar (SoSe&nbsp;26) · ${totalProjects} Projekt${totalProjects === 1 ? '' : 'e'}</p>
+      <div class="search">
+        <input id="suche" type="search" placeholder="Projekte durchsuchen (Titel, Name, Stichwort) …"
+          aria-label="Projekte durchsuchen" autocomplete="off">
+      </div>
     </div>
   </header>
-  <nav class="themes"><div class="wrap">${nav}</div></nav>
-  <main><div class="wrap">${sections}</div></main>
+  <nav class="themes"><div class="wrap">${chips}</div></nav>
+  <main><div class="wrap">
+    ${sections}
+    <p class="empty" id="leer" hidden>Keine Projekte gefunden. Suchbegriff oder Filter ändern.</p>
+  </div></main>
   <footer><div class="wrap">
     Automatisch erzeugt am ${esc(now)} ·
     <a href="${REPO_URL}" target="_blank" rel="noopener">Quellcode auf GitHub</a> ·
     Neues Projekt? Ordner mit <code>projekt.md</code> anlegen und pushen.
   </div></footer>
+  <script>
+  (function () {
+    document.documentElement.classList.add('js');
+    var cards = Array.prototype.slice.call(document.querySelectorAll('.card'));
+    var sections = Array.prototype.slice.call(document.querySelectorAll('.theme'));
+    var chips = Array.prototype.slice.call(document.querySelectorAll('.chip'));
+    var suche = document.getElementById('suche');
+    var leer = document.getElementById('leer');
+    var aktivesThema = 'alle';
+
+    // "weiterlesen"-Knopf nur zeigen, wenn die Beschreibung tatsächlich abgeschnitten ist.
+    cards.forEach(function (card) {
+      var desc = card.querySelector('.desc');
+      var btn = card.querySelector('.more');
+      if (!desc || !btn) return;
+      if (desc.scrollHeight - desc.clientHeight > 4) btn.hidden = false;
+      btn.addEventListener('click', function () {
+        var offen = card.classList.toggle('is-open');
+        btn.textContent = offen ? 'weniger' : 'weiterlesen';
+      });
+    });
+
+    function filtern() {
+      var q = (suche.value || '').toLowerCase().trim();
+      var treffer = 0;
+      cards.forEach(function (card) {
+        var passtThema = aktivesThema === 'alle' || card.dataset.theme === aktivesThema;
+        var passtSuche = !q || (card.dataset.search || '').indexOf(q) !== -1;
+        var sichtbar = passtThema && passtSuche;
+        card.hidden = !sichtbar;
+        if (sichtbar) treffer++;
+      });
+      // Themenabschnitte ohne sichtbare Karten ausblenden.
+      sections.forEach(function (sec) {
+        var hatTreffer = sec.querySelector('.card:not([hidden])');
+        sec.hidden = !hatTreffer;
+      });
+      leer.hidden = treffer !== 0;
+    }
+
+    chips.forEach(function (chip) {
+      chip.addEventListener('click', function () {
+        chips.forEach(function (c) { c.classList.remove('is-active'); });
+        chip.classList.add('is-active');
+        aktivesThema = chip.dataset.filter;
+        filtern();
+      });
+    });
+    suche.addEventListener('input', filtern);
+  })();
+  </script>
 </body>
 </html>`;
 }

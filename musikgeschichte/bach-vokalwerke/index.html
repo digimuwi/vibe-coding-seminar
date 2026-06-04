@@ -89,16 +89,19 @@
     .main {
       display: grid;
       grid-template-columns: 1fr 380px;
+      grid-auto-rows: clamp(300px, calc(100vh - 380px), 420px);
       gap: 16px;
       padding: 16px;
       min-height: 0;
     }
 
-    .info-panel { height: 540px; }
-
     @media (max-width: 900px) {
-      .main { grid-template-columns: 1fr; }
-      .info-panel { height: auto; min-height: 340px; max-height: 80vh; }
+      .main {
+        grid-template-columns: 1fr;
+        grid-auto-rows: auto;
+      }
+      .map-wrap { height: 320px; }
+      .info-panel { min-height: 320px; max-height: 70vh; }
     }
 
     /* ========== MAP ========== */
@@ -109,7 +112,7 @@
       overflow: hidden;
       display: flex;
       flex-direction: column;
-      height: 340px;
+      min-height: 0;
     }
 
     .panel-title {
@@ -238,66 +241,54 @@
     }
     .funfact strong { color: #8b6914; }
 
-    /* ========== HÖRBEISPIEL ========== */
-    .listen {
-      margin-top: 16px;
-      background: #f0e6ff;
-      border-radius: 12px;
-      padding: 12px;
-    }
-    .listen h3 {
-      font-size: 0.95rem;
-      color: #5b3a9d;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .listen .excerpt-note {
-      font-size: 0.78rem;
-      color: var(--ink-soft);
-      font-style: italic;
-      margin-bottom: 8px;
-    }
-    .listen .video-frame {
-      position: relative;
-      width: 100%;
-      aspect-ratio: 16 / 9;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #000;
-    }
-    .listen iframe {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      border: 0;
-    }
-    .listen .source {
-      margin-top: 8px;
-      font-size: 0.78rem;
-      color: var(--ink-soft);
-    }
-    .listen .source a {
-      color: #5b3a9d;
-      text-decoration: none;
-      font-weight: bold;
-    }
-    .listen .source a:hover { text-decoration: underline; }
-    .listen.no-audio {
-      background: #f5f1fa;
-      color: var(--ink-soft);
-      font-size: 0.9rem;
-      line-height: 1.45;
-    }
-
     .info-card .station-works h3 {
       font-size: 1rem;
       color: var(--ink);
       margin: 18px 0 10px;
       padding-bottom: 6px;
       border-bottom: 2px dashed #ddd;
+    }
+
+    .werkdaten {
+      background: #f7f3ff;
+      border: 1px solid #ece4ff;
+      border-radius: 10px;
+      padding: 12px 14px;
+      margin: 14px 0 10px;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+    .werkdaten dt {
+      font-weight: bold;
+      color: #5b3a9d;
+      margin-top: 6px;
+      font-size: 0.82rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    .werkdaten dt:first-child { margin-top: 0; }
+    .werkdaten dd {
+      margin: 2px 0 0;
+      color: var(--ink);
+    }
+
+    .quelle-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: 10px;
+      padding: 6px 12px;
+      background: #fff;
+      border: 1.5px solid #d4a017;
+      border-radius: 14px;
+      color: #8b6914;
+      font-size: 0.82rem;
+      text-decoration: none;
+      transition: all 0.15s;
+    }
+    .quelle-link:hover {
+      background: #fff4d4;
+      transform: translateX(2px);
     }
 
     .work-link {
@@ -322,6 +313,37 @@
       font-size: 0.8rem;
     }
     .work-link .wtitle { color: var(--ink); }
+
+    .hoer-link {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      background: #fff4e0;
+      border: 2px solid #ffd99a;
+      border-radius: 10px;
+      padding: 9px 12px;
+      margin-bottom: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      font-size: 0.9rem;
+      line-height: 1.35;
+      transition: all 0.15s;
+    }
+    .hoer-link:hover {
+      background: #ffe9bf;
+      border-color: #f4b860;
+      transform: translateX(3px);
+    }
+    .hoer-link .hoer-icon { flex-shrink: 0; }
+    .hoer-link .hoer-label { font-weight: bold; }
+    .hoer-link .hoer-quelle {
+      display: block;
+      color: var(--ink-soft);
+      font-size: 0.78rem;
+      font-weight: normal;
+      margin-top: 2px;
+      font-style: italic;
+    }
 
     /* ========== TIMELINE ========== */
     .timeline-wrap {
@@ -530,10 +552,23 @@
       <ul>
         <li>🗺️ <strong>Auf der Karte</strong> die acht Städte erkunden, in denen Bach gelebt hat</li>
         <li>🕰️ <strong>Auf dem Zeitstrahl</strong> seine wichtigsten Vokalwerke entdecken</li>
-        <li>🎧 <strong>Hörbeispiele</strong> zu jedem Werk direkt anhören – Aufnahmen der J. S. Bach-Stiftung</li>
         <li>👆 <strong>Klicke auf einen Punkt</strong>, um mehr zu erfahren</li>
       </ul>
       <p>Vokalwerke sind Musikstücke, in denen Menschen <strong>singen</strong>. Bach hat Kantaten, Passionen, Oratorien und Messen geschrieben.</p>
+
+      <details style="margin-top:18px; font-size:0.88rem;">
+        <summary style="cursor:pointer; font-weight:bold; color:#5b3a9d;">📚 Quellen &amp; Literatur</summary>
+        <p style="margin-top:10px;"><strong>Werke (Texte, Besetzung, Anlass):</strong> Werkausgaben und Werkeinführungen des <a href="https://www.carus-verlag.com/komponisten/bach/kantaten/alle-bach-kantaten/" target="_blank" rel="noopener noreferrer">Carus-Verlags</a> (Stuttgarter Bach-Ausgaben, in Kooperation mit dem Bach-Archiv Leipzig). Jedes Werk verweist mit eigenem Link auf seine Carus-Werkausgabe.</p>
+        <p style="margin-top:8px;"><strong>Lebensstationen:</strong> Die biografischen Texte stützen sich auf die Stationsseiten von <a href="https://www.bach.de/leben/" target="_blank" rel="noopener noreferrer">bach.de</a>, die ihrerseits auf den folgenden Standardbiografien beruhen:</p>
+        <ul style="margin:6px 0 0 22px; line-height:1.55;">
+          <li>Martin Geck: <em>Bach – Leben und Werk</em>. Rowohlt, Reinbek 2000.</li>
+          <li>Klaus Eidam: <em>Das wahre Leben des Johann Sebastian Bach</em>. Piper, München 1999.</li>
+          <li>Friedemann Otterbach: <em>Johann Sebastian Bach – Leben und Werk</em>. Reclam, Stuttgart 1982.</li>
+          <li>Claudia Maria Knispel: <em>Johann Sebastian Bach – Leben und Zeit im Bild</em>. Laaber, Laaber 2000.</li>
+        </ul>
+        <p style="margin-top:8px;">Klassische Primärquelle für viele Anekdoten ist außerdem der <em>Nekrolog</em> von 1754 (Carl Philipp Emanuel Bach und Johann Friedrich Agricola).</p>
+      </details>
+
       <button onclick="document.getElementById('help-modal').classList.remove('show')">Los geht's! 🎶</button>
     </div>
   </div>
@@ -552,8 +587,9 @@
         colorHex: '#ef6f6c',
         emoji: '👶',
         role: 'Bachs Geburtsort',
-        text: 'In Eisenach wurde Bach am 21. März 1685 geboren. Hier wuchs er in einer großen Musikerfamilie auf - sein Vater war Stadtmusiker. Schon mit 9 Jahren wurde Bach Vollwaise.',
-        funfact: 'In Eisenach steht heute das Bachhaus - eines der ältesten Komponisten-Museen der Welt!'
+        text: 'Bach kam am 21. März 1685 in Eisenach zur Welt. Sein Vater Johann Ambrosius war Stadtmusiker - und in seiner ganzen großen Familie waren fast alle Musiker. "Die Bachs" waren in Thüringen so bekannt wie eine Musikerfamilie nur sein kann. Schon als kleiner Junge hörte Sebastian also überall Musik. Mit nur 9 Jahren wurde er Vollwaise.',
+        funfact: 'In Eisenach gibt es bis heute das Bachhaus - eines der ältesten Komponisten-Museen der ganzen Welt. Dort kannst du sogar alte Instrumente hören, wie sie zu Bachs Zeit klangen.',
+        quelle_url: 'https://www.bach.de/leben/eisenach.html'
       },
       {
         id: 'ohrdruf',
@@ -566,8 +602,9 @@
         colorHex: '#f4a261',
         emoji: '📚',
         role: 'Schulzeit beim Bruder',
-        text: 'Nach dem Tod der Eltern lebte der 10-jährige Sebastian bei seinem älteren Bruder Johann Christoph in Ohrdruf. Hier lernte er Orgel und Cembalo spielen und ging zur Schule.',
-        funfact: 'Bach soll heimlich nachts Noten kopiert haben, weil sein Bruder ihm ein bestimmtes Notenbuch nicht leihen wollte!'
+        text: 'Nach dem Tod der Eltern zog der 10-jährige Sebastian zu seinem älteren Bruder Johann Christoph. Der war Organist und brachte ihm das Orgel- und Cembalospielen bei. Tagsüber ging Sebastian zur Schule und lernte dort Latein, Religion und vieles mehr.',
+        funfact: 'Es heißt, Bach habe heimlich bei Mondschein Noten aus einem Buch des Bruders abgeschrieben - weil er das Buch nicht ausleihen durfte. Das war eine echte Strafarbeit, denn Strom und Lampen gab es damals noch nicht!',
+        quelle_url: 'https://www.bach.de/leben/ohrdruf.html'
       },
       {
         id: 'lueneburg',
@@ -580,8 +617,9 @@
         colorHex: '#f9c74f',
         emoji: '🎵',
         role: 'Schüler im Chor',
-        text: 'Mit 15 Jahren ging Bach nach Lüneburg an die Michaelis-Schule. Er sang im Chor und konnte so kostenlos zur Schule gehen. Hier hörte er auch berühmte Organisten.',
-        funfact: 'Bach lief manchmal über 50 Kilometer zu Fuß nach Hamburg, um dem berühmten Organisten Reincken zuzuhören!'
+        text: 'Mit 15 Jahren ging Bach nach Lüneburg an die Michaelis-Schule. Er sang im Chor - dafür durfte er kostenlos zur Schule gehen. Die Schule besaß eine riesige Notenbibliothek mit Stücken von vielen großen Komponisten - dort hat Bach jede Menge Musik kennengelernt!',
+        funfact: 'Bach lief manchmal über 50 Kilometer zu Fuß nach Hamburg, nur um dort dem berühmten Organisten Reincken zuzuhören! Heute würde man dafür etwa 10 Stunden brauchen.',
+        quelle_url: 'https://www.bach.de/leben/lueneburg.html'
       },
       {
         id: 'arnstadt',
@@ -594,8 +632,9 @@
         colorHex: '#90be6d',
         emoji: '🎹',
         role: 'Erster Job als Organist',
-        text: 'Mit nur 18 Jahren bekam Bach in Arnstadt seine erste richtige Stelle als Organist an der Neuen Kirche. Hier komponierte er erste Orgelwerke.',
-        funfact: 'Bach bekam Ärger, weil er einen Schüler in einer Prügelei "Zippelfagottist" (zerzauster Fagottspieler) genannt hatte!'
+        text: 'Mit 18 Jahren bekam Bach seine erste richtige Stelle: Organist an der Neuen Kirche in Arnstadt (heute heißt sie Bach-Kirche). Er musste "nur" im Gottesdienst Orgel spielen, noch keine Kantaten komponieren. 1705 unternahm er eine berühmte Reise zu Buxtehude nach Lübeck - er wollte vier Wochen bleiben, blieb aber vier Monate!',
+        funfact: 'Bach bekam Ärger mit seinen Chefs, weil er einen Schüler in einer Prügelei einen "Zippelfagottisten" (zerzausten Fagottspieler) genannt hatte!',
+        quelle_url: 'https://www.bach.de/leben/arnstadt.html'
       },
       {
         id: 'muehlhausen',
@@ -608,8 +647,9 @@
         colorHex: '#43aa8b',
         emoji: '💍',
         role: 'Hochzeit & erste Kantaten',
-        text: 'In Mühlhausen heiratete Bach seine Cousine Maria Barbara. Hier komponierte er einige seiner ersten und berühmtesten Kantaten - darunter den "Actus Tragicus".',
-        funfact: 'Bachs Kantate "Gott ist mein König" (BWV 71) war das einzige Werk, das zu seinen Lebzeiten gedruckt wurde!'
+        text: 'In Mühlhausen war Bach Organist an der Kirche Divi Blasii. Hier heiratete er seine Cousine Maria Barbara. Obwohl er offiziell nicht für Kantaten zuständig war, schrieb er hier seine ersten berühmten Vokalwerke - darunter den "Actus Tragicus".',
+        funfact: 'Schon hier schrieb Bach einen Plan, wie er später in der Kirche eine "regulierte Kirchenmusik zu Gottes Ehren" aufbauen wollte - dieser Plan wurde aber erst Jahre später in Leipzig wahr.',
+        quelle_url: 'https://www.bach.de/leben/muehlhausen.html'
       },
       {
         id: 'weimar',
@@ -622,8 +662,9 @@
         colorHex: '#4d96d6',
         emoji: '👑',
         role: 'Hoforganist & Konzertmeister',
-        text: 'Am Hof des Herzogs spielte Bach Orgel und komponierte regelmäßig Kantaten für die Schlosskapelle. Sieben seiner Kinder wurden hier geboren.',
-        funfact: 'Als Bach den Hof verlassen wollte, sperrte ihn der wütende Herzog 4 Wochen lang ins Gefängnis!'
+        text: 'Am Hof des Herzogs Wilhelm Ernst arbeitete Bach erst als Hoforganist, ab 1714 auch als Konzertmeister. Jetzt musste er einmal im Monat eine neue Kantate komponieren! Die Texte dazu schrieb meistens der Hofbibliothekar Salomon Franck. Sieben von Bachs Kindern wurden hier geboren.',
+        funfact: 'Als Bach 1717 den Hof verlassen wollte, sperrte ihn der wütende Herzog vier Wochen lang ins Gefängnis - bevor er ihn "in Ungnade" entließ!',
+        quelle_url: 'https://www.bach.de/leben/weimar_1708.html'
       },
       {
         id: 'koethen',
@@ -636,8 +677,9 @@
         colorHex: '#7b68ee',
         emoji: '🎻',
         role: 'Hofkapellmeister',
-        text: 'In Köthen war Bach Chef einer Hofkapelle. Hier schrieb er hauptsächlich Instrumentalmusik (zum Beispiel die Brandenburgischen Konzerte). Vokalwerke entstanden hier weniger.',
-        funfact: 'In Köthen starb Maria Barbara plötzlich. Ein Jahr später heiratete Bach die Sängerin Anna Magdalena.'
+        text: 'In Köthen war Bach Kapellmeister beim jungen Fürsten Leopold. Weil dort eine andere Kirchenform herrschte (calvinistisch - ohne große Kirchenmusik), schrieb Bach hier vor allem Instrumentalmusik. Zum Beispiel die berühmten Brandenburgischen Konzerte. Vokalwerke entstanden hier nur zu besonderen Anlässen wie Geburtstagen.',
+        funfact: '1720 starb Bachs erste Frau Maria Barbara plötzlich, während er auf einer Reise war. Ein Jahr später heiratete er die junge Sängerin Anna Magdalena, die ihm später viele Werke abgeschrieben hat.',
+        quelle_url: 'https://www.bach.de/leben/koethen.html'
       },
       {
         id: 'leipzig',
@@ -650,123 +692,247 @@
         colorHex: '#c44ec8',
         emoji: '⛪',
         role: 'Thomaskantor (27 Jahre!)',
-        text: 'In Leipzig leitete Bach den Chor der Thomaskirche und komponierte fast jede Woche eine neue Kantate für den Gottesdienst. Hier entstanden seine größten Meisterwerke!',
-        funfact: 'Bach hatte insgesamt 20 Kinder - und kümmerte sich nebenbei noch um den Schulunterricht der Thomasschüler!'
+        text: 'Als Thomaskantor in Leipzig leitete Bach den Chor der Thomas- und Nikolaikirche und unterrichtete die Thomasschüler in Musik. In den ersten Jahren komponierte er fast jede Woche eine neue Kantate! Hier entstanden auch die großen Werke: die Passionen, das Magnificat, das Weihnachtsoratorium und am Lebensende die h-Moll-Messe.',
+        funfact: 'Viele Kantaten von Bach sind heute leider verloren. Fachleute schätzen, dass etwa zwei Drittel von dem, was Bach geschrieben hat, gar nicht mehr existiert. Wir kennen also nur einen kleinen Teil seiner Musik!',
+        quelle_url: 'https://www.bach.de/leben/leipzig.html'
       }
     ];
 
+    // Inhaltliche Angaben (Werkbeschreibungen, Besetzung, Entstehung, Anlass)
+    // sind weitgehend dem Carus-Verlag entnommen ("Alle Bach-Kantaten"):
+    // https://www.carus-verlag.com/komponisten/bach/kantaten/alle-bach-kantaten/
     const works = [
       {
         bwv: 4, year: 1707, station: 'muehlhausen',
         title: 'Christ lag in Todes Banden',
         type: 'Osterkantate',
-        text: 'Eine seiner frühesten Kantaten zum Osterfest. Bach war erst 22 Jahre alt!',
-        fun: 'Die Melodie kommt von Martin Luther - schon 200 Jahre vor Bach!',
-        youtube: { id: '3ffg4mU7FNE', kind: 'full' }
+        text: 'Eine von Bachs allerersten Kantaten zum Osterfest. Wahrscheinlich war er erst 22 Jahre alt, als er sie in Mühlhausen schrieb. Bach vertont alle sieben Strophen eines alten Kirchenliedes - jede Strophe klingt anders.',
+        fun: 'Die Melodie und der Text stammen von Martin Luther und sind fast 200 Jahre älter als Bachs Kantate. Luther selbst hat sie wieder aus einem noch viel älteren Ostergesang aus dem Mittelalter genommen!',
+        textdichter: 'Martin Luther (Choral, 1524) - alle sieben Strophen unverändert',
+        anlass: 'Ostersonntag (vermutlich Mühlhausen 1707/08; spätere Leipziger Aufführung am 1. April 1725)',
+        besetzung: 'Soli SATB, Coro SATB, [Cornetto, 3 Posaunen], 2 Violinen, 2 Violen, Basso continuo',
+        dauer: '22 min',
+        quelle: 'Carus 31.004 (Stuttgarter Bach-Ausgaben, in Kooperation mit dem Bach-Archiv Leipzig)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-christ-lag-in-todes-banden-3100400.html',
+        hoer: [
+          { label: 'Gesamtaufnahme René Jacobs (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=uQNBDsDdLeE', quelle: 'Netherlands Bach Society' },
+          { label: 'Werkeinführung Rudolf Lutz (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=ux8FtnryzG4', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 106, year: 1708, station: 'muehlhausen',
         title: 'Actus Tragicus - Gottes Zeit ist die allerbeste Zeit',
-        type: 'Trauerkantate',
-        text: 'Diese traurige und wunderschöne Kantate komponierte Bach für eine Beerdigung.',
-        fun: 'Das Werk gilt als eines der schönsten der gesamten Kirchenmusik - obwohl Bach erst 23 war.',
-        youtube: { id: 'm1la8remdY0', kind: 'full' }
+        type: 'Trauermusik',
+        text: 'Eine wunderschöne Trauermusik aus Bachs Jugendzeit, wahrscheinlich für eine Beerdigung in Mühlhausen geschrieben. Bach war erst 22 oder 23 Jahre alt - viele Leute halten dieses Stück trotzdem für eines seiner allerschönsten Werke.',
+        fun: 'Bach benutzt hier ungewöhnliche Instrumente: zwei Blockflöten und zwei Gamben, aber keine Geigen. Das klingt sehr dunkel und besonders - so eine Mischung verwendet er in seinen anderen Vokalwerken nie wieder!',
+        textdichter: 'Anonymer Kompilator (Bibelstellen aus Altem und Neuem Testament, kombiniert mit Choralstrophen u.a. Luthers und Adam Reusners)',
+        anlass: 'Trauergottesdienst - vermutet wird die Beisetzung des Mühlhäuser Bürgermeisters Adolph Strecker (1708) oder die von Bachs Onkel Tobias Lämmerhirt (1707)',
+        besetzung: 'Coro SATB, 2 Blockflöten, 2 Violen da gamba, Basso continuo (ohne Violinen - dunkle, "antike" Klangfarbe)',
+        dauer: '23 min',
+        quelle: 'Carus 31.106 (Stuttgarter Bach-Ausgaben)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-gottes-zeit-ist-die-allerbeste-zeit-3110600.html',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=xXMUpqSyJJo', quelle: 'Netherlands Bach Society' },
+          { label: 'Werkeinführung Ekkehart Reinelt (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=MPvklzHycmQ', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 71, year: 1708, station: 'muehlhausen',
         title: 'Gott ist mein König',
-        type: 'Ratswahlkantate',
-        text: 'Diese Kantate schrieb Bach für die Wahl des neuen Stadtrats.',
-        fun: 'Das war das einzige Bach-Werk, das zu seinen Lebzeiten als gedrucktes Notenheft erschien!',
-        youtube: null
+        type: 'Ratswechselkantate',
+        text: 'Diese festliche Kantate komponierte Bach für den Tag, an dem in Mühlhausen ein neuer Stadtrat gewählt wurde - der 4. Februar 1708. Der Stadtrat ließ sich die Musik richtig was kosten: Bach besetzt das Stück prachtvoll mit Trompeten, Pauken und vielen weiteren Instrumenten.',
+        fun: 'Das ist das einzige Werk Bachs, von dem zu seinen Lebzeiten ein gedrucktes Notenheft erschien! Alles andere wurde nur per Hand abgeschrieben - deshalb sind viele Stücke heute auch verloren.',
+        textdichter: 'Anonym (Psalm- und Bibelverse, u.a. aus Psalm 74, mit freier Dichtung kombiniert)',
+        anlass: 'Ratswechselgottesdienst in der Marienkirche Mühlhausen, 4. Februar 1708',
+        besetzung: 'Soli SATB, Coro SATB, 2 Blockflöten, 2 Oboen, Fagott, 3 Trompeten, Pauken, Orgel obligat, 2 Violinen, Viola, Violoncello, Violone, Basso continuo',
+        dauer: '20 min',
+        quelle: 'Carus 31.071 (Stuttgarter Bach-Ausgaben); zusätzlich Originaldruck Mühlhausen 1708',
+        quelle_url: 'https://www.carus-verlag.com/alle-bach-kantaten/johann-sebastian-bach-gott-ist-mein-koenig-3107100.html',
+        hoer: [
+          { label: 'Gesamtaufnahme Ton Koopman (Amsterdam Baroque)', url: 'https://www.youtube.com/watch?v=B93E0DYIMEU', quelle: 'Amsterdam Baroque Orchestra & Choir' }
+        ]
       },
       {
         bwv: 21, year: 1714, station: 'weimar',
         title: 'Ich hatte viel Bekümmernis',
         type: 'Kantate',
-        text: 'Eine große Kantate über Trauer, die sich am Ende in Freude verwandelt.',
-        fun: 'Bach wurde zum Konzertmeister befördert - dafür musste er einmal im Monat eine neue Kantate schreiben!',
-        youtube: { id: 'rNgQ8tK08EU', kind: 'full' }
+        text: 'Eine große Kantate, die vom Traurigsein zur Freude führt - sie hat elf Sätze und wurde im Gottesdienst vor und nach der Predigt gesungen. Bach hat sie sein Leben lang immer wieder aufgeführt und an verschiedene Orte und Sänger angepasst.',
+        fun: 'Mit dieser Kantate stellte sich Bach 1720 in Hamburg vor. Der alte berühmte Organist Reincken war so begeistert, dass er ausrief: "Ich dachte, diese Kunst sei ausgestorben - aber in Ihnen lebt sie noch!"',
+        textdichter: 'Vermutlich Salomon Franck (Weimarer Hofdichter); Psalmverse + freie Dichtung + Choral "Sei nun wieder zufrieden" (Georg Neumark)',
+        anlass: '3. Sonntag nach Trinitatis (17. Juni 1714); laut Bachs eigener Notiz auch "per ogni tempo" verwendbar',
+        besetzung: 'Soli STB (SB/TB/SATB), Coro SATB, Oboe, Fagott, 3 Trompeten, 4 Pauken, 2 Violinen, Viola, Basso continuo, [4 Posaunen]',
+        dauer: '45 min',
+        quelle: 'Carus 31.021 (Stuttgarter Bach-Ausgaben)',
+        quelle_url: 'https://www.carus-verlag.com/alle-bach-kantaten/johann-sebastian-bach-ich-hatte-viel-bekuemmernis-3102100.html',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=rNgQ8tK08EU', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=39p2SzQBtk0', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 147, year: 1716, station: 'weimar',
         title: 'Herz und Mund und Tat und Leben',
         type: 'Kantate',
-        text: 'Aus dieser Kantate stammt die berühmte Melodie "Jesus bleibet meine Freude" - die kennen viele Leute!',
-        fun: 'Diese Melodie hörst du heute oft auf Hochzeiten - sie ist eine der bekanntesten Melodien Bachs.',
-        youtube: { id: 'evnzhg_9frs', kind: 'full' }
+        text: 'Diese Kantate gibt es in zwei Versionen: eine kürzere für den Advent in Weimar (1716) und eine längere für Leipzig (1723). Bach hat die Leipziger Fassung in einem ziemlichen Zeitdruck zusammengestellt - das sieht man heute noch an seinen Notenblättern.',
+        fun: 'Aus dieser Kantate stammt "Jesus bleibet meine Freude" - eine der berühmtesten Melodien Bachs überhaupt! Heute hört man sie oft auf Hochzeiten.',
+        textdichter: 'Salomon Franck (Weimarer Adventskantate BWV 147a); Choralstrophen von Martin Jahn ("Jesu, meiner Seelen Wonne", 1661) erst in der Leipziger Fassung',
+        anlass: 'Weimar: 4. Advent 1716 (BWV 147a); Leipzig: Mariä Heimsuchung, 2. Juli 1723',
+        besetzung: 'Soli SATB, Coro SATB, 2 Oboen (2 Oboen da caccia / Oboe I auch Oboe d\'amore), Fagott, Trompete, 2 Violinen, Viola, Basso continuo',
+        dauer: '18 min',
+        quelle: 'Carus 31.147 (Stuttgarter Bach-Ausgaben; Edition der Leipziger Fassung von 1723)',
+        quelle_url: 'https://www.carus-verlag.com/alle-bach-kantaten/johann-sebastian-bach-uwe-wolf-arr-herz-und-mund-und-tat-und-leben-3114700.html',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=evnzhg_9frs', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 245, year: 1724, station: 'leipzig',
         title: 'Johannes-Passion',
         type: 'Passion',
-        text: 'Eine Passion erzählt die Geschichte von Jesu Tod. Diese hier dauert ca. 2 Stunden und wird Karfreitag aufgeführt.',
-        fun: 'Bach hat sie sein ganzes Leben lang immer wieder umgeschrieben!',
-        youtube: { id: 'bItznjK18v4', kind: 'full' }
+        text: 'Eine Passion erzählt die Geschichte von Jesu Tod. Bachs Johannes-Passion wurde an Karfreitag 1724 in Leipzig zum ersten Mal aufgeführt und dauert etwa zwei Stunden.',
+        fun: 'Bach war nie ganz zufrieden mit seiner Johannes-Passion - er hat sie immer wieder umgeschrieben. Es gibt mindestens vier verschiedene Fassungen davon!',
+        textdichter: 'Joh 18-19 (Luther-Bibel); freie Dichtung u.a. nach Brockes-Passion (B. H. Brockes, 1712) und C. H. Postel; Choräle verschiedener Autoren',
+        anlass: 'Karfreitags-Vesper, 7. April 1724 (Erstaufführung wahrscheinlich Nikolaikirche Leipzig)',
+        besetzung: 'Soli SATBB, Coro SATB, 2 Flöten, 2 Oboen (auch d\'amore und da caccia), 2 Violinen, Viola, Viola da gamba, Basso continuo',
+        dauer: '114 min',
+        quelle: 'Carus 31.245 (Traditionelle Fassung); zusätzliche Carus-Ausgaben aller erhaltenen Einzelfassungen verfügbar',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-johannespassion-traditionelle-fassung-3124593.html',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=zMf9XDQBAaI', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 243, year: 1723, station: 'leipzig',
-        title: 'Magnificat',
-        type: 'Lobgesang',
-        text: 'Ein lateinischer Lobgesang Marias - kurz, festlich und voller Trompeten und Pauken.',
-        fun: 'Bach komponierte das Werk zu Weihnachten. Später schrieb er es für die Tonart D-Dur um.',
-        youtube: null
+        title: 'Magnificat in D',
+        type: 'Lateinischer Lobgesang',
+        text: 'Ein festlicher Lobgesang Marias auf Latein. Bach vertont die Bibelstelle aus dem Lukas-Evangelium prächtig mit Trompeten und Pauken. Trotz seiner kurzen Dauer von nur 27 Minuten gehört das Magnificat zu Bachs großen Meisterwerken.',
+        fun: 'Bach hat das Magnificat zuerst in Es-Dur geschrieben - zu Weihnachten 1723 mit vier Extra-Sätzen über die Weihnachtsgeschichte. Erst Jahre später hat er es in D-Dur umgeschrieben. So kennen wir es heute.',
+        textdichter: 'Magnificat-Text aus Lukas 1, 46-55 (Vulgata-Latein); in der Es-Dur-Fassung zusätzlich vier deutsch-lateinische Weihnachtseinlagen',
+        anlass: 'Vesper an den hohen Festen (Weihnachten, Ostern, Pfingsten, Mariä Heimsuchung); Es-Dur erstmals Weihnachten 1723, D-Dur ca. 1730er',
+        besetzung: 'Soli SSATB, Coro SSATB, 2 Flöten, 2 Oboen (Oboe d\'amore), 3 Trompeten, Pauken, 2 Violinen, Viola, Basso continuo',
+        dauer: '27 min',
+        quelle: 'Carus 31.243 (Hg. Ulrich Leisinger, basierend auf Bachs Partiturautograph)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-magnificat-in-d-3124300.html',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=EsUWG2axB3w', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 244, year: 1727, station: 'leipzig',
         title: 'Matthäus-Passion',
-        type: 'Passion',
-        text: 'Bachs größtes Werk! Ein riesiges Stück mit Doppelchor und zwei Orchestern - fast 3 Stunden lang.',
-        fun: 'Nach Bachs Tod wurde das Werk fast 100 Jahre vergessen, bis Felix Mendelssohn es 1829 wieder aufführte!',
-        youtube: { id: '1kGhze52XpY', kind: 'excerpt', label: 'Eröffnungschor „Kommt, ihr Töchter"' }
+        type: 'Passion (für zwei Chöre)',
+        text: 'Bachs größtes Werk! Es erzählt die Leidensgeschichte Jesu und dauert fast drei Stunden. Damit es noch eindrucksvoller klingt, hat Bach zwei Chöre und zwei Orchester gleichzeitig besetzt - die stehen sich im Raum gegenüber und "unterhalten" sich beim Singen.',
+        fun: 'Bachs schönste Notenhandschrift von 1736 hat die Bibelworte sogar mit roter Tinte geschrieben. Sie liegt heute in der Staatsbibliothek Berlin und ist eine der wertvollsten Musikhandschriften überhaupt.',
+        textdichter: 'Mt 26-27 (Luther-Bibel); freie Dichtung von Christian Friedrich Henrici alias Picander; 15 Choralstrophen verschiedener Autoren',
+        anlass: 'Karfreitag, 11. April 1727 in der Thomaskirche Leipzig (Revisionsfassung 1736)',
+        besetzung: 'Soli + Soprano in ripieno (Cantus-firmus-Chor); Coro I: SATB, 2 Blockflöten, 2 Flöten, 2 Oboen/Ob.d\'amore, 2 Oboen da caccia, 2 Vl, Va, Vc/Cb, Viola da gamba, Orgel obligat. Coro II: SATB, 2 Fl, 2 Ob/Ob.d\'amore, 2 Vl, Va, Vg, Vc/Cb, Org. obl.',
+        dauer: '164 min',
+        quelle: 'Carus 31.244 (Hg. Klaus Hofmann, früherer Leiter des Bach-Instituts Göttingen)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-matthaeus-passion-3124400.html',
+        hoer: [
+          { label: 'Gesamtaufnahme Van Veldhoven (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=ZwVW1ttVhuQ', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 225, year: 1727, station: 'leipzig',
         title: 'Singet dem Herrn ein neues Lied',
-        type: 'Motette',
-        text: 'Eine Motette nur für Chor (ohne Soloinstrumente). Sehr fröhlich und virtuos!',
-        fun: 'Mozart hörte diese Motette 1789 in Leipzig und war so begeistert, dass er rief: "Hier ist doch endlich einmal etwas, woraus sich was lernen lässt!"',
-        youtube: null
+        type: 'Motette (für zwei Chöre)',
+        text: 'Eine fröhliche Motette - das ist ein Stück nur für Chor, ohne Solo-Instrumente. Bach schreibt sie für zwei Chöre, die sich gegenseitig zurufen und antworten. Wofür Bach sie genau geschrieben hat, weiß man heute nicht mehr.',
+        fun: 'Mozart hörte diese Motette 1789 in Leipzig und war total begeistert. Er rief: "Das ist doch endlich einmal etwas, woraus man was lernen kann!" - und nahm sich die Noten gleich mit nach Hause.',
+        textdichter: 'Psalm 149, 1-3 und Psalm 150, 2/6 (Luther-Bibel); Choral "Nun lob, mein Seel, den Herren" (Johann Gramann, 1530)',
+        anlass: 'Unbekannt - vermutlich Festgottesdienst zu einem Jahrestag (kein Trauerkontext)',
+        besetzung: 'Coro SATB/SATB (achtstimmiger Doppelchor)',
+        dauer: '15 min',
+        quelle: 'Carus 31.225 (Stuttgarter Bach-Ausgaben)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-singet-dem-herrn-ein-neues-lied-3122500.html',
+        hoer: [
+          { label: 'Gesamtaufnahme MacLeod (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=6aaESm5ySWU', quelle: 'Netherlands Bach Society' }
+        ]
       },
       {
         bwv: 140, year: 1731, station: 'leipzig',
         title: 'Wachet auf, ruft uns die Stimme',
-        type: 'Kantate',
-        text: 'Eine festliche Kantate zur Adventszeit - mit einer der schönsten Melodien Bachs.',
-        fun: 'Diese Kantate gehört bis heute zu den beliebtesten Werken Bachs.',
-        youtube: { id: '_B9eGXDKae0', kind: 'full' }
+        type: 'Choralkantate',
+        text: 'Eine festliche Adventskantate. Im Mittelpunkt steht ein altes Kirchenlied von Philipp Nicolai, das von Wächtern erzählt, die in der Nacht "Wacht auf!" rufen. Bach baut die ganze Kantate um die drei Strophen dieses Liedes herum.',
+        fun: 'Bach hat diese Kantate für einen sehr seltenen Sonntag geschrieben - den 27. Sonntag nach Trinitatis. Den gibt es nur in Jahren, in denen Ostern besonders früh ist! In Leipzig hat Bach ihn nur zweimal erlebt.',
+        textdichter: 'Philipp Nicolai (Choralstrophen 1, 4, 7); Dichter der übrigen Sätze (Rezitative, Arien) unbekannt',
+        anlass: '27. Sonntag nach Trinitatis, 25. November 1731 - letzter Sonntag des Kirchenjahres',
+        besetzung: 'Soli STB, Coro SATB, 2 Oboen, Taille (Corno inglese), Horn, Violino piccolo, 2 Violinen, Viola, Basso continuo',
+        dauer: '31 min',
+        quelle: 'Carus 31.140 (Stuttgarter Bach-Ausgaben)',
+        quelle_url: 'https://www.carus-verlag.com/alle-bach-kantaten/johann-sebastian-bach-wachet-auf-ruft-uns-die-stimme-3114000.html',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=_B9eGXDKae0', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=FVePdTt_VQo', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 232, year: 1733, station: 'leipzig',
         title: 'Messe in h-Moll',
-        type: 'Messe',
-        text: 'Bachs größte Kirchenmusik - eine lateinische Messe für riesige Besetzung. Bach arbeitete fast 25 Jahre daran!',
-        fun: 'Bach hat die Messe nie vollständig live gehört. Sie ist sein "musikalisches Vermächtnis" geworden.',
-        youtube: { id: '9Y5Z3vvDi3c', kind: 'excerpt', label: 'Ausschnitt aus der CD-Produktion' }
+        type: 'Lateinische Messe',
+        text: 'Bachs größte und wichtigste Kirchenmusik - eine lateinische Messe für eine riesige Besetzung. Den ersten Teil schickte er 1733 als Bewerbung an den König nach Dresden. Den vollständigen Rest baute er erst kurz vor seinem Tod dazu.',
+        fun: 'Bach hat seine Messe nie ganz live gehört - sie ist sein letztes großes Werk. Die Papierqualität seiner Notenhandschrift war so schlecht, dass das Original heute an vielen Stellen kaum noch lesbar ist!',
+        textdichter: 'Lateinisches Ordinarium Missae (Kyrie, Gloria, Credo, Sanctus, Benedictus, Agnus Dei)',
+        anlass: 'Kyrie/Gloria 1733 als Bewerbung um den Titel "Compositeur" am Dresdner Hof (Friedrich August II.); Vollendung ca. 1748/49 ohne konkreten Aufführungsanlass',
+        besetzung: 'Soli SSATB, Coro SSAATTBB, 2 Flöten, 3 Oboen (2 Oboen d\'amore), 2 Fagotte, Corno da caccia, 3 Trompeten, Pauken, 2 Violinen, Viola, Basso continuo',
+        dauer: '100 min',
+        quelle: 'Carus 31.232 (Hg. Ulrich Leisinger, Stuttgarter Bach-Ausgaben in Kooperation mit dem Bach-Archiv Leipzig)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-messe-in-h-moll-3123201.html',
+        hoer: [
+          { label: 'Gaechinger Cantorey · Rademann (Bachakademie)', url: 'https://www.youtube.com/watch?v=VUc-yZJcEjk', quelle: 'Bachakademie Stuttgart' },
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/playlist?list=PLdDw5fabY6VRA02yo06R82qEWsTsymNnf', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 248, year: 1734, station: 'leipzig',
         title: 'Weihnachtsoratorium',
-        type: 'Oratorium',
-        text: 'Sechs festliche Kantaten für die Weihnachtszeit - eine für jeden Feiertag von Heiligabend bis Dreikönig.',
-        fun: 'Trompeten und Pauken eröffnen das Werk mit "Jauchzet, frohlocket!" - das hörst du auch heute noch jedes Jahr.',
-        youtube: { id: '7dtiCWAkaQA', kind: 'full', label: 'Kantate I „Jauchzet, frohlocket"' }
+        type: 'Oratorium (sechs Kantaten)',
+        text: 'Sechs zusammengehörende Kantaten für die Weihnachtszeit - eine für jeden Feiertag von Heiligabend bis zum Dreikönigstag. Bach erzählt darin die ganze Weihnachtsgeschichte: von der Geburt im Stall bis zum Besuch der drei Weisen aus dem Morgenland.',
+        fun: 'Der berühmte Eröffnungschor "Jauchzet, frohlocket!" war ursprünglich gar nicht für Weihnachten gedacht! Bach hatte ihn ein Jahr vorher als Geburtstagsmusik für die sächsische Königin Maria Josepha geschrieben - und einfach neu mit Worten unterlegt.',
+        textdichter: 'Vermutlich Christian Friedrich Henrici (Picander); Bibelstellen aus Lukas 2 und Matthäus 2; Choralstrophen verschiedener Autoren',
+        anlass: 'Sechs Aufführungen Weihnachten 1734 / Neujahr 1735: 1. + 2. Weihnachtstag, Neujahr, Sonntag nach Neujahr, Epiphanias - in Nikolai- und Thomaskirche Leipzig',
+        besetzung: 'Soli SSATB, Coro SATB, 2 Flöten, 2 Oboen/2 Oboen d\'amore, 2 Oboen da caccia, 3 Trompeten, Pauken, 2 Hörner, 2 Violinen, Viola, Basso continuo',
+        dauer: '150 min',
+        quelle: 'Carus 31.248 (Hg. Klaus Hofmann, basierend auf Bachs autographer Partitur und Originalstimmen)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-weihnachtsoratorium-teile-i-vi-3124850.html',
+        hoer: [
+          { label: 'Teile I–III & VI – Gaechinger Cantorey · Rademann (Bachakademie)', url: 'https://www.youtube.com/watch?v=6uXtbz-xwGU', quelle: 'Bachakademie Stuttgart' },
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=-4Anu6qvhrM', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 11, year: 1735, station: 'leipzig',
         title: 'Himmelfahrts-Oratorium - Lobet Gott in seinen Reichen',
         type: 'Oratorium',
-        text: 'Ein festliches Oratorium für Christi Himmelfahrt. Mit prächtigen Trompeten!',
-        fun: 'Eine Melodie aus diesem Werk hat Bach später in der h-Moll-Messe wiederverwendet.',
-        youtube: { id: 'YoIV8ouBb2E', kind: 'full' }
+        text: 'Ein festliches Oratorium für den Himmelfahrtstag, mit prächtigen Trompeten am Anfang und Schluss. Bach hat es im gleichen Jahr wie das Weihnachtsoratorium geschrieben - das war für ihn ein sehr produktives Jahr!',
+        fun: 'Eine Melodie aus diesem Oratorium hat Bach später noch einmal verwendet: das "Agnus Dei" aus der h-Moll-Messe stammt aus der Arie "Ach, bleibe doch, mein liebstes Leben". So konnte Bach sparen und seine besten Ideen mehrfach nutzen!',
+        textdichter: 'Anonym (vermutlich Picander); Bibeltexte aus Lukas 24 und Apostelgeschichte 1; Choralstrophen Johann Rist und Gottfried Wilhelm Sacer',
+        anlass: 'Himmelfahrtstag, 19. Mai 1735 in Leipzig',
+        besetzung: 'Soli SATB, Coro SATB, 2 Flöten, 2 Oboen, 3 Trompeten, Pauken, 2 Violinen, Viola, Basso continuo',
+        dauer: '30 min',
+        quelle: 'Carus 31.011 (Hg. Ulrich Leisinger, in Kooperation mit dem Bach-Archiv Leipzig)',
+        quelle_url: 'https://www.carus-verlag.com/musiknoten-und-aufnahmen/johann-sebastian-bach-himmelfahrtsoratorium-3101100.html',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=YoIV8ouBb2E', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=qiapOmHhF_8', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: 80, year: 1735, station: 'leipzig',
         title: 'Ein feste Burg ist unser Gott',
-        type: 'Kantate',
-        text: 'Eine Kantate zum Reformationsfest, gebaut auf dem berühmten Choral von Martin Luther.',
-        fun: 'Bachs Sohn fügte später Trompeten und Pauken hinzu - so klingt es noch festlicher!',
-        youtube: { id: 'mEwjYFhOcTs', kind: 'full' }
+        type: 'Reformationskantate',
+        text: 'Eine Kantate zum Reformationsfest, gebaut auf dem berühmten Choral von Martin Luther. Bach hat sie über viele Jahre immer wieder umgearbeitet - aus einer einfachen Weimarer Kantate wurde nach und nach eine prächtige Reformationsmusik.',
+        fun: 'Bachs Sohn Wilhelm Friedemann hat später Trompeten und Pauken hinzugefügt - so klingt der Anfang noch festlicher! Ob er das wirklich selbst gemacht hat, streiten sich die Bach-Forscher allerdings bis heute.',
+        textdichter: 'Martin Luther (Choral, ca. 1529); freie Dichtung von Salomon Franck aus der Weimarer Frühfassung (BWV 80.1)',
+        anlass: 'Reformationsfest, 31. Oktober (vermutlich Endfassung in Leipzig um 1730)',
+        besetzung: 'Soli SATB, Coro SATB, 3 Oboen (auch Oboe da caccia, 2 Oboen d\'amore, Taille), 2 Violinen, Viola, Basso continuo (mit Cembalo und Orgel)',
+        dauer: '23 min',
+        quelle: 'Carus 31.080 (Stuttgarter Bach-Ausgaben); zusätzlich Rekonstruktion der Weimarer Frühfassung BWV 80.1 (Carus 31.401)',
+        quelle_url: 'https://www.carus-verlag.com/alle-bach-kantaten/johann-sebastian-bach-ein-feste-burg-ist-unser-gott-3108000.html',
+        hoer: [
+          { label: 'Gesamtaufnahme (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=mEwjYFhOcTs', quelle: 'J. S. Bach-Stiftung' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=H_B46Z5fRbY', quelle: 'J. S. Bach-Stiftung' }
+        ]
       }
     ];
 
@@ -935,48 +1101,45 @@
           </div>
           <p class="description">${s.text}</p>
           <div class="funfact"><strong>💡 Wusstest du?</strong> ${s.funfact}</div>
+          ${s.quelle_url ? `<a class="quelle-link" href="${s.quelle_url}" target="_blank" rel="noopener noreferrer">📖 Mehr zur Station auf bach.de</a>` : ''}
           ${worksHtml}
-        </div>
-      `;
-    }
-
-    function listenHtml(w) {
-      if (!w.youtube) {
-        return `
-          <div class="listen no-audio">
-            <h3>🎧 Hörbeispiel</h3>
-            <p>Zu diesem Werk gibt es (noch) keine Aufnahme der J. S. Bach-Stiftung. Auf
-              <a href="https://www.youtube.com/@Bachstiftung" target="_blank" rel="noopener">@Bachstiftung</a>
-              wächst das Archiv aber stetig.</p>
-          </div>
-        `;
-      }
-      const y = w.youtube;
-      const noteLine = y.kind === 'excerpt'
-        ? `<div class="excerpt-note">Ausschnitt${y.label ? ': ' + y.label : ''} – das Gesamtwerk ist sehr lang.</div>`
-        : (y.label ? `<div class="excerpt-note">${y.label}</div>` : '');
-      const watchUrl = `https://www.youtube.com/watch?v=${y.id}`;
-      const embedUrl = `https://www.youtube-nocookie.com/embed/${y.id}?rel=0`;
-      return `
-        <div class="listen">
-          <h3>🎧 Hörbeispiel der J. S. Bach-Stiftung</h3>
-          ${noteLine}
-          <div class="video-frame">
-            <iframe
-              src="${embedUrl}"
-              title="BWV ${w.bwv} – ${w.title.replace(/"/g, '&quot;')}"
-              loading="lazy"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowfullscreen
-              referrerpolicy="strict-origin-when-cross-origin"></iframe>
-          </div>
-          <div class="source">Quelle: <a href="${watchUrl}" target="_blank" rel="noopener">@Bachstiftung auf YouTube</a></div>
         </div>
       `;
     }
 
     function renderWork(w, s) {
       const bachAge = w.year - 1685;
+      const hoerHtml = (w.hoer && w.hoer.length > 0)
+        ? `<div class="station-works">
+             <h3>🎧 Hörbeispiele</h3>
+             ${w.hoer.map(h => `
+               <a class="hoer-link" href="${h.url}" target="_blank" rel="noopener noreferrer">
+                 <span class="hoer-icon">▶️</span>
+                 <span>
+                   <span class="hoer-label">${h.label}</span>
+                   <span class="hoer-quelle">Quelle: ${h.quelle} (YouTube)</span>
+                 </span>
+               </a>
+             `).join('')}
+           </div>`
+        : '';
+
+      // Werkdaten-Block: nur Felder anzeigen, die gesetzt sind
+      const dataRows = [
+        ['Textdichter', w.textdichter],
+        ['Liturgischer Anlass', w.anlass],
+        ['Besetzung', w.besetzung]
+      ].filter(([, v]) => v && v.length);
+      const werkdatenHtml = dataRows.length
+        ? `<dl class="werkdaten">
+             ${dataRows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}
+           </dl>`
+        : '';
+      const quelleHtml = w.quelle_url
+        ? `<a class="quelle-link" href="${w.quelle_url}" target="_blank" rel="noopener noreferrer">📖 Werkausgabe: ${w.quelle || 'Carus-Verlag'}</a>`
+        : '';
+      const dauerPill = w.dauer ? `<span class="meta-pill">⏱️ ${w.dauer}</span>` : '';
+
       document.getElementById('info-content').innerHTML = `
         <div class="info-card">
           <span class="badge" style="background:${s.colorHex}">BWV ${w.bwv}</span>
@@ -986,10 +1149,13 @@
             <span class="meta-pill">📅 ${w.year}</span>
             <span class="meta-pill">📍 ${s.name}</span>
             <span class="meta-pill">🎂 Bach: ${bachAge} Jahre</span>
+            ${dauerPill}
           </div>
           <p class="description">${w.text}</p>
+          ${werkdatenHtml}
           <div class="funfact"><strong>💡 Wusstest du?</strong> ${w.fun}</div>
-          ${listenHtml(w)}
+          ${quelleHtml}
+          ${hoerHtml}
           <div class="station-works">
             <h3>🎵 Mehr aus ${s.name}</h3>
             <div class="work-link" onclick="selectStation('${s.id}')">
