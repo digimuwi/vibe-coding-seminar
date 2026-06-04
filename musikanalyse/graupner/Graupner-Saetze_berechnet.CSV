@@ -1,4 +1,4 @@
-Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
+ï»¿Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
 1101/12;1;aria;(B,ob(2),str,bc);F;3(/8);1712;1. Advent;Advent;1710
 1101/12;2;choral;(SATB,ob(2),str,bc);F;C (allabreve);1712;1. Advent;Advent;1710
 1101/12;3;aria;(B,str,bc);d;3/2;1712;1. Advent;Advent;1710
@@ -1175,152 +1175,152 @@ Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
 1110/49;5;rec;(S,bc);;;1749;Sonntag nach Neujahr;Weihnachtszeit;1740
 1110/49;6;aria;(S,chal(2)ab,str,bc);C;C (allegro);1749;Sonntag nach Neujahr;Weihnachtszeit;1740
 1110/49;7;choral;(4);D;C;1749;Sonntag nach Neujahr;Weihnachtszeit;1740
-1111/10;1;aria;(S,str,bc);D;C (affettuoso);1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/10;2;rec;(S,bc);;;1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/10;3;aria;(1);D;C;1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/10;4;rec;(S,bc);;;1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/10;5;aria;(1);D;C;1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/10;6;rec;(S,bc);;;1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/10;7;aria;(S,str,bc);D;12/8;1710;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;1;choral;(B,ob(2),str,bc);G;3;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;2;rec;(B,bc);;;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;3;aria;(B,ob(2),vl unis,bc);e;C;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;4;rec;(B,bc);;;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;5;aria;(B,ob(2),bc);C;3;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;6;rec;(B,bc);;;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/13;7;aria;(B,ob(2),vl(2),bc);C;C;1713;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/16;1;acc;(B,str,bc);;;1716;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/16;2;aria;(A,vl unis,bc);D;3 (largo);1716;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/16;3;arioso;(T,bc);A;C (andante);1716;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/16;4;aria;(S,vl unis,bc);A;3 (largo);1716;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/16;5;arioso;(T,bc);D;C (allegro);1716;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/16;6;aria;+coro (B,SATB,str,bc);D;3 (allegro);1716;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/18;1;coro;(SATB,clar(2),timp(2),str,bc);D;3;1718;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/18;2;aria;(A,fl,ob (am),bc);G;C (allegro/andante);1718;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/18;3;rec;(T,bc);;;1718;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/18;4;aria;(T,str,bc);C;12/8;1718;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/18;5;rec;(B,bc);;;1718;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/18;6;choral;(SATB,clar(2),timp(2),str,bc);D;6/4;1718;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1710
-1111/20;1;coro;(SSTB,str,bc);A;C;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/20;2;aria;(T,vl unis,bc);A;3;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/20;3;rec;(S,bc);;;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/20;4;aria;(S,vl unis,bc);C;3;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/20;5;aria;(B,ob am(?),bc);a;3;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/20;6;rec;(B,bc);;;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/20;7;aria;+coro (S+SSTB,str,bc);A;3;1720;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;1;coro;(SATB,str,bc);Es;C;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;2;aria;(SB,str,bc);B;3/2;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;3;choral;(SATB,str,bc);Es;C;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;4;rec;(T,bc);;;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;5;choral;(3) DC;only B;part;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;6;rec;(B,bc);;;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;7;aria;(B,vl unis,vla,bc);c;3;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;8;rec;(B,bc);;;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/24;9;choral;(3);D;C;1724;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;1;coro;(SATB,ob(2),clar(2),timp(2),str,bc);D;3+C (allegro);1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;2;rec;(T,bc);;;1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;3;coro;(1);D;C;1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;4;rec;(S,bc);;;1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;5;aria;(S,ob(2),fg,str,bc);B;C (vivace/allegro);1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;6;rec;(B,bc);;;1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/26;7;choral;(SATB,ob(2),clar(2),timp(2),str,bc);D;3;1726;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;1;dictum;(A,str,bc);d;C;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;2;aria;(A,fl/ob,vl unis,vla,bc);g;12/8;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;3;choral;(SAT,str,bc);d;C;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;4;aria;(2);D;C;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;5;rec;(T,bc);;;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;6;aria;(T,str,bc);G;2/4;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;7;rec;(A,bc);;;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/28;8;choral;(3);D;C;1728;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;1;coro;(SATB,str,bc);B;C;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;2;rec;(B,bc);;;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;3;aria;(TB,str,bc);F;3;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;4;rec;(S,bc);;;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;5;aria;(A,fl/ob,vl unis,vla,bc);G;9/8;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;6;rec;(T,bc);;;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/29;7;choral;(SATB,str,bc);G;C;1729;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1720
-1111/31;1;coro;(SATB,clar(2),timp(2),str,bc);D;C;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;2;aria;(B,str,bc);G;9/8;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;3;rec;(B,bc);;;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;4;aria;(2);D;C;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;5;rec;(T,bc);;;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;6;aria;(T,vl unis,vla,bc);e;C (allegro);1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;7;rec;(A,bc);;;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/31;8;choral;(SATB,clar(2),timp(2),str,bc);D;3/2;1731;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;1;acc;+rec (T,str,bc);;;1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;2;aria;(B,vla am,vl unis,vla,bc);D;12/8;1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;3;acc;/dictum (T,str,bc);G;C;1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;4;rec;(S,bc);;;1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;5;aria;(S,vla am,vl unis,vla,bc);G;2/4;1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;6;rec;(B,bc);;;1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/34;7;choral;(SATB,vla am,vl unis,vla,bc);D;C (largo);1734;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;1;acc;(T,str,bc);;;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;2;rec;(B,bc);;;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;3;aria;(B,str,bc);D;C;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;4;rec;(S,bc);;;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;5;aria;(S,str,bc);e;C;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;6;rec;(T,bc);;;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/35;7;choral;(SATB,str,bc);G;3;1735;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;1;coro;(ATB,str,bc);C;C (allegro+adagio);1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;2;rec;(S,bc);;;1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;3;aria;(S,str,bc);G;3;1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;4;rec;(B,bc);;;1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;5;aria;(B,fl,str,bc);D;3;1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;6;rec;(T,bc);;;1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/37;7;choral;(SATB,chalb,fg,str,bc);C;C;1737;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;1;coro;(SATB,str,bc);e;C (/+presto);1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;2;rec;(B,bc);;;1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;3;aria;(B,str,bc);G;3;1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;4;rec;(S,bc);;;1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;5;aria;(S,chals,str,bc);d;3;1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;6;rec;(T,bc);;;1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/39;7;choral;(SATB,str,bc);e;C;1739;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1730
-1111/40;1;coro;+rec (B,SATB,str,bc);e;C (allegro);1740;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/40;2;aria;(B,str,bc);C;C (allegro);1740;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/40;3;choral;(SATB,str,bc);e;C;1740;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/40;4;rec;(S,bc);;;1740;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/40;5;aria;(S,ob,str,bc);G;C (allegro);1740;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/40;6;choral;(3);D;C;1740;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;1;coro;(SATB,str,bc);C;C;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;2;rec;(S,bc);;;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;3;aria;(S,str,bc);A;3;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;4;rec;(B,bc);;;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;5;aria;(B,str,bc);G;3;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;6;rec;(T,bc);;;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/41;7;choral;(SATB,chal(3)stb,str,bc);C;C;1741;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/42;1;acc;+rec (T,str,bc);;;1742;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/42;2;aria;(T,str,bc);C;3;1742;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/42;3;rec;(B,bc);;;1742;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/42;4;aria;(B,str,bc);B;C;1742;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/42;5;rec;(B,bc);;;1742;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/42;6;choral;(TB,str,bc);C;2/4;1742;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/43;1;coro;+acc (T,SATB,str,bc);e;3+C;1743;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/43;2;aria;(T,str,bc);G;6/4;1743;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/43;3;rec;(B,bc);;;1743;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/43;4;aria;(B,vl unis,vla,bc);D;C (vivace);1743;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/43;5;rec;(T,bc);;;1743;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/43;6;choral;(SATB,str,bc);e;3;1743;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;1;choral;(SATB,chal(2)tb,fg,timp(4),str,bc);F;C (allegro);1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;2;rec;(B,bc);;;1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;3;aria;(B,fg,vl unis,vla,bc);B;6/8;1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;4;rec;(S,bc);;;1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;5;aria;(S,chal(2)tb,fg,timp(4),str,bc);F;12/8;1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;6;rec;(T,bc);;;1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/44;7;choral;(1);D;C;1744;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;1;coro;+acc (T,SATB,str,bc);B;3 (vivace);1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;2;rec;(S,bc);;;1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;3;aria;(S,vl unis,vla,bc);C;C (vivace);1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;4;rec;(B,bc);;;1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;5;aria;(B,vl unis,vla,bc);G;3 (largo e giusto);1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;6;rec;(T,bc);;;1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/47;7;choral;(SATB,str,bc);B;C (largo);1747;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1740
-1111/50;1;acc;(S,str,bc);;;1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
-1111/50;2;dictum;,arioso (AT,str,bc);d;C;1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
-1111/50;3;aria;(S,fl(2),hn(2),str,bc);F;C;1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
-1111/50;4;rec;(T,bc);;;1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
-1111/50;5;choral;(SATB,fl(2),hn(2),str,bc);d;C;1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
-1111/50;6;aria;(B,fl(2),str,bc);B;6/8 (vivace/allegro);1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
-1111/50;7;choral;(5);D;C;1750;Epiphanias / Heilige drei Könige / Erscheinung Christi;Epiphanias;1750
+1111/10;1;aria;(S,str,bc);D;C (affettuoso);1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/10;2;rec;(S,bc);;;1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/10;3;aria;(1);D;C;1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/10;4;rec;(S,bc);;;1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/10;5;aria;(1);D;C;1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/10;6;rec;(S,bc);;;1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/10;7;aria;(S,str,bc);D;12/8;1710;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;1;choral;(B,ob(2),str,bc);G;3;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;2;rec;(B,bc);;;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;3;aria;(B,ob(2),vl unis,bc);e;C;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;4;rec;(B,bc);;;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;5;aria;(B,ob(2),bc);C;3;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;6;rec;(B,bc);;;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/13;7;aria;(B,ob(2),vl(2),bc);C;C;1713;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/16;1;acc;(B,str,bc);;;1716;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/16;2;aria;(A,vl unis,bc);D;3 (largo);1716;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/16;3;arioso;(T,bc);A;C (andante);1716;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/16;4;aria;(S,vl unis,bc);A;3 (largo);1716;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/16;5;arioso;(T,bc);D;C (allegro);1716;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/16;6;aria;+coro (B,SATB,str,bc);D;3 (allegro);1716;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/18;1;coro;(SATB,clar(2),timp(2),str,bc);D;3;1718;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/18;2;aria;(A,fl,ob (am),bc);G;C (allegro/andante);1718;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/18;3;rec;(T,bc);;;1718;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/18;4;aria;(T,str,bc);C;12/8;1718;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/18;5;rec;(B,bc);;;1718;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/18;6;choral;(SATB,clar(2),timp(2),str,bc);D;6/4;1718;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1710
+1111/20;1;coro;(SSTB,str,bc);A;C;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/20;2;aria;(T,vl unis,bc);A;3;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/20;3;rec;(S,bc);;;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/20;4;aria;(S,vl unis,bc);C;3;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/20;5;aria;(B,ob am(?),bc);a;3;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/20;6;rec;(B,bc);;;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/20;7;aria;+coro (S+SSTB,str,bc);A;3;1720;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;1;coro;(SATB,str,bc);Es;C;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;2;aria;(SB,str,bc);B;3/2;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;3;choral;(SATB,str,bc);Es;C;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;4;rec;(T,bc);;;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;5;choral;(3) DC;only B;part;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;6;rec;(B,bc);;;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;7;aria;(B,vl unis,vla,bc);c;3;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;8;rec;(B,bc);;;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/24;9;choral;(3);D;C;1724;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;1;coro;(SATB,ob(2),clar(2),timp(2),str,bc);D;3+C (allegro);1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;2;rec;(T,bc);;;1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;3;coro;(1);D;C;1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;4;rec;(S,bc);;;1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;5;aria;(S,ob(2),fg,str,bc);B;C (vivace/allegro);1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;6;rec;(B,bc);;;1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/26;7;choral;(SATB,ob(2),clar(2),timp(2),str,bc);D;3;1726;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;1;dictum;(A,str,bc);d;C;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;2;aria;(A,fl/ob,vl unis,vla,bc);g;12/8;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;3;choral;(SAT,str,bc);d;C;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;4;aria;(2);D;C;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;5;rec;(T,bc);;;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;6;aria;(T,str,bc);G;2/4;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;7;rec;(A,bc);;;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/28;8;choral;(3);D;C;1728;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;1;coro;(SATB,str,bc);B;C;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;2;rec;(B,bc);;;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;3;aria;(TB,str,bc);F;3;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;4;rec;(S,bc);;;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;5;aria;(A,fl/ob,vl unis,vla,bc);G;9/8;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;6;rec;(T,bc);;;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/29;7;choral;(SATB,str,bc);G;C;1729;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1720
+1111/31;1;coro;(SATB,clar(2),timp(2),str,bc);D;C;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;2;aria;(B,str,bc);G;9/8;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;3;rec;(B,bc);;;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;4;aria;(2);D;C;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;5;rec;(T,bc);;;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;6;aria;(T,vl unis,vla,bc);e;C (allegro);1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;7;rec;(A,bc);;;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/31;8;choral;(SATB,clar(2),timp(2),str,bc);D;3/2;1731;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;1;acc;+rec (T,str,bc);;;1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;2;aria;(B,vla am,vl unis,vla,bc);D;12/8;1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;3;acc;/dictum (T,str,bc);G;C;1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;4;rec;(S,bc);;;1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;5;aria;(S,vla am,vl unis,vla,bc);G;2/4;1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;6;rec;(B,bc);;;1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/34;7;choral;(SATB,vla am,vl unis,vla,bc);D;C (largo);1734;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;1;acc;(T,str,bc);;;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;2;rec;(B,bc);;;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;3;aria;(B,str,bc);D;C;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;4;rec;(S,bc);;;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;5;aria;(S,str,bc);e;C;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;6;rec;(T,bc);;;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/35;7;choral;(SATB,str,bc);G;3;1735;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;1;coro;(ATB,str,bc);C;C (allegro+adagio);1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;2;rec;(S,bc);;;1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;3;aria;(S,str,bc);G;3;1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;4;rec;(B,bc);;;1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;5;aria;(B,fl,str,bc);D;3;1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;6;rec;(T,bc);;;1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/37;7;choral;(SATB,chalb,fg,str,bc);C;C;1737;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;1;coro;(SATB,str,bc);e;C (/+presto);1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;2;rec;(B,bc);;;1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;3;aria;(B,str,bc);G;3;1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;4;rec;(S,bc);;;1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;5;aria;(S,chals,str,bc);d;3;1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;6;rec;(T,bc);;;1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/39;7;choral;(SATB,str,bc);e;C;1739;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1730
+1111/40;1;coro;+rec (B,SATB,str,bc);e;C (allegro);1740;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/40;2;aria;(B,str,bc);C;C (allegro);1740;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/40;3;choral;(SATB,str,bc);e;C;1740;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/40;4;rec;(S,bc);;;1740;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/40;5;aria;(S,ob,str,bc);G;C (allegro);1740;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/40;6;choral;(3);D;C;1740;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;1;coro;(SATB,str,bc);C;C;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;2;rec;(S,bc);;;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;3;aria;(S,str,bc);A;3;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;4;rec;(B,bc);;;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;5;aria;(B,str,bc);G;3;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;6;rec;(T,bc);;;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/41;7;choral;(SATB,chal(3)stb,str,bc);C;C;1741;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/42;1;acc;+rec (T,str,bc);;;1742;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/42;2;aria;(T,str,bc);C;3;1742;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/42;3;rec;(B,bc);;;1742;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/42;4;aria;(B,str,bc);B;C;1742;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/42;5;rec;(B,bc);;;1742;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/42;6;choral;(TB,str,bc);C;2/4;1742;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/43;1;coro;+acc (T,SATB,str,bc);e;3+C;1743;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/43;2;aria;(T,str,bc);G;6/4;1743;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/43;3;rec;(B,bc);;;1743;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/43;4;aria;(B,vl unis,vla,bc);D;C (vivace);1743;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/43;5;rec;(T,bc);;;1743;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/43;6;choral;(SATB,str,bc);e;3;1743;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;1;choral;(SATB,chal(2)tb,fg,timp(4),str,bc);F;C (allegro);1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;2;rec;(B,bc);;;1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;3;aria;(B,fg,vl unis,vla,bc);B;6/8;1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;4;rec;(S,bc);;;1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;5;aria;(S,chal(2)tb,fg,timp(4),str,bc);F;12/8;1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;6;rec;(T,bc);;;1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/44;7;choral;(1);D;C;1744;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;1;coro;+acc (T,SATB,str,bc);B;3 (vivace);1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;2;rec;(S,bc);;;1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;3;aria;(S,vl unis,vla,bc);C;C (vivace);1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;4;rec;(B,bc);;;1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;5;aria;(B,vl unis,vla,bc);G;3 (largo e giusto);1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;6;rec;(T,bc);;;1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/47;7;choral;(SATB,str,bc);B;C (largo);1747;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1740
+1111/50;1;acc;(S,str,bc);;;1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
+1111/50;2;dictum;,arioso (AT,str,bc);d;C;1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
+1111/50;3;aria;(S,fl(2),hn(2),str,bc);F;C;1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
+1111/50;4;rec;(T,bc);;;1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
+1111/50;5;choral;(SATB,fl(2),hn(2),str,bc);d;C;1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
+1111/50;6;aria;(B,fl(2),str,bc);B;6/8 (vivace/allegro);1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
+1111/50;7;choral;(5);D;C;1750;Epiphanias / Heilige drei KÃ¶nige / Erscheinung Christi;Epiphanias;1750
 1112/14;1;aria;(TB,str,bc);g;C;1714;1. Sonntag nach Epiphanias;Epiphanias;1710
 1112/14;2;aria;(B,ob,str,bc);B;3;1714;1. Sonntag nach Epiphanias;Epiphanias;1710
 1112/14;3;aria;(TB,ob(2),str,bc);g;C;1714;1. Sonntag nach Epiphanias;Epiphanias;1710
@@ -3194,122 +3194,122 @@ Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
 1125/50;6;coro;(SATB,hn(2),str,bc);G;3/8 (un poco allegro+largo);1750;Palmarum/Palmsonntag;Karwoche;1750
 1125/50;7;rec;(T,bc);;;1750;Palmarum/Palmsonntag;Karwoche;1750
 1125/50;8;choral;(4);D;C;1750;Palmarum/Palmsonntag;Karwoche;1750
-1126/16;1;dictum;(A,str,bc);D;C;1716;Gründonnerstag;Karwoche;1710
-1126/16;2;aria;(S,vl unis,vla,bc);D;C;1716;Gründonnerstag;Karwoche;1710
-1126/16;3;acc;(T,str,bc);;;1716;Gründonnerstag;Karwoche;1710
-1126/16;4;aria;(B,vl unis,bc);G;3;1716;Gründonnerstag;Karwoche;1710
-1126/16;5;acc;(T,str,bc);;;1716;Gründonnerstag;Karwoche;1710
-1126/16;6;aria;+coro (T,A,SATB,str,bc);D;3+C;1716;Gründonnerstag;Karwoche;1710
-1126/21;1;coro;(SSB,str,bc);g;C;1721;Gründonnerstag;Karwoche;1720
-1126/21;2;rec;(S,bc);;;1721;Gründonnerstag;Karwoche;1720
-1126/21;3;aria;(S,str,bc);B;12/8;1721;Gründonnerstag;Karwoche;1720
-1126/21;4;acc;(S,str,bc);;;1721;Gründonnerstag;Karwoche;1720
-1126/21;5;choral;(SSB,str,bc);F;C (largo);1721;Gründonnerstag;Karwoche;1720
-1126/21;6;aria;(B,str,bc);d;C;1721;Gründonnerstag;Karwoche;1720
-1126/21;7;rec;(B,bc);;;1721;Gründonnerstag;Karwoche;1720
-1126/21;8;choral;(SSB,str,bc);g;C;1721;Gründonnerstag;Karwoche;1720
-1126/22;1;coro;(SSATB,str,bc);B;3/2;1722;Gründonnerstag;Karwoche;1720
-1126/22;2;aria;(S,str,bc);g;C (vivace e giusto);1722;Gründonnerstag;Karwoche;1720
-1126/22;3;rec;(S,bc);;;1722;Gründonnerstag;Karwoche;1720
-1126/22;4;choral;(SATB,str,bc);F;C;1722;Gründonnerstag;Karwoche;1720
-1126/22;5;aria;(B,str,bc);C;C (vivace);1722;Gründonnerstag;Karwoche;1720
-1126/22;6;rec;(B,bc);;;1722;Gründonnerstag;Karwoche;1720
-1126/22;7;choral;(SATB,str,bc);B;C;1722;Gründonnerstag;Karwoche;1720
-1126/24;1;aria;(B,str,bc);G;3;1724;Gründonnerstag;Karwoche;1720
-1126/24;2;rec;(B,bc);;;1724;Gründonnerstag;Karwoche;1720
-1126/24;3;choral;(SATB,str,bc);g;C;1724;Gründonnerstag;Karwoche;1720
-1126/24;4;rec;(T,bc);;;1724;Gründonnerstag;Karwoche;1720
-1126/24;5;aria;(T,str,bc);C;3;1724;Gründonnerstag;Karwoche;1720
-1126/24;6;acc;(T,str,bc);;;1724;Gründonnerstag;Karwoche;1720
-1126/24;7;choral;(3);D;C;1724;Gründonnerstag;Karwoche;1720
-1126/28;1;acc;(T,str,bc);;;1728;Gründonnerstag;Karwoche;1720
-1126/28;2;rec;(A,bc);;;1728;Gründonnerstag;Karwoche;1720
-1126/28;3;aria;(A,str,bc);G;C;1728;Gründonnerstag;Karwoche;1720
-1126/28;4;rec;(B,bc);;;1728;Gründonnerstag;Karwoche;1720
-1126/28;5;aria;(B,str,bc);a;C;1728;Gründonnerstag;Karwoche;1720
-1126/28;6;rec;(T,bc);;;1728;Gründonnerstag;Karwoche;1720
-1126/28;7;choral;(SATB,str,bc);e;C;1728;Gründonnerstag;Karwoche;1720
-1126/32;1;choral;(SATB,str,bc);e;C (largo);1732;Gründonnerstag;Karwoche;1730
-1126/32;2;rec;(T,bc);;;1732;Gründonnerstag;Karwoche;1730
-1126/32;3;aria;(AT,str,bc);D;C (largo);1732;Gründonnerstag;Karwoche;1730
-1126/32;4;rec;(B,bc);;;1732;Gründonnerstag;Karwoche;1730
-1126/32;5;aria;(B,vl unis,vla,bc);G;C (largo);1732;Gründonnerstag;Karwoche;1730
-1126/32;6;choral;(1);D;C;1732;Gründonnerstag;Karwoche;1730
-1126/33;1;acc;(T,str,bc);;;1733;Gründonnerstag;Karwoche;1730
-1126/33;2;rec;(B,bc);;;1733;Gründonnerstag;Karwoche;1730
-1126/33;3;aria;(B,str,bc);G;C (affettuoso);1733;Gründonnerstag;Karwoche;1730
-1126/33;4;choral;(ATB,str,bc);e;3;1733;Gründonnerstag;Karwoche;1730
-1126/33;5;rec;(A,bc);;;1733;Gründonnerstag;Karwoche;1730
-1126/33;6;aria;(A,vl unis,vla,bc);C;3;1733;Gründonnerstag;Karwoche;1730
-1126/33;7;choral;(4);D;C;1733;Gründonnerstag;Karwoche;1730
-1126/34;1;coro;(SATB,str,bc);C;3/2;1734;Gründonnerstag;Karwoche;1730
-1126/34;2;rec;(B,bc);;;1734;Gründonnerstag;Karwoche;1730
-1126/34;3;choral;(SATB,str,bc);C;12/8;1734;Gründonnerstag;Karwoche;1730
-1126/34;4;rec;(S,bc);;;1734;Gründonnerstag;Karwoche;1730
-1126/34;5;aria;(S,str,bc);B;C (sostentato);1734;Gründonnerstag;Karwoche;1730
-1126/34;6;rec;(B,bc);;;1734;Gründonnerstag;Karwoche;1730
-1126/34;7;choral;(3);D;C;1734;Gründonnerstag;Karwoche;1730
-1126/35;1;dictum;(T,str,bc);g;C;1735;Gründonnerstag;Karwoche;1730
-1126/35;2;rec;(S,bc);;;1735;Gründonnerstag;Karwoche;1730
-1126/35;3;aria;(S,str,bc);B;C;1735;Gründonnerstag;Karwoche;1730
-1126/35;4;rec;(B,bc);;;1735;Gründonnerstag;Karwoche;1730
-1126/35;5;aria;(B,vl unis,vla,bc);c;C;1735;Gründonnerstag;Karwoche;1730
-1126/35;6;rec;(A,bc);;;1735;Gründonnerstag;Karwoche;1730
-1126/35;7;choral;(SATB,str,bc);g;C;1735;Gründonnerstag;Karwoche;1730
-1126/37;1;acc;(A,str,bc);;;1737;Gründonnerstag;Karwoche;1730
-1126/37;2;aria;(AT,str,bc);F;3/2;1737;Gründonnerstag;Karwoche;1730
-1126/37;3;choral;(SATB,str,bc);B;C;1737;Gründonnerstag;Karwoche;1730
-1126/37;4;rec;(B,bc);;;1737;Gründonnerstag;Karwoche;1730
-1126/37;5;aria;(B,str,bc);g;C;1737;Gründonnerstag;Karwoche;1730
-1126/37;6;rec;(T,bc);;;1737;Gründonnerstag;Karwoche;1730
-1126/37;7;choral;(SATB,str,bc);F;C (largo);1737;Gründonnerstag;Karwoche;1730
-1126/39;1;acc;(T,str,bc);;;1739;Gründonnerstag;Karwoche;1730
-1126/39;2;rec;(B,bc);;;1739;Gründonnerstag;Karwoche;1730
-1126/39;3;aria;(B,str,bc);F;3;1739;Gründonnerstag;Karwoche;1730
-1126/39;4;choral;(SATB,ob(2),str,bc);d;C;1739;Gründonnerstag;Karwoche;1730
-1126/39;5;rec;(T,bc);;;1739;Gründonnerstag;Karwoche;1730
-1126/39;6;aria;(AT,chal(3)atb,str,bc);C;12/8;1739;Gründonnerstag;Karwoche;1730
-1126/39;7;rec;(B,bc);;;1739;Gründonnerstag;Karwoche;1730
-1126/39;8;choral;(4);D;C;1739;Gründonnerstag;Karwoche;1730
-1126/40;1;acc;(B,ob(2),str,bc);;;1740;Gründonnerstag;Karwoche;1740
-1126/40;2;aria;(B,ob(2),fg,str,bc);F;3;1740;Gründonnerstag;Karwoche;1740
-1126/40;3;rec;(S,bc);;;1740;Gründonnerstag;Karwoche;1740
-1126/40;4;aria;(S,vl unis,vla,bc);a;C;1740;Gründonnerstag;Karwoche;1740
-1126/40;5;rec;(T,bc);;;1740;Gründonnerstag;Karwoche;1740
-1126/40;6;choral;(SATB,ob(2),fg,str,bc);F;6/8;1740;Gründonnerstag;Karwoche;1740
-1126/41;1;coro;(SATB,ob(3),fg,str,bc);g;C;1741;Gründonnerstag;Karwoche;1740
-1126/41;2;acc;(S,str,bc);;;1741;Gründonnerstag;Karwoche;1740
-1126/41;3;aria;(S,ob(3),fg,str,bc);c;C (largo);1741;Gründonnerstag;Karwoche;1740
-1126/41;4;acc;(B,str,bc);;;1741;Gründonnerstag;Karwoche;1740
-1126/41;5;aria;(B,fl/ob,violetta(2),str,bc);Es;3;1741;Gründonnerstag;Karwoche;1740
-1126/41;6;acc;(T,str,bc);;;1741;Gründonnerstag;Karwoche;1740
-1126/41;7;choral;(SATB,ob(3),fg,str,bc);G;3/2;1741;Gründonnerstag;Karwoche;1740
-1126/42;1;choral;(ATB,str,bc);d;12/8;1742;Gründonnerstag;Karwoche;1740
-1126/42;2;rec;(T,bc);;;1742;Gründonnerstag;Karwoche;1740
-1126/42;3;aria;(T,vl unis,vla,bc);C;C;1742;Gründonnerstag;Karwoche;1740
-1126/42;4;rec;(B,bc);;;1742;Gründonnerstag;Karwoche;1740
-1126/42;5;aria;(B,str,bc);F;3;1742;Gründonnerstag;Karwoche;1740
-1126/42;6;choral;(1);D;C;1742;Gründonnerstag;Karwoche;1740
-1126/43;1;dictum;(T,str,bc);G;3;1743;Gründonnerstag;Karwoche;1740
-1126/43;2;rec;(B,bc);;;1743;Gründonnerstag;Karwoche;1740
-1126/43;3;aria;(B,str,bc);G;3;1743;Gründonnerstag;Karwoche;1740
-1126/43;4;acc;(T,str,bc);;;1743;Gründonnerstag;Karwoche;1740
-1126/43;5;aria;(AT,str,bc);D;C (allegro);1743;Gründonnerstag;Karwoche;1740
-1126/43;6;rec;+acc (B,str,bc);;;1743;Gründonnerstag;Karwoche;1740
-1126/43;7;choral;(SATB,str,bc);G;C (largo);1743;Gründonnerstag;Karwoche;1740
-1126/45;1;acc;(T,str,bc);;;1745;Gründonnerstag;Karwoche;1740
-1126/45;2;aria;(T,vl unis,vla,bc);G;3;1745;Gründonnerstag;Karwoche;1740
-1126/45;3;dictum;,acc (A,str,bc);;;1745;Gründonnerstag;Karwoche;1740
-1126/45;4;rec;(B,bc);;;1745;Gründonnerstag;Karwoche;1740
-1126/45;5;aria;(B,vl unis,vla,bc);F;3 (allegro);1745;Gründonnerstag;Karwoche;1740
-1126/45;6;rec;(T,bc);;;1745;Gründonnerstag;Karwoche;1740
-1126/45;7;choral;(ATB,str,bc);G;3;1745;Gründonnerstag;Karwoche;1740
-1126/47;1;acc;(T,str,bc);;;1747;Gründonnerstag;Karwoche;1740
-1126/47;2;rec;(B,bc);;;1747;Gründonnerstag;Karwoche;1740
-1126/47;3;arioso;(B,str,bc);F;3;1747;Gründonnerstag;Karwoche;1740
-1126/47;4;rec;(T,bc);;;1747;Gründonnerstag;Karwoche;1740
-1126/47;5;aria;(T,vl unis,vla,bc);B;3;1747;Gründonnerstag;Karwoche;1740
-1126/47;6;choral;(ATB,str,bc);d;C;1747;Gründonnerstag;Karwoche;1740
+1126/16;1;dictum;(A,str,bc);D;C;1716;GrÃ¼ndonnerstag;Karwoche;1710
+1126/16;2;aria;(S,vl unis,vla,bc);D;C;1716;GrÃ¼ndonnerstag;Karwoche;1710
+1126/16;3;acc;(T,str,bc);;;1716;GrÃ¼ndonnerstag;Karwoche;1710
+1126/16;4;aria;(B,vl unis,bc);G;3;1716;GrÃ¼ndonnerstag;Karwoche;1710
+1126/16;5;acc;(T,str,bc);;;1716;GrÃ¼ndonnerstag;Karwoche;1710
+1126/16;6;aria;+coro (T,A,SATB,str,bc);D;3+C;1716;GrÃ¼ndonnerstag;Karwoche;1710
+1126/21;1;coro;(SSB,str,bc);g;C;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;2;rec;(S,bc);;;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;3;aria;(S,str,bc);B;12/8;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;4;acc;(S,str,bc);;;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;5;choral;(SSB,str,bc);F;C (largo);1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;6;aria;(B,str,bc);d;C;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;7;rec;(B,bc);;;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/21;8;choral;(SSB,str,bc);g;C;1721;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;1;coro;(SSATB,str,bc);B;3/2;1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;2;aria;(S,str,bc);g;C (vivace e giusto);1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;3;rec;(S,bc);;;1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;4;choral;(SATB,str,bc);F;C;1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;5;aria;(B,str,bc);C;C (vivace);1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;6;rec;(B,bc);;;1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/22;7;choral;(SATB,str,bc);B;C;1722;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;1;aria;(B,str,bc);G;3;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;2;rec;(B,bc);;;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;3;choral;(SATB,str,bc);g;C;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;4;rec;(T,bc);;;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;5;aria;(T,str,bc);C;3;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;6;acc;(T,str,bc);;;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/24;7;choral;(3);D;C;1724;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;1;acc;(T,str,bc);;;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;2;rec;(A,bc);;;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;3;aria;(A,str,bc);G;C;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;4;rec;(B,bc);;;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;5;aria;(B,str,bc);a;C;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;6;rec;(T,bc);;;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/28;7;choral;(SATB,str,bc);e;C;1728;GrÃ¼ndonnerstag;Karwoche;1720
+1126/32;1;choral;(SATB,str,bc);e;C (largo);1732;GrÃ¼ndonnerstag;Karwoche;1730
+1126/32;2;rec;(T,bc);;;1732;GrÃ¼ndonnerstag;Karwoche;1730
+1126/32;3;aria;(AT,str,bc);D;C (largo);1732;GrÃ¼ndonnerstag;Karwoche;1730
+1126/32;4;rec;(B,bc);;;1732;GrÃ¼ndonnerstag;Karwoche;1730
+1126/32;5;aria;(B,vl unis,vla,bc);G;C (largo);1732;GrÃ¼ndonnerstag;Karwoche;1730
+1126/32;6;choral;(1);D;C;1732;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;1;acc;(T,str,bc);;;1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;2;rec;(B,bc);;;1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;3;aria;(B,str,bc);G;C (affettuoso);1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;4;choral;(ATB,str,bc);e;3;1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;5;rec;(A,bc);;;1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;6;aria;(A,vl unis,vla,bc);C;3;1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/33;7;choral;(4);D;C;1733;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;1;coro;(SATB,str,bc);C;3/2;1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;2;rec;(B,bc);;;1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;3;choral;(SATB,str,bc);C;12/8;1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;4;rec;(S,bc);;;1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;5;aria;(S,str,bc);B;C (sostentato);1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;6;rec;(B,bc);;;1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/34;7;choral;(3);D;C;1734;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;1;dictum;(T,str,bc);g;C;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;2;rec;(S,bc);;;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;3;aria;(S,str,bc);B;C;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;4;rec;(B,bc);;;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;5;aria;(B,vl unis,vla,bc);c;C;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;6;rec;(A,bc);;;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/35;7;choral;(SATB,str,bc);g;C;1735;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;1;acc;(A,str,bc);;;1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;2;aria;(AT,str,bc);F;3/2;1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;3;choral;(SATB,str,bc);B;C;1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;4;rec;(B,bc);;;1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;5;aria;(B,str,bc);g;C;1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;6;rec;(T,bc);;;1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/37;7;choral;(SATB,str,bc);F;C (largo);1737;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;1;acc;(T,str,bc);;;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;2;rec;(B,bc);;;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;3;aria;(B,str,bc);F;3;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;4;choral;(SATB,ob(2),str,bc);d;C;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;5;rec;(T,bc);;;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;6;aria;(AT,chal(3)atb,str,bc);C;12/8;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;7;rec;(B,bc);;;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/39;8;choral;(4);D;C;1739;GrÃ¼ndonnerstag;Karwoche;1730
+1126/40;1;acc;(B,ob(2),str,bc);;;1740;GrÃ¼ndonnerstag;Karwoche;1740
+1126/40;2;aria;(B,ob(2),fg,str,bc);F;3;1740;GrÃ¼ndonnerstag;Karwoche;1740
+1126/40;3;rec;(S,bc);;;1740;GrÃ¼ndonnerstag;Karwoche;1740
+1126/40;4;aria;(S,vl unis,vla,bc);a;C;1740;GrÃ¼ndonnerstag;Karwoche;1740
+1126/40;5;rec;(T,bc);;;1740;GrÃ¼ndonnerstag;Karwoche;1740
+1126/40;6;choral;(SATB,ob(2),fg,str,bc);F;6/8;1740;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;1;coro;(SATB,ob(3),fg,str,bc);g;C;1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;2;acc;(S,str,bc);;;1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;3;aria;(S,ob(3),fg,str,bc);c;C (largo);1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;4;acc;(B,str,bc);;;1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;5;aria;(B,fl/ob,violetta(2),str,bc);Es;3;1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;6;acc;(T,str,bc);;;1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/41;7;choral;(SATB,ob(3),fg,str,bc);G;3/2;1741;GrÃ¼ndonnerstag;Karwoche;1740
+1126/42;1;choral;(ATB,str,bc);d;12/8;1742;GrÃ¼ndonnerstag;Karwoche;1740
+1126/42;2;rec;(T,bc);;;1742;GrÃ¼ndonnerstag;Karwoche;1740
+1126/42;3;aria;(T,vl unis,vla,bc);C;C;1742;GrÃ¼ndonnerstag;Karwoche;1740
+1126/42;4;rec;(B,bc);;;1742;GrÃ¼ndonnerstag;Karwoche;1740
+1126/42;5;aria;(B,str,bc);F;3;1742;GrÃ¼ndonnerstag;Karwoche;1740
+1126/42;6;choral;(1);D;C;1742;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;1;dictum;(T,str,bc);G;3;1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;2;rec;(B,bc);;;1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;3;aria;(B,str,bc);G;3;1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;4;acc;(T,str,bc);;;1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;5;aria;(AT,str,bc);D;C (allegro);1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;6;rec;+acc (B,str,bc);;;1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/43;7;choral;(SATB,str,bc);G;C (largo);1743;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;1;acc;(T,str,bc);;;1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;2;aria;(T,vl unis,vla,bc);G;3;1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;3;dictum;,acc (A,str,bc);;;1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;4;rec;(B,bc);;;1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;5;aria;(B,vl unis,vla,bc);F;3 (allegro);1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;6;rec;(T,bc);;;1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/45;7;choral;(ATB,str,bc);G;3;1745;GrÃ¼ndonnerstag;Karwoche;1740
+1126/47;1;acc;(T,str,bc);;;1747;GrÃ¼ndonnerstag;Karwoche;1740
+1126/47;2;rec;(B,bc);;;1747;GrÃ¼ndonnerstag;Karwoche;1740
+1126/47;3;arioso;(B,str,bc);F;3;1747;GrÃ¼ndonnerstag;Karwoche;1740
+1126/47;4;rec;(T,bc);;;1747;GrÃ¼ndonnerstag;Karwoche;1740
+1126/47;5;aria;(T,vl unis,vla,bc);B;3;1747;GrÃ¼ndonnerstag;Karwoche;1740
+1126/47;6;choral;(ATB,str,bc);d;C;1747;GrÃ¼ndonnerstag;Karwoche;1740
 1127/14;1;coro;(STB,str,bc);g;C;1714;Karfreitag;Karwoche;1710
 1127/14;2;aria;(B,vl unis,bc);Es;3/2;1714;Karfreitag;Karwoche;1710
 1127/14;3;choral;(STB,str,bc);c;C;1714;Karfreitag;Karwoche;1710
@@ -7545,7 +7545,7 @@ Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
 1157/21;4;choral;(1);D;C;1721;16. Sonntag nach Trinitatis;Trinitatis;1720
 1157/21;5;acc;(S,str,bc);;;1721;16. Sonntag nach Trinitatis;Trinitatis;1720
 1157/21;6;aria;(S,ob,str,bc);c;3;1721;16. Sonntag nach Trinitatis;Trinitatis;1720
-1157/21;7;choral;(1) DCÂ²;;;1721;16. Sonntag nach Trinitatis;Trinitatis;1720
+1157/21;7;choral;(1) DCÃ‚Â²;;;1721;16. Sonntag nach Trinitatis;Trinitatis;1720
 1157/24;1;choral;(SATB,str,bc);G;C;1724;16. Sonntag nach Trinitatis;Trinitatis;1720
 1157/24;2;rec;+coro (B+SATB,str,bc) (/+allegro);;;1724;16. Sonntag nach Trinitatis;Trinitatis;1720
 1157/24;3;aria;(B,str,bc);e;C (vivace);1724;16. Sonntag nach Trinitatis;Trinitatis;1720
@@ -9259,56 +9259,31 @@ Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
 1172/22;6;coro;(SATB,clar(2),timp(2),str,bc);C;3/8;1722;Lateinische Werke;other;1720
 1172/22;7;aria;+coro (B+T,SATB,str,bc);F;3;1722;Lateinische Werke;other;1720
 1172/22;8;coro;(SATB,clar(2),timp(2),str,bc);C;C (/+allegro);1722;Lateinische Werke;other;1720
-1173/17;1;coro;(SSATB,fg,clar(2),timp(2),str,bc);D;C+3/8;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;2;aria;(AT,str,bc);G;C+3;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;3;aria;(B,fg/violetta(2),bc);G;C;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;4;rec;(S,bc);;;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;5;aria;(S,str,bc);A;C;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;6;coro;(SSATB,clar(2),timp(2),str,bc);D;C;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;7;rec;(B,bc);;;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/17;8;choral;(SATB,clar(2),timp(2),str,bc);D;6/4;1717;"Reformationsfeier 
-(31.10.1730)";other;1710
-1173/30a;1;coro;(SATB,clar(2),timp(2),str,bc);D;C;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;2;rec;(T,bc);;;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;3;aria;(TB,vl unis,vla,bc);G;3;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;4;rec;(A+B,bc);;;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;5;choral;(SATB,clar(2),timp(2),str,bc);D;6/4;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;6;aria;(S,ob am/fl,str,bc);G;12/8;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;7;rec;(S+A+B,bc);;;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30a;8;choral;(5);D;C;1730;"Reformationsfeier (A.C.)
-(25.6.1730)";other;1730
-1173/30b;1;coro;(SATB,clar(2),timp(2),str,bc);D;C+3/4;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;2;rec;(T,bc);;;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;3;aria;+rec (B,fg obl,str,bc);G;3+C;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;4;rec;(A,bc);;;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;5;choral;(SATB,clar(2),timp(2),str,bc);D;3;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;6;rec;(S,bc);;;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;7;aria;(S,fl am,ob am,vl unis,vla,bc);e;3;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;8;rec;(T,bc);;;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
-1173/30b;9;choral;(5);D;C;1730;"Reformationsfeier (Augsburger Konfession)
-(25.6.1730)";other;1730
+1173/17;1;coro;(SSATB,fg,clar(2),timp(2),str,bc);D;C+3/8;1717;Reformationsfeier ;;
+1173/17;2;aria;(AT,str,bc);G;C+3;1717;Reformationsfeier ;;
+1173/17;3;aria;(B,fg/violetta(2),bc);G;C;1717;Reformationsfeier ;;
+1173/17;4;rec;(S,bc);;;1717;Reformationsfeier ;;
+1173/17;5;aria;(S,str,bc);A;C;1717;Reformationsfeier ;;
+1173/17;6;coro;(SSATB,clar(2),timp(2),str,bc);D;C;1717;Reformationsfeier ;;
+1173/17;7;rec;(B,bc);;;1717;Reformationsfeier ;;
+1173/17;8;choral;(SATB,clar(2),timp(2),str,bc);D;6/4;1717;Reformationsfeier ;;
+1173/30a;1;coro;(SATB,clar(2),timp(2),str,bc);D;C;1730;Reformationsfeier (A.C.);;
+1173/30a;2;rec;(T,bc);;;1730;Reformationsfeier (A.C.);;
+1173/30a;3;aria;(TB,vl unis,vla,bc);G;3;1730;Reformationsfeier (A.C.);;
+1173/30a;4;rec;(A+B,bc);;;1730;Reformationsfeier (A.C.);;
+1173/30a;5;choral;(SATB,clar(2),timp(2),str,bc);D;6/4;1730;Reformationsfeier (A.C.);;
+1173/30a;6;aria;(S,ob am/fl,str,bc);G;12/8;1730;Reformationsfeier (A.C.);;
+1173/30a;7;rec;(S+A+B,bc);;;1730;Reformationsfeier (A.C.);;
+1173/30a;8;choral;(5);D;C;1730;Reformationsfeier (A.C.);;
+1173/30b;1;coro;(SATB,clar(2),timp(2),str,bc);D;C+3/4;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;2;rec;(T,bc);;;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;3;aria;+rec (B,fg obl,str,bc);G;3+C;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;4;rec;(A,bc);;;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;5;choral;(SATB,clar(2),timp(2),str,bc);D;3;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;6;rec;(S,bc);;;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;7;aria;(S,fl am,ob am,vl unis,vla,bc);e;3;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;8;rec;(T,bc);;;1730;Reformationsfeier (Augsburger Konfession);;
+1173/30b;9;choral;(5);D;C;1730;Reformationsfeier (Augsburger Konfession);;
 1174/14;1;coro;(SSATB,ob(2),clar(2),timp(2),str,bc);D;C (andante+allegro);1714;Geburtstag;other;1710
 1174/14;2;aria;+coro (S,SSATB,ob(2),str,bc);G;C;1714;Geburtstag;other;1710
 1174/14;3;acc;(B,str,bc);;;1714;Geburtstag;other;1710
@@ -9803,7 +9778,7 @@ Werk;Satznr;Typ;Besetzung;Tonart;Takt;Jahr;Zeit;Saison;Jahrzehnt
 1175/46;5;aria;(S,str,bc);G;C (sostentato);1746;Trauerfeier / Beerdigung;other;1740
 1175/46;6;acc;(T,str,bc);;;1746;Trauerfeier / Beerdigung;other;1740
 1175/46;7;choral;(SATB,str,bc);F;3;1746;Trauerfeier / Beerdigung;other;1740
-1176/25;;;(1.coro deest);;;1725;Gelegenheitswerke;other;1720
+1176/25;1;coro;(1.coro deest);;;1725;Gelegenheitswerke;other;1720
 1176/25;2;rec;(T,bc);;;1725;Gelegenheitswerke;other;1720
 1176/25;3;aria;(T,ob(2),str,bc);G;3/8;1725;Gelegenheitswerke;other;1720
 1176/25;4;rec;(B,bc);;;1725;Gelegenheitswerke;other;1720
