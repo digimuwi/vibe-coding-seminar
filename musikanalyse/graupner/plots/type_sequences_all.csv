@@ -1,0 +1,481 @@
+Typ,count,percent
+coro > rec > aria > rec > aria > rec > choral,203,14.38
+dictum > rec > aria > rec > aria > rec > choral,92,6.52
+choral > rec > aria > rec > aria > rec > choral,61,4.32
+acc > rec > aria > rec > aria > rec > choral,57,4.04
+coro > rec > aria > rec > aria > choral,33,2.34
+acc > aria > rec > aria > rec > choral,31,2.2
+coro > rec > aria > choral > rec > aria > rec > choral,30,2.12
+choral > rec > aria > rec > aria > choral,30,2.12
+aria > rec > aria > rec > aria,26,1.84
+dictum > rec > aria > rec > aria > choral,24,1.7
+coro > aria > rec > aria > rec > choral,21,1.49
+coro > rec > aria > rec > aria > acc > choral,18,1.27
+aria > rec > choral > rec > aria > rec > choral,18,1.27
+coro > rec > choral > rec > aria > rec > choral,17,1.2
+acc > aria > choral > rec > aria > rec > choral,15,1.06
+coro > aria > rec > choral > aria > rec > choral,13,0.92
+acc > rec > aria > rec > aria > choral,13,0.92
+dictum > rec > aria > choral > rec > aria > rec > choral,12,0.85
+aria > rec > aria > rec > aria > rec > aria,9,0.64
+acc > aria > rec > aria > choral,9,0.64
+dictum > rec > aria > rec > aria > acc > choral,8,0.57
+coro > rec > aria > choral > rec > aria > choral,7,0.5
+dictum > rec > aria > choral > rec > aria > choral,7,0.5
+aria > rec > choral > aria > rec > choral,7,0.5
+choral > rec > aria > rec > aria > acc > choral,7,0.5
+coro > rec > aria > choral > rec > aria > rec > coro,6,0.42
+coro > rec > aria > choral > rec > aria > acc > choral,6,0.42
+coro > aria > rec > aria > choral,6,0.42
+acc > rec > aria > rec > aria > acc > choral,6,0.42
+coro > acc > aria > acc > aria > acc > choral,6,0.42
+aria > rec > aria,6,0.42
+coro > rec > aria > rec > choral,5,0.35
+coro > acc > aria > rec > aria > rec > choral,5,0.35
+dictum > aria > rec > aria > rec > choral,5,0.35
+choral > rec > aria > choral > rec > aria > choral,5,0.35
+coro > rec > aria > rec > choral > aria > rec > choral,5,0.35
+coro > rec > aria > rec > aria > rec > aria > choral,5,0.35
+coro > rec > choral > aria > rec > choral,5,0.35
+coro > aria > rec > choral > rec > aria > rec > choral,5,0.35
+acc > rec > aria > choral > rec > aria > choral,5,0.35
+choral > aria > rec > aria > rec > choral,5,0.35
+acc > aria > rec > choral > aria > rec > choral,4,0.28
+aria > rec > aria > rec > choral,4,0.28
+dictum > aria > choral > rec > aria > rec > choral,4,0.28
+coro > rec > aria > choral > aria > rec > choral,4,0.28
+coro > rec > coro > rec > aria > rec > choral,4,0.28
+coro > aria > rec > aria > rec > aria > rec > choral,4,0.28
+aria > aria > aria,4,0.28
+dictum > aria > rec > choral > aria > rec > choral,4,0.28
+acc > aria > choral > rec > aria > acc > choral,4,0.28
+acc > aria > rec > aria > acc > choral,4,0.28
+coro > rec > arioso > rec > aria > rec > choral,4,0.28
+acc > rec > aria > choral > rec > aria > rec > choral,4,0.28
+coro > aria > rec > choral > rec > aria > choral,4,0.28
+coro > rec > aria > rec > aria > rec > aria > rec > coro,4,0.28
+coro > rec > aria > rec > coro > rec > choral,3,0.21
+coro > rec > aria > coro > rec > aria > rec > choral,3,0.21
+choral > rec > aria > rec > choral > aria > rec > choral,3,0.21
+coro > rec > coro > rec > coro > rec > choral,3,0.21
+coro > aria > choral > rec > aria > choral,3,0.21
+acc > coro > aria > rec > aria > rec > choral,3,0.21
+coro > rec > choral > rec > aria > choral,3,0.21
+acc > aria > choral > rec > aria > choral,3,0.21
+acc > aria > rec > aria > rec > aria,3,0.21
+coro > acc > aria > acc > aria > rec > choral,3,0.21
+choral > acc > aria > acc > aria > acc > choral,3,0.21
+coro > aria > coro > aria > coro,3,0.21
+dictum > aria > rec > coro > aria > rec > choral,3,0.21
+acc > aria > rec > choral > rec > aria > rec > choral,3,0.21
+aria > rec > aria > rec > aria > rec > choral,3,0.21
+coro > rec > aria > rec > aria > rec > aria > rec > choral,3,0.21
+coro > rec > dictum > rec > aria > rec > choral,3,0.21
+choral > rec > aria > rec > aria > rec > coro,3,0.21
+,2,0.14
+choral > aria > choral,2,0.14
+choral > rec > aria > choral > aria > rec > choral,2,0.14
+coro > rec > choral > rec > aria > acc > choral,2,0.14
+coro > rec > coro > aria > rec > aria > rec > choral,2,0.14
+acc > rec > aria > rec > choral > aria > rec > choral,2,0.14
+coro > rec > coro > choral > rec > coro > rec > choral,2,0.14
+choral > rec > aria > coro > rec > aria > rec > choral,2,0.14
+choral > rec > aria > rec > aria > rec > aria,2,0.14
+acc > aria > acc > rec > aria > rec > choral,2,0.14
+aria > rec > aria > choral > rec > aria > rec > choral,2,0.14
+coro > acc > aria > rec > aria > acc > choral,2,0.14
+choral > rec > aria > rec > aria,2,0.14
+dictum > aria > rec > aria > rec > aria > rec > choral,2,0.14
+coro > aria > rec > coro > rec > aria > rec > choral,2,0.14
+coro > rec > aria > rec > aria > coro > rec > choral,2,0.14
+dictum > acc > aria > rec > aria > acc > choral,2,0.14
+coro > aria > rec > aria > acc > choral,2,0.14
+coro > aria > coro > aria > choral,2,0.14
+dictum > aria > acc > aria > rec > choral,2,0.14
+aria > acc > aria > acc > aria,2,0.14
+coro > aria > rec > aria > rec > aria > choral,2,0.14
+coro > aria > choral > acc > aria > rec > choral,2,0.14
+dictum > acc > aria > rec > aria > rec > choral,2,0.14
+acc > aria > dictum > rec > aria > rec > choral,2,0.14
+coro > rec > aria > choral > aria > rec > coro,2,0.14
+acc > rec > aria > rec > aria > rec > aria > choral,2,0.14
+acc > aria > rec > aria > rec > aria > choral,2,0.14
+choral > rec > aria > choral > rec > aria > rec > choral,2,0.14
+choral > aria > rec > choral > rec > aria > rec > choral,2,0.14
+coro > rec > aria > rec > coro > aria > rec > choral,2,0.14
+coro > rec > aria > rec > aria > rec > coro > choral,2,0.14
+choral > rec > aria > rec > acc > aria > rec > choral,2,0.14
+aria > rec > choral > rec > aria > rec > aria,2,0.14
+coro > aria > choral > rec > aria > rec > choral,2,0.14
+acc > aria > rec > choral > aria > acc > choral,2,0.14
+acc > aria > rec > aria > rec > aria > rec > choral,2,0.14
+coro > acc > aria > rec > aria > choral,2,0.14
+dictum > aria > rec > choral > rec > aria > rec > choral,2,0.14
+coro > rec > aria > rec > choral > rec > aria > rec > choral,2,0.14
+coro > rec > aria > rec > aria > rec > coro > rec > choral,2,0.14
+aria > choral > aria > coro > aria > arioso > coro,1,0.07
+coro > arioso > rec > choral > rec > aria,1,0.07
+coro > aria > rec > aria > rec > aria,1,0.07
+dictum > aria > acc > choral > arioso > rec > arioso > choral,1,0.07
+coro > acc > aria > choral > rec > aria > choral,1,0.07
+sonata > arioso > aria > arioso > aria > arioso > aria > choral,1,0.07
+arioso > rec > arioso > rec > arioso > rec > choral > rec > aria,1,0.07
+coro > aria > acc > aria > rec > aria > choral,1,0.07
+coro > rec > aria > rec > aria > rec,1,0.07
+acc > acc > aria > rec > aria > rec > choral,1,0.07
+acc > rec > aria > acc > rec > aria > rec > choral,1,0.07
+acc > aria > acc > rec > aria > acc > choral,1,0.07
+choral > rec > aria > rec > coro > rec > choral,1,0.07
+dictum > rec > arioso > coro > arioso > rec > aria > rec > choral,1,0.07
+dictum > coro > rec > coro > rec > coro > rec > choral,1,0.07
+dictum > rec > choral > rec > aria > choral,1,0.07
+dictum > aria > coro > aria > coro > aria,1,0.07
+aria > coro > aria > acc > aria,1,0.07
+coro > aria > choral > arioso > ritornello > acc > coro,1,0.07
+coro > rec > aria > choral > rec > choral > aria > rec > coro,1,0.07
+coro > acc > aria > choral > rec > aria > rec > coro,1,0.07
+coro > rec > choral > aria > rec > coro,1,0.07
+dictum > rec > coro > rec > aria > rec > choral,1,0.07
+coro > rec > aria > coro > rec > aria > choral,1,0.07
+coro > rec > acc > rec > aria > rec > aria > rec > coro,1,0.07
+arioso > arioso > aria > rec > aria > rec > choral,1,0.07
+choral > rec > aria > arioso > rec > aria,1,0.07
+coro > rec > choral > aria > rec > aria > rec > choral,1,0.07
+coro > aria > acc > aria > rec > choral,1,0.07
+coro > rec > acc > rec > aria > rec > choral,1,0.07
+choral > choral,1,0.07
+acc > coro > acc > aria > acc > coro,1,0.07
+choral > rec > aria > aria > aria > rec > acc > coro,1,0.07
+coro > aria > rec > choral > rec > coro > rec > coro,1,0.07
+coro > aria > rec > choral > rec > aria > rec > coro,1,0.07
+coro > rec > aria > rec > coro > choral,1,0.07
+choral > aria > rec > aria > choral > rec > coro,1,0.07
+choral > rec > aria > rec > coro > acc > choral,1,0.07
+coro > acc > coro > acc > coro > acc > choral,1,0.07
+coro > acc > aria > rec > coro > acc > choral,1,0.07
+choral > rec > aria > rec > aria > coro > acc > choral,1,0.07
+coro > rec > aria > choral > acc > coro > coro,1,0.07
+acc > aria > rec > aria > aria > rec > choral,1,0.07
+acc > aria > arioso > aria > arioso > aria,1,0.07
+coro > aria > rec > aria > aria > rec > aria,1,0.07
+coro > aria > choral > rec > choral > rec > aria > rec > choral,1,0.07
+dictum > aria > choral > aria > rec > aria > rec > choral,1,0.07
+acc > dictum > aria > rec > choral > aria > choral,1,0.07
+choral > arioso > aria > rec > aria > choral,1,0.07
+aria > choral > acc > choral > aria > rec > choral,1,0.07
+coro > aria > coro > aria > coro > aria > coro,1,0.07
+acc > aria > aria,1,0.07
+choral > rec > aria > rec > choral,1,0.07
+coro > acc > coro > coro,1,0.07
+choral > rec > aria > rec > coro > rec > aria > choral,1,0.07
+choral > rec > aria > choral > aria > choral,1,0.07
+coro > aria > choral > rec > arioso > aria > acc > choral,1,0.07
+choral > aria > acc > aria > rec > aria > rec > aria > choral,1,0.07
+acc > choral > aria > rec > aria > acc > choral,1,0.07
+coro > rec > coro > acc > aria > rec > choral,1,0.07
+coro > aria > rec > arioso > aria > rec > choral,1,0.07
+coro > arioso > rec > aria > rec > acc > choral,1,0.07
+coro > aria > coro > aria > acc > choral,1,0.07
+coro > aria > rec > acc > arioso > rec > aria > choral,1,0.07
+arioso > arioso > rec > arioso > arioso > rec > aria,1,0.07
+acc > aria > rec > acc > aria > rec > choral,1,0.07
+arioso > rec > aria > rec > aria > acc > choral,1,0.07
+coro > aria > acc > arioso > coro > rit > choral,1,0.07
+aria > rec > aria > rec > arioso,1,0.07
+aria > arioso > arioso > rec > arioso,1,0.07
+coro > arioso > rec > choral > aria > rec > aria > acc,1,0.07
+choral > rec > coro > choral > rec > aria > choral,1,0.07
+coro > aria > rec > coro > aria > rec > choral,1,0.07
+acc > aria > arioso > coro > acc > coro,1,0.07
+aria > aria > aria > aria,1,0.07
+dictum > aria > rec > choral > acc > choral > rec > aria > coro,1,0.07
+acc > rec > choral > rec > aria > rec > aria > choral,1,0.07
+coro > acc > aria > rec > acc > aria > rec > choral,1,0.07
+coro > ritornello > choral > rec > aria > rec > choral,1,0.07
+coro > rec > coro > rec > aria > coro > choral,1,0.07
+coro > rec > aria > rec > dictum > aria > rec > choral,1,0.07
+aria > rec > aria > rec > arioso > aria > rec > choral,1,0.07
+acc > coro > choral > rec > aria > rec > choral,1,0.07
+coro > acc > choral > aria > rec > choral,1,0.07
+coro > aria > acc > aria > rec > aria > coro,1,0.07
+choral > aria > rec > arioso > rec > aria > choral,1,0.07
+aria > rec > aria > rec > arioso > aria,1,0.07
+acc > rec > acc > aria > rec > choral > aria > rec > choral,1,0.07
+acc > arioso > rec > coro > aria > arioso > acc > choral > aria > acc > choral,1,0.07
+acc > arioso > aria > rec > aria > acc > choral,1,0.07
+aria > acc > aria > coro,1,0.07
+aria > rec > aria > rec > aria > rec > aria > rec > arioso,1,0.07
+coro > coro,1,0.07
+coro > rec > aria > rec > aria > rec > coro,1,0.07
+acc > aria > rec > choral > rec > aria > coro,1,0.07
+acc > aria > rec > aria > choral > aria > rec > choral,1,0.07
+arioso > aria > rec > aria > rec > choral > aria > choral,1,0.07
+coro > rec > coro > acc > choral > rec > aria > rec > choral,1,0.07
+aria > rec > choral > rec > aria > rec > coro,1,0.07
+coro > arioso > rec > coro > aria > rec > acc > coro,1,0.07
+coro > aria > rec > choral > rec > choral > rec > aria > coro,1,0.07
+aria > rec > arioso > rec > arioso > rec > arioso > arioso > rec > aria,1,0.07
+dictum > aria > rec > choral > rec > aria > choral,1,0.07
+dictum > rec > aria > rec > acc > aria > rec > choral,1,0.07
+aria > arioso > aria > acc > choral,1,0.07
+dictum > arioso > rec > arioso > rec > arioso > rec > arioso > rec > aria,1,0.07
+coro > acc > choral > aria > aria > acc > choral,1,0.07
+coro > rec > aria > rec > choral > rec > aria > choral,1,0.07
+dictum > acc > aria > acc > aria > acc > choral,1,0.07
+coro > rec > choral > aria > rec > aria,1,0.07
+dictum > rec > aria > aria > rec > choral,1,0.07
+coro > choral > coro,1,0.07
+coro > aria > acc > acc > acc > aria > rec > coro,1,0.07
+coro > acc > aria > acc > choral > rec > choral > rec > aria > coro,1,0.07
+coro > coro > rec > choral > rec > aria > choral,1,0.07
+coro > rec > aria > choral > acc > aria > choral,1,0.07
+coro > rec > aria > choral > aria > acc > choral,1,0.07
+coro > acc > aria > dictum > acc > aria > rec > choral,1,0.07
+coro > rec > coro > aria > acc > aria > acc > choral,1,0.07
+coro > acc > aria > choral > aria > acc > choral,1,0.07
+coro > rec > aria > choral > rec > coro > rec > choral,1,0.07
+dictum > aria > acc > aria > acc > aria,1,0.07
+coro > rec > aria > acc > choral > aria > rec > choral,1,0.07
+aria > rec > choral > rec > aria > acc > choral,1,0.07
+dictum > rec > aria > acc > aria > rec > choral,1,0.07
+acc > rec > arioso > rec > aria > choral,1,0.07
+coro > aria > choral > coro,1,0.07
+coro > aria > rec > arioso > rec > aria > choral,1,0.07
+choral > acc > aria > acc > choral > rec > aria > rec > choral,1,0.07
+coro > acc > coro > rec > arioso > aria > rec > coro,1,0.07
+coro > acc > choral > acc > aria > acc > choral,1,0.07
+coro > choral > rec > choral > aria > rec > aria > rec > choral,1,0.07
+choral > acc > aria > acc > coro > aria > acc > choral,1,0.07
+coro > acc > choral > aria > acc > choral,1,0.07
+coro > rec > choral > aria > acc > choral,1,0.07
+coro > aria > acc > aria > coro,1,0.07
+choral > rec > aria > coro > rec > aria > choral,1,0.07
+coro > coro > acc > coro > rec > aria > rec > aria > choral,1,0.07
+coro > aria > rec > acc > choral > aria > rec > aria > coro,1,0.07
+coro > aria > rec > aria > rec > acc > choral,1,0.07
+coro > rec > coro > aria > choral > rec > acc > aria > rec > choral,1,0.07
+coro > acc > aria > choral > rec > aria > rec > choral,1,0.07
+coro > coro > rec > coro > rec > aria > choral,1,0.07
+acc > coro > rec > choral > aria > rec > choral,1,0.07
+coro > rec > aria > acc > choral > rec > choral > rec > aria > coro,1,0.07
+aria > aria > arioso > aria > rec > aria,1,0.07
+choral > aria > coro > aria > acc > choral,1,0.07
+coro > acc > aria > aria > coro,1,0.07
+aria > rec > arioso > acc > rec > aria,1,0.07
+aria > rec > aria > choral,1,0.07
+aria > rec > choral > rec > coro > rec > coro,1,0.07
+choral > aria > coro > aria > rec > choral,1,0.07
+dictum > aria > rec > acc > aria > rec > choral,1,0.07
+acc > aria > acc > choral > rec > aria > coro,1,0.07
+coro > rec > aria > dictum > rec > aria > choral,1,0.07
+aria > aria > aria > acc > choral,1,0.07
+coro > rec > choral > aria > rec > aria > choral,1,0.07
+choral > rec > arioso > aria > rec > aria > rec > choral,1,0.07
+acc > aria > acc > choral > rec > aria > choral,1,0.07
+coro > coro > rec > coro > rec > coro > rec > choral,1,0.07
+choral > acc > choral > rec > choral > rec > ritornello > acc > choral > rec > coro,1,0.07
+coro > aria > rec > acc > aria > rec > choral,1,0.07
+aria > rec > aria > rec > coro,1,0.07
+aria > rec > arioso > arioso > aria > rec > choral,1,0.07
+coro > aria > rec > aria > acc > aria > rec > choral,1,0.07
+arioso > aria > rec > aria > rec > choral,1,0.07
+arioso > rec > aria > rec > aria,1,0.07
+dictum > rec > aria > rec > choral > aria > rec > choral,1,0.07
+dictum > rec > dictum > aria > rec > aria > rec > choral,1,0.07
+coro > rec > aria > aria > rec > aria > choral,1,0.07
+arioso > aria > rec > arioso > aria > aria,1,0.07
+coro > rec > aria > rec > aria > rec > choral > coro,1,0.07
+coro > rec > aria > rec > dictum > aria > choral,1,0.07
+aria > acc > aria > rec > choral,1,0.07
+choral > rec > acc > rec > coro > aria > rec > choral,1,0.07
+aria > rec > aria > arioso > rec > aria,1,0.07
+coro > rec > aria > choral > aria > rec > aria > rec > choral,1,0.07
+aria > rec > choral > aria > choral,1,0.07
+acc > rec > acc > aria > rec > aria > choral,1,0.07
+aria > acc > aria > acc > aria > rec > aria,1,0.07
+aria > arioso > acc > aria > acc > coro,1,0.07
+dictum > aria > rec > aria > rec > coro,1,0.07
+coro > rec > aria > rec > choral > rec > aria > coro,1,0.07
+dictum > rec > aria > rec > choral > aria > rec > coro,1,0.07
+coro > aria > arioso > aria > coro,1,0.07
+coro > acc > aria > rec > aria > acc > aria > rec > choral,1,0.07
+dictum > choral > rec > aria > rec > aria > choral,1,0.07
+aria > rec > choral > rec > aria > choral,1,0.07
+acc > rec > aria > choral > rec > coro > choral,1,0.07
+coro > rec > aria > rec > choral > rec > aria > rec > coro,1,0.07
+aria > rec > aria > rec > aria > rec > aria > acc > aria,1,0.07
+dictum > rec > aria > acc > aria > rec > aria > choral,1,0.07
+acc > aria > rec > acc > rec > aria > rec > choral,1,0.07
+acc > rec > aria > rec > arioso > aria > rec > choral,1,0.07
+choral > acc > aria > rec > aria > rec > aria,1,0.07
+aria > rec > aria > rec > aria > arioso > aria > rec > aria,1,0.07
+coro > aria > rec > aria > choral > aria > rec > choral,1,0.07
+dictum > aria > rec > aria > rec > aria > acc > choral,1,0.07
+coro > rec > aria > acc > choral > rec > aria > choral,1,0.07
+acc > aria > rec > coro > aria > rec > choral,1,0.07
+aria > rec > arioso > rec > aria,1,0.07
+choral > aria > acc > aria > aria,1,0.07
+arioso > aria > arioso > aria > arioso > choral > aria,1,0.07
+coro > rec > aria > rec > aria > choral > rec > aria > coro,1,0.07
+choral > acc > arioso > rec > arioso > rec > aria,1,0.07
+aria > aria > acc > aria,1,0.07
+acc > choral > aria > rec > aria > rec > choral,1,0.07
+aria > rec > dictum > rec > aria > rec > choral,1,0.07
+dictum > rec > aria > rec > aria > rec > coro,1,0.07
+aria > rec > aria > acc > choral,1,0.07
+coro > rec > coro > choral > aria > rec > coro > choral,1,0.07
+coro > rec > aria > coro > rec > choral,1,0.07
+acc > rec > aria > rec > choral > rec > aria > rec > coro,1,0.07
+aria > rec > acc > aria > rec > aria,1,0.07
+dictum > rec > aria > rec > aria > arioso > choral,1,0.07
+aria > choral > rec > aria > rec > aria > choral,1,0.07
+arioso > aria > rec > aria > choral > rec > aria,1,0.07
+aria > arioso > aria > acc > coro,1,0.07
+acc > aria > acc > coro > aria > rec > choral,1,0.07
+coro > aria > rec > choral > aria > acc > choral,1,0.07
+rec > aria > rec > aria > rec > choral,1,0.07
+acc > rec > aria > rec > choral > rec > aria > rec > acc,1,0.07
+aria > rec > aria > rec > coro > rec > coro,1,0.07
+coro > rec > aria > rec > coro > coro > choral,1,0.07
+choral > rec > aria > rec > aria > rec > rec > choral,1,0.07
+acc > rec > aria > rec > arioso > rec > aria > choral,1,0.07
+acc > choral > aria > rec > aria > coro > aria > choral,1,0.07
+acc > aria > rec > choral > rec > aria,1,0.07
+acc > rec > aria > choral > aria > rec > aria > rec > choral,1,0.07
+coro > rec > choral > rec > aria > rec > coro,1,0.07
+dictum > rec > aria > choral > rec > aria > acc > choral,1,0.07
+choral > aria > aria > aria > aria > choral,1,0.07
+coro > acc > aria > rec > aria > coro,1,0.07
+acc > aria > acc > aria > rec > aria > acc > choral,1,0.07
+coro > aria > acc > aria > rec > aria > acc > choral,1,0.07
+coro > rec > aria > rec > aria > rec > dictum > choral,1,0.07
+coro > rec > aria > dictum > rec > choral,1,0.07
+coro > acc > aria > rec > choral,1,0.07
+aria > rec > aria > rec > aria > choral,1,0.07
+aria > coro > aria > choral,1,0.07
+acc > aria > rec > aria > rec > aria > rec > choral > rec > aria,1,0.07
+coro > rec > aria > rec > aria > aria > rec > choral,1,0.07
+choral > rec > aria > choral > rec > aria > coro,1,0.07
+sonata > aria > choral > rec > choral > aria > rec > choral > aria > choral,1,0.07
+aria > acc > aria > rec > aria > rec > aria > acc > aria,1,0.07
+choral > rec > coro > rec > aria > rec > choral,1,0.07
+coro > acc > aria > acc > coro,1,0.07
+coro > rec > coro > coro > choral > rec > coro > acc > coro,1,0.07
+coro > rec > aria > acc > aria > acc > choral,1,0.07
+choral > rec > coro > rec > aria > choral,1,0.07
+sonata > coro > aria > coro > rec > coro > aria > aria > coro,1,0.07
+aria > acc > aria > rec > aria > rec > aria > choral,1,0.07
+rec > aria > rec > aria > rec > aria,1,0.07
+aria > aria > arioso > aria > aria,1,0.07
+aria > rec > aria > rec > aria > acc > rec > aria,1,0.07
+coro > aria > rec > coro > aria > rec > aria > rec > choral,1,0.07
+arioso > coro > rec > aria > rec > arioso > aria > choral,1,0.07
+aria > acc > aria > rec > aria > choral > rec > arioso > acc > aria > arioso > aria > rec > arioso > rec > aria,1,0.07
+sonata > rec > choral > acc > aria > rec > aria > rec > aria,1,0.07
+coro > aria > rec > aria,1,0.07
+dictum > aria > rec > choral > rec > aria,1,0.07
+coro > rec > arioso > aria > choral > rec > aria > rec > coro,1,0.07
+dictum > rec > aria > rec > choral > aria > acc > choral,1,0.07
+coro > aria > aria > coro > acc > choral,1,0.07
+dictum > acc > aria > rec > choral > rec > choral,1,0.07
+coro > rec > aria > rec > coro,1,0.07
+choral > aria > acc > choral > acc > aria > choral,1,0.07
+choral > aria > rec > aria > acc > choral,1,0.07
+choral > acc > coro > rec > coro > rec > choral,1,0.07
+coro > aria > coro > aria > acc > aria,1,0.07
+coro > rec > coro > acc > rec > aria > rec > choral,1,0.07
+dictum > aria > rec > aria > aria,1,0.07
+coro,1,0.07
+aria > rec > acc > rec > aria > rec > choral,1,0.07
+acc > arioso > rec > aria > rec > aria,1,0.07
+aria > acc > aria > aria,1,0.07
+coro > acc > aria > acc > choral > aria > rec > choral,1,0.07
+acc > aria > aria > choral > aria > rec > aria > rec > choral,1,0.07
+aria > aria > acc > aria > choral,1,0.07
+aria > choral > aria > coro,1,0.07
+dictum > choral > aria > acc > aria > acc > choral,1,0.07
+coro > acc > coro > rec > aria > rec > choral,1,0.07
+acc > aria > choral > rec > aria > rec > coro,1,0.07
+acc > aria > coro > rec > aria > rec > choral,1,0.07
+sonata > arioso > rec > aria > rec > aria,1,0.07
+coro > rec > aria > rec > aria > rec > arioso > coro,1,0.07
+choral > rec > aria > arioso > rec > aria > rec > choral,1,0.07
+coro > rec > choral > coro > rec > choral,1,0.07
+choral > acc > aria > choral > aria > choral,1,0.07
+dictum > rec > aria > choral > aria > rec > aria > rec > choral,1,0.07
+choral > aria > aria > choral,1,0.07
+coro > aria > coro > aria > coro > coro,1,0.07
+choral > rec > choral > aria > rec > aria > arioso > choral,1,0.07
+acc > aria > rec > arioso > aria > acc > choral,1,0.07
+acc > rec > choral > aria > rec > aria > rec > choral,1,0.07
+choral > acc > aria > rec > aria > rec > arioso > choral,1,0.07
+coro > acc > choral > aria > rec > aria > rec > choral,1,0.07
+coro > choral > rec > aria > rec > coro,1,0.07
+aria > rec > choral > rec > aria,1,0.07
+dictum > aria > choral > rec > aria > acc > choral,1,0.07
+dictum > rec > aria > rec > coro > rec > choral,1,0.07
+coro > aria > aria > aria > choral,1,0.07
+coro > aria > acc > aria > acc > choral > coro,1,0.07
+choral > coro > aria > rec > aria > rec > choral,1,0.07
+coro > aria > rec > coro > acc > coro > rec > choral,1,0.07
+coro > rec > coro > rec > aria > choral,1,0.07
+coro > acc > coro > rec > choral > rec > aria > rec > choral,1,0.07
+coro > coro > rec > choral > aria > rec > choral,1,0.07
+acc > aria > acc > aria > coro,1,0.07
+aria > rec > acc > rec > aria > rec > aria > rec > aria,1,0.07
+acc > aria > acc > aria > acc > choral,1,0.07
+dictum > rec > aria > rec > aria > rec > aria > rec > aria > rec > coro > rec > aria > rec > coro,1,0.07
+acc > coro > rec > aria > rec > coro,1,0.07
+coro > rec > dictum > rec > aria > rec > dictum > rec > choral > aria > rec > choral,1,0.07
+acc > aria > acc > rec > aria > rec > coro > rec > aria > choral,1,0.07
+coro > arioso > choral > aria > choral > aria > arioso > coro,1,0.07
+choral > rec > aria > rec > aria > rec > aria > choral,1,0.07
+coro > rec > aria > acc > aria > rec > choral,1,0.07
+coro > rec > aria > arioso > aria > rec > coro,1,0.07
+coro > rec > coro > rec > aria > rec > choral > rec > coro,1,0.07
+dictum > rec > aria > rec > aria > rec > aria > choral,1,0.07
+coro > rec > aria > rec > choral > aria > choral,1,0.07
+coro > rec > aria > choral > aria > acc > coro,1,0.07
+coro > aria > coro > aria > aria > coro > aria > coro,1,0.07
+coro > aria > aria > rec > aria > coro > rec > choral,1,0.07
+coro > aria > acc > coro > rec > aria > coro > arioso > coro > aria > choral,1,0.07
+coro > acc > aria > acc > coro > acc > coro > acc > aria > acc > coro > acc > coro > rec > coro,1,0.07
+coro > rec > aria > rec > aria > rec > aria > rec > acc,1,0.07
+coro > rec > aria > rec > aria > coro,1,0.07
+coro > aria > rec > aria > rec > aria > rec > coro,1,0.07
+coro > rec > aria > rec > coro > rec > arioso > rec > coro > rec > aria > rec > coro,1,0.07
+coro > aria > rec > aria > rec > arioso > rec > aria > rec > aria > rec > coro,1,0.07
+coro > rec > coro > rec > aria > rec > aria > rec > coro,1,0.07
+coro > rec > coro > aria > rec > aria > rec > aria > rec > coro,1,0.07
+coro > rec > aria > rec > aria > rec > coro > aria > rec > aria > rec > coro,1,0.07
+coro > rec > aria > coro > rec > aria > rec > aria > rec > coro,1,0.07
+coro > rec > coro > aria > rec > aria > rec > coro > aria > rec > coro,1,0.07
+coro > rec > coro > rec > aria > coro > rec > aria > rec > aria > rec > choral > coro,1,0.07
+coro > rec > coro > aria > coro > rec > aria > acc > aria > rec > choral,1,0.07
+coro > acc > aria > acc > aria > acc > aria > rec > coro,1,0.07
+coro > acc > aria > acc > coro > aria > acc > aria > rec > coro,1,0.07
+dictum > acc > aria > rec > coro > aria > acc > aria > coro > coro,1,0.07
+coro > acc > aria > rec > aria > rec > aria > acc > coro,1,0.07
+coro > rec > aria > rec > coro > rec > aria > rec > aria > rec > coro,1,0.07
+coro > rec > aria > rec > aria > coro > rec > coro > rec > choral,1,0.07
+coro > acc > aria > rec > coro > aria > acc > aria > acc > coro,1,0.07
+coro > acc > coro > rec > aria > rec > aria > rec > coro > rec > choral,1,0.07
+coro > rec > aria > rec > coro > aria > acc > coro > acc > choral,1,0.07
+coro > rec > aria > acc > aria > rec > coro > rec > choral,1,0.07
+coro > rec > aria > rec > aria > rec > coro > acc > choral,1,0.07
+coro > rec > coro > acc > aria > acc > choral,1,0.07
+coro > rec > aria > rec > aria > acc > rec > choral,1,0.07
+coro > rec > coro > rec > aria > rec > aria > rec > aria > coro > choral,1,0.07
+coro > acc > choral > rec > aria > rec > aria > rec > coro > coro,1,0.07
+coro > acc > coro > acc > coro > coro > rec > coro > rec > coro > acc > choral,1,0.07
+coro > acc > aria > rec > coro,1,0.07
+acc > rec > aria > rec > coro > coro,1,0.07
+coro > acc > coro > aria > acc > aria > acc > aria > rec > choral,1,0.07
+coro > acc > aria > rec > coro > aria > acc > aria > rec > aria > acc > choral,1,0.07
+coro > acc > aria > acc > aria > rec > aria > acc > choral,1,0.07
+coro > acc > aria > acc > coro > rec > aria > rec > choral,1,0.07
+coro > acc > aria > rec > acc > aria > acc > aria > rec > choral,1,0.07
+coro > aria > acc > choral > acc > aria > acc > choral,1,0.07
+coro > acc > aria > coro > rec > aria > rec > choral,1,0.07
+coro > rec > aria > rec > coro > aria > acc > choral,1,0.07
+coro > rec > aria > rec > choral > aria > rec > coro > rec > aria > rec > choral > coro,1,0.07
