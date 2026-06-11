@@ -507,7 +507,7 @@ function renderByAlbum(query) {
 function renderByPeriod(query) {
   const songs = libraryAllSongs().filter((s) => Number.isFinite(s.year));
   if (!songs.length) {
-    setStatus("Bibliothek leer. Lade zuerst einen Künstler über den „Künstler"-Filter.");
+    setStatus(`Bibliothek leer. Lade zuerst einen Künstler über den „Künstler"-Filter.`);
     return;
   }
   const from = Number(els.yearFrom.value);
@@ -647,4 +647,4 @@ renderLibraryPanel();
 const cnt = libraryArtists().length;
 setStatus(cnt
   ? `${cnt} Künstler in der Bibliothek geladen.`
-  : "Tippe einen Künstlernamen ins Filter-Suchfeld und klicke „Auswerten" – die App lädt Discographie und Texte live.");
+  : `Tippe einen Künstlernamen ins Filter-Suchfeld und klicke „Auswerten" – die App lädt Discographie und Texte live.`);
