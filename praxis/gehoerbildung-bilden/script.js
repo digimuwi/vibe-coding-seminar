@@ -507,7 +507,7 @@ function clearFeedback() {
 
 function checkAnswer() {
   if (!currentTask) {
-    showFeedback("Drücke zuerst „Neue Aufgabe".", "neutral");
+    showFeedback('Drücke zuerst „Neue Aufgabe".', 'neutral');
     return;
   }
   const sel = quizSelection;
