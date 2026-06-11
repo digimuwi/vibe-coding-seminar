@@ -175,6 +175,9 @@ function parseLyrics(html) {
   cont.forEach((c) => {
     const tmp = doc.createElement('div');
     tmp.innerHTML = c.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+    // genius-Kopf (Contributors, Translations, Sprachliste, "… Lyrics") und
+    // andere Nicht-Text-Bausteine entfernen – genius markiert sie selbst so.
+    tmp.querySelectorAll('[data-exclude-from-selection="true"]').forEach((kopf) => kopf.remove());
     teile.push(tmp.textContent);
   });
   return bereinige(teile.join('\n'));
@@ -192,7 +195,7 @@ function bereinige(text) {
     .trim();
 }
 async function holeText(song) {
-  const key = 'lyrics:' + song.id;
+  const key = 'lyrics2:' + song.id; // v2: ohne genius-Kopf (Cache neu aufbauen)
   const cached = localStorage.getItem(key);
   if (cached !== null) return cached;
   const text = parseLyrics(await proxyFetch(song.url));
