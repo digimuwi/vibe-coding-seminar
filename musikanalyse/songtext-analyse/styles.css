@@ -37,9 +37,10 @@ form {
 .feld { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 140px; }
 .feld[hidden] { display: none; }
 .feld-breit { flex: 2 1 220px; }
-.feld-check { flex: 1 1 140px; justify-content: flex-end; }
+.feld-check { flex: 1 1 200px; justify-content: flex-end; gap: .25rem; }
 .check { display: flex; align-items: center; gap: .45rem; font-size: .9rem; font-weight: 600; color: var(--text); cursor: pointer; }
 .check input { width: 1.05rem; height: 1.05rem; cursor: pointer; }
+.check-hinweis { font-size: .78rem; color: var(--grau); line-height: 1.35; }
 label { font-size: .85rem; font-weight: 600; color: var(--grau); }
 input, select {
   padding: .55rem .7rem;
