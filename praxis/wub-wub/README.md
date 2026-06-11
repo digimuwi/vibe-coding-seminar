@@ -1,4 +1,4 @@
-# Wub Wub – Sidechain Ducking Audio Plugin
+# Wub Wub – Sidechain VST Plugin
 
 Ein JUCE-basiertes Audio-Plugin für Sidechain-Volume-Ducking mit Envelope-Editor.
 

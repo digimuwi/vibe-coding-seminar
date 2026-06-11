@@ -1,9 +1,6 @@
 ---
 titel: Wub Wub – Sidechain Ducking
-studierende: (Name eintragen)
-typ: sonstiges
+studierende: Elias Ehmann
+typ: VST
 ---
-Ein Audio-Plugin (VST3/AU/Standalone), das Sidechain-Volume-Ducking erzeugt.
-Drei Trigger-Modi (Audio-Transient, MIDI, Tempo-Sync) und sieben Hüllkurvenformen
-stehen zur Verfügung. Dunkle Oberfläche mit gelbem Akzent, Mix-Regler und
-Envelope-Vorschau.
+Ein interaktives Audio-Plugin für Sidechain-Volume-Ducking – die typische „WUB WUB"-Effekt-Technik des modernen Electronic Music Production. Das Plugin bietet drei flexible Trigger-Modi (Audio-Erkennung, MIDI-Events, DAW-Tempo-Sync), einen grafischen Envelope-Editor zum Zeichnen von Kurvenformen, und sieben voreingestellte Hüllkurvenshapes. Mit dunkler, minimalistischer Oberfläche und Echtzeit-Visualisierung.
