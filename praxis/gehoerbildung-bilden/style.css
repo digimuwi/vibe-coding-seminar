@@ -439,6 +439,52 @@ body.level-hard .hint {
   color: #fff;
 }
 
+/* === Universität Tübingen: Hintergrund-Logo + Fußzeile === */
+/* Großes, sehr dezentes Logo als Wasserzeichen hinter allem.
+   brightness(0) invert(1) färbt das rote Logo weiß, damit es auf dem
+   dunklen Hintergrund sichtbar ist. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: url("uni-tuebingen-logo.svg") no-repeat center 56%;
+  background-size: min(74vw, 720px);
+  filter: brightness(0) invert(1);
+  opacity: 0.06;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Inhalt über das Wasserzeichen heben */
+header,
+main,
+.uni-credit {
+  position: relative;
+  z-index: 1;
+}
+
+.uni-credit {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.7rem;
+  text-align: center;
+  padding: 1rem 1rem 2.75rem;
+}
+
+.uni-logo {
+  width: clamp(150px, 30vw, 210px);
+  height: auto;
+  filter: brightness(0) invert(1);
+  opacity: 0.82;
+}
+
+.uni-line {
+  color: var(--muted);
+  font-size: 0.95rem;
+  letter-spacing: 0.03em;
+}
+
 @media (max-width: 720px) {
   .level-selector {
     position: static;
