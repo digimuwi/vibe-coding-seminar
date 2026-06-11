@@ -20,8 +20,28 @@ Es ist eine statische Webseite – einfach `index.html` im Browser öffnen
 
 Browser dürfen fremde Seiten aus Sicherheitsgründen nicht direkt laden (CORS),
 und genius.com bietet die Texte nicht über eine offizielle Schnittstelle an.
-Deshalb laufen alle Abrufe über einen öffentlichen **Vermittler-Dienst**
-(CORS-Proxy). Das kann gelegentlich langsam oder gestört sein – dann einfach
-erneut versuchen. Sehr umfangreiche Künstler werden auf die bekanntesten Lieder
-begrenzt. Einmal geladene Texte werden im Browser zwischengespeichert
-(localStorage). **Nur zu Lehrzwecken.**
+Deshalb laufen alle Abrufe über einen **Vermittler-Dienst** (CORS-Proxy). Sehr
+umfangreiche Künstler werden auf die bekanntesten Lieder begrenzt. Einmal
+geladene Texte werden im Browser zwischengespeichert (localStorage).
+**Nur zu Lehrzwecken.**
+
+## Eigener Vermittler (empfohlen, kostenlos)
+
+Die öffentlichen Gratis-Vermittler sind oft nicht erreichbar. Am zuverlässigsten
+ist ein eigener kleiner Vermittler bei **Cloudflare** (kostenlos). Das Skript dazu
+liegt in `cloudflare-worker.js`. So richtest du ihn ein:
+
+1. Auf <https://dash.cloudflare.com/sign-up> einen **kostenlosen Account** anlegen
+   (nur E-Mail + Passwort, E-Mail bestätigen).
+2. Links im Menü **„Workers & Pages"** öffnen → **„Create application"** →
+   **„Create Worker"**.
+3. Einen Namen vergeben, z. B. `songtext-proxy`, dann **„Deploy"** klicken.
+4. **„Edit code"** anklicken, den Beispielcode löschen und stattdessen den
+   kompletten Inhalt von `cloudflare-worker.js` einfügen → **„Deploy"**.
+5. Oben erscheint die Adresse deines Workers, etwa
+   `https://songtext-proxy.deinname.workers.dev`. Diese kopieren.
+6. In der App unter **„Eigene Vermittler-Adresse"** einfügen – fertig. Die App
+   nutzt dann immer zuerst deinen eigenen, stabilen Vermittler.
+
+(Die Knopf-Beschriftungen bei Cloudflare können sich leicht ändern; der Ablauf
+„Worker anlegen → Code einfügen → Deploy → Adresse kopieren" bleibt gleich.)

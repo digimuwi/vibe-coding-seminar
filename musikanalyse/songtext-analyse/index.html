@@ -37,10 +37,24 @@
     </form>
 
     <p class="hinweis">
-      Hinweis: Texte werden live über einen Vermittler-Dienst von genius.com
-      geladen. Das kann einige Sekunden dauern; sehr umfangreiche Künstler werden
-      auf die bekanntesten Lieder begrenzt.
+      Hinweis: Texte werden live von genius.com geladen – das kann einige Sekunden
+      dauern; sehr umfangreiche Künstler werden auf die bekanntesten Lieder begrenzt.
+      Damit das zuverlässig klappt, am besten unten die eigene Vermittler-Adresse eintragen.
     </p>
+
+    <details class="einstellungen">
+      <summary>Eigene Vermittler-Adresse (empfohlen)</summary>
+      <p class="hinweis">
+        Trage hier die Adresse deines eigenen Vermittlers (Cloudflare-Worker) ein,
+        z. B. <code>https://songtext-proxy.deinname.workers.dev</code>. Sie wird nur
+        in deinem Browser gespeichert. Ist das Feld leer, werden öffentliche Dienste
+        versucht (oft unzuverlässig).
+      </p>
+      <div class="proxy-zeile">
+        <input id="proxy-url" type="url" placeholder="https://…workers.dev" />
+        <span id="proxy-status" class="proxy-status"></span>
+      </div>
+    </details>
 
     <div id="status" class="status" aria-live="polite"></div>
 

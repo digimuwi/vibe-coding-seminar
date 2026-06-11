@@ -61,6 +61,15 @@ button:hover { filter: brightness(1.07); }
 button:disabled { opacity: .5; cursor: progress; }
 
 .hinweis { font-size: .82rem; color: var(--grau); margin: 0 0 1rem; }
+.hinweis code { background: #eef2ff; padding: 0 .3rem; border-radius: 4px; font-size: .9em; }
+
+.einstellungen { margin: 0 0 1rem; font-size: .9rem; }
+.einstellungen summary { cursor: pointer; color: var(--akzent); font-weight: 600; }
+.proxy-zeile { display: flex; gap: .6rem; align-items: center; margin-top: .4rem; }
+.proxy-zeile input { flex: 1 1 auto; padding: .5rem .7rem; border: 1px solid var(--rahmen); border-radius: 8px; font-size: .95rem; }
+.proxy-status { font-size: .85rem; color: var(--grau); white-space: nowrap; }
+.proxy-status.ok { color: #15803d; }
+
 .status { min-height: 1.4rem; color: var(--grau); font-size: .95rem; }
 .status.fehler { color: #b91c1c; }
 

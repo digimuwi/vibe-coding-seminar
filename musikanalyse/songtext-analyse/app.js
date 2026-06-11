@@ -17,7 +17,7 @@ const PROXIES = [
   { name: 'corsproxy.io',   baue: (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u), auspacken: (t) => t },
 ];
 const PROXY_TIMEOUT = 13000; // ms pro Dienst, dann zum nächsten
-let bevorzugt = 0;           // zuletzt erfolgreicher Dienst – wird zuerst probiert
+let letzterGuter = null;     // Name des zuletzt erfolgreichen Dienstes – wird zuerst probiert
 const MAX_LIEDER = 25; // Künstler-Modus: nur die bekanntesten Lieder
 const PARALLEL = 4;    // gleichzeitige Abrufe
 
@@ -28,12 +28,27 @@ const form = $('suche'), wortEl = $('wort'), filterEl = $('filter'),
   statusEl = $('status'), ergebnis = $('ergebnis'), ergTitel = $('ergebnis-titel'),
   diagramm = $('diagramm'), overlay = $('overlay'), overlayTitel = $('overlay-titel'),
   overlayMeta = $('overlay-meta'), overlayInhalt = $('overlay-inhalt'),
-  overlayZu = $('overlay-zu');
+  overlayZu = $('overlay-zu'), proxyEl = $('proxy-url'), proxyStatusEl = $('proxy-status');
 
 filterEl.addEventListener('change', () => {
   const album = filterEl.value === 'album';
   nameLabel.textContent = album ? 'Album' : 'Künstler';
   nameEl.placeholder = album ? 'z. B. 21' : 'z. B. Adele';
+});
+
+// Eigene Vermittler-Adresse: aus dem Browser laden und beim Tippen speichern.
+function proxyStatusZeigen() {
+  const gesetzt = !!(proxyEl.value || '').trim();
+  proxyStatusEl.textContent = gesetzt ? '✓ gespeichert' : 'nicht gesetzt';
+  proxyStatusEl.classList.toggle('ok', gesetzt);
+}
+proxyEl.value = localStorage.getItem('proxyUrl') || '';
+proxyStatusZeigen();
+proxyEl.addEventListener('input', () => {
+  const wert = proxyEl.value.trim();
+  if (wert) localStorage.setItem('proxyUrl', wert);
+  else localStorage.removeItem('proxyUrl');
+  proxyStatusZeigen();
 });
 
 // ---------- Helfer ----------
@@ -57,8 +72,22 @@ function el(tag, opts = {}, kinder = []) {
 }
 
 // ---------- Abruf über Proxy ----------
-async function einProxy(idx, url) {
-  const p = PROXIES[idx];
+// Eigene Vermittler-Adresse (falls eingetragen) als bevorzugten Dienst ergänzen.
+function eigenerProxy() {
+  const u = (localStorage.getItem('proxyUrl') || '').trim();
+  if (!u) return null;
+  return {
+    name: 'eigener',
+    baue: (z) => u + (u.includes('?') ? '&' : '?') + 'url=' + encodeURIComponent(z),
+    auspacken: (t) => t,
+  };
+}
+function aktiveProxies() {
+  const eigen = eigenerProxy();
+  return eigen ? [eigen, ...PROXIES] : PROXIES.slice();
+}
+
+async function einProxy(p, url) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), PROXY_TIMEOUT);
   try {
@@ -73,14 +102,14 @@ async function einProxy(idx, url) {
 }
 
 async function proxyFetch(url) {
-  // zuletzt erfolgreichen Dienst zuerst, dann der Reihe nach die übrigen
-  const reihenfolge = [bevorzugt, ...PROXIES.map((_, i) => i)]
-    .filter((v, i, a) => a.indexOf(v) === i);
+  // zuletzt erfolgreichen Dienst zuerst, dann die übrigen
+  const liste = aktiveProxies();
+  liste.sort((a, b) => (b.name === letzterGuter ? 1 : 0) - (a.name === letzterGuter ? 1 : 0));
   let letzterFehler;
-  for (const idx of reihenfolge) {
+  for (const p of liste) {
     try {
-      const inhalt = await einProxy(idx, url);
-      bevorzugt = idx;
+      const inhalt = await einProxy(p, url);
+      letzterGuter = p.name;
       return inhalt;
     } catch (e) { letzterFehler = e; }
   }
