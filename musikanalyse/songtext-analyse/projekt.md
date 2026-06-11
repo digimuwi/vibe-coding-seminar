@@ -1,6 +1,6 @@
 ---
 titel: Songtext-Analyse
-studierende: TODO Name eintragen
+studierende: Rian Knittel
 typ: web
 start: index.html
 ---
