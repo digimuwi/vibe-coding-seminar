@@ -1,0 +1,125 @@
+:root {
+  --akzent: #4f46e5;
+  --akzent-hell: #c7d2fe;
+  --text: #1f2937;
+  --grau: #6b7280;
+  --rahmen: #e5e7eb;
+  --treffer: #fde68a;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color: var(--text);
+  line-height: 1.5;
+  background: #f9fafb;
+}
+
+header, main, footer { max-width: 880px; margin: 0 auto; padding: 0 1.2rem; }
+header { padding-top: 2rem; }
+h1 { margin: 0 0 .3rem; font-size: 2rem; }
+.untertitel { color: var(--grau); margin-top: 0; }
+.untertitel a, footer a, .hinweis a { color: var(--akzent); }
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  align-items: flex-end;
+  background: #fff;
+  border: 1px solid var(--rahmen);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin: 1.5rem 0 .8rem;
+}
+.feld { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 140px; }
+.feld-breit { flex: 2 1 220px; }
+label { font-size: .85rem; font-weight: 600; color: var(--grau); }
+input, select {
+  padding: .55rem .7rem;
+  border: 1px solid var(--rahmen);
+  border-radius: 8px;
+  font-size: 1rem;
+  background: #fff;
+}
+input:focus, select:focus { outline: 2px solid var(--akzent-hell); border-color: var(--akzent); }
+
+button {
+  background: var(--akzent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .6rem 1.3rem;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  flex: 0 0 auto;
+}
+button:hover { filter: brightness(1.07); }
+button:disabled { opacity: .5; cursor: progress; }
+
+.hinweis { font-size: .82rem; color: var(--grau); margin: 0 0 1rem; }
+.status { min-height: 1.4rem; color: var(--grau); font-size: .95rem; }
+.status.fehler { color: #b91c1c; }
+
+section { margin: 1rem 0 3rem; }
+h2 { font-size: 1.25rem; }
+
+.diagramm { display: flex; flex-direction: column; gap: 1.4rem; }
+
+/* ----- Künstler-Modus: ein Block je Album ----- */
+.album-block { border: 1px solid var(--rahmen); border-radius: 12px; background: #fff; overflow: hidden; }
+.album-kopf {
+  display: grid; grid-template-columns: 1fr auto; align-items: center; gap: .6rem;
+  padding: .7rem 1rem; background: #eef2ff;
+}
+.album-kopf .titel { font-weight: 700; }
+.album-kopf .summe { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--akzent); }
+.album-spur { height: 8px; background: #e0e7ff; }
+.album-fuellung { height: 8px; background: var(--akzent); }
+.album-lieder { list-style: none; margin: 0; padding: .4rem .6rem; }
+.album-lieder li {
+  display: grid; grid-template-columns: 1fr 90px auto; align-items: center; gap: .6rem;
+  padding: .25rem .4rem; font-size: .9rem;
+}
+.lied-titel { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.mini-spur { background: #eef2ff; border-radius: 5px; height: 14px; overflow: hidden; }
+.mini-fuellung { background: var(--akzent-hell); height: 14px; min-width: 1px; }
+.lied-wert { font-variant-numeric: tabular-nums; font-weight: 600; text-align: right; }
+
+/* ----- Album-Modus: ein Balken je Lied ----- */
+.lied-zeile { display: grid; grid-template-columns: 200px 1fr auto auto; align-items: center; gap: .7rem; }
+.balken-label { font-size: .9rem; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.balken-spur { background: #eef2ff; border-radius: 6px; overflow: hidden; }
+.balken-fuellung { background: var(--akzent); height: 22px; border-radius: 6px; min-width: 2px; transition: width .4s ease; }
+.balken-wert { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 2rem; text-align: right; }
+.text-knopf { background: none; color: var(--akzent); padding: .2rem .5rem; font-size: .85rem; text-decoration: underline; }
+
+/* ----- Overlay (Volltext) ----- */
+.overlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.5);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem; z-index: 10;
+}
+.overlay-box {
+  background: #fff; border-radius: 12px; padding: 2rem 1.6rem 1.6rem;
+  max-width: 640px; width: 100%; max-height: 85vh; overflow-y: auto; position: relative;
+}
+.overlay-box h3 { margin: 0 .5rem .2rem 0; }
+.overlay-meta { margin: 0 0 1rem; color: var(--grau); font-size: .85rem; }
+.overlay-zu {
+  position: absolute; top: .6rem; right: .6rem;
+  background: none; color: var(--grau); font-size: 1.6rem; line-height: 1; padding: .2rem .5rem;
+}
+.overlay-inhalt-text { white-space: pre-wrap; font-size: .95rem; }
+mark { background: var(--treffer); border-radius: 3px; padding: 0 2px; }
+
+footer { color: var(--grau); font-size: .85rem; padding-bottom: 2rem; }
+
+@media (max-width: 560px) {
+  .lied-zeile { grid-template-columns: 120px 1fr auto auto; }
+  .album-lieder li { grid-template-columns: 1fr 60px auto; }
+}

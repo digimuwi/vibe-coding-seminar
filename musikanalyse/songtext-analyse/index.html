@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Songtext-Analyse</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Songtext-Analyse</h1>
+    <p class="untertitel">
+      Wie oft kommt ein Wort in Songtexten vor? Gib ein Suchwort ein, wähle einen
+      Künstler oder ein Album – die Auswertung erscheint als Säulendiagramm.
+      Daten von <a href="https://genius.com/" target="_blank" rel="noopener">genius.com</a>.
+    </p>
+  </header>
+
+  <main>
+    <form id="suche" autocomplete="off">
+      <div class="feld feld-breit">
+        <label for="wort">Suchwort oder Phrase</label>
+        <input id="wort" type="text" placeholder="z. B. love" required />
+      </div>
+      <div class="feld">
+        <label for="filter">Filter</label>
+        <select id="filter">
+          <option value="kuenstler">Künstler</option>
+          <option value="album">Album</option>
+        </select>
+      </div>
+      <div class="feld feld-breit">
+        <label for="name" id="name-label">Künstler</label>
+        <input id="name" type="text" placeholder="z. B. Adele" required />
+      </div>
+      <button type="submit" id="los">Analysieren</button>
+    </form>
+
+    <p class="hinweis">
+      Hinweis: Texte werden live über einen Vermittler-Dienst von genius.com
+      geladen. Das kann einige Sekunden dauern; sehr umfangreiche Künstler werden
+      auf die bekanntesten Lieder begrenzt.
+    </p>
+
+    <div id="status" class="status" aria-live="polite"></div>
+
+    <section id="ergebnis" hidden>
+      <h2 id="ergebnis-titel"></h2>
+      <div id="diagramm" class="diagramm"></div>
+    </section>
+  </main>
+
+  <div id="overlay" class="overlay" hidden>
+    <div class="overlay-box">
+      <button id="overlay-zu" class="overlay-zu" aria-label="Schließen">×</button>
+      <h3 id="overlay-titel"></h3>
+      <p id="overlay-meta" class="overlay-meta"></p>
+      <div id="overlay-inhalt" class="overlay-inhalt-text"></div>
+    </div>
+  </div>
+
+  <footer>
+    <p>
+      Texte &amp; Discographie: <a href="https://genius.com/" target="_blank" rel="noopener">genius.com</a>
+      (nur zu Lehrzwecken). Teil des
+      <a href="https://www.digimuwi.uni-tuebingen.de/vibe-coding-seminar/" target="_blank" rel="noopener">Vibe Coding-Seminars</a>.
+    </p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
