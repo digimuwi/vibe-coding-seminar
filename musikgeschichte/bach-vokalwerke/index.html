@@ -71,8 +71,23 @@
       font-style: italic;
     }
 
-    .help-btn {
+    .quiz-btn {
       margin-left: auto;
+      background: #ffd166;
+      color: #5a3d1a;
+      border: 2px solid #ffe199;
+      padding: 10px 18px;
+      border-radius: 24px;
+      cursor: pointer;
+      font-size: 0.98rem;
+      font-family: inherit;
+      font-weight: bold;
+      transition: all 0.2s;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+    .quiz-btn:hover { background: #ffc94d; transform: translateY(-1px); }
+
+    .help-btn {
       background: rgba(255,255,255,0.2);
       border: 2px solid rgba(255,255,255,0.4);
       color: white;
@@ -506,6 +521,151 @@
     }
     .popup-title { font-weight: bold; font-size: 1.05rem; margin-bottom: 4px; color: var(--ink); }
     .popup-years { color: var(--ink-soft); font-size: 0.85rem; }
+
+    /* ========== QUIZ ========== */
+    .quiz-panel {
+      background: white;
+      border-radius: 22px;
+      max-width: 560px;
+      width: 100%;
+      padding: 26px 26px 30px;
+      box-shadow: 0 12px 44px rgba(0,0,0,0.32);
+      position: relative;
+    }
+    .quiz-x {
+      position: absolute;
+      top: 14px;
+      right: 16px;
+      background: #f3edff;
+      border: none;
+      color: #6a4caf;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      font-size: 1rem;
+      cursor: pointer;
+      font-family: inherit;
+      line-height: 1;
+    }
+    .quiz-x:hover { background: #e7dcff; }
+
+    .quiz-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-right: 34px;
+    }
+    .quiz-count { font-weight: bold; color: var(--ink-soft); font-size: 0.9rem; }
+    .quiz-score {
+      font-weight: bold;
+      color: #8b6914;
+      background: #fff4d4;
+      padding: 5px 12px;
+      border-radius: 14px;
+      font-size: 0.9rem;
+    }
+
+    .quiz-progress {
+      height: 10px;
+      background: #eee;
+      border-radius: 6px;
+      overflow: hidden;
+      margin-bottom: 22px;
+    }
+    .quiz-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #90be6d, #43aa8b);
+      transition: width 0.3s;
+    }
+
+    .quiz-question {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--ink);
+      line-height: 1.4;
+      margin-bottom: 20px;
+    }
+    .quiz-q-emoji { display: block; font-size: 2.4rem; margin-bottom: 10px; }
+
+    .quiz-options { display: grid; gap: 12px; }
+    .quiz-option {
+      text-align: left;
+      background: #faf6ff;
+      border: 2.5px solid #ece4ff;
+      border-radius: 14px;
+      padding: 14px 18px;
+      font-size: 1.05rem;
+      font-family: inherit;
+      color: var(--ink);
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .quiz-option:hover:not(:disabled) {
+      background: #f0e6ff;
+      border-color: #c4abff;
+      transform: translateX(3px);
+    }
+    .quiz-option:disabled { cursor: default; }
+    .quiz-option.correct {
+      background: #e3f6e5;
+      border-color: #5cb85c;
+      color: #256d2a;
+      font-weight: bold;
+    }
+    .quiz-option.wrong {
+      background: #fde5e5;
+      border-color: #e57373;
+      color: #a02020;
+    }
+
+    .quiz-feedback { margin-top: 18px; }
+    .fb-correct { color: #256d2a; font-weight: bold; font-size: 1.05rem; }
+    .fb-wrong { color: #a02020; font-weight: bold; font-size: 1rem; line-height: 1.4; }
+
+    .quiz-next {
+      display: block;
+      width: 100%;
+      margin-top: 16px;
+      background: #6a4caf;
+      color: white;
+      border: none;
+      padding: 13px;
+      border-radius: 22px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1.05rem;
+      font-weight: bold;
+    }
+    .quiz-next:hover { background: #5a3d9b; }
+
+    .quiz-result { text-align: center; padding: 10px 6px; }
+    .quiz-result-stars { font-size: 3.4rem; margin-bottom: 8px; }
+    .quiz-result h2 { color: #6a4caf; font-size: 1.7rem; margin-bottom: 10px; }
+    .quiz-result-score { font-size: 1.2rem; color: var(--ink); margin-bottom: 4px; }
+    .quiz-result-points {
+      font-size: 1.05rem;
+      color: #8b6914;
+      font-weight: bold;
+      background: #fff4d4;
+      display: inline-block;
+      padding: 5px 16px;
+      border-radius: 14px;
+      margin-bottom: 14px;
+    }
+    .quiz-result-msg { color: var(--ink-soft); line-height: 1.5; margin-bottom: 20px; }
+    .quiz-result-btns { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-close-btn {
+      background: #f3edff;
+      color: #6a4caf;
+      border: none;
+      padding: 11px;
+      border-radius: 22px;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+    .quiz-close-btn:hover { background: #e7dcff; }
   </style>
 </head>
 <body>
@@ -515,6 +675,7 @@
       <h1>Bachs Vokalwerke</h1>
       <p>Eine musikalische Reise durch Deutschland</p>
     </div>
+    <button class="quiz-btn" onclick="startQuiz()">🎮 Quiz spielen</button>
     <button class="help-btn" onclick="document.getElementById('help-modal').classList.add('show')">❓ Was ist das?</button>
   </header>
 
@@ -570,6 +731,14 @@
       </details>
 
       <button onclick="document.getElementById('help-modal').classList.remove('show')">Los geht's! 🎶</button>
+    </div>
+  </div>
+
+  <!-- Quiz Modal -->
+  <div class="modal-backdrop" id="quiz-modal">
+    <div class="quiz-panel">
+      <button class="quiz-x" onclick="closeQuiz()" title="Quiz beenden">✕</button>
+      <div id="quiz-body"></div>
     </div>
   </div>
 
@@ -1170,6 +1339,174 @@
     document.getElementById('help-modal').addEventListener('click', (e) => {
       if (e.target.id === 'help-modal') e.currentTarget.classList.remove('show');
     });
+
+    // ============== QUIZ ==============
+    // Die Fragen werden automatisch aus den oben definierten Daten
+    // (stations & works) erzeugt - so bleibt das Quiz immer korrekt.
+
+    function shuffle(arr) {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+    function sample(arr, n) { return shuffle(arr).slice(0, n); }
+
+    // baut 4 Antwortmöglichkeiten: die richtige + 3 zufällige falsche
+    function makeOptions(correct, pool, n = 4) {
+      const distractors = shuffle(pool.filter(x => x !== correct)).slice(0, n - 1);
+      return shuffle([correct, ...distractors]);
+    }
+
+    function buildQuizQuestions() {
+      const qs = [];
+      const cityNames = stations.map(s => s.name);
+      const workTitles = works.map(w => w.title);
+      const types = [...new Set(works.map(w => w.type))];
+
+      // --- feste Wissensfragen ---
+      qs.push({ emoji: '👶', q: 'In welcher Stadt wurde Johann Sebastian Bach geboren?',
+        correct: 'Eisenach', options: makeOptions('Eisenach', cityNames) });
+      qs.push({ emoji: '⛪', q: 'In welcher Stadt arbeitete Bach 27 Jahre lang als Thomaskantor?',
+        correct: 'Leipzig', options: makeOptions('Leipzig', cityNames) });
+      qs.push({ emoji: '🎂', q: 'In welchem Jahr wurde Bach geboren?',
+        correct: '1685', options: shuffle(['1685', '1675', '1695', '1700']) });
+      qs.push({ emoji: '🕯️', q: 'In welchem Jahr starb Bach?',
+        correct: '1750', options: shuffle(['1750', '1720', '1740', '1765']) });
+      qs.push({ emoji: '🎤', q: 'Was ist ein „Vokalwerk“?',
+        correct: 'Musik, in der gesungen wird',
+        options: shuffle(['Musik, in der gesungen wird', 'Musik nur für Orgel', 'Ein langsamer Tanz', 'Ein gemaltes Bild']) });
+      qs.push({ emoji: '🎶', q: 'Aus welchem Werk stammt die berühmte Melodie „Jesus bleibet meine Freude“?',
+        correct: 'Herz und Mund und Tat und Leben',
+        options: makeOptions('Herz und Mund und Tat und Leben', workTitles) });
+      qs.push({ emoji: '⭐', q: 'Welcher berühmte Komponist war von Bachs Motette „Singet dem Herrn“ so begeistert?',
+        correct: 'Mozart', options: shuffle(['Mozart', 'Beethoven', 'Vivaldi', 'Händel']) });
+      qs.push({ emoji: '🎭', q: 'Wie viele Chöre singen in der Matthäus-Passion gleichzeitig?',
+        correct: 'Zwei Chöre', options: shuffle(['Zwei Chöre', 'Ein Chor', 'Drei Chöre', 'Vier Chöre']) });
+      qs.push({ emoji: '👨‍👩‍👦', q: 'Was war der Beruf der meisten Männer in Bachs großer Familie?',
+        correct: 'Musiker', options: shuffle(['Musiker', 'Bäcker', 'Bauern', 'Lehrer']) });
+      qs.push({ emoji: '🏆', q: 'Welches ist Bachs längstes und größtes Vokalwerk?',
+        correct: 'Matthäus-Passion', options: makeOptions('Matthäus-Passion', workTitles) });
+
+      // --- aus den Daten erzeugte Fragen: In welcher Stadt entstand ein Werk? ---
+      sample(works, 3).forEach(w => {
+        const s = stations.find(x => x.id === w.station);
+        qs.push({ emoji: '📍', q: `In welcher Stadt schrieb Bach „${w.title}“?`,
+          correct: s.name, options: makeOptions(s.name, cityNames) });
+      });
+
+      // --- aus den Daten erzeugte Fragen: Was für ein Werk ist das? ---
+      sample(works, 3).forEach(w => {
+        qs.push({ emoji: '🎼', q: `Was für ein Werk ist „${w.title}“?`,
+          correct: w.type, options: makeOptions(w.type, types) });
+      });
+
+      return qs;
+    }
+
+    const QUIZ_LENGTH = 8;
+    let quizQuestions = [], quizIndex = 0, quizScore = 0, quizCorrect = 0, quizStreak = 0, quizAnswered = false;
+
+    function startQuiz() {
+      quizQuestions = shuffle(buildQuizQuestions()).slice(0, QUIZ_LENGTH);
+      quizIndex = 0; quizScore = 0; quizCorrect = 0; quizStreak = 0;
+      document.getElementById('quiz-modal').classList.add('show');
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      quizAnswered = false;
+      const q = quizQuestions[quizIndex];
+      const total = quizQuestions.length;
+      const progress = (quizIndex / total) * 100;
+
+      document.getElementById('quiz-body').innerHTML = `
+        <div class="quiz-top">
+          <span class="quiz-count">Frage ${quizIndex + 1} von ${total}</span>
+          <span class="quiz-score">⭐ ${quizScore} Punkte</span>
+        </div>
+        <div class="quiz-progress"><div class="quiz-progress-bar" style="width:${progress}%"></div></div>
+        <div class="quiz-question"><span class="quiz-q-emoji">${q.emoji}</span>${q.q}</div>
+        <div class="quiz-options" id="quiz-options"></div>
+        <div class="quiz-feedback" id="quiz-feedback"></div>
+      `;
+
+      const optWrap = document.getElementById('quiz-options');
+      q.options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'quiz-option';
+        btn.textContent = opt;
+        btn.addEventListener('click', () => answerQuestion(opt, btn));
+        optWrap.appendChild(btn);
+      });
+    }
+
+    function answerQuestion(opt, btn) {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      const q = quizQuestions[quizIndex];
+
+      document.querySelectorAll('.quiz-option').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === q.correct) b.classList.add('correct');
+      });
+
+      const fb = document.getElementById('quiz-feedback');
+      if (opt === q.correct) {
+        quizCorrect++;
+        quizStreak++;
+        let gained = 10, bonus = '';
+        if (quizStreak >= 3) { gained += 5; bonus = ' 🔥 Serie! +5 Bonus'; }
+        quizScore += gained;
+        fb.innerHTML = `<div class="fb-correct">✅ Richtig! +${gained} Punkte${bonus}</div>`;
+      } else {
+        quizStreak = 0;
+        btn.classList.add('wrong');
+        fb.innerHTML = `<div class="fb-wrong">❌ Leider falsch. Richtig ist: <strong>${q.correct}</strong></div>`;
+      }
+      document.querySelector('.quiz-score').textContent = `⭐ ${quizScore} Punkte`;
+
+      const nextBtn = document.createElement('button');
+      nextBtn.className = 'quiz-next';
+      nextBtn.textContent = quizIndex < quizQuestions.length - 1 ? 'Weiter →' : 'Ergebnis ansehen 🏆';
+      nextBtn.addEventListener('click', nextQuestion);
+      fb.appendChild(nextBtn);
+    }
+
+    function nextQuestion() {
+      if (quizIndex < quizQuestions.length - 1) { quizIndex++; renderQuestion(); }
+      else finishQuiz();
+    }
+
+    function finishQuiz() {
+      const total = quizQuestions.length;
+      const pct = quizCorrect / total;
+      let stars, title, msg;
+      if (pct >= 0.9)      { stars = '⭐⭐⭐'; title = 'Bach-Meister!';   msg = 'Wow, du kennst dich richtig gut aus!'; }
+      else if (pct >= 0.6) { stars = '⭐⭐';   title = 'Super gemacht!';  msg = 'Du weißt schon eine Menge über Bach.'; }
+      else if (pct >= 0.3) { stars = '⭐';     title = 'Gut dabei!';      msg = 'Schau dich noch ein bisschen auf der Karte und dem Zeitstrahl um und probier es nochmal.'; }
+      else                 { stars = '🌱';     title = 'Weiter so!';      msg = 'Entdecke die Stationen und Werke - dann klappt es beim nächsten Mal bestimmt besser!'; }
+
+      document.getElementById('quiz-body').innerHTML = `
+        <div class="quiz-result">
+          <div class="quiz-result-stars">${stars}</div>
+          <h2>${title}</h2>
+          <p class="quiz-result-score">${quizCorrect} von ${total} Fragen richtig</p>
+          <p class="quiz-result-points">⭐ ${quizScore} Punkte</p>
+          <p class="quiz-result-msg">${msg}</p>
+          <div class="quiz-result-btns">
+            <button class="quiz-next" onclick="startQuiz()">🔄 Nochmal spielen</button>
+            <button class="quiz-close-btn" onclick="closeQuiz()">Zurück zur Karte</button>
+          </div>
+        </div>
+      `;
+    }
+
+    function closeQuiz() {
+      document.getElementById('quiz-modal').classList.remove('show');
+    }
   </script>
 </body>
 </html>
