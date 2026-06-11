@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#050508;color:#e0e0e0;font-family:'SF Pro Display',-apple-system,sans-serif;
+  text-align:center;user-select:none;-webkit-user-select:none;padding:16px 20px;
+  overflow:hidden}
+h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-bottom:12px;
+  text-shadow:0 0 20px rgba(255,255,0,0.3),0 0 60px rgba(255,255,0,0.1)}
+.lbl{font-size:10px;color:#666;margin-bottom:12px;text-transform:uppercase;letter-spacing:3px;font-weight:500}
+.section{margin-bottom:14px}
+.rtitle{font-size:9px;color:#555;text-transform:uppercase;letter-spacing:3px;margin-bottom:6px;font-weight:600}
+.b{background:linear-gradient(180deg,#1a1a1e 0%,#111114 100%);border:1px solid #2a2a2e;color:#888;
+  padding:7px 14px;border-radius:6px;font-size:11px;cursor:pointer;display:inline-block;margin:3px;
+  transition:all .15s ease;font-weight:500;letter-spacing:0.5px}
+.b:hover{border-color:#ffff00;color:#fff;box-shadow:0 0 8px rgba(255,255,0,0.15)}
+.b.on{background:linear-gradient(180deg,#ffff00 0%,#cccc00 100%);color:#000;border-color:#ffff00;
+  font-weight:700;box-shadow:0 0 12px rgba(255,255,0,0.4)}
+.hide{display:none}
+.hint{font-size:9px;color:#333;margin-top:6px;letter-spacing:1.5px;font-weight:400}
+.canvas-wrap{position:relative;display:inline-block;border-radius:10px;overflow:hidden;
+  box-shadow:0 4px 24px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.03)}
+</style>
+</head>
+<body>
+<h1>WUB WUB</h1>
+<canvas id="K" width="220" height="220" style="width:110px;height:110px;cursor:ns-resize;margin-bottom:4px"></canvas>
+<div class="lbl">Mix</div>
+
+<div class="section">
+<div class="rtitle">Trigger</div>
+<span class="b on" onclick="setMode(0)">AUDIO</span>
+<span class="b" onclick="setMode(1)">MIDI</span>
+<span class="b" onclick="setMode(2)">SYNC</span>
+</div>
+
+<div class="section hide" id="BR">
+<div class="rtitle">Beat Division</div>
+<span class="b" onclick="setBeat(0)">1/8</span>
+<span class="b on" onclick="setBeat(1)">1/4</span>
+<span class="b" onclick="setBeat(2)">1/2</span>
+<span class="b" onclick="setBeat(3)">1/1</span>
+</div>
+
+<div class="section">
+<div class="rtitle">Envelope</div>
+<span class="b" onclick="setShape(0)">Linear</span>
+<span class="b" onclick="setShape(1)">Expo</span>
+<span class="b on" onclick="setShape(2)">Smooth</span>
+<span class="b" onclick="setShape(3)">SmoothExp</span>
+<span class="b" onclick="setShape(4)">FastAtk</span>
+<span class="b" onclick="setShape(5)">SlowRel</span>
+<span class="b" onclick="setShape(6)">DblPeak</span>
+</div>
+
+<div class="canvas-wrap">
+<canvas id="E" width="800" height="300" style="width:400px;height:150px;cursor:crosshair;display:block"></canvas>
+</div>
+<div class="hint">click to add · drag to move · double-click to remove</div>
+
+<script>
+var N=64, pi=Math.PI, tbl=[], mix=100, mode=0, beat=1, shape=2;
+var kDrag=false,kY=0,kV=0;
+var i;
+for(i=0;i<N;i++) tbl[i]=0;
+
+var K=document.getElementById('K');
+var kx=K.getContext('2d');
+var E=document.getElementById('E');
+var ex=E.getContext('2d');
+var EW=800,EH=300,PAD=20;
+
+var points=[{x:0,y:1},{x:1,y:0}];
+var dragIdx=-1;
+
+function tx(p,v){
+  try{var f=document.createElement('iframe');f.style.display='none';
+  f.src='juce://set?'+p+'='+v;document.body.appendChild(f);
+  setTimeout(function(){try{f.remove();}catch(e){}},100);}catch(e){}
+}
+
+function txTbl(){var a=[];for(var i=0;i<N;i++)a.push(Math.round(tbl[i]*100));tx('table',a.join(','));}
+
+function catmull(p0,p1,p2,p3,t){
+  var a=.5*(2*p1+(-p0+p2)*t+(2*p0-5*p1+4*p2-p3)*t*t+(-p0+3*p1-3*p2+p3)*t*t*t);
+  return Math.max(0,Math.min(1,a));
+}
+
+function evalCurve(t){
+  if(points.length<2)return 0;
+  if(t<=points[0].x)return points[0].y;
+  if(t>=points[points.length-1].x)return points[points.length-1].y;
+  var i;
+  for(i=0;i<points.length-1;i++){
+    if(t>=points[i].x&&t<=points[i+1].x){
+      var dt=(t-points[i].x)/(points[i+1].x-points[i].x);
+      var p0=points[Math.max(0,i-1)].y;
+      var p1=points[i].y;
+      var p2=points[i+1].y;
+      var p3=points[Math.min(points.length-1,i+2)].y;
+      return catmull(p0,p1,p2,p3,dt);
+    }
+  }
+  return 0;
+}
+
+function rebuildTable(){
+  for(var i=0;i<N;i++){
+    var t=i/(N-1);
+    tbl[i]=evalCurve(t);
+  }
+}
+
+function drawK(){
+  var w=220,cx=110,cy=110,r=82;
+  kx.clearRect(0,0,w,w);
+  
+  kx.beginPath();kx.arc(cx,cy,r,.75*pi,2.25*pi);
+  kx.strokeStyle='#1a1a1e';kx.lineWidth=12;kx.lineCap='round';kx.stroke();
+  
+  kx.beginPath();kx.arc(cx,cy,r,.75*pi,.75*pi+(mix/100)*1.5*pi);
+  kx.strokeStyle='#ffff00';kx.lineWidth=12;kx.lineCap='round';kx.stroke();
+  
+  kx.shadowColor='rgba(255,255,0,0.4)';kx.shadowBlur=15;
+  kx.beginPath();kx.arc(cx,cy,r,.75*pi,.75*pi+(mix/100)*1.5*pi);
+  kx.strokeStyle='#ffff00';kx.lineWidth=4;kx.lineCap='round';kx.stroke();
+  kx.shadowBlur=0;
+  
+  kx.fillStyle='#fff';kx.font='bold 28px -apple-system,sans-serif';
+  kx.textAlign='center';kx.textBaseline='middle';
+  kx.fillText(Math.round(mix)+'%',cx,cy);
+}
+
+function drawE(){
+  ex.clearRect(0,0,EW,EH);
+  
+  var grad=ex.createLinearGradient(0,0,0,EH);
+  grad.addColorStop(0,'#0c0c10');
+  grad.addColorStop(1,'#080809');
+  ex.fillStyle=grad;ex.fillRect(0,0,EW,EH);
+  
+  ex.strokeStyle='#161618';ex.lineWidth=1;
+  var gi;
+  for(gi=0;gi<=8;gi++){var gx=PAD+(EW-2*PAD)*gi/8;ex.beginPath();ex.moveTo(gx,PAD);ex.lineTo(gx,EH-PAD);ex.stroke();}
+  for(gi=0;gi<=4;gi++){var gy=PAD+(EH-2*PAD)*gi/4;ex.beginPath();ex.moveTo(PAD,gy);ex.lineTo(EW-PAD,gy);ex.stroke();}
+
+  ex.beginPath();ex.moveTo(PAD,EH-PAD);
+  for(var i=0;i<N;i++){var t=i/(N-1);ex.lineTo(PAD+(EW-2*PAD)*t,EH-PAD-(EH-2*PAD)*tbl[i]);}
+  ex.lineTo(EW-PAD,EH-PAD);ex.closePath();
+  var fGrad=ex.createLinearGradient(0,PAD,0,EH-PAD);
+  fGrad.addColorStop(0,'rgba(255,255,0,0.12)');
+  fGrad.addColorStop(1,'rgba(255,255,0,0.01)');
+  ex.fillStyle=fGrad;ex.fill();
+
+  ex.save();
+  ex.shadowColor='rgba(255,255,0,0.5)';ex.shadowBlur=6;
+  ex.beginPath();
+  for(var i=0;i<N;i++){var t=i/(N-1);var cx2=PAD+(EW-2*PAD)*t,cy2=EH-PAD-(EH-2*PAD)*tbl[i];
+    if(i===0)ex.moveTo(cx2,cy2);else ex.lineTo(cx2,cy2);}
+  ex.strokeStyle='#ffff00';ex.lineWidth=2.5;ex.stroke();
+  ex.restore();
+
+  for(var i=0;i<points.length;i++){
+    var px=PAD+(EW-2*PAD)*points[i].x;
+    var py=EH-PAD-(EH-2*PAD)*points[i].y;
+    ex.save();
+    ex.shadowColor=i===dragIdx?'rgba(0,255,0,0.6)':'rgba(255,255,0,0.5)';ex.shadowBlur=8;
+    ex.beginPath();ex.arc(px,py,6,0,2*pi);
+    ex.fillStyle=i===dragIdx?'#00ff88':'#ffff00';ex.fill();
+    ex.restore();
+    ex.beginPath();ex.arc(px,py,6,0,2*pi);
+    ex.strokeStyle='rgba(0,0,0,0.4)';ex.lineWidth=1.5;ex.stroke();
+  }
+
+  ex.fillStyle='#2a2a2a';ex.font='500 9px -apple-system,sans-serif';ex.textAlign='left';
+  ex.fillText('0',PAD+2,EH-PAD-4);ex.fillText('1',PAD+2,PAD+12);
+  ex.textAlign='right';
+  ex.fillText('time',EW-PAD-2,EH-PAD-4);
+}
+
+function radioG(parent,idx){
+  var btns=parent.querySelectorAll('.b');
+  for(var j=0;j<btns.length;j++) btns[j].className='b';
+  if(btns[idx]) btns[idx].className='b on';
+}
+
+function setMode(v){
+  mode=v;tx('mode',v);
+  radioG(document.querySelectorAll('.section')[0],v);
+  document.getElementById('BR').className=v===2?'section':'section hide';
+}
+function setBeat(v){beat=v;tx('beat',v);radioG(document.getElementById('BR'),v);}
+function setShape(v){
+  shape=v;
+  var envF=function(t,s){
+    switch(s){
+      case 0:return t;
+      case 1:return 1-Math.exp(-5*t);
+      case 2:return .5-.5*Math.cos(pi*t);
+      case 3:var vv=.5-.5*Math.cos(pi*t);return vv*vv;
+      case 4:return Math.pow(t,.3);
+      case 5:return t*t*t;
+      case 6:return Math.max(0,Math.min(1,t-.3*Math.sin(2*pi*t)));
+    }return t;
+  };
+  points=[];
+  for(var i=0;i<=8;i++){points.push({x:i/8,y:envF(i/8,v)});}
+  rebuildTable();
+  drawE();
+  txTbl();
+  radioG(document.querySelectorAll('.section')[2],v);
+}
+
+function ptAt(x,y){
+  for(var i=0;i<points.length;i++){
+    var px=PAD+(EW-2*PAD)*points[i].x;
+    var py=EH-PAD-(EH-2*PAD)*points[i].y;
+    var d=Math.sqrt((x-px)*(x-px)+(y-py)*(y-py));
+    if(d<16)return i;
+  }
+  return -1;
+}
+
+function addPoint(x,y){
+  var t=Math.max(0,Math.min(1,(x-PAD)/(EW-2*PAD)));
+  var v=Math.max(0,Math.min(1,1-(y-PAD)/(EH-2*PAD)));
+  for(var k=0;k<points.length;k++){
+    if(Math.abs(points[k].x-t)<0.02&&Math.abs(points[k].y-v)<0.02)return;
+  }
+  var i;
+  for(i=0;i<points.length;i++){
+    if(points[i].x>t)break;
+  }
+  points.splice(i,0,{x:t,y:v});
+}
+
+function movePoint(idx,x,y){
+  if(idx===0){
+    points[idx].y=Math.max(0,Math.min(1,1-(y-PAD)/(EH-2*PAD)));
+  }else if(idx===points.length-1){
+    points[idx].y=Math.max(0,Math.min(1,1-(y-PAD)/(EH-2*PAD)));
+  }else{
+    var minX=points[idx-1].x+0.02;
+    var maxX=points[idx+1].x-0.02;
+    var newX=Math.max(minX,Math.min(maxX,(x-PAD)/(EW-2*PAD)));
+    points[idx].x=newX;
+    points[idx].y=Math.max(0,Math.min(1,1-(y-PAD)/(EH-2*PAD)));
+  }
+}
+
+function removePoint(idx){
+  if(idx>0&&idx<points.length-1){
+    points.splice(idx,1);
+  }
+}
+
+var lastClick=0;
+E.onmousedown=function(e){
+  var r=E.getBoundingClientRect();
+  var scaleX=E.width/r.width;
+  var scaleY=E.height/r.height;
+  var mx=(e.clientX-r.left)*scaleX;
+  var my=(e.clientY-r.top)*scaleY;
+  var idx=ptAt(mx,my);
+  if(idx>=0){
+    var now=new Date().getTime();
+    if(now-lastClick<300){
+      removePoint(idx);lastClick=0;
+      rebuildTable();drawE();txTbl();
+    }else{
+      dragIdx=idx;lastClick=now;
+    }
+  }else{
+    addPoint(mx,my);lastClick=0;
+    rebuildTable();drawE();txTbl();
+  }
+  e.preventDefault();
+};
+
+document.onmousemove=function(e){
+  if(dragIdx>=0){
+    var r=E.getBoundingClientRect();
+    var scaleX=E.width/r.width;
+    var scaleY=E.height/r.height;
+    var mx=(e.clientX-r.left)*scaleX;
+    var my=(e.clientY-r.top)*scaleY;
+    movePoint(dragIdx,mx,my);
+    rebuildTable();
+    drawE();
+  }
+  if(kDrag){mix=Math.max(0,Math.min(100,kV+(kY-e.clientY)*.5));drawK();tx('mix',Math.round(mix));}
+};
+
+document.onmouseup=function(){
+  if(dragIdx>=0){
+    rebuildTable();
+    drawE();
+    txTbl();
+  }
+  dragIdx=-1;
+  kDrag=false;
+};
+
+K.onmousedown=function(e){kDrag=true;kY=e.clientY;kV=mix;e.preventDefault();};
+
+setShape(2);
+drawK();
+drawE();
+</script>
+</body>
+</html>
