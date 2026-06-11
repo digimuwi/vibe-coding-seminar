@@ -1,7 +1,8 @@
 # Songtext-Analyse
 
-Eine kleine Webseite zur **quantitativen Analyse von Songtexten**. Datenquelle
-ist ausschließlich [genius.com](https://genius.com/).
+Eine kleine **Web-App** zur **quantitativen Analyse von Songtexten**. Datenquelle
+ist ausschließlich [genius.com](https://genius.com/). Sie läuft im Browser und
+lässt sich zusätzlich wie eine App installieren.
 
 ## Was sie kann
 
@@ -13,8 +14,10 @@ ist ausschließlich [genius.com](https://genius.com/).
 
 ## Wie sie startet
 
-Es ist eine statische Webseite – einfach `index.html` im Browser öffnen
-(kein Server, kein Build nötig).
+Statische Web-App – einfach `index.html` im Browser öffnen (kein Server, kein
+Build nötig). Wird sie über die Seminar-Website (https) aufgerufen, lässt sie
+sich über das Browser-Menü **installieren** (eigenes Icon, eigenes Fenster); das
+Installieren funktioniert nur über https, nicht beim direkten Öffnen der Datei.
 
 ## Technischer Hinweis
 

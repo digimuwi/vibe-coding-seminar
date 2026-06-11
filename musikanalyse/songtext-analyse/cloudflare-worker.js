@@ -6,14 +6,21 @@
 
 export default {
   async fetch(request) {
-    const ziel = new URL(request.url).searchParams.get('url');
+    // CORS-Header, die der Browser zum Lesen fremder Inhalte braucht.
+    const cors = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, OPTIONS',
+      'Access-Control-Allow-Headers': '*',
+    };
 
     // Vorab-Anfrage des Browsers (CORS preflight) beantworten.
     if (request.method === 'OPTIONS') {
-      return new Response(null, { headers: corsHeaders() });
+      return new Response(null, { headers: cors });
     }
+
+    const ziel = new URL(request.url).searchParams.get('url');
     if (!ziel) {
-      return new Response('Bitte ?url=... angeben', { status: 400, headers: corsHeaders() });
+      return new Response('Bitte ?url=... angeben', { status: 400, headers: cors });
     }
 
     try {
@@ -24,19 +31,15 @@ export default {
         },
       });
       const koerper = await antwort.arrayBuffer();
-      const kopf = corsHeaders();
-      kopf['Content-Type'] = antwort.headers.get('Content-Type') || 'text/plain; charset=utf-8';
-      return new Response(koerper, { status: antwort.status, headers: kopf });
+      return new Response(koerper, {
+        status: antwort.status,
+        headers: {
+          ...cors,
+          'Content-Type': antwort.headers.get('Content-Type') || 'text/plain; charset=utf-8',
+        },
+      });
     } catch (e) {
-      return new Response('Fehler beim Laden: ' + e.message, { status: 502, headers: corsHeaders() });
+      return new Response('Fehler beim Laden: ' + String(e), { status: 502, headers: cors });
     }
   },
 };
-
-function corsHeaders() {
-  return {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': '*',
-  };
-}

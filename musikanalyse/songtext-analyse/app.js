@@ -16,6 +16,9 @@ const PROXIES = [
   { name: 'thingproxy',     baue: (u) => 'https://thingproxy.freeboard.io/fetch/' + u, auspacken: (t) => t },
   { name: 'corsproxy.io',   baue: (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u), auspacken: (t) => t },
 ];
+// Voreingestellte Vermittler-Adresse (eigener Cloudflare-Worker). Wird benutzt,
+// solange im Feld "Eigene Vermittler-Adresse" nichts anderes eingetragen ist.
+const STANDARD_PROXY = 'https://songtextproxy.trashy-stuff.workers.dev/';
 const PROXY_TIMEOUT = 13000; // ms pro Dienst, dann zum nächsten
 let letzterGuter = null;     // Name des zuletzt erfolgreichen Dienstes – wird zuerst probiert
 const MAX_LIEDER = 25; // Künstler-Modus: nur die bekanntesten Lieder
@@ -42,7 +45,7 @@ function proxyStatusZeigen() {
   proxyStatusEl.textContent = gesetzt ? '✓ gespeichert' : 'nicht gesetzt';
   proxyStatusEl.classList.toggle('ok', gesetzt);
 }
-proxyEl.value = localStorage.getItem('proxyUrl') || '';
+proxyEl.value = localStorage.getItem('proxyUrl') || STANDARD_PROXY;
 proxyStatusZeigen();
 proxyEl.addEventListener('input', () => {
   const wert = proxyEl.value.trim();
@@ -74,7 +77,7 @@ function el(tag, opts = {}, kinder = []) {
 // ---------- Abruf über Proxy ----------
 // Eigene Vermittler-Adresse (falls eingetragen) als bevorzugten Dienst ergänzen.
 function eigenerProxy() {
-  const u = (localStorage.getItem('proxyUrl') || '').trim();
+  const u = (localStorage.getItem('proxyUrl') || STANDARD_PROXY).trim();
   if (!u) return null;
   return {
     name: 'eigener',
@@ -363,3 +366,12 @@ form.addEventListener('submit', async (e) => {
     losBtn.disabled = false;
   }
 });
+
+// ---------- Web-App installierbar machen ----------
+// Service Worker registrieren (funktioniert nur über http/https, nicht bei
+// direktem Öffnen der Datei). Fehler werden bewusst ignoriert.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}

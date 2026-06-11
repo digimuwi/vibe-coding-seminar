@@ -4,9 +4,10 @@ studierende: Rian Knittel
 typ: web
 start: index.html
 ---
-Quantitative Analyse von Songtexten auf Basis von **genius.com**. Du gibst ein
-Wort oder eine Phrase ein und siehst als **Säulendiagramm**, wie oft es in den
-Liedern vorkommt.
+Installierbare **Web-App** zur quantitativen Analyse von Songtexten auf Basis von
+**genius.com**. Du gibst ein Wort oder eine Phrase ein und siehst als
+**Säulendiagramm**, wie oft es in den Liedern vorkommt. Die App lässt sich im
+Browser öffnen oder auf Startbildschirm/Desktop installieren.
 
 - **Filter „Künstler"**: eine Säule pro Album des Künstlers, darunter
   aufgeschlüsselt, wie oft der Begriff in welchem Lied des Albums vorkommt.

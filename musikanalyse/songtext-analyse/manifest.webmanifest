@@ -1,0 +1,14 @@
+{
+  "name": "Songtext-Analyse",
+  "short_name": "Songtexte",
+  "description": "Quantitative Analyse von Songtexten auf Basis von genius.com.",
+  "lang": "de",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f9fafb",
+  "theme_color": "#4f46e5",
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}

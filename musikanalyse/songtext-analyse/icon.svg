@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Songtext-Analyse">
+  <rect width="512" height="512" rx="96" fill="#4f46e5"/>
+  <g fill="#ffffff">
+    <!-- Säulendiagramm -->
+    <rect x="132" y="300" width="50" height="96" rx="10"/>
+    <rect x="206" y="240" width="50" height="156" rx="10"/>
+    <rect x="280" y="176" width="50" height="220" rx="10"/>
+    <!-- kleine Musiknote -->
+    <circle cx="338" cy="150" r="28"/>
+    <rect x="360" y="64" width="14" height="92" rx="7"/>
+  </g>
+</svg>
