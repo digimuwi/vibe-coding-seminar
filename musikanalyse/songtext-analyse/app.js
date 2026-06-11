@@ -32,7 +32,14 @@ const form = $('suche'), wortEl = $('wort'), filterEl = $('filter'),
   diagramm = $('diagramm'), overlay = $('overlay'), overlayTitel = $('overlay-titel'),
   overlayMeta = $('overlay-meta'), overlayInhalt = $('overlay-inhalt'),
   overlayZu = $('overlay-zu'), proxyEl = $('proxy-url'), proxyStatusEl = $('proxy-status'),
-  ganzwortEl = $('ganzwort'), anzahlEl = $('anzahl');
+  ganzwortEl = $('ganzwort'), anzahlEl = $('anzahl'), darstellungEl = $('darstellung');
+
+// Darstellung (absolut / pro 1000 Wörter) umschalten, ohne neu zu laden.
+darstellungEl.addEventListener('change', () => {
+  if (!letzteAnsicht) return;
+  if (letzteAnsicht.typ === 'kuenstler') renderKuenstler();
+  else renderAlbum();
+});
 
 filterEl.addEventListener('change', () => {
   const album = filterEl.value === 'album';
@@ -244,40 +251,67 @@ async function poolKarte(items, fn, onProgress) {
   return ergebnisse;
 }
 
+// ---------- Relative Häufigkeit / Darstellung ----------
+// Zählt die Wörter eines Liedtexts (für "Treffer pro 1000 Wörter").
+function zaehleWoerter(text) {
+  if (!text) return 0;
+  const m = text.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu);
+  return m ? m.length : 0;
+}
+function fmt(n) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: 1 });
+}
+// Liefert je nach gewählter Darstellung den Balken-Wert und die Beschriftungen.
+function werte(treffer, woerter) {
+  const rel = woerter > 0 ? (treffer / woerter) * 1000 : 0;
+  if (darstellungEl.value === 'pro1000') {
+    return { wert: rel, haupt: fmt(rel) + '/1000', neben: treffer + '×' };
+  }
+  return { wert: treffer, haupt: treffer + '×', neben: fmt(rel) + '/1000 W.' };
+}
+
+let letzteAnsicht = null; // gespeicherte Auswertung, damit die Darstellung umschaltbar ist
+
 // ---------- Analyse: Künstler ----------
 async function analyseKuenstler(name, phrase, ganzwort, anzahl) {
   setStatus('Suche Künstler „' + name + '" …');
   const artist = await findeKuenstler(name);
   if (!artist) return setStatus('Keinen Künstler dazu gefunden.', true);
 
-  setStatus('Lade Liedliste von ' + artist.name + ' …');
+  const wieviele = anzahl === Infinity ? 'alle' : anzahl;
+  setStatus('Lade Liedliste von ' + artist.name + ' (' + wieviele + ' Lieder) …');
   const lieder = await kuenstlerLieder(artist.id, anzahl);
   if (!lieder.length) return setStatus('Keine Lieder gefunden.', true);
 
   const daten = (await poolKarte(lieder, async (s) => {
     const det = await songDetail(s.id);
     const text = await holeText(det);
-    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase, ganzwort) };
+    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text) };
   }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
 
-  renderKuenstler(artist, phrase, daten, lieder.length >= anzahl, anzahl);
+  letzteAnsicht = { typ: 'kuenstler', artist, phrase, daten, begrenzt: lieder.length >= anzahl, limit: anzahl };
+  renderKuenstler();
 }
 
-function renderKuenstler(artist, phrase, daten, begrenzt, limit) {
+function renderKuenstler() {
+  const { artist, phrase, daten, begrenzt, limit } = letzteAnsicht;
   const map = new Map();
   for (const d of daten) {
     const name = d.album && d.album.name ? d.album.name : 'Sonstige';
-    if (!map.has(name)) map.set(name, { name, lieder: [], summe: 0 });
+    if (!map.has(name)) map.set(name, { name, lieder: [], treffer: 0, woerter: 0 });
     const g = map.get(name);
     g.lieder.push(d);
-    g.summe += d.treffer;
+    g.treffer += d.treffer;
+    g.woerter += d.woerter;
   }
-  const gruppen = [...map.values()].sort((a, b) => {
+  const gruppen = [...map.values()];
+  for (const g of gruppen) g.w = werte(g.treffer, g.woerter);
+  gruppen.sort((a, b) => {
     if (a.name === 'Sonstige') return 1;
     if (b.name === 'Sonstige') return -1;
-    return b.summe - a.summe;
+    return b.w.wert - a.w.wert;
   });
-  const max = Math.max(1, ...gruppen.map((g) => g.summe));
+  const max = Math.max(1, ...gruppen.map((g) => g.w.wert));
   const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
 
   ergTitel.textContent = '„' + phrase + '" bei ' + artist.name +
@@ -287,19 +321,23 @@ function renderKuenstler(artist, phrase, daten, begrenzt, limit) {
   for (const g of gruppen) {
     const kopf = el('div', { class: 'album-kopf' }, [
       el('span', { class: 'titel', text: g.name }),
-      el('span', { class: 'summe', text: g.summe + '×' }),
+      el('span', { class: 'summe' }, [
+        el('span', { class: 'wert-haupt', text: g.w.haupt }),
+        el('span', { class: 'wert-neben', text: g.w.neben }),
+      ]),
     ]);
     const spur = el('div', { class: 'album-spur' },
-      el('div', { class: 'album-fuellung', style: 'width:' + (100 * g.summe / max) + '%' }));
+      el('div', { class: 'album-fuellung', style: 'width:' + (100 * g.w.wert / max) + '%' }));
 
-    const maxLied = Math.max(1, ...g.lieder.map((l) => l.treffer));
+    const liederW = g.lieder.map((l) => ({ l, w: werte(l.treffer, l.woerter) }));
+    const maxLied = Math.max(1, ...liederW.map((x) => x.w.wert));
     const liste = el('ul', { class: 'album-lieder' },
-      g.lieder.sort((a, b) => b.treffer - a.treffer).map((l) =>
+      liederW.sort((a, b) => b.w.wert - a.w.wert).map(({ l, w }) =>
         el('li', {}, [
           el('span', { class: 'lied-titel', text: l.titel }),
           el('span', { class: 'mini-spur' },
-            el('span', { class: 'mini-fuellung', style: 'width:' + (100 * l.treffer / maxLied) + '%' })),
-          el('span', { class: 'lied-wert', text: l.treffer + '×' }),
+            el('span', { class: 'mini-fuellung', style: 'width:' + (100 * w.wert / maxLied) + '%' })),
+          el('span', { class: 'lied-wert', text: w.haupt }),
         ])));
 
     diagramm.appendChild(el('div', { class: 'album-block' }, [kopf, spur, liste]));
@@ -323,14 +361,17 @@ async function analyseAlbum(name, phrase, ganzwort) {
 
   const daten = (await poolKarte(tracks, async (s) => {
     const text = await holeText(s);
-    return { titel: s.title, treffer: zaehle(text, phrase, ganzwort), text };
+    return { titel: s.title, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text), text };
   }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
 
-  renderAlbum(album, phrase, daten, ganzwort);
+  letzteAnsicht = { typ: 'album', album, phrase, daten, ganzwort };
+  renderAlbum();
 }
 
-function renderAlbum(album, phrase, daten, ganzwort) {
-  const max = Math.max(1, ...daten.map((d) => d.treffer));
+function renderAlbum() {
+  const { album, phrase, daten, ganzwort } = letzteAnsicht;
+  const datenW = daten.map((d) => ({ d, w: werte(d.treffer, d.woerter) }));
+  const max = Math.max(1, ...datenW.map((x) => x.w.wert));
   const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
   const kuenstler = album.artist ? album.artist.name : '';
 
@@ -338,7 +379,7 @@ function renderAlbum(album, phrase, daten, ganzwort) {
     (kuenstler ? ' (' + kuenstler + ')' : '') + ' – ' + gesamt + '×';
   diagramm.innerHTML = '';
 
-  for (const d of daten) {
+  for (const { d, w } of datenW) {
     const knopf = el('button', { class: 'text-knopf', text: 'Text anzeigen', attr: { type: 'button' } });
     knopf.addEventListener('click', () =>
       zeigeText(d.titel, kuenstler + ' · ' + d.treffer + ' Treffer', d.text, phrase, ganzwort));
@@ -346,8 +387,11 @@ function renderAlbum(album, phrase, daten, ganzwort) {
     diagramm.appendChild(el('div', { class: 'lied-zeile' }, [
       el('span', { class: 'balken-label', text: d.titel }),
       el('span', { class: 'balken-spur' },
-        el('span', { class: 'balken-fuellung', style: 'width:' + (100 * d.treffer / max) + '%' })),
-      el('span', { class: 'balken-wert', text: d.treffer + '×' }),
+        el('span', { class: 'balken-fuellung', style: 'width:' + (100 * w.wert / max) + '%' })),
+      el('span', { class: 'balken-wert' }, [
+        el('span', { class: 'wert-haupt', text: w.haupt }),
+        el('span', { class: 'wert-neben', text: w.neben }),
+      ]),
       knopf,
     ]));
   }
@@ -376,7 +420,9 @@ form.addEventListener('submit', async (e) => {
   const phrase = wortEl.value.trim();
   const name = nameEl.value.trim();
   const ganzwort = ganzwortEl.checked;
-  const anzahl = parseInt(anzahlEl.value, 10) || STANDARD_ANZAHL;
+  const anzahl = anzahlEl.value === 'alle'
+    ? Infinity
+    : (parseInt(anzahlEl.value, 10) || STANDARD_ANZAHL);
   if (!phrase || !name) return;
 
   losBtn.disabled = true;

@@ -90,7 +90,9 @@ h2 { font-size: 1.25rem; }
   padding: .7rem 1rem; background: #eef2ff;
 }
 .album-kopf .titel { font-weight: 700; }
-.album-kopf .summe { font-variant-numeric: tabular-nums; font-weight: 700; color: var(--akzent); }
+.album-kopf .summe { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; }
+.wert-haupt { font-weight: 700; color: var(--akzent); font-variant-numeric: tabular-nums; }
+.wert-neben { font-size: .72rem; color: var(--grau); font-variant-numeric: tabular-nums; }
 .album-spur { height: 8px; background: #e0e7ff; }
 .album-fuellung { height: 8px; background: var(--akzent); }
 .album-lieder { list-style: none; margin: 0; padding: .4rem .6rem; }
@@ -108,7 +110,7 @@ h2 { font-size: 1.25rem; }
 .balken-label { font-size: .9rem; text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .balken-spur { background: #eef2ff; border-radius: 6px; overflow: hidden; }
 .balken-fuellung { background: var(--akzent); height: 22px; border-radius: 6px; min-width: 2px; transition: width .4s ease; }
-.balken-wert { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 2rem; text-align: right; }
+.balken-wert { display: flex; flex-direction: column; align-items: flex-end; line-height: 1.15; min-width: 4.5rem; }
 .text-knopf { background: none; color: var(--akzent); padding: .2rem .5rem; font-size: .85rem; text-decoration: underline; }
 
 /* ----- Overlay (Volltext) ----- */
