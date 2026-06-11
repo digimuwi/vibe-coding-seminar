@@ -447,10 +447,10 @@ body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background: url("uni-tuebingen-logo.svg") no-repeat center center;
-  background-size: min(96vw, 1500px);
+  background: url("uni-tuebingen-schriftzug.svg") no-repeat center center;
+  background-size: min(88vw, 1150px);
   filter: brightness(0) invert(1);
-  opacity: 0.11;
+  opacity: 0.15;
   pointer-events: none;
   z-index: 0;
 }
