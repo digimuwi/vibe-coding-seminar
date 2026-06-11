@@ -38,6 +38,17 @@
         <label for="name" id="name-label">Künstler</label>
         <input id="name" type="text" placeholder="z. B. Adele" required />
       </div>
+      <div class="feld" id="anzahl-feld">
+        <label for="anzahl">Lieder (bei Künstler)</label>
+        <select id="anzahl">
+          <option value="25">25 (schnell)</option>
+          <option value="50" selected>50</option>
+          <option value="100">100 (langsam)</option>
+        </select>
+      </div>
+      <div class="feld feld-check">
+        <label class="check"><input type="checkbox" id="ganzwort" /> nur ganze Wörter</label>
+      </div>
       <button type="submit" id="los">Analysieren</button>
     </form>
 

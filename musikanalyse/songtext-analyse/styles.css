@@ -35,7 +35,11 @@ form {
   margin: 1.5rem 0 .8rem;
 }
 .feld { display: flex; flex-direction: column; gap: .3rem; flex: 1 1 140px; }
+.feld[hidden] { display: none; }
 .feld-breit { flex: 2 1 220px; }
+.feld-check { flex: 1 1 140px; justify-content: flex-end; }
+.check { display: flex; align-items: center; gap: .45rem; font-size: .9rem; font-weight: 600; color: var(--text); cursor: pointer; }
+.check input { width: 1.05rem; height: 1.05rem; cursor: pointer; }
 label { font-size: .85rem; font-weight: 600; color: var(--grau); }
 input, select {
   padding: .55rem .7rem;

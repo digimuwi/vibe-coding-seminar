@@ -21,8 +21,8 @@ const PROXIES = [
 const STANDARD_PROXY = 'https://songtextproxy.trashy-stuff.workers.dev/';
 const PROXY_TIMEOUT = 13000; // ms pro Dienst, dann zum nächsten
 let letzterGuter = null;     // Name des zuletzt erfolgreichen Dienstes – wird zuerst probiert
-const MAX_LIEDER = 25; // Künstler-Modus: nur die bekanntesten Lieder
-const PARALLEL = 4;    // gleichzeitige Abrufe
+const STANDARD_ANZAHL = 50; // Künstler-Modus: wie viele Lieder höchstens
+const PARALLEL = 4;         // gleichzeitige Abrufe
 
 // ---------- DOM ----------
 const $ = (id) => document.getElementById(id);
@@ -31,12 +31,14 @@ const form = $('suche'), wortEl = $('wort'), filterEl = $('filter'),
   statusEl = $('status'), ergebnis = $('ergebnis'), ergTitel = $('ergebnis-titel'),
   diagramm = $('diagramm'), overlay = $('overlay'), overlayTitel = $('overlay-titel'),
   overlayMeta = $('overlay-meta'), overlayInhalt = $('overlay-inhalt'),
-  overlayZu = $('overlay-zu'), proxyEl = $('proxy-url'), proxyStatusEl = $('proxy-status');
+  overlayZu = $('overlay-zu'), proxyEl = $('proxy-url'), proxyStatusEl = $('proxy-status'),
+  ganzwortEl = $('ganzwort'), anzahlEl = $('anzahl');
 
 filterEl.addEventListener('change', () => {
   const album = filterEl.value === 'album';
   nameLabel.textContent = album ? 'Album' : 'Künstler';
   nameEl.placeholder = album ? 'z. B. 21' : 'z. B. Adele';
+  $('anzahl-feld').hidden = album; // "Lieder (bei Künstler)" nur im Künstler-Modus
 });
 
 // Eigene Vermittler-Adresse: aus dem Browser laden und beim Tippen speichern.
@@ -140,15 +142,15 @@ async function findeAlbum(name) {
   const albumSec = sec.find((s) => s.type === 'album');
   return albumSec && albumSec.hits.length ? albumSec.hits[0].result : null;
 }
-async function kuenstlerLieder(artistId) {
+async function kuenstlerLieder(artistId, limit) {
   const lieder = [];
   let page = 1;
-  while (lieder.length < MAX_LIEDER && page) {
+  while (lieder.length < limit && page) {
     const d = await jsonGet(GENIUS + '/artists/' + artistId +
       '/songs?per_page=20&page=' + page + '&sort=popularity');
     for (const s of (d.response.songs || [])) {
       lieder.push(s);
-      if (lieder.length >= MAX_LIEDER) break;
+      if (lieder.length >= limit) break;
     }
     page = d.response.next_page;
   }
@@ -175,7 +177,19 @@ function parseLyrics(html) {
     tmp.innerHTML = c.innerHTML.replace(/<br\s*\/?>/gi, '\n');
     teile.push(tmp.textContent);
   });
-  return teile.join('\n').replace(/\n{3,}/g, '\n\n').trim();
+  return bereinige(teile.join('\n'));
+}
+
+// Entfernt genius-Markierungen ([Strophe], [Refrain] …) und typische Zusätze,
+// damit sie weder gezählt noch markiert werden.
+function bereinige(text) {
+  return text
+    .replace(/\[[^\]]*\]/g, '')          // Abschnitts-Marker wie [Chorus], [Verse 1]
+    .replace(/You might also like/gi, '') // von genius eingestreuter Hinweis
+    .replace(/\d*\s*Embed\s*$/i, '')      // "…123Embed" am Ende
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
 }
 async function holeText(song) {
   const key = 'lyrics:' + song.id;
@@ -187,13 +201,20 @@ async function holeText(song) {
 }
 
 // ---------- Zählen & Markieren ----------
-function zaehle(text, phrase) {
+// Baut den Suchausdruck. Bei "ganze Wörter" sorgen Grenzen dafür, dass z. B.
+// "love" nicht in "glove" oder "lover" mitgezählt wird (auch mit Umlauten).
+function bauRegex(phrase, ganzwort) {
+  const kern = escapeRegex(phrase);
+  const muster = ganzwort ? '(?<![\\p{L}\\p{N}])' + kern + '(?![\\p{L}\\p{N}])' : kern;
+  return new RegExp(muster, 'giu');
+}
+function zaehle(text, phrase, ganzwort) {
   if (!text || !phrase) return 0;
-  const m = text.match(new RegExp(escapeRegex(phrase), 'gi'));
+  const m = text.match(bauRegex(phrase, ganzwort));
   return m ? m.length : 0;
 }
-function markiere(text, phrase) {
-  const re = new RegExp(escapeRegex(phrase), 'gi');
+function markiere(text, phrase, ganzwort) {
+  const re = bauRegex(phrase, ganzwort);
   let out = '', last = 0, m;
   while ((m = re.exec(text))) {
     if (m.index === re.lastIndex) { re.lastIndex++; continue; }
@@ -221,25 +242,25 @@ async function poolKarte(items, fn, onProgress) {
 }
 
 // ---------- Analyse: Künstler ----------
-async function analyseKuenstler(name, phrase) {
+async function analyseKuenstler(name, phrase, ganzwort, anzahl) {
   setStatus('Suche Künstler „' + name + '" …');
   const artist = await findeKuenstler(name);
   if (!artist) return setStatus('Keinen Künstler dazu gefunden.', true);
 
   setStatus('Lade Liedliste von ' + artist.name + ' …');
-  const lieder = await kuenstlerLieder(artist.id);
+  const lieder = await kuenstlerLieder(artist.id, anzahl);
   if (!lieder.length) return setStatus('Keine Lieder gefunden.', true);
 
   const daten = (await poolKarte(lieder, async (s) => {
     const det = await songDetail(s.id);
     const text = await holeText(det);
-    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase) };
+    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase, ganzwort) };
   }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
 
-  renderKuenstler(artist, phrase, daten, lieder.length >= MAX_LIEDER);
+  renderKuenstler(artist, phrase, daten, lieder.length >= anzahl, anzahl);
 }
 
-function renderKuenstler(artist, phrase, daten, begrenzt) {
+function renderKuenstler(artist, phrase, daten, begrenzt, limit) {
   const map = new Map();
   for (const d of daten) {
     const name = d.album && d.album.name ? d.album.name : 'Sonstige';
@@ -282,13 +303,13 @@ function renderKuenstler(artist, phrase, daten, begrenzt) {
   }
 
   setStatus('Fertig.' + (begrenzt
-    ? ' Hinweis: nur die ' + MAX_LIEDER + ' bekanntesten Lieder wurden ausgewertet.'
+    ? ' Hinweis: nur die ' + limit + ' bekanntesten Lieder wurden ausgewertet.'
     : ''));
   ergebnis.hidden = false;
 }
 
 // ---------- Analyse: Album ----------
-async function analyseAlbum(name, phrase) {
+async function analyseAlbum(name, phrase, ganzwort) {
   setStatus('Suche Album „' + name + '" …');
   const album = await findeAlbum(name);
   if (!album) return setStatus('Kein Album dazu gefunden.', true);
@@ -299,13 +320,13 @@ async function analyseAlbum(name, phrase) {
 
   const daten = (await poolKarte(tracks, async (s) => {
     const text = await holeText(s);
-    return { titel: s.title, treffer: zaehle(text, phrase), text };
+    return { titel: s.title, treffer: zaehle(text, phrase, ganzwort), text };
   }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
 
-  renderAlbum(album, phrase, daten);
+  renderAlbum(album, phrase, daten, ganzwort);
 }
 
-function renderAlbum(album, phrase, daten) {
+function renderAlbum(album, phrase, daten, ganzwort) {
   const max = Math.max(1, ...daten.map((d) => d.treffer));
   const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
   const kuenstler = album.artist ? album.artist.name : '';
@@ -317,7 +338,7 @@ function renderAlbum(album, phrase, daten) {
   for (const d of daten) {
     const knopf = el('button', { class: 'text-knopf', text: 'Text anzeigen', attr: { type: 'button' } });
     knopf.addEventListener('click', () =>
-      zeigeText(d.titel, kuenstler + ' · ' + d.treffer + ' Treffer', d.text, phrase));
+      zeigeText(d.titel, kuenstler + ' · ' + d.treffer + ' Treffer', d.text, phrase, ganzwort));
 
     diagramm.appendChild(el('div', { class: 'lied-zeile' }, [
       el('span', { class: 'balken-label', text: d.titel }),
@@ -333,11 +354,11 @@ function renderAlbum(album, phrase, daten) {
 }
 
 // ---------- Overlay (Volltext) ----------
-function zeigeText(titel, meta, text, phrase) {
+function zeigeText(titel, meta, text, phrase, ganzwort) {
   overlayTitel.textContent = titel;
   overlayMeta.textContent = meta;
   overlayInhalt.innerHTML = text
-    ? markiere(text, phrase)
+    ? markiere(text, phrase, ganzwort)
     : '(Der Text konnte nicht geladen werden.)';
   overlay.hidden = false;
 }
@@ -351,14 +372,16 @@ form.addEventListener('submit', async (e) => {
   e.preventDefault();
   const phrase = wortEl.value.trim();
   const name = nameEl.value.trim();
+  const ganzwort = ganzwortEl.checked;
+  const anzahl = parseInt(anzahlEl.value, 10) || STANDARD_ANZAHL;
   if (!phrase || !name) return;
 
   losBtn.disabled = true;
   ergebnis.hidden = true;
   diagramm.innerHTML = '';
   try {
-    if (filterEl.value === 'album') await analyseAlbum(name, phrase);
-    else await analyseKuenstler(name, phrase);
+    if (filterEl.value === 'album') await analyseAlbum(name, phrase, ganzwort);
+    else await analyseKuenstler(name, phrase, ganzwort, anzahl);
   } catch (err) {
     setStatus('Fehler: ' + err.message +
       ' – gerade ist offenbar kein Vermittler-Dienst erreichbar. Bitte in ein paar Sekunden erneut auf „Analysieren" klicken.', true);
