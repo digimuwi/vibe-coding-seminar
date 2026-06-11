@@ -5,11 +5,19 @@
    Abruf über einen öffentlichen Vermittler-Dienst (Proxy). */
 
 const GENIUS = 'https://genius.com/api';
+// Mehrere öffentliche Vermittler-Dienste (CORS-Proxys). Fällt einer aus, wird
+// automatisch der nächste probiert. `auspacken` holt bei JSON-verpackenden
+// Diensten den eigentlichen Inhalt heraus.
 const PROXIES = [
-  (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u),
-  (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u),
-  (u) => 'https://thingproxy.freeboard.io/fetch/' + u,
+  { name: 'allorigins-raw', baue: (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u), auspacken: (t) => t },
+  { name: 'allorigins-get', baue: (u) => 'https://api.allorigins.win/get?url=' + encodeURIComponent(u), auspacken: (t) => JSON.parse(t).contents },
+  { name: 'codetabs',       baue: (u) => 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u), auspacken: (t) => t },
+  { name: 'cors.eu.org',    baue: (u) => 'https://cors.eu.org/' + u, auspacken: (t) => t },
+  { name: 'thingproxy',     baue: (u) => 'https://thingproxy.freeboard.io/fetch/' + u, auspacken: (t) => t },
+  { name: 'corsproxy.io',   baue: (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u), auspacken: (t) => t },
 ];
+const PROXY_TIMEOUT = 13000; // ms pro Dienst, dann zum nächsten
+let bevorzugt = 0;           // zuletzt erfolgreicher Dienst – wird zuerst probiert
 const MAX_LIEDER = 25; // Künstler-Modus: nur die bekanntesten Lieder
 const PARALLEL = 4;    // gleichzeitige Abrufe
 
@@ -49,16 +57,34 @@ function el(tag, opts = {}, kinder = []) {
 }
 
 // ---------- Abruf über Proxy ----------
+async function einProxy(idx, url) {
+  const p = PROXIES[idx];
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), PROXY_TIMEOUT);
+  try {
+    const r = await fetch(p.baue(url), { signal: ctrl.signal });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const inhalt = p.auspacken(await r.text());
+    if (!inhalt) throw new Error('leere Antwort');
+    return inhalt;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
 async function proxyFetch(url) {
+  // zuletzt erfolgreichen Dienst zuerst, dann der Reihe nach die übrigen
+  const reihenfolge = [bevorzugt, ...PROXIES.map((_, i) => i)]
+    .filter((v, i, a) => a.indexOf(v) === i);
   let letzterFehler;
-  for (const baue of PROXIES) {
+  for (const idx of reihenfolge) {
     try {
-      const r = await fetch(baue(url));
-      if (!r.ok) throw new Error('HTTP ' + r.status);
-      return await r.text();
+      const inhalt = await einProxy(idx, url);
+      bevorzugt = idx;
+      return inhalt;
     } catch (e) { letzterFehler = e; }
   }
-  throw letzterFehler || new Error('Abruf fehlgeschlagen');
+  throw letzterFehler || new Error('Kein Vermittler-Dienst erreichbar');
 }
 async function jsonGet(url) {
   return JSON.parse(await proxyFetch(url));
@@ -303,7 +329,7 @@ form.addEventListener('submit', async (e) => {
     else await analyseKuenstler(name, phrase);
   } catch (err) {
     setStatus('Fehler: ' + err.message +
-      ' – möglicherweise ist der Vermittler-Dienst gerade nicht erreichbar. Bitte erneut versuchen.', true);
+      ' – gerade ist offenbar kein Vermittler-Dienst erreichbar. Bitte in ein paar Sekunden erneut auf „Analysieren" klicken.', true);
   } finally {
     losBtn.disabled = false;
   }
