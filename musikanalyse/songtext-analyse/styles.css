@@ -98,6 +98,7 @@ h2 { font-size: 1.25rem; }
 .text-knopf { background: none; color: var(--akzent); padding: .2rem .5rem; font-size: .85rem; text-decoration: underline; }
 
 /* ----- Overlay (Volltext) ----- */
+.overlay[hidden] { display: none; }
 .overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.5);
