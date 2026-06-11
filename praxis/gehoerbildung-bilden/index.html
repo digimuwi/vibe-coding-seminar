@@ -6,25 +6,68 @@
   <title>Gehörbildung bilden</title>
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
+<body class="level-easy">
+  <nav class="level-selector" role="tablist" aria-label="Schwierigkeitsstufe">
+    <button class="level-btn level-easy-btn active" data-level="easy" role="tab" aria-selected="true">Easy</button>
+    <button class="level-btn level-mid-btn" data-level="mid" role="tab" aria-selected="false">Modus 2</button>
+    <button class="level-btn level-hard-btn" data-level="hard" role="tab" aria-selected="false">Modus 3</button>
+  </nav>
+
   <header>
     <h1>Gehörbildung bilden</h1>
-    <p class="subtitle">Prototyp – Klaviatur einer Oktave (c<sup>1</sup> – c<sup>2</sup>)</p>
+    <p class="subtitle" id="subtitle">Prototyp – Klaviatur einer Oktave (c<sup>1</sup> – c<sup>2</sup>)</p>
   </header>
 
   <main>
+    <!-- Easy / Modus 2: Normal / Intervalle -->
     <div class="mode-selector" role="tablist" aria-label="Modus">
       <button class="mode-btn active" data-mode="normal" role="tab" aria-selected="true">Normal</button>
       <button class="mode-btn" data-mode="intervalle" role="tab" aria-selected="false">Intervalle</button>
+    </div>
+
+    <!-- Modus 3: Neue Aufgabe -->
+    <div class="quiz-top">
+      <button class="quiz-primary-btn" id="new-task-btn" type="button">Neue Aufgabe</button>
     </div>
 
     <div class="keyboard" id="keyboard" role="group" aria-label="Klaviatur">
       <!-- Tasten werden via JS gerendert -->
     </div>
 
+    <!-- Easy / Modus 2: Info & Hinweis -->
     <div class="info-area" id="info-area" aria-live="polite"></div>
-
     <p class="hint" id="hint"></p>
+
+    <!-- Modus 3: Antwort-Buttons + Prüfen -->
+    <div class="quiz-bottom">
+      <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
+
+      <div class="quiz-buttons">
+        <div class="quiz-row qualities" role="group" aria-label="Qualität">
+          <button class="ans-btn" data-cat="qual" data-val="gross" type="button">große</button>
+          <button class="ans-btn" data-cat="qual" data-val="klein" type="button">kleine</button>
+          <button class="ans-btn" data-cat="qual" data-val="rein" type="button">reine</button>
+        </div>
+
+        <div class="quiz-row names" role="group" aria-label="Intervall">
+          <button class="ans-btn" data-cat="name" data-val="Prim" type="button">Prim</button>
+          <button class="ans-btn" data-cat="name" data-val="Sekunde" type="button">Sekunde</button>
+          <button class="ans-btn" data-cat="name" data-val="Terz" type="button">Terz</button>
+          <button class="ans-btn" data-cat="name" data-val="Quarte" type="button">Quarte</button>
+          <button class="ans-btn" data-cat="name" data-val="Quinte" type="button">Quinte</button>
+          <button class="ans-btn" data-cat="name" data-val="Sexte" type="button">Sexte</button>
+          <button class="ans-btn" data-cat="name" data-val="Septime" type="button">Septime</button>
+          <button class="ans-btn" data-cat="name" data-val="Oktave" type="button">Oktave</button>
+        </div>
+
+        <div class="quiz-row directions" role="group" aria-label="Richtung">
+          <button class="ans-btn" data-cat="dir" data-val="up" type="button">aufwärts</button>
+          <button class="ans-btn" data-cat="dir" data-val="down" type="button">abwärts</button>
+        </div>
+      </div>
+
+      <button class="quiz-primary-btn quiz-check-btn" id="check-btn" type="button">Prüfen</button>
+    </div>
   </main>
 
   <script src="script.js"></script>

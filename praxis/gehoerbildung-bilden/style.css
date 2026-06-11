@@ -1,13 +1,34 @@
 :root {
-  --bg: #1e1e24;
   --panel: #2a2a33;
   --text: #f5f5f7;
   --muted: #b0b0bb;
+  --key-white: #fafafa;
+  --key-shadow: rgba(0, 0, 0, 0.35);
+
+  /* Level-Farben (werden über body.level-* gesetzt) */
   --accent: #ffb347;
   --accent-soft: #ffd98a;
-  --key-white: #fafafa;
-  --key-white-active: #ffd98a;
-  --key-shadow: rgba(0, 0, 0, 0.35);
+  --key-white-active: var(--accent-soft);
+}
+
+/* === Level-Themes === */
+body.level-easy {
+  --accent: #4a8fe7;
+  --accent-soft: #a8c8f0;
+  --bg-top: #18223c;
+  --bg-bot: #233461;
+}
+body.level-mid {
+  --accent: #ffb347;
+  --accent-soft: #ffd98a;
+  --bg-top: #2a1e10;
+  --bg-bot: #3e2c14;
+}
+body.level-hard {
+  --accent: #e57bb5;
+  --accent-soft: #f3aed1;
+  --bg-top: #2a1530;
+  --bg-bot: #3d1f3a;
 }
 
 * {
@@ -18,9 +39,13 @@ html, body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  background: linear-gradient(160deg, #1e1e24 0%, #2a2a33 100%);
   color: var(--text);
   font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background: linear-gradient(160deg, var(--bg-top) 0%, var(--bg-bot) 100%);
+  transition: background 0.5s ease;
 }
 
 header {
@@ -50,6 +75,54 @@ main {
   gap: 1.25rem;
 }
 
+/* === Level-Selector (links oben, vertikal) === */
+.level-selector {
+  position: fixed;
+  top: 1.25rem;
+  left: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  z-index: 100;
+}
+
+.level-btn {
+  border: none;
+  border-radius: 10px;
+  padding: 0.65rem 1.2rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  min-width: 120px;
+  text-align: left;
+  opacity: 0.55;
+  transition: opacity 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.25);
+}
+
+.level-easy-btn { background: #4a8fe7; }
+.level-mid-btn  { background: #ffb347; color: #1e1e24; }
+.level-hard-btn { background: #e57bb5; }
+
+.level-btn:not(.active):not(:disabled):hover {
+  opacity: 0.85;
+  transform: translateX(2px);
+}
+
+.level-btn.active {
+  opacity: 1;
+  transform: translateX(6px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+}
+
+.level-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+}
+
+/* === Mode-Selector (Normal / Intervalle) === */
 .mode-selector {
   display: flex;
   gap: 0.35rem;
@@ -81,9 +154,8 @@ main {
   font-weight: 600;
 }
 
+/* === Klaviatur === */
 .keyboard {
-  display: flex;
-  gap: 4px;
   background: var(--panel);
   padding: 1rem;
   border-radius: 14px;
@@ -92,35 +164,49 @@ main {
   max-width: 900px;
 }
 
+body.level-hard .keyboard {
+  max-width: 1050px;
+}
+
+.key-row {
+  position: relative;
+  display: flex;
+  gap: 2px;
+}
+
 .key {
-  flex: 1 1 0;
-  height: 280px;
-  background: var(--key-white);
   border: none;
-  border-radius: 0 0 10px 10px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: center;
-  padding-bottom: 1rem;
   font-family: inherit;
-  font-size: 1.1rem;
-  color: #2a2a33;
-  box-shadow:
-    inset 0 -6px 0 rgba(0, 0, 0, 0.08),
-    0 4px 10px rgba(0, 0, 0, 0.25);
   transition: background 0.08s ease, transform 0.05s ease, box-shadow 0.08s ease;
   user-select: none;
   -webkit-user-select: none;
 }
 
-.key:hover {
+/* Weiße Tasten */
+.key.white {
+  flex: 1 1 0;
+  height: 280px;
+  background: var(--key-white);
+  border-radius: 0 0 10px 10px;
+  padding-bottom: 1rem;
+  font-size: 1.1rem;
+  color: #2a2a33;
+  box-shadow:
+    inset 0 -6px 0 rgba(0, 0, 0, 0.08),
+    0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+.key.white:hover {
   background: #fff7e0;
 }
 
-.key.active,
-.key:active {
+.key.white.active,
+.key.white:active {
   background: var(--key-white-active);
   transform: translateY(2px);
   box-shadow:
@@ -128,12 +214,62 @@ main {
     0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
-.key.selected {
+.key.white.selected {
   background: var(--accent-soft);
   box-shadow:
     inset 0 0 0 3px var(--accent),
     inset 0 -6px 0 rgba(0, 0, 0, 0.08),
     0 4px 10px rgba(0, 0, 0, 0.25);
+}
+
+/* Schwarze Tasten (über weiße gelegt) */
+.key.black {
+  position: absolute;
+  top: 0;
+  height: 175px;
+  background: linear-gradient(180deg, #2a2a33 0%, #1a1a20 100%);
+  border-radius: 0 0 6px 6px;
+  padding-bottom: 0.7rem;
+  font-size: 0.8rem;
+  color: #f5f5f7;
+  z-index: 2;
+  box-shadow:
+    inset 0 -4px 0 rgba(255, 255, 255, 0.08),
+    0 5px 12px rgba(0, 0, 0, 0.45);
+}
+
+.key.black:hover {
+  background: linear-gradient(180deg, #3a3a45 0%, #2a2a35 100%);
+}
+
+.key.black.active,
+.key.black:active {
+  background: linear-gradient(180deg, var(--accent) 0%, #1a1a20 100%);
+  transform: translateY(2px);
+}
+
+.key.black.selected {
+  background: linear-gradient(180deg, var(--accent) 0%, #2a2a33 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--accent-soft),
+    0 5px 12px rgba(0, 0, 0, 0.45);
+}
+
+/* Aufleuchten bei Quiz-Aufgaben */
+.key.white.task-on {
+  background: var(--accent-soft);
+  box-shadow:
+    inset 0 0 0 3px var(--accent),
+    inset 0 -6px 0 rgba(0, 0, 0, 0.08),
+    0 0 24px var(--accent),
+    0 4px 10px rgba(0, 0, 0, 0.25);
+}
+.key.black.task-on {
+  background: linear-gradient(180deg, var(--accent-soft) 0%, var(--accent) 100%);
+  box-shadow:
+    inset 0 0 0 2px #fff,
+    0 0 24px var(--accent),
+    0 5px 12px rgba(0, 0, 0, 0.45);
 }
 
 .key .number {
@@ -145,10 +281,32 @@ main {
   line-height: 1;
 }
 
+.key.black .number {
+  font-size: 1rem;
+  color: var(--accent-soft);
+  margin-bottom: 0.15rem;
+}
+
 .key .note {
   font-size: 0.95rem;
   color: #555;
   font-style: italic;
+}
+
+.key.black .note {
+  font-size: 0.75rem;
+  color: #ddd;
+  font-style: normal;
+}
+
+/* Modus 3: keine Namen/Zahlen auf den Tasten */
+body.level-hard .key .note,
+body.level-hard .key .number {
+  visibility: hidden;
+}
+
+body.level-hard .key {
+  cursor: default;
 }
 
 .info-area {
@@ -182,8 +340,121 @@ kbd {
   color: var(--text);
 }
 
-@media (max-width: 600px) {
-  .key { height: 200px; }
+/* === Quiz-Modus (Modus 3) === */
+.quiz-top, .quiz-bottom { display: none; }
+body.level-hard .quiz-top,
+body.level-hard .quiz-bottom { display: flex; }
+body.level-hard .quiz-top { justify-content: center; }
+body.level-hard .quiz-bottom {
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  width: 100%;
+  max-width: 900px;
+}
+
+body.level-hard .mode-selector,
+body.level-hard .info-area,
+body.level-hard .hint {
+  display: none;
+}
+
+.quiz-primary-btn {
+  background: var(--accent);
+  color: #1e1e24;
+  border: none;
+  border-radius: 12px;
+  padding: 0.85rem 2.5rem;
+  font-family: inherit;
+  font-size: 1.15rem;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+  transition: transform 0.1s ease, box-shadow 0.15s ease, background 0.15s ease;
+  letter-spacing: 0.02em;
+}
+
+.quiz-primary-btn:hover {
+  background: var(--accent-soft);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.4);
+}
+
+.quiz-primary-btn:active {
+  transform: translateY(0);
+}
+
+.quiz-check-btn { min-width: 200px; }
+
+.quiz-feedback {
+  min-height: 1.8rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  text-align: center;
+  letter-spacing: 0.01em;
+  color: var(--muted);
+}
+.quiz-feedback.right { color: #7be09a; }
+.quiz-feedback.wrong { color: #f29191; }
+
+.quiz-buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  background: var(--panel);
+  padding: 1rem;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+}
+
+.quiz-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.ans-btn {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text);
+  border: 2px solid transparent;
+  border-radius: 9px;
+  padding: 0.55rem 1.1rem;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.ans-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+}
+
+.ans-btn.selected {
+  border-color: var(--accent);
+  background: rgba(229, 123, 181, 0.18);
+  box-shadow: 0 0 0 2px var(--accent), 0 0 18px var(--accent-soft);
+  color: #fff;
+}
+
+@media (max-width: 720px) {
+  .level-selector {
+    position: static;
+    flex-direction: row;
+    justify-content: center;
+    padding: 1rem 0.5rem 0;
+  }
+  .level-btn {
+    min-width: 0;
+    padding: 0.5rem 0.9rem;
+    text-align: center;
+  }
+  .level-btn.active { transform: none; }
+  header { padding-top: 1rem; }
+  .key.white { height: 200px; }
+  .key.black { height: 125px; }
   .key .number { font-size: 1.1rem; }
   .key .note { font-size: 0.8rem; }
 }
