@@ -6,11 +6,17 @@ lässt sich zusätzlich wie eine App installieren.
 
 ## Was sie kann
 
-- **Suchwort/Phrase eingeben** und zählen lassen, wie oft es vorkommt.
-- **Filter „Künstler"**: eine Säule pro Album, darunter pro Lied aufgeschlüsselt.
-  Lieder ohne Album erscheinen unter **„Sonstige"**.
-- **Filter „Album"**: eine Säule pro Lied; pro Lied ein Knopf, der den
-  **Volltext** mit **markierten Treffern** öffnet.
+- **Suchwort/Phrase eingeben** und zählen lassen, wie oft es vorkommt; wahlweise
+  nur ganze Wörter. genius-Markierungen wie `[Refrain]` werden nicht mitgezählt.
+- **Filter „Künstler"**: eine Säule pro Album, darunter pro Lied aufgeschlüsselt;
+  jedes Lied hat einen Knopf für den **Volltext** mit markierten Treffern.
+  Lieder ohne Album erscheinen unter **„Sonstige"**. Anzahl der Lieder wählbar
+  (25/50/100/alle).
+- **Filter „Album"**: eine Säule pro Lied; pro Lied ein Volltext-Knopf.
+- **Filter „Lied"**: ein einzelnes Lied suchen – zeigt Trefferzahl und den
+  vollständigen Text mit markierten Treffern.
+- **Diagramm umschaltbar:** absolute Anzahl oder **Prozent** (Anteil des Wortes
+  am gesamten Text), damit lange und kurze Lieder vergleichbar werden.
 
 ## Wie sie startet
 

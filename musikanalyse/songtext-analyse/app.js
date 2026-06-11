@@ -38,14 +38,15 @@ const form = $('suche'), wortEl = $('wort'), filterEl = $('filter'),
 darstellungEl.addEventListener('change', () => {
   if (!letzteAnsicht) return;
   if (letzteAnsicht.typ === 'kuenstler') renderKuenstler();
-  else renderAlbum();
+  else if (letzteAnsicht.typ === 'album') renderAlbum();
+  else renderLied();
 });
 
 filterEl.addEventListener('change', () => {
-  const album = filterEl.value === 'album';
-  nameLabel.textContent = album ? 'Album' : 'Künstler';
-  nameEl.placeholder = album ? 'z. B. 21' : 'z. B. Adele';
-  $('anzahl-feld').hidden = album; // "Lieder (bei Künstler)" nur im Künstler-Modus
+  const v = filterEl.value;
+  nameLabel.textContent = v === 'album' ? 'Album' : v === 'lied' ? 'Lied' : 'Künstler';
+  nameEl.placeholder = v === 'album' ? 'z. B. 21' : v === 'lied' ? 'z. B. Hello' : 'z. B. Adele';
+  $('anzahl-feld').hidden = v !== 'kuenstler'; // "Lieder (bei Künstler)" nur im Künstler-Modus
 });
 
 // Eigene Vermittler-Adresse: aus dem Browser laden und beim Tippen speichern.
@@ -148,6 +149,11 @@ async function findeAlbum(name) {
   const sec = await sucheMulti(name);
   const albumSec = sec.find((s) => s.type === 'album');
   return albumSec && albumSec.hits.length ? albumSec.hits[0].result : null;
+}
+async function findeLied(name) {
+  const sec = await sucheMulti(name);
+  const songSec = sec.find((s) => s.type === 'song');
+  return songSec && songSec.hits.length ? songSec.hits[0].result : null;
 }
 async function kuenstlerLieder(artistId, limit) {
   const lieder = [];
@@ -258,16 +264,17 @@ function zaehleWoerter(text) {
   const m = text.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu);
   return m ? m.length : 0;
 }
-function fmt(n) {
-  return n.toLocaleString('de-DE', { maximumFractionDigits: 1 });
+function fmt(n, stellen) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: stellen == null ? 1 : stellen });
 }
 // Liefert je nach gewählter Darstellung den Balken-Wert und die Beschriftungen.
+// "prozent" = Anteil des Wortes am gesamten Text (Treffer / Wörter * 100).
 function werte(treffer, woerter) {
-  const rel = woerter > 0 ? (treffer / woerter) * 1000 : 0;
-  if (darstellungEl.value === 'pro1000') {
-    return { wert: rel, haupt: fmt(rel) + '/1000', neben: treffer + '×' };
+  const prozent = woerter > 0 ? (treffer / woerter) * 100 : 0;
+  if (darstellungEl.value === 'prozent') {
+    return { wert: prozent, haupt: fmt(prozent, 2) + ' %', neben: treffer + '×' };
   }
-  return { wert: treffer, haupt: treffer + '×', neben: fmt(rel) + '/1000 W.' };
+  return { wert: treffer, haupt: treffer + '×', neben: fmt(prozent, 2) + ' %' };
 }
 
 let letzteAnsicht = null; // gespeicherte Auswertung, damit die Darstellung umschaltbar ist
@@ -286,15 +293,15 @@ async function analyseKuenstler(name, phrase, ganzwort, anzahl) {
   const daten = (await poolKarte(lieder, async (s) => {
     const det = await songDetail(s.id);
     const text = await holeText(det);
-    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text) };
+    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text), text };
   }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
 
-  letzteAnsicht = { typ: 'kuenstler', artist, phrase, daten, begrenzt: lieder.length >= anzahl, limit: anzahl };
+  letzteAnsicht = { typ: 'kuenstler', artist, phrase, daten, ganzwort, begrenzt: lieder.length >= anzahl, limit: anzahl };
   renderKuenstler();
 }
 
 function renderKuenstler() {
-  const { artist, phrase, daten, begrenzt, limit } = letzteAnsicht;
+  const { artist, phrase, daten, ganzwort, begrenzt, limit } = letzteAnsicht;
   const map = new Map();
   for (const d of daten) {
     const name = d.album && d.album.name ? d.album.name : 'Sonstige';
@@ -332,13 +339,18 @@ function renderKuenstler() {
     const liederW = g.lieder.map((l) => ({ l, w: werte(l.treffer, l.woerter) }));
     const maxLied = Math.max(1, ...liederW.map((x) => x.w.wert));
     const liste = el('ul', { class: 'album-lieder' },
-      liederW.sort((a, b) => b.w.wert - a.w.wert).map(({ l, w }) =>
-        el('li', {}, [
+      liederW.sort((a, b) => b.w.wert - a.w.wert).map(({ l, w }) => {
+        const knopf = el('button', { class: 'text-knopf', text: 'Text', attr: { type: 'button' } });
+        knopf.addEventListener('click', () =>
+          zeigeText(l.titel, artist.name + ' · ' + l.treffer + ' Treffer', l.text, phrase, ganzwort));
+        return el('li', {}, [
           el('span', { class: 'lied-titel', text: l.titel }),
           el('span', { class: 'mini-spur' },
             el('span', { class: 'mini-fuellung', style: 'width:' + (100 * w.wert / maxLied) + '%' })),
           el('span', { class: 'lied-wert', text: w.haupt }),
-        ])));
+          knopf,
+        ]);
+      }));
 
     diagramm.appendChild(el('div', { class: 'album-block' }, [kopf, spur, liste]));
   }
@@ -400,6 +412,46 @@ function renderAlbum() {
   ergebnis.hidden = false;
 }
 
+// ---------- Analyse: einzelnes Lied ----------
+async function analyseLied(name, phrase, ganzwort) {
+  setStatus('Suche Lied „' + name + '" …');
+  const song = await findeLied(name);
+  if (!song) return setStatus('Kein Lied dazu gefunden.', true);
+
+  setStatus('Lade Text von „' + song.title + '" …');
+  const text = await holeText(song);
+  const daten = {
+    titel: song.title,
+    kuenstler: song.primary_artist ? song.primary_artist.name : '',
+    treffer: zaehle(text, phrase, ganzwort),
+    woerter: zaehleWoerter(text),
+    text,
+  };
+  letzteAnsicht = { typ: 'lied', phrase, daten, ganzwort };
+  renderLied();
+}
+
+function renderLied() {
+  const { phrase, daten, ganzwort } = letzteAnsicht;
+  const w = werte(daten.treffer, daten.woerter);
+
+  ergTitel.textContent = '„' + phrase + '" in „' + daten.titel + '"' +
+    (daten.kuenstler ? ' (' + daten.kuenstler + ')' : '');
+  diagramm.innerHTML = '';
+
+  diagramm.appendChild(el('div', { class: 'lied-zusammenfassung' }, [
+    el('span', { class: 'wert-haupt', text: w.haupt }),
+    el('span', { class: 'wert-neben', text: w.neben + ' · von ' + daten.woerter + ' Wörtern' }),
+  ]));
+  diagramm.appendChild(el('div', {
+    class: 'volltext',
+    html: daten.text ? markiere(daten.text, phrase, ganzwort) : '(Der Text konnte nicht geladen werden.)',
+  }));
+
+  setStatus('Fertig.');
+  ergebnis.hidden = false;
+}
+
 // ---------- Overlay (Volltext) ----------
 function zeigeText(titel, meta, text, phrase, ganzwort) {
   overlayTitel.textContent = titel;
@@ -430,6 +482,7 @@ form.addEventListener('submit', async (e) => {
   diagramm.innerHTML = '';
   try {
     if (filterEl.value === 'album') await analyseAlbum(name, phrase, ganzwort);
+    else if (filterEl.value === 'lied') await analyseLied(name, phrase, ganzwort);
     else await analyseKuenstler(name, phrase, ganzwort, anzahl);
   } catch (err) {
     setStatus('Fehler: ' + err.message +
