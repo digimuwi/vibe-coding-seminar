@@ -23,6 +23,17 @@ const PROXY_TIMEOUT = 13000; // ms pro Dienst, dann zum nächsten
 let letzterGuter = null;     // Name des zuletzt erfolgreichen Dienstes – wird zuerst probiert
 const STANDARD_ANZAHL = 50; // Künstler-Modus: wie viele Lieder höchstens
 const PARALLEL = 4;         // gleichzeitige Abrufe
+const FENSTER = 4;          // Wortwolke: so viele Wörter vor und nach dem Treffer
+// Häufige Füllwörter, die in der Wortwolke ausgeblendet werden (EN + DE).
+const STOPWOERTER = new Set((
+  'the a an and or but if of to in on at for with from by as is are was were be been ' +
+  'am i you he she it we they me him her us them my your his its our their this that these ' +
+  'those do does did not no so up down out off over all just like get got can will would ' +
+  'oh yeah na la ooh hey ' +
+  'der die das ein eine einen und oder aber wenn von zu im in an auf für mit aus durch ' +
+  'ich du er sie es wir ihr mich dich sich mein dein sein ist sind war waren bin bist ' +
+  'nicht kein auch noch schon nur wie so dass den dem des'
+).split(' '));
 
 // ---------- DOM ----------
 const $ = (id) => document.getElementById(id);
@@ -33,7 +44,7 @@ const form = $('suche'), wortEl = $('wort'), filterEl = $('filter'),
   overlayMeta = $('overlay-meta'), overlayInhalt = $('overlay-inhalt'),
   overlayZu = $('overlay-zu'), proxyEl = $('proxy-url'), proxyStatusEl = $('proxy-status'),
   ganzwortEl = $('ganzwort'), anzahlEl = $('anzahl'), darstellungEl = $('darstellung'),
-  jahrEl = $('jahr');
+  jahrEl = $('jahr'), wolkeKnopf = $('wolke-knopf');
 
 // Darstellung (absolut / Prozent) umschalten, ohne neu zu laden.
 darstellungEl.addEventListener('change', () => {
@@ -492,6 +503,71 @@ form.addEventListener('submit', async (e) => {
     losBtn.disabled = false;
   }
 });
+
+// ---------- Umgebungswörter / Wortwolke ----------
+// Sammelt die Wörter rund um jeden Treffer (FENSTER Wörter davor und danach).
+function umgebung(text, phrase, ganzwort) {
+  if (!text) return [];
+  const tokens = [];
+  const wre = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
+  let m;
+  while ((m = wre.exec(text))) tokens.push({ w: m[0], start: m.index, end: m.index + m[0].length });
+
+  const tre = bauRegex(phrase, ganzwort);
+  const gefunden = [];
+  let pm;
+  while ((pm = tre.exec(text))) {
+    if (pm.index === tre.lastIndex) { tre.lastIndex++; continue; }
+    const s = pm.index, e = pm.index + pm[0].length;
+    const first = tokens.findIndex((t) => t.end > s);
+    if (first === -1) continue;
+    let last = first;
+    for (let i = tokens.length - 1; i >= 0; i--) { if (tokens[i].start < e) { last = i; break; } }
+    for (let i = first - FENSTER; i <= last + FENSTER; i++) {
+      if (i < 0 || i >= tokens.length || (i >= first && i <= last)) continue;
+      gefunden.push(tokens[i].w.toLowerCase());
+    }
+  }
+  return gefunden;
+}
+
+// Zeigt die Umgebungswörter als Wortwolke (Schriftgröße = Häufigkeit) im Overlay.
+function zeigeWolke() {
+  if (!letzteAnsicht) return;
+  const { phrase, ganzwort, daten } = letzteAnsicht;
+  const zaehl = new Map();
+  for (const d of daten) {
+    for (const w of umgebung(d.text || '', phrase, ganzwort)) {
+      if (w.length < 2 || STOPWOERTER.has(w)) continue;
+      zaehl.set(w, (zaehl.get(w) || 0) + 1);
+    }
+  }
+  const liste = [...zaehl.entries()].sort((a, b) => b[1] - a[1]).slice(0, 60);
+
+  overlayTitel.textContent = 'Umgebung von „' + phrase + '"';
+  overlayMeta.textContent = liste.length
+    ? 'Häufigste Wörter direkt vor/nach „' + phrase + '" (je ' + FENSTER + ' Wörter; Füllwörter ausgeblendet).'
+    : '';
+  overlayInhalt.innerHTML = '';
+  if (!liste.length) {
+    overlayInhalt.textContent = 'Keine Umgebungswörter gefunden – „' + phrase +
+      '" kommt in den geladenen Texten nicht vor.';
+    overlay.hidden = false;
+    return;
+  }
+  const maxN = liste[0][1], minN = liste[liste.length - 1][1];
+  const wolke = el('div', { class: 'wortwolke' });
+  for (const [wort, n] of liste) {
+    const t = maxN === minN ? 1 : (Math.sqrt(n) - Math.sqrt(minN)) / (Math.sqrt(maxN) - Math.sqrt(minN));
+    const span = el('span', { class: 'wolke-wort', text: wort, attr: { title: n + '×' } });
+    span.style.fontSize = (0.9 + t * 2).toFixed(2) + 'rem';
+    span.style.color = 'hsl(' + Math.round(255 - t * 75) + ', 62%, ' + Math.round(60 - t * 22) + '%)';
+    wolke.appendChild(span);
+  }
+  overlayInhalt.appendChild(wolke);
+  overlay.hidden = false;
+}
+wolkeKnopf.addEventListener('click', zeigeWolke);
 
 // ---------- Web-App installierbar machen ----------
 // Service Worker registrieren (funktioniert nur über http/https, nicht bei

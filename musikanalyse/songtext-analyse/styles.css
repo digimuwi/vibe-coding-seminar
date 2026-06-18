@@ -81,6 +81,18 @@ button:disabled { opacity: .5; cursor: progress; }
 section { margin: 1rem 0 3rem; }
 h2 { font-size: 1.25rem; }
 
+.ergebnis-kopf { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .6rem; }
+.neben-knopf {
+  background: #eef2ff; color: var(--akzent); border: 1px solid var(--akzent-hell);
+  padding: .45rem .9rem; font-size: .9rem; border-radius: 8px;
+}
+
+.wortwolke {
+  white-space: normal; display: flex; flex-wrap: wrap; gap: .35rem .8rem;
+  align-items: center; justify-content: center; line-height: 1.4; padding: .5rem 0;
+}
+.wolke-wort { font-weight: 600; cursor: default; }
+
 .diagramm { display: flex; flex-direction: column; gap: 1.4rem; }
 
 /* ----- Künstler-Modus: ein Block je Album ----- */

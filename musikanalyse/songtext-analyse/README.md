@@ -18,6 +18,9 @@ lässt sich zusätzlich wie eine App installieren.
   werden, steuert die Auswahl 25/50/100/alle.
 - **Diagramm umschaltbar:** absolute Anzahl oder **Prozent** (Anteil des Wortes
   am gesamten Text), damit lange und kurze Lieder vergleichbar werden.
+- **Umgebung als Wortwolke:** ein Knopf zeigt die häufigsten Wörter direkt vor
+  und nach dem Suchwort als Wortwolke (Schriftgröße = Häufigkeit; Füllwörter
+  werden ausgeblendet).
 
 ## Wie sie startet
 
