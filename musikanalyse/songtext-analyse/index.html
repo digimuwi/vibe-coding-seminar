@@ -32,7 +32,7 @@
         <select id="filter">
           <option value="kuenstler">Künstler</option>
           <option value="album">Album</option>
-          <option value="lied">Lied</option>
+          <option value="jahr">Jahr</option>
         </select>
       </div>
       <div class="feld feld-breit">
@@ -40,13 +40,17 @@
         <input id="name" type="text" placeholder="z. B. Adele" required />
       </div>
       <div class="feld" id="anzahl-feld">
-        <label for="anzahl">Lieder (bei Künstler)</label>
+        <label for="anzahl">Lieder durchsuchen</label>
         <select id="anzahl">
           <option value="25">25 (schnell)</option>
           <option value="50" selected>50</option>
           <option value="100">100 (langsam)</option>
           <option value="alle">alle (sehr langsam)</option>
         </select>
+      </div>
+      <div class="feld" id="jahr-feld" hidden>
+        <label for="jahr">Jahr</label>
+        <input id="jahr" type="number" inputmode="numeric" placeholder="z. B. 2015" min="1900" max="2099" />
       </div>
       <div class="feld">
         <label for="darstellung">Diagramm</label>

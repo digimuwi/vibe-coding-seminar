@@ -141,13 +141,3 @@ footer { color: var(--grau); font-size: .85rem; padding-bottom: 2rem; }
   .album-lieder li { grid-template-columns: 1fr 60px auto auto; }
 }
 
-/* ----- Einzelnes Lied (Filter "Lied") ----- */
-.lied-zusammenfassung {
-  display: flex; align-items: baseline; gap: .8rem;
-  padding: .6rem .9rem; background: #eef2ff; border-radius: 10px; margin-bottom: 1rem;
-}
-.lied-zusammenfassung .wert-haupt { font-size: 1.4rem; }
-.volltext {
-  white-space: pre-wrap; font-size: .95rem;
-  background: #fff; border: 1px solid var(--rahmen); border-radius: 10px; padding: 1rem 1.1rem;
-}

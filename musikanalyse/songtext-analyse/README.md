@@ -13,8 +13,9 @@ lässt sich zusätzlich wie eine App installieren.
   Lieder ohne Album erscheinen unter **„Sonstige"**. Anzahl der Lieder wählbar
   (25/50/100/alle).
 - **Filter „Album"**: eine Säule pro Lied; pro Lied ein Volltext-Knopf.
-- **Filter „Lied"**: ein einzelnes Lied suchen – zeigt Trefferzahl und den
-  vollständigen Text mit markierten Treffern.
+- **Filter „Jahr"**: alle durchsuchten Lieder eines Künstlers aus einem
+  bestimmten Jahr (mit Liedname und Künstler). Wie viele Lieder durchsucht
+  werden, steuert die Auswahl 25/50/100/alle.
 - **Diagramm umschaltbar:** absolute Anzahl oder **Prozent** (Anteil des Wortes
   am gesamten Text), damit lange und kurze Lieder vergleichbar werden.
 
