@@ -56,10 +56,13 @@ darstellungEl.addEventListener('change', () => {
 
 filterEl.addEventListener('change', () => {
   const v = filterEl.value;
+  const istJahr = v === 'jahr';
   nameLabel.textContent = v === 'album' ? 'Album' : 'Künstler';
   nameEl.placeholder = v === 'album' ? 'z. B. 21' : 'z. B. Adele';
-  $('anzahl-feld').hidden = !(v === 'kuenstler' || v === 'jahr');
-  $('jahr-feld').hidden = v !== 'jahr';
+  $('name-feld').hidden = istJahr;   // im Jahr-Modus kein Künstler/Album nötig
+  nameEl.required = !istJahr;
+  $('anzahl-feld').hidden = !(v === 'kuenstler' || istJahr);
+  $('jahr-feld').hidden = !istJahr;
 });
 
 // Eigene Vermittler-Adresse: aus dem Browser laden und beim Tippen speichern.
@@ -394,12 +397,14 @@ function songBalken(daten, phrase, ganzwort, kuenstler) {
   const max = Math.max(1, ...datenW.map((x) => x.w.wert));
   diagramm.innerHTML = '';
   for (const { d, w } of datenW) {
+    const wer = d.kuenstler || kuenstler;
+    const label = d.kuenstler ? d.titel + ' – ' + d.kuenstler : d.titel;
     const knopf = el('button', { class: 'text-knopf', text: 'Text anzeigen', attr: { type: 'button' } });
     knopf.addEventListener('click', () =>
-      zeigeText(d.titel, kuenstler + ' · ' + d.treffer + ' Treffer', d.text, phrase, ganzwort));
+      zeigeText(d.titel, (wer ? wer + ' · ' : '') + d.treffer + ' Treffer', d.text, phrase, ganzwort));
 
     diagramm.appendChild(el('div', { class: 'lied-zeile' }, [
-      el('span', { class: 'balken-label', text: d.titel }),
+      el('span', { class: 'balken-label', text: label, attr: { title: label } }),
       el('span', { class: 'balken-spur' },
         el('span', { class: 'balken-fuellung', style: 'width:' + (100 * w.wert / max) + '%' })),
       el('span', { class: 'balken-wert' }, [
@@ -422,40 +427,61 @@ function renderAlbum() {
   ergebnis.hidden = false;
 }
 
-// ---------- Analyse: nach Jahr ----------
-async function analyseJahr(name, phrase, ganzwort, anzahl, jahr) {
-  setStatus('Suche Künstler „' + name + '" …');
-  const artist = await findeKuenstler(name);
-  if (!artist) return setStatus('Keinen Künstler dazu gefunden.', true);
+// ---------- Analyse: nach Jahr (unabhängig vom Künstler) ----------
+// genius bietet keine "alle Songs aus Jahr X"-Liste. Stattdessen durchsuchen wir
+// die nach Klickzahlen sortierte Bestenliste (Charts) und filtern nach dem Jahr –
+// so erhalten wir die populärsten Lieder dieses Jahres.
+const CHART_MAX_SEITEN = 30; // höchstens so viele Chart-Seiten (à 50) absuchen
 
-  const wieviele = anzahl === Infinity ? 'alle' : anzahl;
-  setStatus('Lade Liedliste von ' + artist.name + ' (' + wieviele + ' Lieder) …');
-  const lieder = await kuenstlerLieder(artist.id, anzahl);
-  if (!lieder.length) return setStatus('Keine Lieder gefunden.', true);
+async function chartSeite(page) {
+  const d = await jsonGet(GENIUS + '/songs/chart?per_page=50&page=' + page +
+    '&time_period=all_time&chart_genre=all');
+  return (d.response.chart_items || []).map((c) => c.item).filter(Boolean);
+}
 
-  const alle = (await poolKarte(lieder, async (s) => {
-    const det = await songDetail(s.id);
-    const jahrSong = det.release_date_components ? det.release_date_components.year : null;
-    const text = await holeText(det);
-    return { titel: det.title, jahr: jahrSong, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text), text };
-  }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
-
-  const daten = alle.filter((d) => d.jahr === jahr);
-  if (!daten.length) {
-    return setStatus('Keine Lieder aus ' + jahr + ' unter den ' + alle.length +
-      ' geladenen Liedern. Tipp: Liederanzahl erhöhen (z. B. 100 oder „alle").', true);
+async function analyseJahr(phrase, ganzwort, anzahl, jahr) {
+  const ziel = anzahl === Infinity ? CHART_MAX_SEITEN * 50 : anzahl;
+  const gefunden = [];
+  let page = 1;
+  while (gefunden.length < ziel && page <= CHART_MAX_SEITEN) {
+    setStatus('Suche populäre Lieder aus ' + jahr + ' … (' + gefunden.length + ' gefunden)');
+    const songs = await chartSeite(page);
+    if (!songs.length) break;
+    for (const s of songs) {
+      const y = s.release_date_components ? s.release_date_components.year : null;
+      if (y === jahr) {
+        gefunden.push(s);
+        if (gefunden.length >= ziel) break;
+      }
+    }
+    page++;
+  }
+  if (!gefunden.length) {
+    return setStatus('Keine Lieder aus ' + jahr + ' in den Charts gefunden – für sehr ' +
+      'alte oder seltene Jahre gibt es dort evtl. zu wenige Einträge.', true);
   }
 
-  letzteAnsicht = { typ: 'jahr', artist, phrase, daten, ganzwort, jahr };
+  const daten = (await poolKarte(gefunden, async (s) => {
+    const text = await holeText(s);
+    return {
+      titel: s.title,
+      kuenstler: s.primary_artist ? s.primary_artist.name : (s.primary_artist_names || ''),
+      treffer: zaehle(text, phrase, ganzwort),
+      woerter: zaehleWoerter(text),
+      text,
+    };
+  }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
+
+  letzteAnsicht = { typ: 'jahr', phrase, daten, ganzwort, jahr };
   renderJahr();
 }
 
 function renderJahr() {
-  const { artist, phrase, daten, ganzwort, jahr } = letzteAnsicht;
+  const { phrase, daten, ganzwort, jahr } = letzteAnsicht;
   const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
-  ergTitel.textContent = '„' + phrase + '" bei ' + artist.name + ' im Jahr ' + jahr +
-    ' – ' + gesamt + '× in ' + daten.length + ' Liedern';
-  songBalken(daten, phrase, ganzwort, artist.name);
+  ergTitel.textContent = '„' + phrase + '" in den ' + daten.length +
+    ' populärsten Liedern aus ' + jahr + ' – ' + gesamt + '×';
+  songBalken(daten, phrase, ganzwort, '');
   setStatus('Fertig. ' + daten.length + ' Lied(er) aus ' + jahr + '.');
   ergebnis.hidden = false;
 }
@@ -484,9 +510,12 @@ form.addEventListener('submit', async (e) => {
     ? Infinity
     : (parseInt(anzahlEl.value, 10) || STANDARD_ANZAHL);
   const jahr = parseInt(jahrEl.value, 10);
-  if (!phrase || !name) return;
-  if (filterEl.value === 'jahr' && !jahr) {
-    return setStatus('Bitte eine Jahreszahl eingeben (z. B. 2015).', true);
+  const istJahr = filterEl.value === 'jahr';
+  if (!phrase) return;
+  if (istJahr) {
+    if (!jahr) return setStatus('Bitte eine Jahreszahl eingeben (z. B. 2015).', true);
+  } else if (!name) {
+    return;
   }
 
   losBtn.disabled = true;
@@ -494,7 +523,7 @@ form.addEventListener('submit', async (e) => {
   diagramm.innerHTML = '';
   try {
     if (filterEl.value === 'album') await analyseAlbum(name, phrase, ganzwort);
-    else if (filterEl.value === 'jahr') await analyseJahr(name, phrase, ganzwort, anzahl, jahr);
+    else if (istJahr) await analyseJahr(phrase, ganzwort, anzahl, jahr);
     else await analyseKuenstler(name, phrase, ganzwort, anzahl);
   } catch (err) {
     setStatus('Fehler: ' + err.message +

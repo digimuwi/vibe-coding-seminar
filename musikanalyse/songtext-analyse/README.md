@@ -13,9 +13,9 @@ lässt sich zusätzlich wie eine App installieren.
   Lieder ohne Album erscheinen unter **„Sonstige"**. Anzahl der Lieder wählbar
   (25/50/100/alle).
 - **Filter „Album"**: eine Säule pro Lied; pro Lied ein Volltext-Knopf.
-- **Filter „Jahr"**: alle durchsuchten Lieder eines Künstlers aus einem
-  bestimmten Jahr (mit Liedname und Künstler). Wie viele Lieder durchsucht
-  werden, steuert die Auswahl 25/50/100/alle.
+- **Filter „Jahr"**: die **populärsten Lieder eines Jahres** (über alle Künstler
+  hinweg, aus der genius-Bestenliste nach Klickzahlen), angezeigt mit Liedname
+  und Künstler. Wie viele Lieder, steuert die Auswahl 25/50/100.
 - **Diagramm umschaltbar:** absolute Anzahl oder **Prozent** (Anteil des Wortes
   am gesamten Text), damit lange und kurze Lieder vergleichbar werden.
 - **Umgebung als Wortwolke:** ein Knopf zeigt die häufigsten Wörter direkt vor
