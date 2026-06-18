@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="de" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noten-Manager & Customizer</title>
+    
+    <!-- Google Fonts: Inter & Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- OpenSheetMusicDisplay (OSMD) CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/opensheetmusicdisplay@1.8.0/build/opensheetmusicdisplay.min.js"></script>
+    
+    <!-- Stylesheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-logo">
+                <i data-lucide="music-4" class="logo-icon"></i>
+                <div class="logo-text">
+                    <h1>Noten-Manager</h1>
+                    <span>OMR Scanner & Layout Customizer</span>
+                </div>
+            </div>
+            
+            <div class="header-steps">
+                <div class="step-item active" id="step-1-indicator">
+                    <span class="step-num">1</span>
+                    <span class="step-name">Bibliothek & Scan</span>
+                </div>
+                <div class="step-line"></div>
+                <div class="step-item" id="step-2-indicator">
+                    <span class="step-num">2</span>
+                    <span class="step-name">Layout & Umbruch</span>
+                </div>
+            </div>
+            
+            <div class="header-actions" style="display: flex; align-items: center; gap: 10px;">
+                <div id="user-profile-widget" style="display: none; align-items: center; gap: 10px; margin-right: 10px;">
+                    <span class="user-greeting" style="font-size: 13px; color: var(--text-secondary);">
+                        <i data-lucide="user" style="width: 14px; height: 14px; vertical-align: middle; margin-right: 2px;"></i>
+                        Hallo, <strong id="header-username" style="color: var(--text-primary);">Gast</strong>
+                    </span>
+                    <button id="btn-request-delete" class="btn-secondary btn-small" title="Löschung des Accounts beantragen" style="color: var(--error); border-color: rgba(255, 69, 69, 0.3);">
+                        Löschen anfordern
+                    </button>
+                    <button id="btn-logout" class="btn-secondary btn-small">
+                        Abmelden
+                    </button>
+                </div>
+                <button id="theme-toggle" class="btn-icon" title="Theme wechseln">
+                    <i data-lucide="sun"></i>
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Workspace -->
+        <main class="app-main">
+            <!-- SECTION 1: LIBRARY & UPLOAD SCREEN -->
+            <section id="screen-upload" class="screen-section active">
+                <div class="welcome-container">
+                    <h2>Notenblätter digitalisieren & anpassen</h2>
+                    <p>Lade eine PDF-Datei oder ein Foto hoch, um sie in ein bearbeitbares Format umzuwandeln. Passe anschließend Notengrößen und Umbrüche für dein Tablet an. Bereits gescannte Noten kannst du direkt aus deiner Bibliothek laden.</p>
+                </div>
+
+                <div class="scanner-grid">
+                    <!-- Column Left: Scanner Upload Zone -->
+                    <div class="scanner-card">
+                        <h3><i data-lucide="scan-line"></i> Neues Notenblatt scannen</h3>
+                        <p class="card-desc">Lade deine PDF oder Bilddatei hoch. Der OMR-Server konvertiert sie mittels Audiveris.</p>
+                        
+                        <div class="upload-dropzone" id="upload-zone">
+                            <input type="file" id="file-input" accept="application/pdf,image/*" style="display: none;">
+                            <div class="dropzone-content">
+                                <div class="upload-icon-wrapper">
+                                    <i data-lucide="file-up" class="upload-icon"></i>
+                                </div>
+                                <h4>Ziehe deine Datei hierher</h4>
+                                <p>oder klicke zum Durchsuchen</p>
+                                <span class="file-limits">PDF, PNG, JPG (Audiveris OMR)</span>
+                            </div>
+                        </div>
+
+                        <div class="demo-trigger-wrapper">
+                            <button id="btn-load-demo" class="btn-secondary btn-large">
+                                <i data-lucide="play-circle"></i> Mit Demodaten testen (Mock Mode)
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Column Right: Saved Library Projects -->
+                    <div class="library-card">
+                        <h3><i data-lucide="folder-heart"></i> Projekt-Bibliothek</h3>
+                        <p class="card-desc">Gescannte Lieder werden hier gespeichert. Wähle ein Lied aus, um die Layout-Bearbeitung fortzusetzen.</p>
+                        
+                        <div class="library-list-container">
+                            <div id="library-empty" class="library-empty">
+                                <i data-lucide="inbox"></i>
+                                <p>Noch keine gescannten Lieder in der Bibliothek.</p>
+                            </div>
+                            <div id="library-list" class="library-list">
+                                <!-- Populated dynamically from API -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Admin Panel (Only visible to admin) -->
+                <div class="admin-card" id="admin-panel-card" style="display: none; margin-top: 30px;">
+                    <h3><i data-lucide="shield-alert"></i> Administrator-Verwaltung</h3>
+                    <p class="card-desc">Freigabe neuer Konten, Passwort-Resets und Bestätigung von Löschungsanfragen.</p>
+                    
+                    <div class="admin-grid">
+                        <!-- Table / List of users -->
+                        <div class="admin-users-list-wrapper">
+                            <table class="admin-table">
+                                <thead>
+                                    <tr>
+                                        <th>Benutzername</th>
+                                        <th>Rolle</th>
+                                        <th>Status</th>
+                                        <th>Aktionen</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="admin-users-tbody">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+                        
+                        <!-- Admin action: Reset password -->
+                        <div class="admin-reset-pw-box">
+                            <h4>Passwort zurücksetzen</h4>
+                            <p class="small-desc">Setzt das Passwort eines Nutzers zurück. Notendateien bleiben durch Server-Schlüssel-Entschlüsselung lesbar.</p>
+                            <div class="control-group">
+                                <label for="admin-reset-username">Benutzername</label>
+                                <select id="admin-reset-username" class="form-select">
+                                    <option value="">Wähle einen Benutzer...</option>
+                                </select>
+                            </div>
+                            <div class="control-group">
+                                <label for="admin-reset-new-pw">Neues Passwort</label>
+                                <input type="password" id="admin-reset-new-pw" placeholder="Neues Passwort..." class="form-input">
+                            </div>
+                            <button id="btn-admin-reset-pw" class="btn-secondary btn-large" style="width: 100%; margin-top: 10px;">
+                                Passwort ändern
+                            </button>
+                            <div id="admin-reset-message" style="margin-top: 8px; font-size: 13px; display: none;"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SECTION 2: LAYOUT EDITOR WORKSPACE -->
+            <section id="screen-editor" class="screen-section">
+                <div class="editor-grid">
+                    <!-- Sidebar Controls (Left) -->
+                    <aside class="editor-sidebar">
+                        <div class="sidebar-nav-top">
+                            <button id="btn-back-to-upload" class="btn-secondary btn-small">
+                                <i data-lucide="arrow-left"></i> Zurück zu Scan & Bibliothek
+                            </button>
+                        </div>
+
+                        <!-- Current Project Info & Rename Option -->
+                        <div class="control-card project-info-card">
+                            <div class="project-header">
+                                <i data-lucide="file-music" class="project-icon"></i>
+                                <div class="project-details">
+                                    <h4 id="project-title-display">Unbenanntes Projekt</h4>
+                                    <span id="project-filename-display">file.musicxml</span>
+                                </div>
+                            </div>
+                            <div class="control-group" style="margin-bottom: 12px;">
+                                <label for="input-project-title" style="margin-bottom: 4px;">Titel (in Noten)</label>
+                                <input type="text" id="input-project-title" placeholder="Liedtitel..." class="form-input">
+                            </div>
+                            <div class="control-group" style="margin-bottom: 12px;">
+                                <label for="input-project-composer" style="margin-bottom: 4px;">Komponist (in Noten)</label>
+                                <input type="text" id="input-project-composer" placeholder="Komponist..." class="form-input">
+                            </div>
+                            <div class="control-group" style="margin-bottom: 12px;">
+                                <label for="input-project-filename" style="margin-bottom: 4px;">Dateiname</label>
+                                <input type="text" id="input-project-filename" placeholder="Dateiname..." class="form-input">
+                            </div>
+                            <button id="btn-project-save" class="btn-primary btn-large" style="margin-top: 10px;">
+                                <i data-lucide="save"></i> Projekt speichern
+                            </button>
+                        </div>
+
+                        <!-- Notensatz-Engines Selection -->
+                        <div class="control-card" id="card-notation-engines">
+                            <h3><i data-lucide="cpu"></i> Notensatz-Engines</h3>
+                            <p class="card-desc">Wähle die Engines für die Noten-Visualisierung.</p>
+                            
+                            <div class="control-group">
+                                <label for="select-preview-mode">Vorschau-Modus</label>
+                                <select id="select-preview-mode" class="form-select">
+                                    <option value="osmd" selected>Interaktiv (OSMD)</option>
+                                    <option value="server">Druckvorschau (Server)</option>
+                                </select>
+                            </div>
+                            
+                            <div class="control-group" id="group-server-engine" style="display: none;">
+                                <label for="select-server-engine">Server-Engine</label>
+                                <select id="select-server-engine" class="form-select">
+                                    <option value="lilypond" selected>LilyPond (Vektor-PDF)</option>
+                                    <option value="musescore">MuseScore CLI</option>
+                                </select>
+                            </div>
+
+                            <button id="btn-generate-server-preview" class="btn-secondary btn-large" style="display: none; margin-top: 10px;">
+                                <i data-lucide="refresh-cw"></i> Vorschau generieren
+                            </button>
+                        </div>
+
+                        <!-- Dynamic Layout Settings (Extensible SettingsManager target) -->
+                        <div class="control-card">
+                            <h3>Layout-Optionen</h3>
+                            <div id="dynamic-settings-container">
+                                <!-- Populated dynamically by app.js SettingsManager -->
+                            </div>
+                        </div>
+
+                        <!-- Takt-Manager (Measure Breaks List) -->
+                        <div class="control-card scrollable-card" id="card-takt-manager">
+                            <h3>Takt-Manager</h3>
+                            <p class="card-desc">Klicke auf Zeile oder Seite, um manuelle Umbrüche nach bestimmten Takten einzufügen.</p>
+                            
+                            <!-- Auto break selection as helper -->
+                            <div class="control-group auto-breaks-group">
+                                <label for="auto-measures-per-line">Takt-Automatik</label>
+                                <select id="auto-measures-per-line" class="form-select">
+                                    <option value="custom" selected>Manuell (siehe Takt-Manager)</option>
+                                    <option value="2">Alle 2 Takte umbrechen</option>
+                                    <option value="3">Alle 3 Takte umbrechen</option>
+                                    <option value="4">Alle 4 Takte umbrechen</option>
+                                    <option value="5">Alle 5 Takte umbrechen</option>
+                                    <option value="6">Alle 6 Takte umbrechen</option>
+                                </select>
+                            </div>
+
+                            <div class="takt-grid" id="takt-grid-container">
+                                <!-- Populated dynamically by app.js -->
+                            </div>
+                        </div>
+
+                        <!-- Export Button -->
+                        <div class="control-card accent-card">
+                            <div class="control-group" style="margin-bottom: 12px;">
+                                <label for="select-export-engine" style="color: rgba(255,255,255,0.85); font-weight: 500;">Export-Engine</label>
+                                <select id="select-export-engine" class="form-select">
+                                    <option value="osmd" selected>Browser-Druck (OSMD)</option>
+                                    <option value="lilypond">LilyPond (Server)</option>
+                                    <option value="musescore">MuseScore (Server)</option>
+                                </select>
+                            </div>
+                            <button id="btn-print-pdf" class="btn-accent btn-large">
+                                <i data-lucide="printer"></i> PDF exportieren
+                            </button>
+                            <span id="export-help-text" class="btn-help">Wähle im Druckdialog deines Browsers "Als PDF speichern".</span>
+                        </div>
+                    </aside>
+
+                    <!-- Sheet Music Preview Viewport (Right) -->
+                    <main class="editor-workspace">
+                        <div class="score-container-scroll">
+                            <div class="score-page-preview" id="score-preview-page">
+                                <div id="osmd-canvas-container"></div>
+                            </div>
+                            <iframe id="pdf-preview-frame" style="display: none;"></iframe>
+                        </div>
+                    </main>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Processing Overlay Dialog -->
+    <div class="overlay" id="loading-overlay">
+        <div class="glass-loader">
+            <div class="spinner"></div>
+            <h3 id="loading-title">Datei wird verarbeitet...</h3>
+            <p id="loading-text">Dies kann je nach Notenkomplexität 30-60 Sekunden dauern.</p>
+            
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="loading-progress" style="width: 0%"></div>
+            </div>
+            
+            <div class="loading-steps-list">
+                <div class="loading-step" id="load-step-upload">
+                    <i data-lucide="circle" class="step-check"></i>
+                    <span>Datei wird an Server übertragen</span>
+                </div>
+                <div class="loading-step" id="load-step-omr">
+                    <i data-lucide="circle" class="step-check"></i>
+                    <span>Audiveris OMR Scan läuft</span>
+                </div>
+                <div class="loading-step" id="load-step-xml">
+                    <i data-lucide="circle" class="step-check"></i>
+                    <span>MusicXML Daten werden importiert</span>
+                </div>
+                <div class="loading-step" id="load-step-render">
+                    <i data-lucide="circle" class="step-check"></i>
+                    <span>Notenblatt wird im Editor gerendert</span>
+                </div>
+            </div>
+            
+            <button id="btn-cancel-scanning" class="btn-secondary btn-small" style="margin-top: 20px;">
+                Abbrechen
+            </button>
+        </div>
+    </div>
+
+    <!-- Authentication Overlay -->
+    <div class="overlay active" id="auth-overlay">
+        <div class="glass-loader auth-card">
+            <div class="auth-header">
+                <div class="upload-icon-wrapper">
+                    <i data-lucide="shield-check" class="upload-icon" style="color: var(--accent);"></i>
+                </div>
+                <h2>Noten-Manager Login</h2>
+                <p>Melde dich an oder registriere ein neues Konto. Daten werden sicher auf dem Server verschlüsselt.</p>
+            </div>
+            
+            <!-- Tab Switcher -->
+            <div class="auth-tabs" style="width: 100%;">
+                <button id="tab-login" class="auth-tab-btn active">Anmelden</button>
+                <button id="tab-register" class="auth-tab-btn">Registrieren</button>
+            </div>
+            
+            <form id="auth-form" class="auth-form">
+                <div class="control-group">
+                    <label for="auth-username">Benutzername</label>
+                    <input type="text" id="auth-username" required placeholder="Benutzername eingeben..." class="form-input">
+                </div>
+                <div class="control-group">
+                    <label for="auth-password">Passwort</label>
+                    <input type="password" id="auth-password" required placeholder="Passwort eingeben..." class="form-input">
+                </div>
+                <div class="control-group" id="auth-confirm-password-group" style="display: none;">
+                    <label for="auth-confirm-password">Passwort bestätigen</label>
+                    <input type="password" id="auth-confirm-password" placeholder="Passwort erneut eingeben..." class="form-input">
+                </div>
+                
+                <div id="auth-error-message" class="auth-error" style="display: none;"></div>
+                <div id="auth-success-message" class="auth-success" style="display: none;"></div>
+                
+                <button type="submit" id="btn-auth-submit" class="btn-accent btn-large" style="width: 100%; margin-top: 15px;">
+                    Anmelden
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Scripts Link -->
+    <script src="app.js"></script>
+</body>
+</html>
