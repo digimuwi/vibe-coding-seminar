@@ -560,7 +560,89 @@ function umgebung(text, phrase, ganzwort) {
   return gefunden;
 }
 
-// Zeigt die Umgebungswörter als Wortwolke (Schriftgröße = Häufigkeit) im Overlay.
+// Textbreite messen (Canvas), um Wörter überlappungsfrei zu platzieren.
+const messContext = document.createElement('canvas').getContext('2d');
+function textBreite(wort, fs) {
+  messContext.font = '700 ' + fs + 'px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+  return messContext.measureText(wort).width;
+}
+// Rechtecke (mit kleinem Abstand) auf Überlappung prüfen.
+function ueberlappt(a, b) {
+  const luft = 3;
+  return !(a.x + a.w + luft <= b.x || b.x + b.w + luft <= a.x ||
+           a.y + a.h + luft <= b.y || b.y + b.h + luft <= a.y);
+}
+
+// Baut eine echte Wortwolke: Schriftgröße = Häufigkeit, jedes dritte Wort
+// senkrecht, spiralförmig dicht gepackt, jedes Wort in einer farbigen Kachel.
+function wortwolkeBauen(liste) {
+  const maxN = liste[0][1], minN = liste[liste.length - 1][1];
+  const platzierte = [];
+  const kacheln = [];
+
+  liste.forEach(([wort, n], i) => {
+    const t = maxN === minN ? 1 : (Math.sqrt(n) - Math.sqrt(minN)) / (Math.sqrt(maxN) - Math.sqrt(minN));
+    const fs = Math.round(15 + t * 38);          // Schriftgröße 15…53 px
+    const senkrecht = (i % 3 === 1);             // jedes dritte Wort senkrecht
+    const padX = Math.round(fs * 0.34), padY = Math.round(fs * 0.22);
+    const tw = Math.ceil(textBreite(wort, fs)) + 2 * padX;
+    const th = Math.round(fs) + 2 * padY;
+    const fw = senkrecht ? th : tw;              // Grundfläche der Kachel
+    const fh = senkrecht ? tw : th;
+
+    // Spiralsuche nach einem freien Platz (Archimedische Spirale, breit gestaucht)
+    let schritt = 0, x = -fw / 2, y = -fh / 2;
+    while (true) {
+      const r = 4 * schritt;
+      x = Math.cos(schritt) * r - fw / 2;
+      y = Math.sin(schritt) * r * 0.62 - fh / 2;
+      const rect = { x, y, w: fw, h: fh };
+      if (!platzierte.some((p) => ueberlappt(p, rect))) { platzierte.push(rect); break; }
+      schritt += 0.18;
+      if (r > 6000) { platzierte.push(rect); break; }
+    }
+    kacheln.push({ wort, n, fs, senkrecht, x, y, fw, fh, hue: (i * 53) % 360 });
+  });
+
+  const minX = Math.min(...platzierte.map((p) => p.x));
+  const minY = Math.min(...platzierte.map((p) => p.y));
+  const breite = Math.max(...platzierte.map((p) => p.x + p.w)) - minX;
+  const hoehe = Math.max(...platzierte.map((p) => p.y + p.h)) - minY;
+
+  const wolke = el('div', { class: 'wortwolke' });
+  wolke.style.width = breite + 'px';
+  wolke.style.height = hoehe + 'px';
+  for (const k of kacheln) {
+    const box = el('div', { class: 'wolke-kachel', attr: { title: k.wort + ': ' + k.n + '×' } });
+    box.style.left = (k.x - minX) + 'px';
+    box.style.top = (k.y - minY) + 'px';
+    box.style.width = k.fw + 'px';
+    box.style.height = k.fh + 'px';
+    box.style.background = 'hsl(' + k.hue + ', 82%, 93%)';
+    box.style.color = 'hsl(' + k.hue + ', 68%, 32%)';
+    const span = el('span', { class: 'wolke-wort', text: k.wort });
+    span.style.fontSize = k.fs + 'px';
+    if (k.senkrecht) span.style.transform = 'rotate(-90deg)';
+    box.appendChild(span);
+    wolke.appendChild(box);
+  }
+
+  // Bei Überbreite herunterskalieren, damit die Wolke ins Overlay passt.
+  const maxBreite = 600;
+  if (breite > maxBreite) {
+    const skala = maxBreite / breite;
+    const rahmen = el('div', { class: 'wolke-rahmen' });
+    rahmen.style.width = (breite * skala) + 'px';
+    rahmen.style.height = (hoehe * skala) + 'px';
+    wolke.style.transformOrigin = 'top left';
+    wolke.style.transform = 'scale(' + skala + ')';
+    rahmen.appendChild(wolke);
+    return rahmen;
+  }
+  return wolke;
+}
+
+// Sammelt die Umgebungswörter und zeigt sie als Wortwolke im Overlay.
 function zeigeWolke() {
   if (!letzteAnsicht) return;
   const { phrase, ganzwort, daten } = letzteAnsicht;
@@ -571,7 +653,7 @@ function zeigeWolke() {
       zaehl.set(w, (zaehl.get(w) || 0) + 1);
     }
   }
-  const liste = [...zaehl.entries()].sort((a, b) => b[1] - a[1]).slice(0, 60);
+  const liste = [...zaehl.entries()].sort((a, b) => b[1] - a[1]).slice(0, 50);
 
   overlayTitel.textContent = 'Umgebung von „' + phrase + '"';
   overlayMeta.textContent = liste.length
@@ -584,16 +666,7 @@ function zeigeWolke() {
     overlay.hidden = false;
     return;
   }
-  const maxN = liste[0][1], minN = liste[liste.length - 1][1];
-  const wolke = el('div', { class: 'wortwolke' });
-  for (const [wort, n] of liste) {
-    const t = maxN === minN ? 1 : (Math.sqrt(n) - Math.sqrt(minN)) / (Math.sqrt(maxN) - Math.sqrt(minN));
-    const span = el('span', { class: 'wolke-wort', text: wort, attr: { title: n + '×' } });
-    span.style.fontSize = (0.9 + t * 2).toFixed(2) + 'rem';
-    span.style.color = 'hsl(' + Math.round(255 - t * 75) + ', 62%, ' + Math.round(60 - t * 22) + '%)';
-    wolke.appendChild(span);
-  }
-  overlayInhalt.appendChild(wolke);
+  overlayInhalt.appendChild(wortwolkeBauen(liste));
   overlay.hidden = false;
 }
 wolkeKnopf.addEventListener('click', zeigeWolke);

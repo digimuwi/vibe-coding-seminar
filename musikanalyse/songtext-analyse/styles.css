@@ -87,11 +87,13 @@ h2 { font-size: 1.25rem; }
   padding: .45rem .9rem; font-size: .9rem; border-radius: 8px;
 }
 
-.wortwolke {
-  white-space: normal; display: flex; flex-wrap: wrap; gap: .35rem .8rem;
-  align-items: center; justify-content: center; line-height: 1.4; padding: .5rem 0;
+.wortwolke { position: relative; margin: 0 auto; white-space: normal; }
+.wolke-rahmen { position: relative; margin: 0 auto; overflow: hidden; }
+.wolke-kachel {
+  position: absolute; display: flex; align-items: center; justify-content: center;
+  border-radius: 9px; overflow: hidden; box-shadow: 0 1px 3px rgba(0, 0, 0, .12);
 }
-.wolke-wort { font-weight: 600; cursor: default; }
+.wolke-wort { font-weight: 700; line-height: 1; white-space: nowrap; cursor: default; }
 
 .diagramm { display: flex; flex-direction: column; gap: 1.4rem; }
 
