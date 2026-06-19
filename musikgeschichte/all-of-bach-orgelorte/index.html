@@ -124,6 +124,33 @@
       text-decoration: none;
     }
     .popup-aufnahmen a:hover { text-decoration: underline; }
+    .popup-konzert-titel {
+      font-weight: bold;
+      color: var(--akzent-dunkel);
+      font-size: 0.9rem;
+      margin-top: 0.6rem;
+      padding-top: 0.4rem;
+      border-top: 1px solid #e7dfce;
+    }
+    .konzert-reihe { margin-top: 0.35rem; }
+    .konzert-reihe-name {
+      font-size: 0.8rem;
+      font-weight: bold;
+      color: #6b5b3a;
+    }
+    .popup-konzerte {
+      font-size: 0.82rem;
+      margin: 0.15rem 0 0;
+      padding-left: 1.1rem;
+    }
+    .popup-konzerte li { margin: 0.1rem 0; }
+    .popup-konzert-quelle {
+      font-size: 0.75rem;
+      color: #6b5b3a;
+      margin-top: 0.4rem;
+    }
+    .popup-konzert-quelle a { color: var(--akzent-dunkel); text-decoration: none; }
+    .popup-konzert-quelle a:hover { text-decoration: underline; }
     footer {
       padding: 0.5rem 1rem;
       font-size: 0.75rem;
@@ -147,7 +174,8 @@
       historischen Orgeln verschiedener Kirchen aufgenommen – einige in
       Deutschland, viele aber in den Niederlanden. Diese Karte zeigt die
       niederländischen Aufnahmeorte. Klicken Sie auf eine Markierung oder einen
-      Eintrag in der Liste, um die dort eingespielten Werke zu sehen.
+      Eintrag in der Liste, um die dort eingespielten Werke sowie die
+      <strong>Orgelkonzerte 2026</strong> zu sehen.
     </p>
   </header>
   <main>
@@ -184,7 +212,18 @@
           { bwv: "BWV 545", titel: "Präludium und Fuge C-Dur", url: "https://www.bachvereniging.nl/en/bwv/bwv-545" },
           { bwv: "BWV 650", titel: "Kommst du nun, Jesu (Schübler-Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-650" },
           { bwv: "BWV 727", titel: "Herzlich tut mich verlangen", url: "https://www.bachvereniging.nl/en/bwv/bwv-727" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "bavo.nl", url: "https://www.bavo.nl/muziek/orgelconcerten/" },
+            { titel: "organfestival.nl", url: "https://organfestival.nl/program/" }
+          ],
+          reihen: [
+            { name: "Middagconcerten (Sa, ca. 13:15)", termine: ["20.06. Daniël Cardiel Manso", "27.06. Rien Donkersloot", "04.07. Andries Bogerd", "11.07. Klaas Koelewijn", "08.08. Simone di Meo", "15.08. Elena Roce"] },
+            { name: "Stadsorgelconcerten (Di/Do)", termine: ["23.06. Victor Baeña", "30.06. Vincent de Ridder", "07.07. Thomas Ospital", "09.07. Ko Zwanenburg", "14.07. Stephan van de Wijgert", "16.07. Geurt van Lagen"] },
+            { name: "57. Internationaal Orgelfestival (18.07.–01.08., 75-Jahr-Jubiläum)", termine: ["18.07. Eröffnung – Matthias Havinga (UA Joey Roukens)", "21.07. Gröhn & Danksagmüller", "23.07. Ulsrud & Tomadin", "28.07. Zerer & Peretti", "30.07. Lebrun & Ferjenčíková"] }
+          ]
+        }
       },
       {
         kirche: "Waalse Kerk",
@@ -202,7 +241,16 @@
           { bwv: "BWV 659", titel: "Nun komm, der Heiden Heiland (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-659" },
           { bwv: "BWV 660", titel: "Nun komm, der Heiden Heiland – Trio (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-660" },
           { bwv: "BWV 661", titel: "Nun komm, der Heiden Heiland – Organo pleno (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-661" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "dewaalsekerk.nl", url: "https://dewaalsekerk.nl/agenda" }
+          ],
+          reihen: [
+            { name: "Konzerte", termine: ["28.06. „Bach bewerkt“ – Cello, Violine & Orgel", "30.10. Nederlandse Bachvereniging"] },
+            { name: "Orgel-Lunchkonzerte (Müller-Orgel)", termine: ["jeden 2. Dienstag im Monat, 12 Uhr (außer Juli/Aug.), Eintritt frei"] }
+          ]
+        }
       },
       {
         kirche: "Martinikerk",
@@ -215,7 +263,17 @@
           { bwv: "BWV 565", titel: "Toccata und Fuge d-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-565" },
           { bwv: "BWV 542", titel: "Fantasie und Fuge g-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-542" },
           { bwv: "BWV 653", titel: "An Wasserflüssen Babylon (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-653" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "martinikerk.nl", url: "https://martinikerk.nl/" },
+            { titel: "avondmuziek.nl", url: "https://www.nieuw.avondmuziek.nl/" }
+          ],
+          reihen: [
+            { name: "Orgelzomer (Mi)", termine: ["01.07. Leo van Doeselaar", "08.07. Erwin Wiersinga", "15.07. Klaas Stok"] },
+            { name: "Int. Martini Orgelwettbewerb (02.–08.08.)", termine: ["02.08. Eröffnung – Erwin Wiersinga", "08.08. Finale"] }
+          ]
+        }
       },
       {
         kirche: "Bovenkerk",
@@ -228,7 +286,15 @@
           { bwv: "BWV 544", titel: "Präludium und Fuge h-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-544" },
           { bwv: "BWV 578", titel: "Fuge g-Moll („Kleine“)", url: "https://www.bachvereniging.nl/en/bwv/bwv-578" },
           { bwv: "BWV 588", titel: "Canzona d-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-588" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "orgelstadkampen.nl", url: "https://www.orgelstadkampen.nl/orgelconcerten/" }
+          ],
+          reihen: [
+            { name: "Sommer-Abendkonzerte (Do), Eintritt 12,50 €", termine: ["02.07. Francesca Ajossa", "09.07. Adriaan Hoek", "16.07. Reitze Smits", "23.07. Niels Adema", "30.07. Sander van den Houten", "06.08. Gerben Budding", "13.08. Rik Melissant", "20.08. Peter Westerbrink", "27.08. Matthias Havinga", "03.09. Rien Donkersloot"] }
+          ]
+        }
       },
       {
         kirche: "Grote Kerk (Groote Kerk)",
@@ -240,7 +306,15 @@
         aufnahmen: [
           { bwv: "BWV 625", titel: "Christ lag in Todesbanden", url: "https://www.bachvereniging.nl/en/bwv/bwv-625" },
           { bwv: "BWV 1091", titel: "Das alte Jahr vergangen ist (Neumeister-Choräle)", url: "https://www.bachvereniging.nl/en/bwv/bwv-1091" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "garrelsorgelmaassluis.nl", url: "https://www.garrelsorgelmaassluis.nl/concerten/" }
+          ],
+          reihen: [
+            { name: "Konzerte (20 Uhr)", termine: ["20.06. Matthias Havinga", "04.07. Petra Veenswijk", "18.07. Francesca Ajossa", "01.08. Cor Ardesch (Bach)", "15.08. Hayo Boerema", "29.08. Arjen Leistra", "12.09. Minne Veldman (Wunschkonzert)", "26.09. Sander van den Houten", "19.12. Kerstconcert bei Kerzenlicht (Aarnoud de Groen)"] }
+          ]
+        }
       },
       {
         kirche: "Walburgiskerk",
@@ -254,7 +328,15 @@
           { bwv: "BWV 767", titel: "Partite diverse sopra: O Gott du frommer Gott", url: "https://www.bachvereniging.nl/en/bwv/bwv-767" },
           { bwv: "BWV 549", titel: "Präludium und Fuge c-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-549" },
           { bwv: "BWV 528", titel: "Sonate Nr. 4 e-Moll", url: "https://www.bachvereniging.nl/en/bwv/bwv-528" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "baderorgel.nl", url: "https://www.baderorgel.nl/agenda/" }
+          ],
+          reihen: [
+            { name: "Konzerte (Auswahl)", termine: ["21.06. Hayo Boerema", "28.06. Nederlands Bach Consort + Hannes Minnaar", "11.07. Tomadin & Sartore", "12.07. Wilbert Berendsen", "18.07. Andries Bogerd & Violine", "25.07. Hoefnagel & van den Hoek", "01.08. Reinier Korver", "08.08. Maarten Wilmink", "15.08. Groeneveld & Smith", "16.08. Sander van den Houten", "22.08. Klaas Stok", "12.09. „Klee droomt Bach“ (visuelles Orgelspektakel)"] }
+          ]
+        }
       },
       {
         kirche: "Jacobikerk",
@@ -270,7 +352,16 @@
           { bwv: "BWV 648", titel: "Meine Seele erhebt den Herren (Schübler-Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-648" },
           { bwv: "BWV 657", titel: "Nun danket alle Gott (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-657" },
           { bwv: "BWV 667", titel: "Komm, Gott Schöpfer, Heiliger Geist (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-667" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "arpschnitgerorgeluithuizen.nl", url: "https://arpschnitgerorgeluithuizen.nl/" }
+          ],
+          reihen: [
+            { name: "Marktconcerten (16 Uhr)", termine: ["20.06. Zonnewende – Tomadin & Sartore (15 €)", "27.06. Jaime González", "04.07. Benjamin Krause", "11.07. Annemiek Zeldenrust", "18.07. Lénart & Pozsonyi", "25.07. Tobias Groeneveld"] },
+            { name: "Wettbewerb", termine: ["24.10. 38. Orgelconcours"] }
+          ]
+        }
       },
       {
         kirche: "Lutherse Kerk",
@@ -284,7 +375,16 @@
           { bwv: "BWV 593", titel: "Konzert a-Moll (nach Vivaldi)", url: "https://www.bachvereniging.nl/en/bwv/bwv-593" },
           { bwv: "BWV 663", titel: "Allein Gott in der Höh sei Ehr (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-663" },
           { bwv: "BWV 664", titel: "Allein Gott in der Höh sei Ehr – Trio (Leipziger Choral)", url: "https://www.bachvereniging.nl/en/bwv/bwv-664" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "luthersdenhaag.nl", url: "https://luthersdenhaag.nl/muziek/" },
+            { titel: "haagsorgelkontakt.nl", url: "https://haagsorgelkontakt.nl/concertagenda/" }
+          ],
+          reihen: [
+            { name: "Konzerte", termine: ["11.08. (unbestätigt) Orgel + Fagott – van den Houten / Weegenaar", "Orgel sonst v.a. über SCMLK-Reihe – Termine meist kurzfristig"] }
+          ]
+        }
       },
       {
         kirche: "Grote of Jacobijnerkerk",
@@ -296,7 +396,16 @@
         aufnahmen: [
           { bwv: "BWV 564", titel: "Toccata, Adagio und Fuge C-Dur", url: "https://www.bachvereniging.nl/en/bwv/bwv-564" },
           { bwv: "BWV 548", titel: "Präludium und Fuge e-Moll („Keilstück“)", url: "https://www.bachvereniging.nl/en/bwv/bwv-548" }
-        ]
+        ],
+        konzerte2026: {
+          quellen: [
+            { titel: "grotekerkleeuwarden.nl", url: "https://grotekerkleeuwarden.nl/agenda/" }
+          ],
+          reihen: [
+            { name: "Orgelkonzerte (Müller-Orgel)", termine: ["26.06. „Koraalpreludes“ – Hannes Minnaar", "Avondconcerten: jeden Mi ab 01.07., 20 Uhr (Peter van der Zwaag), 10 €"] },
+            { name: "Bach-/Chorkonzerte", termine: ["19.12. Kerstconcert – Weihnachtsoratorium (Teil V)"] }
+          ]
+        }
       }
     ];
 
@@ -316,6 +425,24 @@
       popupAnchor: [0, -20]
     });
 
+    function konzerteHtml(k) {
+      if (!k || !k.reihen || !k.reihen.length) return "";
+      const reihen = k.reihen
+        .map((r) => {
+          const termine = r.termine.map((t) => `<li>${t}</li>`).join("");
+          return `<div class="konzert-reihe"><div class="konzert-reihe-name">${r.name}</div><ul class="popup-konzerte">${termine}</ul></div>`;
+        })
+        .join("");
+      const quellen = (k.quellen || [])
+        .map((q) => `<a href="${q.url}" target="_blank" rel="noopener">${q.titel} ↗</a>`)
+        .join(" · ");
+      return `
+        <div class="popup-konzert-titel">Konzerte 2026</div>
+        ${reihen}
+        ${quellen ? `<div class="popup-konzert-quelle">Quelle: ${quellen}</div>` : ""}
+      `;
+    }
+
     function popupHtml(ort) {
       const lis = ort.aufnahmen
         .map(
@@ -329,6 +456,7 @@
         <div class="popup-beschreibung">${ort.beschreibung}</div>
         <div style="font-size:0.8rem;color:#6b5b3a;margin-top:0.3rem;">Hier aufgenommene Werke:</div>
         <ul class="popup-aufnahmen">${lis}</ul>
+        ${konzerteHtml(ort.konzerte2026)}
       `;
     }
 
