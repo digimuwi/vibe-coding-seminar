@@ -27,7 +27,6 @@ h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-botto
 <body>
 <h1>WUB WUB</h1>
 <canvas id="K" width="220" height="220" style="width:110px;height:110px;cursor:ns-resize;margin-bottom:4px"></canvas>
-<div class="lbl">Mix</div>
 
 <div class="section">
 <div class="rtitle">Trigger</div>
@@ -63,7 +62,7 @@ h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-botto
 <script>
 var N=64, pi=Math.PI, tbl=[], mix=100, mode=0, beat=1, shape=2;
 var kDrag=false,kY=0,kV=0;
-var envPhase=0;
+var envPhase=0, waveformData=[], rafId=null, triggerTime=0, triggerDuration=200;
 var i;
 for(i=0;i<N;i++) tbl[i]=0;
 
@@ -117,21 +116,70 @@ function rebuildTable(){
 function drawK(){
   var w=220,cx=110,cy=110,r=82;
   kx.clearRect(0,0,w,w);
-  
+
+  // Subtle background circle
+  kx.beginPath();kx.arc(cx,cy,r+10,0,2*pi);
+  kx.fillStyle='#0e0e12';kx.fill();
+
+  // Tick marks around the arc
+  var startA=0.75*pi, endA=2.25*pi, range=1.5*pi;
+  for(var t=0;t<=10;t++){
+    var a=startA+(t/10)*range;
+    var isLoud=(t/10)<=(mix/100);
+    var inner=isLoud?r+6:r+7;
+    var outer=isLoud?r+15:r+13;
+    kx.beginPath();
+    kx.moveTo(cx+Math.cos(a)*inner,cy+Math.sin(a)*inner);
+    kx.lineTo(cx+Math.cos(a)*outer,cy+Math.sin(a)*outer);
+    kx.strokeStyle=isLoud?'rgba(255,255,0,0.7)':'rgba(80,80,80,0.4)';
+    kx.lineWidth=t%5===0?2.5:1.5;kx.lineCap='round';kx.stroke();
+  }
+
+  // Track background
   kx.beginPath();kx.arc(cx,cy,r,.75*pi,2.25*pi);
-  kx.strokeStyle='#1a1a1e';kx.lineWidth=12;kx.lineCap='round';kx.stroke();
-  
-  kx.beginPath();kx.arc(cx,cy,r,.75*pi,.75*pi+(mix/100)*1.5*pi);
-  kx.strokeStyle='#ffff00';kx.lineWidth=12;kx.lineCap='round';kx.stroke();
-  
-  kx.shadowColor='rgba(255,255,0,0.4)';kx.shadowBlur=15;
-  kx.beginPath();kx.arc(cx,cy,r,.75*pi,.75*pi+(mix/100)*1.5*pi);
-  kx.strokeStyle='#ffff00';kx.lineWidth=4;kx.lineCap='round';kx.stroke();
-  kx.shadowBlur=0;
-  
-  kx.fillStyle='#fff';kx.font='bold 28px -apple-system,sans-serif';
+  kx.strokeStyle='#1a1a1e';kx.lineWidth=10;kx.lineCap='round';kx.stroke();
+
+  // Colored gradient arc
+  if(mix>0){
+    var arcEnd=0.75*pi+(mix/100)*1.5*pi;
+    var arcGrad=kx.createLinearGradient(
+      cx+Math.cos(0.75*pi)*r, cy+Math.sin(0.75*pi)*r,
+      cx+Math.cos(arcEnd)*r,  cy+Math.sin(arcEnd)*r);
+    arcGrad.addColorStop(0,'#aaaa00');
+    arcGrad.addColorStop(1,'#ffff00');
+    kx.beginPath();kx.arc(cx,cy,r,0.75*pi,arcEnd);
+    kx.strokeStyle=arcGrad;kx.lineWidth=10;kx.lineCap='round';kx.stroke();
+
+    // Glow layer
+    kx.save();
+    kx.shadowColor='rgba(255,255,0,'+(0.2+mix/200)+')';kx.shadowBlur=18;
+    kx.beginPath();kx.arc(cx,cy,r,0.75*pi,arcEnd);
+    kx.strokeStyle='rgba(255,255,0,0.6)';kx.lineWidth=4;kx.lineCap='round';kx.stroke();
+    kx.restore();
+  }
+
+  // Pointer dot at end of arc
+  if(mix>0){
+    var dotA=0.75*pi+(mix/100)*1.5*pi;
+    var dx=cx+Math.cos(dotA)*r, dy=cy+Math.sin(dotA)*r;
+    kx.save();
+    kx.shadowColor='rgba(255,255,0,0.9)';kx.shadowBlur=12;
+    kx.beginPath();kx.arc(dx,dy,5,0,2*pi);
+    kx.fillStyle='#fff';kx.fill();
+    kx.restore();
+  }
+
+  // Center value
+  var isDragging=kDrag;
+  kx.fillStyle=isDragging?'#ffff00':'#ffffff';
+  kx.font='bold '+(isDragging?'32':'28')+'px -apple-system,sans-serif';
   kx.textAlign='center';kx.textBaseline='middle';
-  kx.fillText(Math.round(mix)+'%',cx,cy);
+  kx.fillText(Math.round(mix)+'%',cx,cy-6);
+
+  // "MIX" sub-label inside knob
+  kx.fillStyle='rgba(120,120,120,0.6)';
+  kx.font='500 10px -apple-system,sans-serif';
+  kx.fillText('MIX',cx,cy+14);
 }
 
 function drawE(){
@@ -146,6 +194,28 @@ function drawE(){
   var gi;
   for(gi=0;gi<=8;gi++){var gx=PAD+(EW-2*PAD)*gi/8;ex.beginPath();ex.moveTo(gx,PAD);ex.lineTo(gx,EH-PAD);ex.stroke();}
   for(gi=0;gi<=4;gi++){var gy=PAD+(EH-2*PAD)*gi/4;ex.beginPath();ex.moveTo(PAD,gy);ex.lineTo(EW-PAD,gy);ex.stroke();}
+
+  // Background waveform
+  if(waveformData.length>0){
+    var maxWf=0.001;
+    for(var wi=0;wi<waveformData.length;wi++) if(waveformData[wi]>maxWf) maxWf=waveformData[wi];
+    var midY=(PAD+(EH-PAD))/2;
+    var ampH=(EH-2*PAD)*0.42;
+    ex.beginPath();
+    for(var wi=0;wi<waveformData.length;wi++){
+      var wx=PAD+(EW-2*PAD)*wi/(waveformData.length-1);
+      var amp=(waveformData[wi]/maxWf)*ampH;
+      if(wi===0)ex.moveTo(wx,midY-amp);else ex.lineTo(wx,midY-amp);
+    }
+    for(var wi=waveformData.length-1;wi>=0;wi--){
+      var wx=PAD+(EW-2*PAD)*wi/(waveformData.length-1);
+      var amp=(waveformData[wi]/maxWf)*ampH;
+      ex.lineTo(wx,midY+amp);
+    }
+    ex.closePath();
+    ex.fillStyle='rgba(200,200,80,0.05)';ex.fill();
+    ex.strokeStyle='rgba(200,200,80,0.12)';ex.lineWidth=1;ex.stroke();
+  }
 
   ex.beginPath();ex.moveTo(PAD,EH-PAD);
   for(var i=0;i<N;i++){var t=i/(N-1);ex.lineTo(PAD+(EW-2*PAD)*t,EH-PAD-(EH-2*PAD)*tbl[i]);}
@@ -312,10 +382,29 @@ document.onmouseup=function(){
 
 K.onmousedown=function(e){kDrag=true;kY=e.clientY;kV=mix;e.preventDefault();};
 
-// Called from C++ via javascript: URL when envelope is active
-function setPhase(p){
-  envPhase=p;
+// Called from C++ when envelope triggers — JS animates smoothly from here
+function onTrigger(durationMs){
+  triggerTime=Date.now();
+  triggerDuration=durationMs;
+  if(!rafId) animatePlayhead();
+}
+
+function animatePlayhead(){
+  var elapsed=Date.now()-triggerTime;
+  envPhase=Math.min(1.0,elapsed/triggerDuration);
   drawE();
+  if(envPhase<1.0){
+    rafId=requestAnimationFrame(animatePlayhead);
+  }else{
+    rafId=null;
+    envPhase=0;
+    drawE();
+  }
+}
+
+function setWaveform(data){
+  waveformData=data;
+  if(!rafId) drawE();
 }
 
 setShape(2);

@@ -33,6 +33,12 @@ public:
     std::atomic<int> beatDiv { 1 };        // 0=1/8, 1=1/4, 2=1/2, 3=1/1
     std::atomic<float> mix { 100.0f };     // 0-100
 
+    // For UI visualisation — written on audio thread, read on UI thread (races OK for display)
+    static constexpr int kWaveformSize = 128;
+    float waveformBuf[kWaveformSize] {};
+    std::atomic<int> waveformHead { 0 };
+    std::atomic<bool> justTriggered { false };
+
     void setEnvelopeTable(const float* data);
     float getEnvelopePhaseValue() const;
 

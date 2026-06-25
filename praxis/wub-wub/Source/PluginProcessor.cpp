@@ -32,6 +32,7 @@ void WubWubProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiB
             if (metadata.getMessage().isNoteOn())
             {
                 envelope.trigger();
+                justTriggered.store(true);
                 break;
             }
         }
@@ -55,10 +56,18 @@ void WubWubProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiB
                         double prevBeat = std::fmod(lastBeatPos, div);
 
                         if (lastBeatPos >= 0.0 && curBeat < prevBeat)
+                        {
                             envelope.trigger();
+                            justTriggered.store(true);
+                        }
 
                         lastBeatPos = beatPos;
                     }
+                }
+                else
+                {
+                    // DAW stopped — reset so we don't get spurious triggers on next play
+                    lastBeatPos = -1.0;
                 }
             }
         }
@@ -73,7 +82,10 @@ void WubWubProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiB
             float sample = buffer.getSample(0, i);
             float diff = std::abs(sample) - std::abs(prevSample);
             if (diff > transientThreshold && !envelope.isActive())
+            {
                 envelope.trigger();
+                justTriggered.store(true);
+            }
             prevSample = sample;
         }
 
@@ -83,6 +95,15 @@ void WubWubProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiB
         for (int ch = 0; ch < numChannels; ++ch)
             buffer.getWritePointer(ch)[i] *= finalGain;
     }
+
+    // Accumulate RMS for waveform display
+    float rms = 0.0f;
+    for (int ch = 0; ch < numChannels; ++ch)
+        rms += buffer.getRMSLevel(ch, 0, numSamples);
+    if (numChannels > 0) rms /= numChannels;
+    int head = waveformHead.load();
+    waveformBuf[head % kWaveformSize] = rms;
+    waveformHead.store(head + 1);
 }
 
 juce::AudioProcessorEditor* WubWubProcessor::createEditor()

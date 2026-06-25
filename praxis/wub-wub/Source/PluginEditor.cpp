@@ -30,12 +30,30 @@ WubWubEditor::~WubWubEditor()
 
 void WubWubEditor::timerCallback()
 {
-    float phase = processor.getEnvelopePhaseValue();
-    if (phase >= 0.0f)
+    juce::String js;
+
+    // Fire trigger notification — JS animates playhead independently via requestAnimationFrame
+    if (processor.justTriggered.exchange(false))
+        js += "if(typeof onTrigger==='function')onTrigger(200);";
+
+    // Send waveform data at ~5 Hz (every 6th tick at 30 Hz)
+    static int wfTick = 0;
+    if (++wfTick >= 6)
     {
-        juce::String js = "if(typeof setPhase==='function')setPhase(" + juce::String(phase, 3) + ");";
-        browser.goToURL("javascript:" + js);
+        wfTick = 0;
+        int head = processor.waveformHead.load();
+        juce::String wfStr;
+        for (int i = 0; i < WubWubProcessor::kWaveformSize; ++i)
+        {
+            int idx = (head + i) % WubWubProcessor::kWaveformSize;
+            if (i > 0) wfStr += ",";
+            wfStr += juce::String(processor.waveformBuf[idx], 3);
+        }
+        js += "if(typeof setWaveform==='function')setWaveform([" + wfStr + "]);";
     }
+
+    if (js.isNotEmpty())
+        browser.goToURL("javascript:" + js);
 }
 
 void WubWubEditor::resized()
