@@ -12,6 +12,7 @@ public:
     void setDurationMs(float ms) { durationMs = std::max(1.0f, ms); }
     float processSample(double sampleRate);
     bool isActive() const { return active; }
+    float getPhase() const { return active ? std::min(1.0f, elapsedMs / durationMs) : -1.0f; }
 
 private:
     float table[kTableSize];

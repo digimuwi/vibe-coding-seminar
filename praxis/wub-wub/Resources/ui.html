@@ -63,6 +63,7 @@ h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-botto
 <script>
 var N=64, pi=Math.PI, tbl=[], mix=100, mode=0, beat=1, shape=2;
 var kDrag=false,kY=0,kV=0;
+var envPhase=0;
 var i;
 for(i=0;i<N;i++) tbl[i]=0;
 
@@ -173,6 +174,12 @@ function drawE(){
     ex.beginPath();ex.arc(px,py,6,0,2*pi);
     ex.strokeStyle='rgba(0,0,0,0.4)';ex.lineWidth=1.5;ex.stroke();
   }
+
+  // Draw playhead (vertical line showing current envelope position)
+  var playheadX=PAD+(EW-2*PAD)*envPhase;
+  ex.strokeStyle='rgba(0,255,200,0.8)';ex.lineWidth=2.5;
+  ex.beginPath();ex.moveTo(playheadX,PAD);ex.lineTo(playheadX,EH-PAD);ex.stroke();
+  ex.fillStyle='rgba(0,255,200,0.3)';ex.fillRect(playheadX-1,PAD,2,EH-2*PAD);
 
   ex.fillStyle='#2a2a2a';ex.font='500 9px -apple-system,sans-serif';ex.textAlign='left';
   ex.fillText('0',PAD+2,EH-PAD-4);ex.fillText('1',PAD+2,PAD+12);
@@ -304,6 +311,12 @@ document.onmouseup=function(){
 };
 
 K.onmousedown=function(e){kDrag=true;kY=e.clientY;kV=mix;e.preventDefault();};
+
+// Called from C++ via javascript: URL when envelope is active
+function setPhase(p){
+  envPhase=p;
+  drawE();
+}
 
 setShape(2);
 drawK();

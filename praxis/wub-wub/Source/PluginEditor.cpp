@@ -19,11 +19,23 @@ WubWubEditor::WubWubEditor(WubWubProcessor& p)
         + "&beat=" + juce::String(processor.beatDiv.load());
 
     browser.goToURL(url);
+    startTimerHz(30);
 }
 
 WubWubEditor::~WubWubEditor()
 {
+    stopTimer();
     htmlFile.deleteFile();
+}
+
+void WubWubEditor::timerCallback()
+{
+    float phase = processor.getEnvelopePhaseValue();
+    if (phase >= 0.0f)
+    {
+        juce::String js = "if(typeof setPhase==='function')setPhase(" + juce::String(phase, 3) + ");";
+        browser.goToURL("javascript:" + js);
+    }
 }
 
 void WubWubEditor::resized()

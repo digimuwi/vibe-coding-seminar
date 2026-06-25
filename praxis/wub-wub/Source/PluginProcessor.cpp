@@ -95,6 +95,11 @@ void WubWubProcessor::setEnvelopeTable(const float* data)
     envelope.setTable(data);
 }
 
+float WubWubProcessor::getEnvelopePhaseValue() const
+{
+    return envelope.getPhase();
+}
+
 juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new WubWubProcessor();
