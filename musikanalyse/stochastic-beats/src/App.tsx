@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { startAudio } from './audio';
 import { SoundTester } from './components/SoundTester';
+import { GeneratorView } from './components/Generator';
 import './App.css';
 
 type Tab = 'sounds' | 'generator';
@@ -47,14 +48,7 @@ export default function App() {
         ) : tab === 'sounds' ? (
           <SoundTester />
         ) : (
-          <div className="placeholder">
-            <h2>Beat-Generator</h2>
-            <p>
-              Hier kommt später der eigentliche Generator. Er wird auf Basis
-              eines stochastischen Prozesses und eines minimalen Regelsatzes
-              Beats erzeugen.
-            </p>
-          </div>
+          <GeneratorView />
         )}
       </main>
     </div>

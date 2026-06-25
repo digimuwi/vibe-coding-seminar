@@ -371,3 +371,241 @@
     padding: 18px;
   }
 }
+
+/* ===== Generator ===== */
+
+.generator {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  max-width: 960px;
+}
+
+.gen-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #1f242c;
+  border-radius: 10px;
+}
+
+.gen-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.gen-label {
+  color: #8b9097;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  min-width: 70px;
+}
+
+.gen-seed {
+  flex: 1;
+  min-width: 200px;
+  padding: 9px 12px;
+  background: #1c2129;
+  border: 1px solid #2a313b;
+  color: #e6e6e6;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  outline: none;
+  transition: border-color 0.1s, background 0.1s;
+}
+
+.gen-seed:focus {
+  border-color: #ff7a59;
+  background: #1f252e;
+}
+
+.gen-mini-btn {
+  padding: 8px 12px;
+  background: #1c2129;
+  border: 1px solid #2a313b;
+  color: #c8ccd2;
+  border-radius: 6px;
+  font-size: 12px;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+}
+
+.gen-mini-btn:hover {
+  background: #232a34;
+  border-color: #3a4250;
+}
+
+.gen-pills {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.gen-pill {
+  padding: 8px 14px;
+  background: #1c2129;
+  border: 1px solid #2a313b;
+  color: #c8ccd2;
+  border-radius: 999px;
+  font-size: 13px;
+  text-transform: capitalize;
+  transition: background 0.1s, border-color 0.1s, color 0.1s;
+}
+
+.gen-pill:hover {
+  background: #232a34;
+}
+
+.gen-pill.active {
+  background: #ff7a59;
+  border-color: #ff7a59;
+  color: #0e1116;
+}
+
+.gen-select {
+  padding: 8px 10px;
+  background: #1c2129;
+  border: 1px solid #2a313b;
+  color: #c8ccd2;
+  border-radius: 6px;
+  font-size: 13px;
+}
+
+.gen-primary {
+  padding: 11px 22px;
+  background: #ff7a59;
+  color: #0e1116;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+}
+
+.gen-primary:hover {
+  background: #ff8d70;
+}
+
+.gen-secondary {
+  padding: 11px 22px;
+  background: #1c2129;
+  border: 1px solid #2a313b;
+  color: #e6e6e6;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.gen-secondary:hover:not(.disabled) {
+  background: #232a34;
+  border-color: #3a4250;
+}
+
+.gen-secondary.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+/* ===== Output ===== */
+
+.gen-output {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  padding: 18px;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid #1f242c;
+  border-radius: 10px;
+}
+
+.meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.meta-item {
+  padding: 10px 14px;
+  background: #1c2129;
+  border: 1px solid #2a313b;
+  border-radius: 8px;
+}
+
+.meta-label {
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 1.2px;
+  color: #8b9097;
+  margin-bottom: 4px;
+}
+
+.meta-value {
+  font-size: 14px;
+  color: #f0f0f0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+/* ===== Timeline ===== */
+
+.timeline-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.timeline-track {
+  position: relative;
+  height: 56px;
+  background: #14181e;
+  border: 1px solid #1f242c;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.timeline-section {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  border-right: 1px solid rgba(14, 17, 22, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.timeline-section-label {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  pointer-events: none;
+  white-space: nowrap;
+}
+
+.timeline-playhead {
+  position: absolute;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: #fff;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+  transition: left 0.05s linear;
+}
+
+.timeline-playhead.playing {
+  background: #ffea59;
+  box-shadow: 0 0 10px rgba(255, 234, 89, 0.8);
+}
+
+.timeline-time {
+  color: #8b9097;
+  font-size: 12px;
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  text-align: right;
+}
