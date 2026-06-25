@@ -19,14 +19,26 @@ h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-botto
 .b.on{background:linear-gradient(180deg,#ffff00 0%,#cccc00 100%);color:#000;border-color:#ffff00;
   font-weight:700;box-shadow:0 0 12px rgba(255,255,0,0.4)}
 .hide{display:none}
-.hint{font-size:9px;color:#333;margin-top:6px;letter-spacing:1.5px;font-weight:400}
+.threshold-knob{transition:opacity .2s ease}
+.threshold-knob.hidden{opacity:0;pointer-events:none}
+#inputMeter{margin-top:12px;background:linear-gradient(180deg,#0e0e12 0%,#0a0a0d 100%);border-radius:8px;padding:10px;
+  border:1px solid #1a1a1e;box-shadow:inset 0 2px 8px rgba(0,0,0,0.5)}
 .canvas-wrap{position:relative;display:inline-block;border-radius:10px;overflow:hidden;
   box-shadow:0 4px 24px rgba(0,0,0,0.6),inset 0 1px 0 rgba(255,255,255,0.03)}
 </style>
 </head>
 <body>
 <h1>WUB WUB</h1>
-<canvas id="K" width="220" height="220" style="width:110px;height:110px;cursor:ns-resize;margin-bottom:4px"></canvas>
+<div style="display:flex;justify-content:center;gap:8px;margin-bottom:4px">
+<canvas id="K" width="220" height="220" style="width:110px;height:110px;cursor:ns-resize"></canvas>
+<canvas id="T" width="220" height="220" style="width:110px;height:110px;cursor:ns-resize" class="threshold-knob"></canvas>
+</div>
+
+<div id="inputMeter">
+<div style="font-size:9px;color:#555;text-transform:uppercase;letter-spacing:2px;margin-bottom:6px;font-weight:600">Audio Input</div>
+<canvas id="meter" width="360" height="24" style="width:180px;height:12px;display:block;margin:0 auto;border-radius:4px"></canvas>
+<div style="font-size:8px;color:#333;margin-top:4px;text-align:center">Peak: <span id="peakVal" style="color:#ffff00;font-weight:600">0.0</span></div>
+</div>
 
 <div class="section">
 <div class="rtitle">Trigger</div>
@@ -60,14 +72,18 @@ h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-botto
 <div class="hint">click to add · drag to move · double-click to remove</div>
 
 <script>
-var N=64, pi=Math.PI, tbl=[], mix=100, mode=0, beat=1, shape=2;
+var N=64, pi=Math.PI, tbl=[], mix=100, threshold=50, mode=0, beat=1, shape=2;
 var kDrag=false,kY=0,kV=0;
+var tDrag=false,tY=0,tV=0;
 var envPhase=0, waveformData=[], rafId=null, triggerTime=0, triggerDuration=200;
+var currentPeak=0, peakDecay=0.97, peakHoldTime=0;
 var i;
 for(i=0;i<N;i++) tbl[i]=0;
 
 var K=document.getElementById('K');
 var kx=K.getContext('2d');
+var T=document.getElementById('T');
+var tx2=T.getContext('2d');
 var E=document.getElementById('E');
 var ex=E.getContext('2d');
 var EW=800,EH=300,PAD=20;
@@ -182,6 +198,75 @@ function drawK(){
   kx.fillText('MIX',cx,cy+14);
 }
 
+function drawT(){
+  var w=220,cx=110,cy=110,r=82;
+  tx2.clearRect(0,0,w,w);
+
+  // Subtle background circle
+  tx2.beginPath();tx2.arc(cx,cy,r+10,0,2*pi);
+  tx2.fillStyle='#0e0e12';tx2.fill();
+
+  // Tick marks around the arc
+  var startA=0.75*pi, endA=2.25*pi, range=1.5*pi;
+  for(var t=0;t<=10;t++){
+    var a=startA+(t/10)*range;
+    var isSens=(t/10)<=(threshold/100);
+    var inner=isSens?r+6:r+7;
+    var outer=isSens?r+15:r+13;
+    tx2.beginPath();
+    tx2.moveTo(cx+Math.cos(a)*inner,cy+Math.sin(a)*inner);
+    tx2.lineTo(cx+Math.cos(a)*outer,cy+Math.sin(a)*outer);
+    tx2.strokeStyle=isSens?'rgba(255,255,0,0.7)':'rgba(80,80,80,0.4)';
+    tx2.lineWidth=t%5===0?2.5:1.5;tx2.lineCap='round';tx2.stroke();
+  }
+
+  // Track background
+  tx2.beginPath();tx2.arc(cx,cy,r,.75*pi,2.25*pi);
+  tx2.strokeStyle='#1a1a1e';tx2.lineWidth=10;tx2.lineCap='round';tx2.stroke();
+
+  // Colored gradient arc
+  if(threshold>0){
+    var arcEnd=0.75*pi+(threshold/100)*1.5*pi;
+    var arcGrad=tx2.createLinearGradient(
+      cx+Math.cos(0.75*pi)*r, cy+Math.sin(0.75*pi)*r,
+      cx+Math.cos(arcEnd)*r,  cy+Math.sin(arcEnd)*r);
+    arcGrad.addColorStop(0,'#aaaa00');
+    arcGrad.addColorStop(1,'#ffff00');
+    tx2.beginPath();tx2.arc(cx,cy,r,0.75*pi,arcEnd);
+    tx2.strokeStyle=arcGrad;tx2.lineWidth=10;tx2.lineCap='round';tx2.stroke();
+
+    // Glow layer
+    tx2.save();
+    tx2.shadowColor='rgba(255,255,0,'+(0.2+threshold/200)+')';tx2.shadowBlur=18;
+    tx2.beginPath();tx2.arc(cx,cy,r,0.75*pi,arcEnd);
+    tx2.strokeStyle='rgba(255,255,0,0.6)';tx2.lineWidth=4;tx2.lineCap='round';tx2.stroke();
+    tx2.restore();
+  }
+
+  // Pointer dot at end of arc
+  if(threshold>0){
+    var dotA=0.75*pi+(threshold/100)*1.5*pi;
+    var dx=cx+Math.cos(dotA)*r, dy=cy+Math.sin(dotA)*r;
+    tx2.save();
+    tx2.shadowColor='rgba(255,255,0,0.9)';tx2.shadowBlur=12;
+    tx2.beginPath();tx2.arc(dx,dy,5,0,2*pi);
+    tx2.fillStyle='#fff';tx2.fill();
+    tx2.restore();
+  }
+
+  // Center value
+  var isDragging=tDrag;
+  tx2.fillStyle=isDragging?'#ffff00':'#ffffff';
+  tx2.font='bold '+(isDragging?'32':'28')+'px -apple-system,sans-serif';
+  tx2.textAlign='center';tx2.textBaseline='middle';
+  tx2.fillText(Math.round(threshold),cx,cy-6);
+
+  // "THR" sub-label inside knob
+  tx2.fillStyle='rgba(120,120,120,0.6)';
+  tx2.font='500 10px -apple-system,sans-serif';
+  tx2.fillText('THR',cx,cy+14);
+}
+
 function drawE(){
   ex.clearRect(0,0,EW,EH);
   
@@ -267,6 +352,17 @@ function setMode(v){
   mode=v;tx('mode',v);
   radioG(document.querySelectorAll('.section')[0],v);
   document.getElementById('BR').className=v===2?'section':'section hide';
+  
+  // Show threshold knob and input meter only in AUDIO mode
+  var thrKnob=document.querySelector('.threshold-knob');
+  var inputMeter=document.getElementById('inputMeter');
+  if(v===0){
+    thrKnob.style.display='block';
+    inputMeter.style.display='block';
+  }else{
+    thrKnob.style.display='none';
+    inputMeter.style.display='none';
+  }
 }
 function setBeat(v){beat=v;tx('beat',v);radioG(document.getElementById('BR'),v);}
 function setShape(v){
@@ -368,6 +464,7 @@ document.onmousemove=function(e){
     drawE();
   }
   if(kDrag){mix=Math.max(0,Math.min(100,kV+(kY-e.clientY)*.5));drawK();tx('mix',Math.round(mix));}
+  if(tDrag){threshold=Math.max(0,Math.min(100,tV+(tY-e.clientY)*.5));drawT();tx('threshold',Math.round(threshold));}
 };
 
 document.onmouseup=function(){
@@ -378,9 +475,11 @@ document.onmouseup=function(){
   }
   dragIdx=-1;
   kDrag=false;
+  tDrag=false;
 };
 
 K.onmousedown=function(e){kDrag=true;kY=e.clientY;kV=mix;e.preventDefault();};
+T.onmousedown=function(e){tDrag=true;tY=e.clientY;tV=threshold;e.preventDefault();};
 
 // Called from C++ when envelope triggers — JS animates smoothly from here
 function onTrigger(durationMs){
@@ -402,13 +501,81 @@ function animatePlayhead(){
   }
 }
 
+function drawMeter(){
+  var meter=document.getElementById('meter');
+  if(!meter) return;
+  var mx=meter.getContext('2d');
+  var w=360, h=24;
+  mx.clearRect(0,0,w,h);
+  
+  // Background
+  mx.fillStyle='#0a0a0d';
+  mx.fillRect(0,0,w,h);
+  
+  // Border
+  mx.strokeStyle='#222';
+  mx.lineWidth=1;
+  mx.strokeRect(0,0,w,h);
+  
+  // Get current level from waveform data
+  var currentLvl=0;
+  if(waveformData.length>0){
+    currentLvl=Math.max.apply(null,waveformData);
+  }
+  
+  // Update peak with decay
+  if(currentLvl>currentPeak){
+    currentPeak=currentLvl;
+    peakHoldTime=500; // Hold peak for 500ms
+  }else if(peakHoldTime>0){
+    peakHoldTime-=16; // Rough frame time
+  }else{
+    currentPeak*=peakDecay;
+  }
+  
+  // Current level bar (bright yellow)
+  var barW=currentLvl*w*0.95;
+  var barGrad=mx.createLinearGradient(0,0,barW,0);
+  barGrad.addColorStop(0,'#ffff00');
+  barGrad.addColorStop(1,'#cccc00');
+  mx.fillStyle=barGrad;
+  mx.fillRect(2,3,barW-2,h-6);
+  
+  // Glow on the bar
+  mx.save();
+  mx.shadowColor='rgba(255,255,0,0.5)';
+  mx.shadowBlur=6;
+  mx.fillStyle='rgba(255,255,0,0.3)';
+  mx.fillRect(2,3,barW-2,h-6);
+  mx.restore();
+  
+  // Peak indicator line
+  if(currentPeak>0.01){
+    var peakX=currentPeak*w*0.95+2;
+    mx.strokeStyle='#ffff00';
+    mx.lineWidth=2;
+    mx.beginPath();
+    mx.moveTo(peakX,1);
+    mx.lineTo(peakX,h-1);
+    mx.stroke();
+  }
+  
+  // Update display text
+  var peakVal=document.getElementById('peakVal');
+  if(peakVal){
+    peakVal.textContent=(currentPeak*100).toFixed(1);
+  }
+}
+
 function setWaveform(data){
   waveformData=data;
+  drawMeter();
   if(!rafId) drawE();
 }
 
 setShape(2);
 drawK();
+drawT();
 drawE();
 </script>
 </body>

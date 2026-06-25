@@ -16,7 +16,8 @@ WubWubEditor::WubWubEditor(WubWubProcessor& p)
     juce::String url = "file://" + htmlFile.getFullPathName()
         + "?mix=" + juce::String(static_cast<int>(processor.mix.load()))
         + "&mode=" + juce::String(processor.triggerMode.load())
-        + "&beat=" + juce::String(processor.beatDiv.load());
+        + "&beat=" + juce::String(processor.beatDiv.load())
+        + "&threshold=" + juce::String(static_cast<int>(processor.threshold.load()));
 
     browser.goToURL(url);
     startTimerHz(30);
@@ -70,6 +71,7 @@ void WubWubEditor::handleCommand(const juce::String& url)
     if (param == "mix")       processor.mix.store(value.getFloatValue());
     else if (param == "mode") processor.triggerMode.store(value.getIntValue());
     else if (param == "beat") processor.beatDiv.store(value.getIntValue());
+    else if (param == "threshold") processor.threshold.store(value.getFloatValue());
     else if (param == "table")
     {
         float table[kTableSize];

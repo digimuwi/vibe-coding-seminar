@@ -32,6 +32,7 @@ public:
     std::atomic<int> triggerMode { 0 };    // 0=audio, 1=midi, 2=sync
     std::atomic<int> beatDiv { 1 };        // 0=1/8, 1=1/4, 2=1/2, 3=1/1
     std::atomic<float> mix { 100.0f };     // 0-100
+    std::atomic<float> threshold { 50.0f };// 0-100, maps to 0.05-0.5 actual threshold
 
     // For UI visualisation — written on audio thread, read on UI thread (races OK for display)
     static constexpr int kWaveformSize = 128;
@@ -48,7 +49,6 @@ private:
 
     // Transient detection
     float prevSample = 0.0f;
-    float transientThreshold = 0.15f;
 
     // Sync tracking
     double lastBeatPos = -1.0;

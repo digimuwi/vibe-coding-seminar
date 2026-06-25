@@ -81,7 +81,10 @@ void WubWubProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiB
         {
             float sample = buffer.getSample(0, i);
             float diff = std::abs(sample) - std::abs(prevSample);
-            if (diff > transientThreshold && !envelope.isActive())
+            // Map normalized 0-100 threshold to actual range 0.05-0.5
+            float thrNorm = threshold.load() / 100.0f;
+            float actualThreshold = 0.05f + thrNorm * 0.45f;
+            if (diff > actualThreshold && !envelope.isActive())
             {
                 envelope.trigger();
                 justTriggered.store(true);
