@@ -19,7 +19,7 @@ public:
     }
 };
 
-class WubWubEditor : public juce::AudioProcessorEditor
+class WubWubEditor : public juce::AudioProcessorEditor, private juce::Timer
 {
 public:
     explicit WubWubEditor(WubWubProcessor&);
@@ -32,6 +32,7 @@ private:
     juce::File htmlFile;
 
     void handleCommand(const juce::String& url);
+    void timerCallback() override;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(WubWubEditor)
 };

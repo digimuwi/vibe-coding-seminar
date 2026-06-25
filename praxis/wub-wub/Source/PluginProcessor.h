@@ -34,6 +34,7 @@ public:
     std::atomic<float> mix { 100.0f };     // 0-100
 
     void setEnvelopeTable(const float* data);
+    float getEnvelopePhaseValue() const;
 
 private:
     EnvelopeGenerator envelope;
