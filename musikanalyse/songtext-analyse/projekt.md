@@ -1,17 +1,22 @@
 ---
 titel: Songtext-Analyse
-studierende: TODO Name eintragen
+studierende: Rian Knittel
 typ: web
 start: index.html
 ---
-Quantitative Analyse von Songtexten: Eingabe eines Worts oder einer Phrase,
-Auswertung als Säulendiagramm. Filter nach Künstler, Album und Zeitraum.
+Installierbare **Web-App** zur quantitativen Analyse von Songtexten auf Basis von
+**genius.com**. Du gibst ein Wort oder eine Phrase ein und siehst als
+**Säulendiagramm**, wie oft es in den Liedern vorkommt. Die App lässt sich im
+Browser öffnen oder auf Startbildschirm/Desktop installieren.
 
-- Künstler-Filter: Säulen pro Album, darunter Aufschlüsselung je Lied
-- Album-Filter: Säulen pro Lied, Button öffnet den Volltext mit markierten Treffern
-- Zeitraum-Filter: Säulen pro Jahr, Button listet die berücksichtigten Lieder
+- **Filter „Künstler"**: eine Säule pro Album des Künstlers, darunter
+  aufgeschlüsselt, wie oft der Begriff in welchem Lied des Albums vorkommt.
+  Lieder ohne Album landen unter **„Sonstige"**.
+- **Filter „Album"**: eine Säule pro Lied des Albums. Unter jedem Lied öffnet ein
+  Knopf den **vollständigen Text** mit **farbig markierten** Treffern.
 
-Daten werden live geladen: Discographie aus
-[MusicBrainz](https://musicbrainz.org/), Songtexte aus
-[lyrics.ovh](https://lyricsovh.docs.apiary.io/). Künstler werden im Browser
-zwischengespeichert (localStorage).
+Die Lied- und Albumlisten sowie die Texte stammen ausschließlich von
+[genius.com](https://genius.com/). Da Browser fremde Seiten nicht direkt laden
+dürfen, läuft der Abruf über einen öffentlichen Vermittler-Dienst (CORS-Proxy);
+einmal geladene Texte werden im Browser zwischengespeichert (localStorage).
+Nur für Lehrzwecke.

@@ -1,82 +1,60 @@
 # Songtext-Analyse
 
-Quantitative Analyse von Songtexten direkt im Browser. Du gibst ein Wort oder
-eine Phrase ein, das Programm zählt die Treffer und zeigt sie als
-Säulendiagramm. Filter: **Künstler**, **Album**, **Zeitraum**.
+Eine kleine **Web-App** zur **quantitativen Analyse von Songtexten**. Datenquelle
+ist ausschließlich [genius.com](https://genius.com/). Sie läuft im Browser und
+lässt sich zusätzlich wie eine App installieren.
 
-## Quellen (live, kein lokaler Datensatz)
+## Was sie kann
 
-- **[MusicBrainz](https://musicbrainz.org/)** — offene Musikdatenbank.
-  Liefert Künstler, Studio-Alben und Tracklisten samt Erscheinungsjahr.
-- **[lyrics.ovh](https://lyricsovh.docs.apiary.io/)** — kostenlose Lyrics-API.
-  Liefert die Songtexte zu Künstler + Titel.
+- **Suchwort/Phrase eingeben** und zählen lassen, wie oft es vorkommt; wahlweise
+  nur ganze Wörter. genius-Markierungen wie `[Refrain]` werden nicht mitgezählt.
+- **Filter „Künstler"**: eine Säule pro Album, darunter pro Lied aufgeschlüsselt;
+  jedes Lied hat einen Knopf für den **Volltext** mit markierten Treffern.
+  Lieder ohne Album erscheinen unter **„Sonstige"**. Anzahl der Lieder wählbar
+  (25/50/100/alle).
+- **Filter „Album"**: eine Säule pro Lied; pro Lied ein Volltext-Knopf.
+- **Filter „Jahr"**: die **populärsten Lieder eines Jahres** (über alle Künstler
+  hinweg, aus der genius-Bestenliste nach Klickzahlen), angezeigt mit Liedname
+  und Künstler. Wie viele Lieder, steuert die Auswahl 25/50/100.
+- **Diagramm umschaltbar:** absolute Anzahl oder **Prozent** (Anteil des Wortes
+  am gesamten Text), damit lange und kurze Lieder vergleichbar werden.
+- **Umgebung als Wortwolke:** ein Knopf zeigt die häufigsten Wörter direkt vor
+  und nach dem Suchwort als Wortwolke (Schriftgröße = Häufigkeit; Füllwörter
+  werden ausgeblendet).
 
-Beide sind CORS-freundlich, ohne Anmeldung und ohne API-Schlüssel nutzbar.
-Direkt von `songtexte.com` ist Browser-Scraping nicht möglich – die Seite
-erlaubt das technisch (CORS) nicht und es wäre rechtlich heikel.
+## Wie sie startet
 
-## So benutzt du es
+Statische Web-App – einfach `index.html` im Browser öffnen (kein Server, kein
+Build nötig). Wird sie über die Seminar-Website (https) aufgerufen, lässt sie
+sich über das Browser-Menü **installieren** (eigenes Icon, eigenes Fenster); das
+Installieren funktioniert nur über https, nicht beim direkten Öffnen der Datei.
 
-1. **Künstler laden:** Filter „Künstler" wählen, Namen ins Suchfeld tippen
-   (z. B. `The Beatles`), Wort/Phrase oben eintragen, **Auswerten** klicken.
-   Beim ersten Mal lädt die App Discographie + Songtexte live – das dauert
-   je nach Größe der Discographie 1–5 Minuten (Progress-Anzeige läuft).
-2. **Bibliothek wächst mit:** Jeder geladene Künstler wird im Browser
-   gespeichert (localStorage). Beim nächsten Mal ist er sofort verfügbar.
-3. **Album-Filter:** Sobald ein Künstler in der Bibliothek ist, kannst du
-   gezielt ein seiner Alben auswählen. Pro Song gibt es einen Knopf, der den
-   Volltext mit markierten Treffern öffnet.
-4. **Zeitraum-Filter:** Säulen pro Jahr, über die gesamte Bibliothek. Pro
-   Jahr ein Knopf, der Künstler + Titel der gefundenen Lieder zeigt.
+## Technischer Hinweis
 
-## Was du wissen solltest
+Browser dürfen fremde Seiten aus Sicherheitsgründen nicht direkt laden (CORS),
+und genius.com bietet die Texte nicht über eine offizielle Schnittstelle an.
+Deshalb laufen alle Abrufe über einen **Vermittler-Dienst** (CORS-Proxy). Sehr
+umfangreiche Künstler werden auf die bekanntesten Lieder begrenzt. Einmal
+geladene Texte werden im Browser zwischengespeichert (localStorage).
+**Nur zu Lehrzwecken.**
 
-- **Erstes Laden dauert.** MusicBrainz erlaubt etwa eine Anfrage pro Sekunde,
-  und für jedes Album wird einmal angefragt. Bei 20 Alben sind das also gut
-  20 Sekunden allein für die Tracklisten, dazu die parallelen Lyrics-Abrufe.
-- **Lyrics sind nicht für jeden Song verfügbar.** lyrics.ovh hat nicht alles.
-  Songs ohne Text werden mit dem Hinweis „kein Text" markiert und mit 0
-  gezählt.
-- **Studio-Alben only.** Die App lädt nur reguläre Alben – keine
-  Compilations, Live-Alben, Soundtracks oder Singles. Andernfalls würde die
-  Discographie schnell unübersichtlich.
-- **Maximal 20 Alben pro Künstler** – damit das Laden in vertretbarer Zeit
-  bleibt. Bei sehr großen Diskographien werden die ältesten 20 genommen.
-- **Lokaler Cache:** Die Bibliothek lebt im `localStorage` deines Browsers.
-  Wenn du den Browser-Speicher löschst, ist sie weg. Im Bibliotheks-Panel
-  kannst du einzelne Künstler mit „×" wieder entfernen.
+## Eigener Vermittler (empfohlen, kostenlos)
 
-## App starten
+Die öffentlichen Gratis-Vermittler sind oft nicht erreichbar. Am zuverlässigsten
+ist ein eigener kleiner Vermittler bei **Cloudflare** (kostenlos). Das Skript dazu
+liegt in `cloudflare-worker.js`. So richtest du ihn ein:
 
-Statische Seite – ein lokaler Server reicht. Auf der Seminar-Website ist
-schon alles eingerichtet; lokal z. B.:
+1. Auf <https://dash.cloudflare.com/sign-up> einen **kostenlosen Account** anlegen
+   (nur E-Mail + Passwort, E-Mail bestätigen).
+2. Links im Menü **„Workers & Pages"** öffnen → **„Create application"** →
+   **„Create Worker"**.
+3. Einen Namen vergeben, z. B. `songtext-proxy`, dann **„Deploy"** klicken.
+4. **„Edit code"** anklicken, den Beispielcode löschen und stattdessen den
+   kompletten Inhalt von `cloudflare-worker.js` einfügen → **„Deploy"**.
+5. Oben erscheint die Adresse deines Workers, etwa
+   `https://songtext-proxy.deinname.workers.dev`. Diese kopieren.
+6. In der App unter **„Eigene Vermittler-Adresse"** einfügen – fertig. Die App
+   nutzt dann immer zuerst deinen eigenen, stabilen Vermittler.
 
-**VS Code:** Erweiterung „Live Server" → Rechtsklick auf `index.html` →
-„Open with Live Server".
-
-**Python (falls installiert):**
-```
-python -m http.server 8000
-```
-Dann `http://localhost:8000/` öffnen.
-
-> **Hinweis:** Doppelklick auf `index.html` funktioniert nicht – moderne
-> Browser blockieren API-Zugriffe von `file://`-Seiten.
-
-## Aufbau
-
-```
-songtext-analyse/
-├── index.html      Oberfläche
-├── styles.css      Aussehen
-├── app.js          Logik: APIs, Cache, Filter, Diagramm
-├── projekt.md      Metadaten für die Seminar-Website
-└── README.md       diese Anleitung
-```
-
-## Wo kommen die Texte rechtlich her?
-
-- MusicBrainz-Daten stehen unter CC0 (öffentliche Domain).
-- lyrics.ovh aggregiert Songtexte aus dem Web. Für eine quantitative
-  Textanalyse im wissenschaftlichen Seminar-Kontext deckt § 60d UrhG
-  (Text- und Data-Mining für Forschungszwecke) das Vorgehen ab.
+(Die Knopf-Beschriftungen bei Cloudflare können sich leicht ändern; der Ablauf
+„Worker anlegen → Code einfügen → Deploy → Adresse kopieren" bleibt gleich.)

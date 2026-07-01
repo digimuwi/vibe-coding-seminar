@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>All of Bach – Orgelorte in den Niederlanden</title>
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+    crossorigin=""
+  />
+  <style>
+    :root {
+      --akzent: #b8860b;
+      --akzent-dunkel: #7c5c08;
+      --hg: #faf7f1;
+      --text: #2a2520;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; padding: 0; height: 100%; }
+    body {
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--text);
+      background: var(--hg);
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      padding: 1rem 1.25rem 0.75rem;
+      border-bottom: 1px solid #e7dfce;
+      background: #fffdf7;
+    }
+    header h1 {
+      margin: 0 0 0.25rem 0;
+      font-size: 1.4rem;
+      color: var(--akzent-dunkel);
+    }
+    header p {
+      margin: 0;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      max-width: 70ch;
+    }
+    header a { color: var(--akzent-dunkel); }
+    main {
+      flex: 1;
+      display: flex;
+      min-height: 0;
+    }
+    #karte {
+      flex: 1;
+      min-height: 60vh;
+    }
+    aside {
+      width: 320px;
+      max-width: 40vw;
+      overflow-y: auto;
+      border-left: 1px solid #e7dfce;
+      background: #fffdf7;
+      padding: 0.75rem 1rem 1.25rem;
+    }
+    aside h2 {
+      font-size: 1rem;
+      margin: 0.5rem 0 0.5rem;
+      color: var(--akzent-dunkel);
+      border-bottom: 1px solid #e7dfce;
+      padding-bottom: 0.25rem;
+    }
+    .ort-liste {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .ort-liste li {
+      padding: 0.45rem 0.4rem;
+      border-bottom: 1px dotted #e0d7c1;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1.35;
+    }
+    .ort-liste li:hover {
+      background: #f5ecd3;
+    }
+    .ort-liste strong { color: var(--akzent-dunkel); }
+    .ort-liste .stadt {
+      display: block;
+      font-size: 0.8rem;
+      color: #6b5b3a;
+    }
+    .popup-titel {
+      font-weight: bold;
+      color: var(--akzent-dunkel);
+      font-size: 1rem;
+      margin-bottom: 0.25rem;
+    }
+    .popup-meta {
+      font-size: 0.85rem;
+      color: #555;
+      margin-bottom: 0.4rem;
+    }
+    .popup-link {
+      display: inline-block;
+      margin-top: 0.3rem;
+      color: var(--akzent-dunkel);
+      font-weight: bold;
+      text-decoration: none;
+    }
+    .popup-link:hover { text-decoration: underline; }
+    footer {
+      padding: 0.5rem 1rem;
+      font-size: 0.75rem;
+      color: #6b5b3a;
+      background: #fffdf7;
+      border-top: 1px solid #e7dfce;
+    }
+    @media (max-width: 720px) {
+      main { flex-direction: column; }
+      aside { width: 100%; max-width: 100%; max-height: 35vh; border-left: none; border-top: 1px solid #e7dfce; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>All of Bach – Orgelorte in den Niederlanden</h1>
+    <p>
+      Die <em>Nederlandse Bachvereniging</em> nimmt für ihr Projekt
+      <a href="https://www.bachvereniging.nl/en/bach" target="_blank" rel="noopener">All of Bach</a>
+      sämtliche Werke Johann Sebastian Bachs auf. Für die Orgelwerke spielt sie
+      an einigen der bedeutendsten historischen Orgeln der Niederlande. Diese
+      Karte zeigt die Aufnahmeorte. Klicken Sie auf eine Markierung oder einen
+      Eintrag in der Liste.
+    </p>
+  </header>
+  <main>
+    <div id="karte" role="application" aria-label="Karte der Aufnahmeorte"></div>
+    <aside>
+      <h2>Aufnahmeorte</h2>
+      <ul class="ort-liste" id="liste"></ul>
+    </aside>
+  </main>
+  <footer>
+    Kartendaten © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>-Mitwirkende ·
+    Projektinformationen © <a href="https://www.bachvereniging.nl/" target="_blank" rel="noopener">Nederlandse Bachvereniging</a>
+  </footer>
+
+  <script
+    src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+    crossorigin=""
+  ></script>
+  <script>
+    // Aufnahmeorte. Quelle: allofbach.com (Recordings -> Filter "Organ").
+    // Die Koordinaten beziehen sich jeweils auf die Kirche, nicht die Stadt.
+    const orte = [
+      {
+        kirche: "Grote of Sint-Bavokerk",
+        stadt: "Haarlem",
+        koord: [52.38138, 4.63637],
+        orgel: "Christian Müller, 1738",
+        beschreibung:
+          "Eine der berühmtesten historischen Orgeln Europas. Hier spielte 1766 der zehnjährige Mozart.",
+        link: "https://www.bachvereniging.nl/en/locations/grote-of-sint-bavokerk"
+      },
+      {
+        kirche: "Waalse Kerk",
+        stadt: "Amsterdam",
+        koord: [52.37247, 4.89622],
+        orgel: "Christian Müller, 1734",
+        beschreibung:
+          "Stammsitz der Bachvereniging und einer der Hauptaufnahmeorte für die Orgelwerke.",
+        link: "https://www.bachvereniging.nl/en/locations/waalse-kerk"
+      },
+      {
+        kirche: "Martinikerk",
+        stadt: "Groningen",
+        koord: [53.21926, 6.56853],
+        orgel: "Rudolf Agricola / Arp Schnitger u. a., ab 1480, 1692 erweitert",
+        beschreibung:
+          "Eine der ältesten und klanglich reichsten Orgeln der Niederlande mit Pfeifenwerk aus mehreren Jahrhunderten.",
+        link: "https://www.bachvereniging.nl/en/locations/martinikerk-groningen"
+      },
+      {
+        kirche: "Der Aa-kerk",
+        stadt: "Groningen",
+        koord: [53.21862, 6.56385],
+        orgel: "Arp Schnitger, 1702 (ursprünglich für die Broerkerk)",
+        beschreibung:
+          "Klangvolle Schnitger-Orgel, 1815 in die Der Aa-kerk übertragen.",
+        link: "https://www.bachvereniging.nl/en/locations/der-aa-kerk"
+      },
+      {
+        kirche: "Grote of Sint-Laurenskerk",
+        stadt: "Alkmaar",
+        koord: [52.63251, 4.74807],
+        orgel: "Van Hagerbeer 1646 / F. C. Schnitger 1725",
+        beschreibung:
+          "Berühmte Doppelorgelanlage mit großer Orgel und kleiner Chororgel.",
+        link: "https://www.bachvereniging.nl/en/locations/grote-of-sint-laurenskerk"
+      },
+      {
+        kirche: "Bovenkerk",
+        stadt: "Kampen",
+        koord: [52.55510, 5.91044],
+        orgel: "Albertus Antoni Hinsz, 1743",
+        beschreibung:
+          "Eine der größten historischen Orgeln der Niederlande in einer hohen gotischen Kirche.",
+        link: "https://www.bachvereniging.nl/en/locations/bovenkerk-kampen"
+      },
+      {
+        kirche: "Hooglandse Kerk",
+        stadt: "Leiden",
+        koord: [52.15997, 4.49444],
+        orgel: "Van Hagerbeer / spätere Umbauten",
+        beschreibung:
+          "Hohe gotische Hallenkirche; Aufnahmeort u. a. für Choralbearbeitungen.",
+        link: "https://www.bachvereniging.nl/en/locations/hooglandse-kerk"
+      },
+      {
+        kirche: "Petruskerk",
+        stadt: "Leens",
+        koord: [53.36964, 6.35569],
+        orgel: "Albertus Antoni Hinsz, 1733",
+        beschreibung:
+          "Kleine Dorfkirche im Groninger Land mit einer der schönsten Hinsz-Orgeln.",
+        link: "https://www.bachvereniging.nl/en/locations/petruskerk-leens"
+      },
+      {
+        kirche: "Grote of Sint-Michaëlskerk",
+        stadt: "Oudewater",
+        koord: [52.02642, 4.86703],
+        orgel: "Bätz-Witte, 1860 (nach älterem Werk)",
+        beschreibung:
+          "Aufnahmeort für mehrere Orgelchoräle und kleinere Werke.",
+        link: "https://www.bachvereniging.nl/en/locations/grote-of-sint-michaelskerk"
+      },
+      {
+        kirche: "Grote Kerk",
+        stadt: "Maassluis",
+        koord: [51.92143, 4.24927],
+        orgel: "Rudolf Garrels, 1732",
+        beschreibung:
+          "Norddeutsch geprägte Barockorgel eines Schnitger-Schülers – ideal für Bach.",
+        link: "https://www.bachvereniging.nl/en/locations/grote-kerk-maassluis"
+      }
+    ];
+
+    const karte = L.map("karte", {
+      scrollWheelZoom: true
+    }).setView([52.4, 5.4], 7);
+
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 18,
+      attribution:
+        '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>-Mitwirkende'
+    }).addTo(karte);
+
+    const orgelIcon = L.divIcon({
+      className: "orgel-marker",
+      html: '<div style="background:#b8860b;border:2px solid #7c5c08;border-radius:50% 50% 50% 0;width:22px;height:22px;transform:rotate(-45deg);box-shadow:0 1px 4px rgba(0,0,0,0.4);"></div>',
+      iconSize: [22, 22],
+      iconAnchor: [11, 22],
+      popupAnchor: [0, -20]
+    });
+
+    const liste = document.getElementById("liste");
+    const marker = {};
+
+    orte.forEach((ort, i) => {
+      const popupHtml = `
+        <div class="popup-titel">${ort.kirche}</div>
+        <div class="popup-meta"><strong>${ort.stadt}</strong><br>Orgel: ${ort.orgel}</div>
+        <div>${ort.beschreibung}</div>
+        <a class="popup-link" href="${ort.link}" target="_blank" rel="noopener">Auf allofbach.com ansehen ↗</a>
+      `;
+      const m = L.marker(ort.koord, { icon: orgelIcon })
+        .addTo(karte)
+        .bindPopup(popupHtml, { maxWidth: 280 });
+      marker[i] = m;
+
+      const li = document.createElement("li");
+      li.innerHTML = `<strong>${ort.kirche}</strong><span class="stadt">${ort.stadt} · ${ort.orgel}</span>`;
+      li.addEventListener("click", () => {
+        karte.setView(ort.koord, 12, { animate: true });
+        m.openPopup();
+      });
+      liste.appendChild(li);
+    });
+
+    // Karte so zoomen, dass alle Marker sichtbar sind.
+    const gruppe = L.featureGroup(Object.values(marker));
+    karte.fitBounds(gruppe.getBounds().pad(0.15));
+  </script>
+</body>
+</html>

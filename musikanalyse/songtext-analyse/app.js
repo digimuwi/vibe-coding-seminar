@@ -1,650 +1,681 @@
-// Songtext-Analyse – Live-Daten aus MusicBrainz (Discographie) + lyrics.ovh (Texte).
-// Alles läuft im Browser, ohne Server. Künstler werden im localStorage zwischengespeichert.
+'use strict';
 
-const SONSTIGE = "Sonstige";
-const CACHE_KEY = "songtext-analyse:library:v1";
-const MB_BASE = "https://musicbrainz.org/ws/2";
-const LYRICS_BASE = "https://api.lyrics.ovh/v1";
-const MAX_ALBUMS = 20;          // pro Künstler – große Discographien begrenzen
-const LYRICS_PARALLEL = 4;      // gleichzeitige Lyrics-Anfragen
-const MB_DELAY_MS = 1100;       // MusicBrainz erlaubt ~1 Anfrage pro Sekunde
+/* Songtext-Analyse – Daten ausschließlich von genius.com.
+   Da Browser fremde Seiten nicht direkt laden dürfen (CORS), läuft jeder
+   Abruf über einen öffentlichen Vermittler-Dienst (Proxy). */
 
-const els = {
-  search: document.getElementById("search-input"),
-  filterType: document.getElementById("filter-type"),
-  filterValue: document.getElementById("filter-value"),
-  filterValueList: document.getElementById("filter-value-list"),
-  periodRange: document.getElementById("period-range"),
-  yearFrom: document.getElementById("year-from"),
-  yearTo: document.getElementById("year-to"),
-  runButton: document.getElementById("run-button"),
-  status: document.getElementById("status-line"),
-  progress: document.getElementById("progress"),
-  progressBar: document.getElementById("progress-bar"),
-  libraryList: document.getElementById("library-list"),
-  libraryEmpty: document.getElementById("library-empty"),
-  chartCanvas: document.getElementById("main-chart"),
-  details: document.getElementById("details"),
-  modal: document.getElementById("modal"),
-  modalTitle: document.getElementById("modal-title"),
-  modalMeta: document.getElementById("modal-meta"),
-  modalLyrics: document.getElementById("modal-lyrics"),
-  modalClose: document.getElementById("modal-close"),
-};
+const GENIUS = 'https://genius.com/api';
+// Mehrere öffentliche Vermittler-Dienste (CORS-Proxys). Fällt einer aus, wird
+// automatisch der nächste probiert. `auspacken` holt bei JSON-verpackenden
+// Diensten den eigentlichen Inhalt heraus.
+const PROXIES = [
+  { name: 'allorigins-raw', baue: (u) => 'https://api.allorigins.win/raw?url=' + encodeURIComponent(u), auspacken: (t) => t },
+  { name: 'allorigins-get', baue: (u) => 'https://api.allorigins.win/get?url=' + encodeURIComponent(u), auspacken: (t) => JSON.parse(t).contents },
+  { name: 'codetabs',       baue: (u) => 'https://api.codetabs.com/v1/proxy/?quest=' + encodeURIComponent(u), auspacken: (t) => t },
+  { name: 'cors.eu.org',    baue: (u) => 'https://cors.eu.org/' + u, auspacken: (t) => t },
+  { name: 'thingproxy',     baue: (u) => 'https://thingproxy.freeboard.io/fetch/' + u, auspacken: (t) => t },
+  { name: 'corsproxy.io',   baue: (u) => 'https://corsproxy.io/?url=' + encodeURIComponent(u), auspacken: (t) => t },
+];
+// Voreingestellte Vermittler-Adresse (eigener Cloudflare-Worker). Wird benutzt,
+// solange im Feld "Eigene Vermittler-Adresse" nichts anderes eingetragen ist.
+const STANDARD_PROXY = 'https://songtextproxy.trashy-stuff.workers.dev/';
+const PROXY_TIMEOUT = 13000; // ms pro Dienst, dann zum nächsten
+let letzterGuter = null;     // Name des zuletzt erfolgreichen Dienstes – wird zuerst probiert
+const STANDARD_ANZAHL = 50; // Künstler-Modus: wie viele Lieder höchstens
+const PARALLEL = 4;         // gleichzeitige Abrufe
+const FENSTER = 4;          // Wortwolke: so viele Wörter vor und nach dem Treffer
+// Häufige Füllwörter, die in der Wortwolke ausgeblendet werden (EN + DE).
+const STOPWOERTER = new Set((
+  'the a an and or but if of to in on at for with from by as is are was were be been ' +
+  'am i you he she it we they me him her us them my your his its our their this that these ' +
+  'those do does did not no so up down out off over all just like get got can will would ' +
+  'oh yeah na la ooh hey ' +
+  'der die das ein eine einen und oder aber wenn von zu im in an auf für mit aus durch ' +
+  'ich du er sie es wir ihr mich dich sich mein dein sein ist sind war waren bin bist ' +
+  'nicht kein auch noch schon nur wie so dass den dem des'
+).split(' '));
 
-let chart = null;
-let artistLookup = new Map();
-let albumLookup = new Map();
-let isLoading = false;
+// ---------- DOM ----------
+const $ = (id) => document.getElementById(id);
+const form = $('suche'), wortEl = $('wort'), filterEl = $('filter'),
+  nameEl = $('name'), nameLabel = $('name-label'), losBtn = $('los'),
+  statusEl = $('status'), ergebnis = $('ergebnis'), ergTitel = $('ergebnis-titel'),
+  diagramm = $('diagramm'), overlay = $('overlay'), overlayTitel = $('overlay-titel'),
+  overlayMeta = $('overlay-meta'), overlayInhalt = $('overlay-inhalt'),
+  overlayZu = $('overlay-zu'), proxyEl = $('proxy-url'), proxyStatusEl = $('proxy-status'),
+  ganzwortEl = $('ganzwort'), anzahlEl = $('anzahl'), darstellungEl = $('darstellung'),
+  jahrEl = $('jahr'), wolkeKnopf = $('wolke-knopf');
 
-// ===== Bibliothek (localStorage) =====
-function loadLibrary() {
+// Darstellung (absolut / Prozent) umschalten, ohne neu zu laden.
+darstellungEl.addEventListener('change', () => {
+  if (!letzteAnsicht) return;
+  if (letzteAnsicht.typ === 'kuenstler') renderKuenstler();
+  else if (letzteAnsicht.typ === 'album') renderAlbum();
+  else renderJahr();
+});
+
+filterEl.addEventListener('change', () => {
+  const v = filterEl.value;
+  const istJahr = v === 'jahr';
+  nameLabel.textContent = v === 'album' ? 'Album' : 'Künstler';
+  nameEl.placeholder = v === 'album' ? 'z. B. 21' : 'z. B. Adele';
+  $('name-feld').hidden = istJahr;   // im Jahr-Modus kein Künstler/Album nötig
+  nameEl.required = !istJahr;
+  $('anzahl-feld').hidden = !(v === 'kuenstler' || istJahr);
+  $('jahr-feld').hidden = !istJahr;
+});
+
+// Eigene Vermittler-Adresse: aus dem Browser laden und beim Tippen speichern.
+function proxyStatusZeigen() {
+  const gesetzt = !!(proxyEl.value || '').trim();
+  proxyStatusEl.textContent = gesetzt ? '✓ gespeichert' : 'nicht gesetzt';
+  proxyStatusEl.classList.toggle('ok', gesetzt);
+}
+proxyEl.value = localStorage.getItem('proxyUrl') || STANDARD_PROXY;
+proxyStatusZeigen();
+proxyEl.addEventListener('input', () => {
+  const wert = proxyEl.value.trim();
+  if (wert) localStorage.setItem('proxyUrl', wert);
+  else localStorage.removeItem('proxyUrl');
+  proxyStatusZeigen();
+});
+
+// ---------- Helfer ----------
+const escapeRegex = (s) => s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+function setStatus(msg, fehler = false) {
+  statusEl.textContent = msg;
+  statusEl.classList.toggle('fehler', !!fehler);
+}
+
+function el(tag, opts = {}, kinder = []) {
+  const e = document.createElement(tag);
+  if (opts.class) e.className = opts.class;
+  if (opts.text != null) e.textContent = opts.text;
+  if (opts.html != null) e.innerHTML = opts.html;
+  if (opts.style) e.style.cssText = opts.style;
+  for (const [k, v] of Object.entries(opts.attr || {})) e.setAttribute(k, v);
+  for (const c of [].concat(kinder)) if (c) e.appendChild(c);
+  return e;
+}
+
+// ---------- Abruf über Proxy ----------
+// Eigene Vermittler-Adresse (falls eingetragen) als bevorzugten Dienst ergänzen.
+function eigenerProxy() {
+  const u = (localStorage.getItem('proxyUrl') || STANDARD_PROXY).trim();
+  if (!u) return null;
+  return {
+    name: 'eigener',
+    baue: (z) => u + (u.includes('?') ? '&' : '?') + 'url=' + encodeURIComponent(z),
+    auspacken: (t) => t,
+  };
+}
+function aktiveProxies() {
+  const eigen = eigenerProxy();
+  return eigen ? [eigen, ...PROXIES] : PROXIES.slice();
+}
+
+async function einProxy(p, url) {
+  const ctrl = new AbortController();
+  const timer = setTimeout(() => ctrl.abort(), PROXY_TIMEOUT);
   try {
-    const raw = localStorage.getItem(CACHE_KEY);
-    return raw ? JSON.parse(raw) : {};
-  } catch {
-    return {};
+    const r = await fetch(p.baue(url), { signal: ctrl.signal });
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const inhalt = p.auspacken(await r.text());
+    if (!inhalt) throw new Error('leere Antwort');
+    return inhalt;
+  } finally {
+    clearTimeout(timer);
   }
 }
-function saveLibrary() {
-  try {
-    localStorage.setItem(CACHE_KEY, JSON.stringify(library));
-  } catch (e) {
-    console.warn("Cache konnte nicht gespeichert werden:", e);
-  }
-}
-let library = loadLibrary();
 
-function libraryArtists() {
-  return Object.values(library).sort((a, b) => a.name.localeCompare(b.name));
+async function proxyFetch(url) {
+  // zuletzt erfolgreichen Dienst zuerst, dann die übrigen
+  const liste = aktiveProxies();
+  liste.sort((a, b) => (b.name === letzterGuter ? 1 : 0) - (a.name === letzterGuter ? 1 : 0));
+  let letzterFehler;
+  for (const p of liste) {
+    try {
+      const inhalt = await einProxy(p, url);
+      letzterGuter = p.name;
+      return inhalt;
+    } catch (e) { letzterFehler = e; }
+  }
+  throw letzterFehler || new Error('Kein Vermittler-Dienst erreichbar');
 }
-function libraryAlbums() {
-  const out = [];
-  for (const a of libraryArtists()) {
-    for (const alb of a.albums) {
-      out.push({ artist: a.name, album: alb.title, year: alb.year });
+async function jsonGet(url) {
+  return JSON.parse(await proxyFetch(url));
+}
+
+// ---------- genius.com ----------
+async function sucheMulti(q) {
+  const d = await jsonGet(GENIUS + '/search/multi?q=' + encodeURIComponent(q));
+  return (d.response && d.response.sections) || [];
+}
+async function findeKuenstler(name) {
+  const sec = await sucheMulti(name);
+  const artistSec = sec.find((s) => s.type === 'artist');
+  if (artistSec && artistSec.hits.length) return artistSec.hits[0].result;
+  const songSec = sec.find((s) => s.type === 'song');
+  if (songSec && songSec.hits.length) return songSec.hits[0].result.primary_artist;
+  return null;
+}
+async function findeAlbum(name) {
+  const sec = await sucheMulti(name);
+  const albumSec = sec.find((s) => s.type === 'album');
+  return albumSec && albumSec.hits.length ? albumSec.hits[0].result : null;
+}
+async function kuenstlerLieder(artistId, limit) {
+  const lieder = [];
+  let page = 1;
+  while (lieder.length < limit && page) {
+    const d = await jsonGet(GENIUS + '/artists/' + artistId +
+      '/songs?per_page=20&page=' + page + '&sort=popularity');
+    for (const s of (d.response.songs || [])) {
+      lieder.push(s);
+      if (lieder.length >= limit) break;
+    }
+    page = d.response.next_page;
+  }
+  return lieder;
+}
+async function songDetail(id) {
+  const d = await jsonGet(GENIUS + '/songs/' + id + '?text_format=plain');
+  return d.response.song;
+}
+async function albumLieder(albumId) {
+  const d = await jsonGet(GENIUS + '/albums/' + albumId + '/tracks?per_page=50');
+  return (d.response.tracks || []).map((t) => t.song);
+}
+
+// ---------- Liedtext lesen ----------
+function parseLyrics(html) {
+  const doc = new DOMParser().parseFromString(html, 'text/html');
+  let cont = doc.querySelectorAll('[data-lyrics-container="true"]');
+  if (!cont.length) cont = doc.querySelectorAll('[class^="Lyrics__Container"], .lyrics');
+  if (!cont.length) return '';
+  const teile = [];
+  cont.forEach((c) => {
+    const tmp = doc.createElement('div');
+    tmp.innerHTML = c.innerHTML.replace(/<br\s*\/?>/gi, '\n');
+    // genius-Kopf (Contributors, Translations, Sprachliste, "… Lyrics") und
+    // andere Nicht-Text-Bausteine entfernen – genius markiert sie selbst so.
+    tmp.querySelectorAll('[data-exclude-from-selection="true"]').forEach((kopf) => kopf.remove());
+    teile.push(tmp.textContent);
+  });
+  return bereinige(teile.join('\n'));
+}
+
+// Entfernt genius-Markierungen ([Strophe], [Refrain] …) und typische Zusätze,
+// damit sie weder gezählt noch markiert werden.
+function bereinige(text) {
+  return text
+    .replace(/\[[^\]]*\]/g, '')          // Abschnitts-Marker wie [Chorus], [Verse 1]
+    .replace(/You might also like/gi, '') // von genius eingestreuter Hinweis
+    .replace(/\d*\s*Embed\s*$/i, '')      // "…123Embed" am Ende
+    .replace(/[ \t]{2,}/g, ' ')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+async function holeText(song) {
+  const key = 'lyrics2:' + song.id; // v2: ohne genius-Kopf (Cache neu aufbauen)
+  const cached = localStorage.getItem(key);
+  if (cached !== null) return cached;
+  const text = parseLyrics(await proxyFetch(song.url));
+  try { localStorage.setItem(key, text); } catch (e) { /* Speicher voll – egal */ }
+  return text;
+}
+
+// ---------- Zählen & Markieren ----------
+// Baut den Suchausdruck. Bei "ganze Wörter" sorgen Grenzen dafür, dass z. B.
+// "love" nicht in "glove" oder "lover" mitgezählt wird (auch mit Umlauten).
+function bauRegex(phrase, ganzwort) {
+  const kern = escapeRegex(phrase);
+  const muster = ganzwort ? '(?<![\\p{L}\\p{N}])' + kern + '(?![\\p{L}\\p{N}])' : kern;
+  return new RegExp(muster, 'giu');
+}
+function zaehle(text, phrase, ganzwort) {
+  if (!text || !phrase) return 0;
+  const m = text.match(bauRegex(phrase, ganzwort));
+  return m ? m.length : 0;
+}
+function markiere(text, phrase, ganzwort) {
+  const re = bauRegex(phrase, ganzwort);
+  let out = '', last = 0, m;
+  while ((m = re.exec(text))) {
+    if (m.index === re.lastIndex) { re.lastIndex++; continue; }
+    out += escapeHtml(text.slice(last, m.index)) + '<mark>' + escapeHtml(m[0]) + '</mark>';
+    last = m.index + m[0].length;
+  }
+  return out + escapeHtml(text.slice(last));
+}
+
+// ---------- Parallel mit Fortschritt ----------
+async function poolKarte(items, fn, onProgress) {
+  const ergebnisse = new Array(items.length);
+  let i = 0, fertig = 0;
+  async function worker() {
+    while (i < items.length) {
+      const idx = i++;
+      try { ergebnisse[idx] = await fn(items[idx], idx); }
+      catch (e) { ergebnisse[idx] = null; }
+      fertig++;
+      if (onProgress) onProgress(fertig, items.length);
     }
   }
-  return out.sort(
-    (x, y) => x.artist.localeCompare(y.artist) || x.album.localeCompare(y.album)
-  );
+  await Promise.all(Array.from({ length: Math.min(PARALLEL, items.length) }, worker));
+  return ergebnisse;
 }
-function libraryAllSongs() {
-  const out = [];
-  for (const a of libraryArtists()) {
-    for (const alb of a.albums) {
-      for (const s of alb.songs) {
-        out.push({
-          artist: a.name,
-          album: alb.title,
-          albumLabel: alb.title || SONSTIGE,
-          year: alb.year,
-          title: s.title,
-          lyrics: s.lyrics,
-        });
+
+// ---------- Relative Häufigkeit / Darstellung ----------
+// Zählt die Wörter eines Liedtexts (für "Treffer pro 1000 Wörter").
+function zaehleWoerter(text) {
+  if (!text) return 0;
+  const m = text.match(/[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu);
+  return m ? m.length : 0;
+}
+function fmt(n, stellen) {
+  return n.toLocaleString('de-DE', { maximumFractionDigits: stellen == null ? 1 : stellen });
+}
+// Liefert je nach gewählter Darstellung den Balken-Wert und die Beschriftungen.
+// "prozent" = Anteil des Wortes am gesamten Text (Treffer / Wörter * 100).
+function werte(treffer, woerter) {
+  const prozent = woerter > 0 ? (treffer / woerter) * 100 : 0;
+  if (darstellungEl.value === 'prozent') {
+    return { wert: prozent, haupt: fmt(prozent, 2) + ' %', neben: treffer + '×' };
+  }
+  return { wert: treffer, haupt: treffer + '×', neben: fmt(prozent, 2) + ' %' };
+}
+
+let letzteAnsicht = null; // gespeicherte Auswertung, damit die Darstellung umschaltbar ist
+
+// ---------- Analyse: Künstler ----------
+async function analyseKuenstler(name, phrase, ganzwort, anzahl) {
+  setStatus('Suche Künstler „' + name + '" …');
+  const artist = await findeKuenstler(name);
+  if (!artist) return setStatus('Keinen Künstler dazu gefunden.', true);
+
+  const wieviele = anzahl === Infinity ? 'alle' : anzahl;
+  setStatus('Lade Liedliste von ' + artist.name + ' (' + wieviele + ' Lieder) …');
+  const lieder = await kuenstlerLieder(artist.id, anzahl);
+  if (!lieder.length) return setStatus('Keine Lieder gefunden.', true);
+
+  const daten = (await poolKarte(lieder, async (s) => {
+    const det = await songDetail(s.id);
+    const text = await holeText(det);
+    return { titel: det.title, album: det.album, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text), text };
+  }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
+
+  letzteAnsicht = { typ: 'kuenstler', artist, phrase, daten, ganzwort, begrenzt: lieder.length >= anzahl, limit: anzahl };
+  renderKuenstler();
+}
+
+function renderKuenstler() {
+  const { artist, phrase, daten, ganzwort, begrenzt, limit } = letzteAnsicht;
+  const map = new Map();
+  for (const d of daten) {
+    const name = d.album && d.album.name ? d.album.name : 'Sonstige';
+    if (!map.has(name)) map.set(name, { name, lieder: [], treffer: 0, woerter: 0 });
+    const g = map.get(name);
+    g.lieder.push(d);
+    g.treffer += d.treffer;
+    g.woerter += d.woerter;
+  }
+  const gruppen = [...map.values()];
+  for (const g of gruppen) g.w = werte(g.treffer, g.woerter);
+  gruppen.sort((a, b) => {
+    if (a.name === 'Sonstige') return 1;
+    if (b.name === 'Sonstige') return -1;
+    return b.w.wert - a.w.wert;
+  });
+  const max = Math.max(1, ...gruppen.map((g) => g.w.wert));
+  const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
+
+  ergTitel.textContent = '„' + phrase + '" bei ' + artist.name +
+    ' – ' + gesamt + '× in ' + daten.length + ' Liedern';
+  diagramm.innerHTML = '';
+
+  for (const g of gruppen) {
+    const kopf = el('div', { class: 'album-kopf' }, [
+      el('span', { class: 'titel', text: g.name }),
+      el('span', { class: 'summe' }, [
+        el('span', { class: 'wert-haupt', text: g.w.haupt }),
+        el('span', { class: 'wert-neben', text: g.w.neben }),
+      ]),
+    ]);
+    const spur = el('div', { class: 'album-spur' },
+      el('div', { class: 'album-fuellung', style: 'width:' + (100 * g.w.wert / max) + '%' }));
+
+    const liederW = g.lieder.map((l) => ({ l, w: werte(l.treffer, l.woerter) }));
+    const maxLied = Math.max(1, ...liederW.map((x) => x.w.wert));
+    const liste = el('ul', { class: 'album-lieder' },
+      liederW.sort((a, b) => b.w.wert - a.w.wert).map(({ l, w }) => {
+        const knopf = el('button', { class: 'text-knopf', text: 'Text', attr: { type: 'button' } });
+        knopf.addEventListener('click', () =>
+          zeigeText(l.titel, artist.name + ' · ' + l.treffer + ' Treffer', l.text, phrase, ganzwort));
+        return el('li', {}, [
+          el('span', { class: 'lied-titel', text: l.titel }),
+          el('span', { class: 'mini-spur' },
+            el('span', { class: 'mini-fuellung', style: 'width:' + (100 * w.wert / maxLied) + '%' })),
+          el('span', { class: 'lied-wert', text: w.haupt }),
+          knopf,
+        ]);
+      }));
+
+    diagramm.appendChild(el('div', { class: 'album-block' }, [kopf, spur, liste]));
+  }
+
+  setStatus('Fertig.' + (begrenzt
+    ? ' Hinweis: nur die ' + limit + ' bekanntesten Lieder wurden ausgewertet.'
+    : ''));
+  ergebnis.hidden = false;
+}
+
+// ---------- Analyse: Album ----------
+async function analyseAlbum(name, phrase, ganzwort) {
+  setStatus('Suche Album „' + name + '" …');
+  const album = await findeAlbum(name);
+  if (!album) return setStatus('Kein Album dazu gefunden.', true);
+
+  setStatus('Lade Lieder von „' + album.name + '" …');
+  const tracks = await albumLieder(album.id);
+  if (!tracks.length) return setStatus('Keine Lieder im Album gefunden.', true);
+
+  const daten = (await poolKarte(tracks, async (s) => {
+    const text = await holeText(s);
+    return { titel: s.title, treffer: zaehle(text, phrase, ganzwort), woerter: zaehleWoerter(text), text };
+  }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
+
+  letzteAnsicht = { typ: 'album', album, phrase, daten, ganzwort };
+  renderAlbum();
+}
+
+// Gemeinsame Balken-Darstellung „ein Balken je Lied" (Album- und Jahr-Filter).
+function songBalken(daten, phrase, ganzwort, kuenstler) {
+  const datenW = daten.map((d) => ({ d, w: werte(d.treffer, d.woerter) }));
+  const max = Math.max(1, ...datenW.map((x) => x.w.wert));
+  diagramm.innerHTML = '';
+  for (const { d, w } of datenW) {
+    const wer = d.kuenstler || kuenstler;
+    const label = d.kuenstler ? d.titel + ' – ' + d.kuenstler : d.titel;
+    const knopf = el('button', { class: 'text-knopf', text: 'Text anzeigen', attr: { type: 'button' } });
+    knopf.addEventListener('click', () =>
+      zeigeText(d.titel, (wer ? wer + ' · ' : '') + d.treffer + ' Treffer', d.text, phrase, ganzwort));
+
+    diagramm.appendChild(el('div', { class: 'lied-zeile' }, [
+      el('span', { class: 'balken-label', text: label, attr: { title: label } }),
+      el('span', { class: 'balken-spur' },
+        el('span', { class: 'balken-fuellung', style: 'width:' + (100 * w.wert / max) + '%' })),
+      el('span', { class: 'balken-wert' }, [
+        el('span', { class: 'wert-haupt', text: w.haupt }),
+        el('span', { class: 'wert-neben', text: w.neben }),
+      ]),
+      knopf,
+    ]));
+  }
+}
+
+function renderAlbum() {
+  const { album, phrase, daten, ganzwort } = letzteAnsicht;
+  const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
+  const kuenstler = album.artist ? album.artist.name : '';
+  ergTitel.textContent = '„' + phrase + '" auf „' + album.name + '"' +
+    (kuenstler ? ' (' + kuenstler + ')' : '') + ' – ' + gesamt + '×';
+  songBalken(daten, phrase, ganzwort, kuenstler);
+  setStatus('Fertig. ' + daten.length + ' Lieder ausgewertet.');
+  ergebnis.hidden = false;
+}
+
+// ---------- Analyse: nach Jahr (unabhängig vom Künstler) ----------
+// genius bietet keine "alle Songs aus Jahr X"-Liste. Stattdessen durchsuchen wir
+// die nach Klickzahlen sortierte Bestenliste (Charts) und filtern nach dem Jahr –
+// so erhalten wir die populärsten Lieder dieses Jahres.
+const CHART_MAX_SEITEN = 30; // höchstens so viele Chart-Seiten (à 50) absuchen
+
+async function chartSeite(page) {
+  const d = await jsonGet(GENIUS + '/songs/chart?per_page=50&page=' + page +
+    '&time_period=all_time&chart_genre=all');
+  return (d.response.chart_items || []).map((c) => c.item).filter(Boolean);
+}
+
+async function analyseJahr(phrase, ganzwort, anzahl, jahr) {
+  const ziel = anzahl === Infinity ? CHART_MAX_SEITEN * 50 : anzahl;
+  const gefunden = [];
+  let page = 1;
+  while (gefunden.length < ziel && page <= CHART_MAX_SEITEN) {
+    setStatus('Suche populäre Lieder aus ' + jahr + ' … (' + gefunden.length + ' gefunden)');
+    const songs = await chartSeite(page);
+    if (!songs.length) break;
+    for (const s of songs) {
+      const y = s.release_date_components ? s.release_date_components.year : null;
+      if (y === jahr) {
+        gefunden.push(s);
+        if (gefunden.length >= ziel) break;
       }
     }
+    page++;
   }
-  return out;
-}
-
-// ===== MusicBrainz =====
-async function mbSearchArtist(name) {
-  const url = `${MB_BASE}/artist/?query=${encodeURIComponent("artist:" + name)}&fmt=json&limit=5`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`MusicBrainz-Suche fehlgeschlagen (${res.status})`);
-  const data = await res.json();
-  return data.artists || [];
-}
-async function mbReleaseGroups(mbid) {
-  const url = `${MB_BASE}/release-group?artist=${mbid}&type=album&limit=100&fmt=json`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`MusicBrainz Discographie fehlgeschlagen (${res.status})`);
-  const data = await res.json();
-  // Nur reguläre Studio-Alben (keine Compilations, Live, Soundtrack etc.)
-  return (data["release-groups"] || []).filter(
-    (rg) => !rg["secondary-types"] || rg["secondary-types"].length === 0
-  );
-}
-async function mbTracksForReleaseGroup(rgid) {
-  const url = `${MB_BASE}/release?release-group=${rgid}&inc=recordings&fmt=json&limit=1`;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error(`MusicBrainz Tracks fehlgeschlagen (${res.status})`);
-  const data = await res.json();
-  const release = (data.releases || [])[0];
-  if (!release) return [];
-  const tracks = [];
-  for (const media of release.media || []) {
-    for (const tr of media.tracks || []) {
-      if (tr.title) tracks.push({ title: tr.title });
-    }
-  }
-  return tracks;
-}
-
-// ===== lyrics.ovh =====
-async function fetchLyrics(artist, title) {
-  try {
-    const url = `${LYRICS_BASE}/${encodeURIComponent(artist)}/${encodeURIComponent(title)}`;
-    const res = await fetch(url);
-    if (!res.ok) return null;
-    const data = await res.json();
-    return (data && data.lyrics) ? data.lyrics : null;
-  } catch {
-    return null;
-  }
-}
-
-// ===== Hilfen =====
-const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function runInParallel(items, max, worker, onProgress) {
-  const results = new Array(items.length);
-  let i = 0;
-  let done = 0;
-  const run = async () => {
-    while (true) {
-      const my = i++;
-      if (my >= items.length) return;
-      results[my] = await worker(items[my], my);
-      done++;
-      onProgress?.(done, items.length);
-    }
-  };
-  const lanes = [];
-  for (let k = 0; k < Math.min(max, items.length); k++) lanes.push(run());
-  await Promise.all(lanes);
-  return results;
-}
-
-function dedupeBy(items, keyFn) {
-  const seen = new Set();
-  const out = [];
-  for (const it of items) {
-    const k = keyFn(it);
-    if (!seen.has(k)) {
-      seen.add(k);
-      out.push(it);
-    }
-  }
-  return out;
-}
-
-// ===== Künstler live laden =====
-async function loadArtistLive(name) {
-  setProgress(0, "Suche Künstler bei MusicBrainz…");
-  const candidates = await mbSearchArtist(name);
-  if (!candidates.length) throw new Error(`Künstler „${name}" nicht gefunden.`);
-  const artist = candidates[0];
-  await sleep(MB_DELAY_MS);
-
-  setProgress(5, `Lade Alben von ${artist.name}…`);
-  let groups = await mbReleaseGroups(artist.id);
-  groups.sort((a, b) =>
-    (a["first-release-date"] || "9999").localeCompare(b["first-release-date"] || "9999")
-  );
-  groups = dedupeBy(groups, (g) => g.title.toLowerCase()).slice(0, MAX_ALBUMS);
-  await sleep(MB_DELAY_MS);
-
-  // Tracks pro Album (sequentiell, wegen Rate-Limit)
-  const albums = [];
-  for (let i = 0; i < groups.length; i++) {
-    const g = groups[i];
-    const pct = 5 + Math.round((i / groups.length) * 45);
-    setProgress(pct, `Lade Tracks: „${g.title}" (${i + 1}/${groups.length})…`);
-    try {
-      const tracks = await mbTracksForReleaseGroup(g.id);
-      const yr = parseInt((g["first-release-date"] || "").slice(0, 4), 10);
-      albums.push({
-        title: g.title,
-        year: Number.isFinite(yr) ? yr : null,
-        songs: dedupeBy(tracks, (t) => t.title.toLowerCase()).map((t) => ({
-          title: t.title,
-          lyrics: null,
-        })),
-      });
-    } catch (e) {
-      console.warn("Album übersprungen:", g.title, e.message);
-    }
-    await sleep(MB_DELAY_MS);
+  if (!gefunden.length) {
+    return setStatus('Keine Lieder aus ' + jahr + ' in den Charts gefunden – für sehr ' +
+      'alte oder seltene Jahre gibt es dort evtl. zu wenige Einträge.', true);
   }
 
-  // Lyrics holen (parallel)
-  const lyricTasks = [];
-  for (const alb of albums) {
-    for (const s of alb.songs) lyricTasks.push({ artist: artist.name, ref: s });
-  }
-  await runInParallel(
-    lyricTasks,
-    LYRICS_PARALLEL,
-    async ({ artist: a, ref }) => {
-      ref.lyrics = await fetchLyrics(a, ref.title);
-    },
-    (done, total) => {
-      const pct = 50 + Math.round((done / total) * 50);
-      setProgress(pct, `Lade Songtexte (${done}/${total})…`);
-    }
-  );
-
-  const entry = {
-    name: artist.name,
-    mbid: artist.id,
-    albums,
-    loadedAt: Date.now(),
-  };
-  library[artist.name.toLowerCase()] = entry;
-  saveLibrary();
-  return entry;
-}
-
-// ===== UI: Status & Progress =====
-function setStatus(text) {
-  els.status.textContent = text;
-}
-function setProgress(percent, text) {
-  if (percent === null) {
-    els.progress.classList.add("hidden");
-    els.progressBar.style.width = "0%";
-  } else {
-    els.progress.classList.remove("hidden");
-    els.progressBar.style.width = `${Math.min(100, Math.max(0, percent))}%`;
-  }
-  if (text !== undefined) setStatus(text);
-}
-
-function setBusy(busy) {
-  isLoading = busy;
-  els.runButton.disabled = busy;
-}
-
-// ===== Bibliotheks-Panel =====
-function renderLibraryPanel() {
-  const artists = libraryArtists();
-  els.libraryEmpty.classList.toggle("hidden", artists.length > 0);
-  els.libraryList.innerHTML = artists
-    .map(
-      (a) =>
-        `<li><span>${escapeHtml(a.name)} <span class="meta">(${a.albums.length} Alben)</span></span>
-         <button data-remove="${escapeAttr(a.name.toLowerCase())}" title="Aus Bibliothek entfernen">×</button></li>`
-    )
-    .join("");
-  els.libraryList.querySelectorAll("button[data-remove]").forEach((b) =>
-    b.addEventListener("click", () => {
-      delete library[b.dataset.remove];
-      saveLibrary();
-      renderLibraryPanel();
-    })
-  );
-  populateFilterValue();
-}
-
-// ===== Filter-Suchfeld =====
-function populateFilterValue() {
-  const type = els.filterType.value;
-  if (type === "period") {
-    els.filterValue.classList.add("hidden");
-    els.periodRange.classList.remove("hidden");
-    initYearRange();
-    return;
-  }
-  els.filterValue.classList.remove("hidden");
-  els.periodRange.classList.add("hidden");
-
-  let labels = [];
-  if (type === "artist") {
-    els.filterValue.placeholder = "Künstlernamen tippen (neu = live laden)…";
-    artistLookup = new Map();
-    const artists = libraryArtists().map((a) => a.name);
-    artists.forEach((a) => artistLookup.set(a.toLowerCase(), a));
-    labels = artists;
-  } else if (type === "album") {
-    els.filterValue.placeholder = "Album aus Bibliothek suchen…";
-    albumLookup = new Map();
-    const seen = new Set();
-    for (const it of libraryAlbums()) {
-      const label = `${it.artist} – ${it.album}`;
-      const key = label.toLowerCase();
-      if (!seen.has(key)) {
-        seen.add(key);
-        albumLookup.set(key, { artist: it.artist, album: it.album });
-        labels.push(label);
-      }
-    }
-  }
-  els.filterValueList.innerHTML = labels
-    .map((l) => `<option value="${escapeAttr(l)}"></option>`)
-    .join("");
-}
-
-function initYearRange() {
-  const all = libraryAllSongs().filter((s) => Number.isFinite(s.year));
-  if (!all.length) {
-    els.yearFrom.value = "";
-    els.yearTo.value = "";
-    return;
-  }
-  const years = all.map((s) => s.year);
-  const min = Math.min(...years);
-  const max = Math.max(...years);
-  if (!els.yearFrom.value) els.yearFrom.value = min;
-  if (!els.yearTo.value) els.yearTo.value = max;
-  els.yearFrom.min = min;
-  els.yearTo.min = min;
-  els.yearFrom.max = max;
-  els.yearTo.max = max;
-}
-
-// ===== Treffer zählen =====
-function countMatches(text, query) {
-  if (!query || !text) return 0;
-  const haystack = text.toLowerCase();
-  const needle = query.toLowerCase();
-  let count = 0;
-  let from = 0;
-  while (true) {
-    const i = haystack.indexOf(needle, from);
-    if (i === -1) break;
-    count++;
-    from = i + needle.length;
-  }
-  return count;
-}
-
-// ===== Auswertung =====
-async function runAnalysis() {
-  if (isLoading) {
-    setStatus("Es läuft schon eine Auswertung – bitte warten.");
-    return;
-  }
-  const query = els.search.value.trim();
-  const type = els.filterType.value;
-  setStatus(`Auswertung gestartet (Filter: ${type}, Suchwort: „${query || "—"}")…`);
-  if (!query) {
-    setStatus("Bitte oben ein Wort oder eine Phrase eingeben.");
-    return;
-  }
-  try {
-    if (type === "artist") await renderByArtist(query);
-    else if (type === "album") renderByAlbum(query);
-    else if (type === "period") renderByPeriod(query);
-  } catch (e) {
-    console.error(e);
-    setStatus(`Fehler: ${e.message || e}`);
-    setProgress(null);
-    setBusy(false);
-  }
-}
-
-// ----- Künstler-Filter (live laden, falls nötig) -----
-async function renderByArtist(query) {
-  const input = els.filterValue.value.trim();
-  if (!input) {
-    setStatus("Bitte einen Künstlernamen eingeben.");
-    return;
-  }
-  let entry = library[input.toLowerCase()];
-  if (!entry) {
-    setBusy(true);
-    setProgress(0, `Lade „${input}" – das kann ein paar Minuten dauern…`);
-    try {
-      entry = await loadArtistLive(input);
-    } finally {
-      setBusy(false);
-      setProgress(null);
-      renderLibraryPanel();
-    }
-  }
-  drawArtist(entry, query);
-}
-
-function drawArtist(entry, query) {
-  const albumStats = entry.albums.map((alb) => {
-    const songs = alb.songs.map((s) => ({
-      ...s,
-      count: countMatches(s.lyrics, query),
-    }));
+  const daten = (await poolKarte(gefunden, async (s) => {
+    const text = await holeText(s);
     return {
-      album: alb.title || SONSTIGE,
-      year: alb.year,
-      songs,
-      total: songs.reduce((a, b) => a + b.count, 0),
-      hasLyrics: songs.some((s) => s.lyrics !== null),
+      titel: s.title,
+      kuenstler: s.primary_artist ? s.primary_artist.name : (s.primary_artist_names || ''),
+      treffer: zaehle(text, phrase, ganzwort),
+      woerter: zaehleWoerter(text),
+      text,
     };
-  });
-  albumStats.sort((a, b) => (a.year ?? 9999) - (b.year ?? 9999));
+  }, (f, t) => setStatus('Lade Texte … ' + f + '/' + t))).filter(Boolean);
 
-  drawBarChart({
-    labels: albumStats.map((a) => `${a.album}${a.year ? ` (${a.year})` : ""}`),
-    values: albumStats.map((a) => a.total),
-    title: `„${query}" bei ${entry.name} – pro Album`,
-    yLabel: "Treffer gesamt",
-  });
-
-  els.details.innerHTML = albumStats
-    .map((a) => {
-      const items = a.songs
-        .sort((x, y) => y.count - x.count || x.title.localeCompare(y.title))
-        .map((s) => {
-          const noLyrics = s.lyrics === null;
-          return `<li>
-            <span class="song-title">${escapeHtml(s.title)}${noLyrics ? ' <span class="meta">(kein Text)</span>' : ""}</span>
-            <span class="song-count">${s.count}×</span>
-          </li>`;
-        })
-        .join("");
-      return `<div class="album-group">
-        <h3>${escapeHtml(a.album)} <span class="meta">${a.year ? `· ${a.year}` : ""} · ${a.total} Treffer</span></h3>
-        <ul class="song-list">${items}</ul>
-      </div>`;
-    })
-    .join("");
-
-  const total = albumStats.reduce((s, a) => s + a.total, 0);
-  const missing = entry.albums.flatMap((a) => a.songs).filter((s) => s.lyrics === null).length;
-  setStatus(`„${query}" – ${total} Treffer bei ${entry.name}.${missing ? ` (${missing} Lieder ohne verfügbaren Text)` : ""}`);
+  letzteAnsicht = { typ: 'jahr', phrase, daten, ganzwort, jahr };
+  renderJahr();
 }
 
-// ----- Album-Filter -----
-function renderByAlbum(query) {
-  const input = els.filterValue.value.trim();
-  if (!input) {
-    setStatus("Bitte ein Album aus der Bibliothek auswählen.");
-    return;
-  }
-  const ref = albumLookup.get(input.toLowerCase());
-  if (!ref) {
-    setStatus(`Album „${input}" ist nicht in der Bibliothek. Lade erst den Künstler über den „Künstler"-Filter.`);
-    return;
-  }
-  const artistEntry = library[ref.artist.toLowerCase()];
-  const album = artistEntry?.albums.find((a) => a.title === ref.album);
-  if (!album) {
-    setStatus("Album in der Bibliothek nicht gefunden.");
-    return;
-  }
-  const counted = album.songs.map((s) => ({
-    ...s,
-    count: countMatches(s.lyrics, query),
-    artist: ref.artist,
-    album: ref.album,
-    year: album.year,
-    id: `${ref.artist}::${ref.album}::${s.title}`,
-  }));
-
-  drawBarChart({
-    labels: counted.map((s) => s.title),
-    values: counted.map((s) => s.count),
-    title: `„${query}" – ${ref.artist}: ${ref.album}`,
-    yLabel: "Treffer",
-  });
-
-  els.details.innerHTML = counted
-    .map((s) => {
-      const noLyrics = s.lyrics === null;
-      return `<div class="song-row">
-        <div>
-          <strong>${escapeHtml(s.title)}</strong>
-          <div class="meta">${s.count} Treffer${album.year ? ` · ${album.year}` : ""}${noLyrics ? " · kein Text verfügbar" : ""}</div>
-        </div>
-        <button class="btn-secondary" data-song-id="${escapeAttr(s.id)}" data-query="${escapeAttr(query)}" ${noLyrics ? "disabled" : ""}>
-          Songtext anzeigen
-        </button>
-      </div>`;
-    })
-    .join("");
-
-  els.details.querySelectorAll("button[data-song-id]").forEach((btn) =>
-    btn.addEventListener("click", () =>
-      openLyricsModalById(btn.dataset.songId, btn.dataset.query)
-    )
-  );
-
-  const total = counted.reduce((s, x) => s + x.count, 0);
-  setStatus(`„${query}" – ${total} Treffer auf „${ref.album}".`);
+function renderJahr() {
+  const { phrase, daten, ganzwort, jahr } = letzteAnsicht;
+  const gesamt = daten.reduce((s, d) => s + d.treffer, 0);
+  ergTitel.textContent = '„' + phrase + '" in den ' + daten.length +
+    ' populärsten Liedern aus ' + jahr + ' – ' + gesamt + '×';
+  songBalken(daten, phrase, ganzwort, '');
+  setStatus('Fertig. ' + daten.length + ' Lied(er) aus ' + jahr + '.');
+  ergebnis.hidden = false;
 }
 
-// ----- Zeitraum-Filter -----
-function renderByPeriod(query) {
-  const songs = libraryAllSongs().filter((s) => Number.isFinite(s.year));
-  if (!songs.length) {
-    setStatus(`Bibliothek leer. Lade zuerst einen Künstler über den „Künstler"-Filter.`);
-    return;
-  }
-  const from = Number(els.yearFrom.value);
-  const to = Number(els.yearTo.value);
-  if (!Number.isFinite(from) || !Number.isFinite(to) || from > to) {
-    setStatus("Bitte einen gültigen Zeitraum eingeben (Von ≤ Bis).");
+// ---------- Overlay (Volltext) ----------
+function zeigeText(titel, meta, text, phrase, ganzwort) {
+  overlayTitel.textContent = titel;
+  overlayMeta.textContent = meta;
+  overlayInhalt.innerHTML = text
+    ? markiere(text, phrase, ganzwort)
+    : '(Der Text konnte nicht geladen werden.)';
+  overlay.hidden = false;
+}
+function schliesseOverlay() { overlay.hidden = true; }
+overlayZu.addEventListener('click', schliesseOverlay);
+overlay.addEventListener('click', (e) => { if (e.target === overlay) schliesseOverlay(); });
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') schliesseOverlay(); });
+
+// ---------- Absenden ----------
+form.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const phrase = wortEl.value.trim();
+  const name = nameEl.value.trim();
+  const ganzwort = ganzwortEl.checked;
+  const anzahl = anzahlEl.value === 'alle'
+    ? Infinity
+    : (parseInt(anzahlEl.value, 10) || STANDARD_ANZAHL);
+  const jahr = parseInt(jahrEl.value, 10);
+  const istJahr = filterEl.value === 'jahr';
+  if (!phrase) return;
+  if (istJahr) {
+    if (!jahr) return setStatus('Bitte eine Jahreszahl eingeben (z. B. 2015).', true);
+  } else if (!name) {
     return;
   }
 
-  const byYear = new Map();
-  for (let y = from; y <= to; y++) byYear.set(y, { count: 0, songs: [] });
-
-  for (const s of songs) {
-    if (s.year < from || s.year > to) continue;
-    const c = countMatches(s.lyrics, query);
-    const e = byYear.get(s.year);
-    if (!e) continue;
-    e.count += c;
-    if (c > 0) e.songs.push({ ...s, count: c });
+  losBtn.disabled = true;
+  ergebnis.hidden = true;
+  diagramm.innerHTML = '';
+  try {
+    if (filterEl.value === 'album') await analyseAlbum(name, phrase, ganzwort);
+    else if (istJahr) await analyseJahr(phrase, ganzwort, anzahl, jahr);
+    else await analyseKuenstler(name, phrase, ganzwort, anzahl);
+  } catch (err) {
+    setStatus('Fehler: ' + err.message +
+      ' – gerade ist offenbar kein Vermittler-Dienst erreichbar. Bitte in ein paar Sekunden erneut auf „Analysieren" klicken.', true);
+  } finally {
+    losBtn.disabled = false;
   }
-
-  const years = [...byYear.keys()];
-  drawBarChart({
-    labels: years.map(String),
-    values: years.map((y) => byYear.get(y).count),
-    title: `„${query}" pro Jahr (${from}–${to}) – Bibliothek`,
-    yLabel: "Treffer",
-  });
-
-  els.details.innerHTML = years
-    .map((y) => {
-      const e = byYear.get(y);
-      return `<div class="year-row">
-        <h3>${y} <span class="meta">– ${e.count} Treffer</span></h3>
-        <button class="btn-secondary" data-year="${y}" ${e.songs.length === 0 ? "disabled" : ""}>Welche Lieder?</button>
-        <div class="year-songs hidden" data-year-list="${y}"></div>
-      </div>`;
-    })
-    .join("");
-
-  els.details.querySelectorAll("button[data-year]").forEach((btn) =>
-    btn.addEventListener("click", () => {
-      const y = btn.dataset.year;
-      const list = els.details.querySelector(`[data-year-list="${y}"]`);
-      const e = byYear.get(Number(y));
-      if (!list || !e) return;
-      list.classList.toggle("hidden");
-      list.innerHTML = `<ul class="song-list">${e.songs
-        .sort((a, b) => b.count - a.count)
-        .map(
-          (s) =>
-            `<li><span class="song-title">${escapeHtml(s.artist)} – ${escapeHtml(s.title)}</span><span class="song-count">${s.count}×</span></li>`
-        )
-        .join("")}</ul>`;
-    })
-  );
-
-  const total = years.reduce((sum, y) => sum + byYear.get(y).count, 0);
-  setStatus(`„${query}" – ${total} Treffer zwischen ${from} und ${to} (Bibliothek mit ${libraryArtists().length} Künstler/n).`);
-}
-
-// ===== Diagramm =====
-function drawBarChart({ labels, values, title, yLabel }) {
-  if (chart) chart.destroy();
-  chart = new Chart(els.chartCanvas, {
-    type: "bar",
-    data: {
-      labels,
-      datasets: [{ label: yLabel, data: values, backgroundColor: "#2f6feb", borderRadius: 4 }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        title: { display: true, text: title, font: { size: 14 } },
-        tooltip: { callbacks: { label: (ctx) => `${ctx.parsed.y} Treffer` } },
-      },
-      scales: {
-        y: { beginAtZero: true, ticks: { precision: 0 }, title: { display: true, text: yLabel } },
-        x: { ticks: { autoSkip: false, maxRotation: 45, minRotation: 0 } },
-      },
-    },
-  });
-}
-
-// ===== Songtext-Modal =====
-function openLyricsModalById(id, query) {
-  const [artist, album, title] = id.split("::");
-  const entry = library[artist.toLowerCase()];
-  const alb = entry?.albums.find((a) => a.title === album);
-  const song = alb?.songs.find((s) => s.title === title);
-  if (!song || song.lyrics === null) return;
-  els.modalTitle.textContent = song.title;
-  els.modalMeta.textContent = `${artist} · ${album}${alb.year ? ` · ${alb.year}` : ""}`;
-  els.modalLyrics.innerHTML = highlight(song.lyrics, query);
-  els.modal.classList.remove("hidden");
-}
-function closeModal() {
-  els.modal.classList.add("hidden");
-}
-function highlight(text, query) {
-  const safe = escapeHtml(text);
-  if (!query) return safe;
-  return safe.replace(new RegExp(escapeRegex(query), "gi"), (m) => `<mark class="hit">${m}</mark>`);
-}
-
-// ===== Helfer =====
-function escapeHtml(s) {
-  return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
-}
-function escapeAttr(s) { return escapeHtml(s); }
-function escapeRegex(s) { return String(s).replace(/[.*+?^${}()|[\]\\]/g, "\\$&"); }
-
-// ===== Globaler Fehler-Anzeiger (damit Bugs sichtbar werden) =====
-window.addEventListener("error", (e) => {
-  if (els.status) setStatus(`Skript-Fehler: ${e.message} (${e.filename?.split("/").pop()}:${e.lineno})`);
-});
-window.addEventListener("unhandledrejection", (e) => {
-  if (els.status) setStatus(`Unbehandelter Fehler: ${e.reason?.message || e.reason}`);
 });
 
-// ===== Events =====
-els.filterType.addEventListener("change", populateFilterValue);
-els.runButton.addEventListener("click", () => {
-  setStatus("Klick registriert, starte…");
-  runAnalysis();
-});
-els.search.addEventListener("keydown", (e) => { if (e.key === "Enter") runAnalysis(); });
-els.filterValue.addEventListener("keydown", (e) => { if (e.key === "Enter") runAnalysis(); });
-els.modalClose.addEventListener("click", closeModal);
-els.modal.addEventListener("click", (e) => { if (e.target === els.modal) closeModal(); });
-document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeModal(); });
+// ---------- Umgebungswörter / Wortwolke ----------
+// Sammelt die Wörter rund um jeden Treffer (FENSTER Wörter davor und danach).
+function umgebung(text, phrase, ganzwort) {
+  if (!text) return [];
+  const tokens = [];
+  const wre = /[\p{L}\p{N}]+(?:['’][\p{L}\p{N}]+)*/gu;
+  let m;
+  while ((m = wre.exec(text))) tokens.push({ w: m[0], start: m.index, end: m.index + m[0].length });
 
-// ===== Start =====
-renderLibraryPanel();
-const cnt = libraryArtists().length;
-setStatus(cnt
-  ? `${cnt} Künstler in der Bibliothek geladen.`
-  : `Tippe einen Künstlernamen ins Filter-Suchfeld und klicke „Auswerten" – die App lädt Discographie und Texte live.`);
+  const tre = bauRegex(phrase, ganzwort);
+  const gefunden = [];
+  let pm;
+  while ((pm = tre.exec(text))) {
+    if (pm.index === tre.lastIndex) { tre.lastIndex++; continue; }
+    const s = pm.index, e = pm.index + pm[0].length;
+    const first = tokens.findIndex((t) => t.end > s);
+    if (first === -1) continue;
+    let last = first;
+    for (let i = tokens.length - 1; i >= 0; i--) { if (tokens[i].start < e) { last = i; break; } }
+    for (let i = first - FENSTER; i <= last + FENSTER; i++) {
+      if (i < 0 || i >= tokens.length || (i >= first && i <= last)) continue;
+      gefunden.push(tokens[i].w.toLowerCase());
+    }
+  }
+  return gefunden;
+}
+
+// Textbreite messen (Canvas), um Wörter überlappungsfrei zu platzieren.
+const messContext = document.createElement('canvas').getContext('2d');
+function textBreite(wort, fs) {
+  messContext.font = '700 ' + fs + 'px system-ui, -apple-system, "Segoe UI", Roboto, sans-serif';
+  return messContext.measureText(wort).width;
+}
+// Rechtecke (mit kleinem Abstand) auf Überlappung prüfen.
+function ueberlappt(a, b) {
+  const luft = 3;
+  return !(a.x + a.w + luft <= b.x || b.x + b.w + luft <= a.x ||
+           a.y + a.h + luft <= b.y || b.y + b.h + luft <= a.y);
+}
+
+// Baut eine echte Wortwolke: Schriftgröße = Häufigkeit, jedes dritte Wort
+// senkrecht, spiralförmig dicht gepackt, jedes Wort in einer farbigen Kachel.
+function wortwolkeBauen(liste) {
+  const maxN = liste[0][1], minN = liste[liste.length - 1][1];
+  const platzierte = [];
+  const kacheln = [];
+
+  liste.forEach(([wort, n], i) => {
+    const t = maxN === minN ? 1 : (Math.sqrt(n) - Math.sqrt(minN)) / (Math.sqrt(maxN) - Math.sqrt(minN));
+    const fs = Math.round(15 + t * 38);          // Schriftgröße 15…53 px
+    const senkrecht = (i % 3 === 1);             // jedes dritte Wort senkrecht
+    const padX = Math.round(fs * 0.34), padY = Math.round(fs * 0.22);
+    const tw = Math.ceil(textBreite(wort, fs)) + 2 * padX;
+    const th = Math.round(fs) + 2 * padY;
+    const fw = senkrecht ? th : tw;              // Grundfläche der Kachel
+    const fh = senkrecht ? tw : th;
+
+    // Spiralsuche nach einem freien Platz (Archimedische Spirale, breit gestaucht)
+    let schritt = 0, x = -fw / 2, y = -fh / 2;
+    while (true) {
+      const r = 4 * schritt;
+      x = Math.cos(schritt) * r - fw / 2;
+      y = Math.sin(schritt) * r * 0.62 - fh / 2;
+      const rect = { x, y, w: fw, h: fh };
+      if (!platzierte.some((p) => ueberlappt(p, rect))) { platzierte.push(rect); break; }
+      schritt += 0.18;
+      if (r > 6000) { platzierte.push(rect); break; }
+    }
+    kacheln.push({ wort, n, fs, senkrecht, x, y, fw, fh, hue: (i * 53) % 360 });
+  });
+
+  const minX = Math.min(...platzierte.map((p) => p.x));
+  const minY = Math.min(...platzierte.map((p) => p.y));
+  const breite = Math.max(...platzierte.map((p) => p.x + p.w)) - minX;
+  const hoehe = Math.max(...platzierte.map((p) => p.y + p.h)) - minY;
+
+  const wolke = el('div', { class: 'wortwolke' });
+  wolke.style.width = breite + 'px';
+  wolke.style.height = hoehe + 'px';
+  for (const k of kacheln) {
+    const box = el('div', { class: 'wolke-kachel', attr: { title: k.wort + ': ' + k.n + '×' } });
+    box.style.left = (k.x - minX) + 'px';
+    box.style.top = (k.y - minY) + 'px';
+    box.style.width = k.fw + 'px';
+    box.style.height = k.fh + 'px';
+    box.style.background = 'hsl(' + k.hue + ', 82%, 93%)';
+    box.style.color = 'hsl(' + k.hue + ', 68%, 32%)';
+    const span = el('span', { class: 'wolke-wort', text: k.wort });
+    span.style.fontSize = k.fs + 'px';
+    if (k.senkrecht) span.style.transform = 'rotate(-90deg)';
+    box.appendChild(span);
+    wolke.appendChild(box);
+  }
+
+  // Bei Überbreite herunterskalieren, damit die Wolke ins Overlay passt.
+  const maxBreite = 600;
+  if (breite > maxBreite) {
+    const skala = maxBreite / breite;
+    const rahmen = el('div', { class: 'wolke-rahmen' });
+    rahmen.style.width = (breite * skala) + 'px';
+    rahmen.style.height = (hoehe * skala) + 'px';
+    wolke.style.transformOrigin = 'top left';
+    wolke.style.transform = 'scale(' + skala + ')';
+    rahmen.appendChild(wolke);
+    return rahmen;
+  }
+  return wolke;
+}
+
+// Sammelt die Umgebungswörter und zeigt sie als Wortwolke im Overlay.
+function zeigeWolke() {
+  if (!letzteAnsicht) return;
+  const { phrase, ganzwort, daten } = letzteAnsicht;
+  const zaehl = new Map();
+  for (const d of daten) {
+    for (const w of umgebung(d.text || '', phrase, ganzwort)) {
+      if (w.length < 2 || STOPWOERTER.has(w)) continue;
+      zaehl.set(w, (zaehl.get(w) || 0) + 1);
+    }
+  }
+  const liste = [...zaehl.entries()].sort((a, b) => b[1] - a[1]).slice(0, 50);
+
+  overlayTitel.textContent = 'Umgebung von „' + phrase + '"';
+  overlayMeta.textContent = liste.length
+    ? 'Häufigste Wörter direkt vor/nach „' + phrase + '" (je ' + FENSTER + ' Wörter; Füllwörter ausgeblendet).'
+    : '';
+  overlayInhalt.innerHTML = '';
+  if (!liste.length) {
+    overlayInhalt.textContent = 'Keine Umgebungswörter gefunden – „' + phrase +
+      '" kommt in den geladenen Texten nicht vor.';
+    overlay.hidden = false;
+    return;
+  }
+  overlayInhalt.appendChild(wortwolkeBauen(liste));
+  overlay.hidden = false;
+}
+wolkeKnopf.addEventListener('click', zeigeWolke);
+
+// ---------- Web-App installierbar machen ----------
+// Service Worker registrieren (funktioniert nur über http/https, nicht bei
+// direktem Öffnen der Datei). Fehler werden bewusst ignoriert.
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').catch(() => {});
+  });
+}

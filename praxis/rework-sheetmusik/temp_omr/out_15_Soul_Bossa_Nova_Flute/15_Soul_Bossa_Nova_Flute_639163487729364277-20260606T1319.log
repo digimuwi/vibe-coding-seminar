@@ -1,0 +1,105 @@
+2026-06-06 13:19:34,042 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:560  | 1 sheet in C:\Users\cgros\OneDrive\Dokumente\MuWi\VibeCodingMuWi\sheetmusic_editor\rework_sheetmusik\temp_omr\15_Soul_Bossa_Nova_Flute_639163487729364277.pdf
+2026-06-06 13:19:34,148 INFO []                 Book.java:2565 | Stored /book.xml
+2026-06-06 13:19:34,148 INFO []                 Book.java:2525 | Book stored as C:\Users\cgros\OneDrive\Dokumente\MuWi\VibeCodingMuWi\sheetmusic_editor\rework_sheetmusik\temp_omr\out_15_Soul_Bossa_Nova_Flute\15_Soul_Bossa_Nova_Flute_639163487729364277.omr
+2026-06-06 13:19:34,152 INFO []                 Book.java:1929 | Book reaching PAGE on sheets:[#1]
+2026-06-06 13:19:34,153 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | LOAD
+2026-06-06 13:19:35,151 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]            SheetStub.java:1278 | Loaded image #1 2480x3507 from C:\Users\cgros\OneDrive\Dokumente\MuWi\VibeCodingMuWi\sheetmusic_editor\rework_sheetmusik\temp_omr\15_Soul_Bossa_Nova_Flute_639163487729364277.pdf
+2026-06-06 13:19:35,153 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | BINARY
+2026-06-06 13:19:35,481 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | SCALE
+2026-06-06 13:19:35,503 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]         ScaleBuilder.java:255  | Beam  guessed height: 12 -- mid of [6..19]
+2026-06-06 13:19:35,503 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]         ScaleBuilder.java:271  | Beam measured height: 12 -- 0.46 of [6..19] range at 279% of needed quorum
+2026-06-06 13:19:35,504 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]         ScaleBuilder.java:401  | Normalized black jitter: 10.00 %
+2026-06-06 13:19:35,504 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]            ScaleStep.java:65   | Scale{ interline(19,20,21) line(3,3,5) beam(12)}
+2026-06-06 13:19:35,504 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | GRID
+2026-06-06 13:19:35,964 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       LinesRetriever.java:1500 | Global slope: -0.00335
+2026-06-06 13:19:36,027 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    ClustersRetriever.java:326  | Retrieved raw line clusters: 11 of sizes [5] with interline(19,20,21)
+2026-06-06 13:19:36,260 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]            PeakGraph.java:310  | Systems: #1[1] #2[2] #3[3] #4[4] #5[5] #6[6] #7[7] #8[8] #9[9] #10[10] #11[11]
+2026-06-06 13:19:36,708 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SystemManager.java:134  | Indentation detected for system #1
+2026-06-06 13:19:36,708 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SystemManager.java:134  | Indentation detected for system #10
+2026-06-06 13:19:36,709 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SystemManager.java:723  | 2 pages found in sheet
+2026-06-06 13:19:36,709 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SystemManager.java:779  | Page #1: 1 part along 9 systems
+2026-06-06 13:19:36,709 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SystemManager.java:779  | Page #2: 1 part along 2 systems
+2026-06-06 13:19:36,709 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:543  | Created scores: [{Score 1}, {Score 2}]
+2026-06-06 13:19:36,710 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | HEADERS
+2026-06-06 13:19:37,530 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | STEM_SEEDS
+2026-06-06 13:19:37,579 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        StemSeedsStep.java:86   | stem(4 max:6)
+2026-06-06 13:19:37,656 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | BEAMS
+2026-06-06 13:19:40,617 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | LEDGERS
+2026-06-06 13:19:41,009 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | HEADS
+2026-06-06 13:19:46,762 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        HeadSeedTally.java:235  | Scale information: HeadSeeds{NOTEHEAD_VOID[L:-0.8,R:-0.0] NOTEHEAD_BLACK[L:-0.4]}
+2026-06-06 13:19:46,763 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | STEMS
+2026-06-06 13:19:47,297 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | REDUCTION
+2026-06-06 13:19:47,373 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        ReductionStep.java:105  | Stems free length median value: 72 pixels, 3.6 interlines
+2026-06-06 13:19:47,378 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | CUE_BEAMS
+2026-06-06 13:19:47,378 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]         CueBeamsStep.java:81   | Step CUE_BEAMS is skipped because small heads switch is off
+2026-06-06 13:19:47,378 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | TEXTS
+2026-06-06 13:19:47,479 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:47,479 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:47,487 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | MEASURES
+2026-06-06 13:19:47,493 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Page.java:307  | 45 raw measures: [3 in system#1, 5 in system#2, 4 in system#3, 5 in system#4, 6 in system#5, 4 in system#6, 4 in system#7, 6 in system#8, 8 in system#9]
+2026-06-06 13:19:47,494 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Page.java:307  | 12 raw measures: [6 in system#10, 6 in system#11]
+2026-06-06 13:19:47,494 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | CHORDS
+2026-06-06 13:19:47,504 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | CURVES
+2026-06-06 13:19:48,454 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]         SlursBuilder.java:240  | Slurs: 33
+2026-06-06 13:19:48,508 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]      SegmentsBuilder.java:155  | Segments: 82
+2026-06-06 13:19:48,523 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,523 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,523 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=169,y=686,width=57,height=57]
+2026-06-06 13:19:48,527 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,527 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,528 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=89,y=1192,width=70,height=58]
+2026-06-06 13:19:48,530 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,530 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,530 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=57,y=1464,width=68,height=57]
+2026-06-06 13:19:48,533 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,533 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,533 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=1294,y=1682,width=72,height=57]
+2026-06-06 13:19:48,536 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,536 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,536 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=1074,y=2199,width=71,height=58]
+2026-06-06 13:19:48,538 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,539 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,539 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=90,y=2483,width=69,height=57]
+2026-06-06 13:19:48,543 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         TesseractOCR.java:335  | The collection of supported languages is empty
+2026-06-06 13:19:48,543 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]              OcrUtil.java:106  | Missing support for 'eng' language(s)
+2026-06-06 13:19:48,543 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]    RehearsalsBuilder.java:199  | No text found in rehearsal enclosure java.awt.Rectangle[x=98,y=3010,width=69,height=57]
+2026-06-06 13:19:48,543 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | SYMBOLS
+2026-06-06 13:19:49,809 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | LINKS
+2026-06-06 13:19:49,835 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10554{(0.252) staff:6 OTTAVA BASSA} at java.awt.Point[x=55,y=1961]
+2026-06-06 13:19:49,841 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#10659{(0.252) staff:7 OTTAVA ALTA} at java.awt.Point[x=55,y=1961]
+2026-06-06 13:19:49,853 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        SymbolsLinker.java:258  | No chord linked to OctaveShiftInter#11068{(0.468) staff:11 QUINDICESIMA ALTA} at java.awt.Point[x=1823,y=2963]
+2026-06-06 13:19:49,855 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | RHYTHMS
+2026-06-06 13:19:49,874 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                Voice.java:257  | Measure{#9} Voice{#1 excess:1/8} too long
+2026-06-06 13:19:49,875 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]          StackRhythm.java:224  | S3 MeasureStack#9 no correct rhythm
+2026-06-06 13:19:49,878 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                Voice.java:257  | Measure{#13} Voice{#1 excess:1/8} too long
+2026-06-06 13:19:49,878 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]          StackRhythm.java:224  | S4 MeasureStack#13 no correct rhythm
+2026-06-06 13:19:49,902 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       StepMonitoring.java:98   | PAGE
+2026-06-06 13:19:49,903 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 2/3 DynamicsInter#10265{(0.458/0.740) DYNAMICS_P} vs LedgerInter#2276{(0.749/0.749) staff:3 LEDGER}
+2026-06-06 13:19:49,903 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 2/3 DynamicsInter#10265{(0.458/0.740) DYNAMICS_P} vs LedgerInter#2338{(0.756/0.756) staff:3 LEDGER}
+2026-06-06 13:19:49,903 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 2/3 DynamicsInter#10265{(0.458/0.740) DYNAMICS_P} vs HeadInter#3548{(0.767/0.959) staff:3 NOTEHEAD_BLACK pitch:-9.0}
+2026-06-06 13:19:49,904 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 5/6 DynamicsInter#10544{(0.311/0.601) DYNAMICS_PP} vs LedgerInter#2612{(0.755/0.755) staff:6 LEDGER}
+2026-06-06 13:19:49,904 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 5/6 DynamicsInter#10544{(0.311/0.601) DYNAMICS_PP} vs LedgerInter#2690{(0.726/0.726) staff:6 LEDGER}
+2026-06-06 13:19:49,904 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 5/6 DynamicsInter#10544{(0.311/0.601) DYNAMICS_PP} vs HeadInter#4085{(0.770/0.957) staff:6 NOTEHEAD_BLACK pitch:-9.0}
+2026-06-06 13:19:49,905 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 5/6 DynamicsInter#10544{(0.311/0.601) DYNAMICS_PP} vs ArticulationInter#10646{(0.611/0.835) TENUTO}
+2026-06-06 13:19:49,905 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 6/7 DynamicsInter#10649{(0.433/0.722) DYNAMICS_P} vs LedgerInter#2748{(0.753/0.753) staff:7 LEDGER}
+2026-06-06 13:19:49,905 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 6/7 DynamicsInter#10649{(0.433/0.722) DYNAMICS_P} vs LedgerInter#2804{(0.756/0.756) staff:7 LEDGER}
+2026-06-06 13:19:49,905 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]       SheetReduction.java:154  | Gutter. Different glyphs 6/7 DynamicsInter#10649{(0.433/0.722) DYNAMICS_P} vs HeadInter#4258{(0.762/0.957) staff:7 NOTEHEAD_BLACK pitch:-9.0}
+2026-06-06 13:19:49,910 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                Voice.java:257  | Measure{#13} Voice{#1 excess:1/8} too long
+2026-06-06 13:19:49,911 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         MeasureFixer.java:343  | System#10 No target duration for measures local IDs [1, 2, 3, 4, 5, 6], please check time signatures
+2026-06-06 13:19:49,911 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]         MeasureFixer.java:343  | System#11 No target duration for measures local IDs [7, 8, 9, 10, 11, 12], please check time signatures
+2026-06-06 13:19:49,911 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:2584 | Book{15_Soul_Bossa_Nova_Flute_639163487729364277} storing
+2026-06-06 13:19:49,961 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:2565 | Stored /book.xml
+2026-06-06 13:19:50,051 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]           DataHolder.java:348  | Stored /sheet#1/BINARY.png
+2026-06-06 13:19:50,550 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                Sheet.java:1583 | Stored /sheet#1/sheet#1.xml
+2026-06-06 13:19:50,550 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:2525 | Book stored as C:\Users\cgros\OneDrive\Dokumente\MuWi\VibeCodingMuWi\sheetmusic_editor\rework_sheetmusik\temp_omr\out_15_Soul_Bossa_Nova_Flute\15_Soul_Bossa_Nova_Flute_639163487729364277.omr
+2026-06-06 13:19:50,553 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]            SheetStub.java:1655 | Sheet disposed
+2026-06-06 13:19:50,574 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:2050 | End of Stub#1
+2026-06-06 13:19:50,575 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                 Book.java:2057 | End of Book{15_Soul_Bossa_Nova_Flute_639163487729364277}
+2026-06-06 13:19:51,011 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]            SheetStub.java:1000 | Loaded /sheet#1/sheet#1.xml
+2026-06-06 13:19:51,236 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]      PartwiseBuilder.java:2706 | Exporting sheet(s): [#1]
+2026-06-06 13:19:51,240 WARN [15_Soul_Bossa_Nova_Flute_639163487729364277]      PartwiseBuilder.java:983  | Measure{#1} Multirest with no measure count, using default value 1
+2026-06-06 13:19:51,297 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        ScoreExporter.java:164  | Score 15_Soul_Bossa_Nova_Flute_639163487729364277.mvt1 exported to C:\Users\cgros\OneDrive\Dokumente\MuWi\VibeCodingMuWi\sheetmusic_editor\rework_sheetmusik\temp_omr\out_15_Soul_Bossa_Nova_Flute\15_Soul_Bossa_Nova_Flute_639163487729364277.mvt1.mxl
+2026-06-06 13:19:51,298 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]      PartwiseBuilder.java:2706 | Exporting sheet(s): [#1]
+2026-06-06 13:19:51,308 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]        ScoreExporter.java:164  | Score 15_Soul_Bossa_Nova_Flute_639163487729364277.mvt2 exported to C:\Users\cgros\OneDrive\Dokumente\MuWi\VibeCodingMuWi\sheetmusic_editor\rework_sheetmusik\temp_omr\out_15_Soul_Bossa_Nova_Flute\15_Soul_Bossa_Nova_Flute_639163487729364277.mvt2.mxl
+2026-06-06 13:19:51,345 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                Score.java:181  | Closing {Score 1}
+2026-06-06 13:19:51,345 INFO [15_Soul_Bossa_Nova_Flute_639163487729364277]                Score.java:181  | Closing {Score 2}
