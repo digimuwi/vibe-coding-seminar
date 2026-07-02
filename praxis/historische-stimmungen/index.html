@@ -22,6 +22,8 @@
       --black-key:       #18120e;
       --black-key-hover: #2a211a;
       --black-key-act:   #9a7030;
+      --black-key-back:       #2d2318;
+      --black-key-back-hover: #3d2f20;
     }
 
     body {
@@ -159,12 +161,27 @@
     .key.black {
       position: absolute; top: 0; width: 28px; height: 106px;
       background: var(--black-key); border-radius: 0 0 4px 4px; z-index: 2;
-      display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px;
-      padding-bottom: 5px; font-size: 7.5px; color: #888;
-      box-shadow: 2px 4px 10px rgba(0,0,0,.55); transition: background .05s;
+      display: flex; flex-direction: column;
+      font-size: 7.5px; color: #888;
+      box-shadow: 2px 4px 10px rgba(0,0,0,.55);
+      overflow: hidden;
     }
-    .key.black:hover  { background: var(--black-key-hover); }
-    .key.black.active { background: var(--black-key-act); color: #ddd; box-shadow: 1px 2px 5px rgba(0,0,0,.5); }
+    /* Geteilte Obertasten (Subsemitonien): hinterer + vorderer Teil */
+    .key.black .subkey {
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+      gap: 2px; cursor: pointer; transition: background .05s;
+    }
+    .key.black .subkey.back {
+      flex: 0 0 50px;
+      background: var(--black-key-back);
+      border-bottom: 1px solid rgba(0,0,0,.9);
+      padding-bottom: 4px;
+      color: #a3937f;
+    }
+    .key.black .subkey.front { flex: 1; padding-bottom: 5px; }
+    .key.black .subkey.back:hover  { background: var(--black-key-back-hover); }
+    .key.black .subkey.front:hover { background: var(--black-key-hover); }
+    .key.black .subkey.active { background: var(--black-key-act); color: #ddd; }
     .key kbd {
       font-family: ui-monospace, Menlo, monospace;
       font-size: 8px; line-height: 1;
@@ -255,7 +272,11 @@
   Taste anklicken – der Ton hält, bis die Taste erneut angeklickt wird …
 </div>
 <div class="cents-hint">¢ = Abweichung in Cent von der gleichstufigen Stimmung (100 ¢ = 1 Halbton)</div>
-<div class="cents-hint">Computertastatur: A S D F G H J K L Ö Ä = weiße Tasten · W E T Z U O P = schwarze Tasten (gedrückt halten, auch mehrere gleichzeitig)</div>
+<div class="cents-hint">Computertastatur: A S D F G H J K L Ö Ä = weiße Tasten · W E T Z U O P = vordere Obertasten · 2 3 6 7 8 9 0 = hintere Obertasten (gedrückt halten, auch mehrere gleichzeitig)</div>
+<div class="cents-hint">
+  Die Obertasten sind geteilt wie bei historischen Orgeln und Cembali („Subsemitonien“):<br>
+  vorne cis · es · fis · as · b &nbsp;–&nbsp; hinten die enharmonischen Gegenstücke des · dis · ges · gis · ais
+</div>
 
 <footer>Historische Stimmungen · Saskia · Seminar Vibe Coding SoSe 26 · Universität Tübingen</footer>
 
@@ -269,11 +290,21 @@ const TUNINGS = [
     year: 'ca. 500 v. Chr.',
     desc: 'Aufgebaut aus reinen Quinten (3:2). Quinten klingen vollkommen, '
         + 'große Terzen (81:64) jedoch spürbar scharf. '
-        + 'Das älteste systematische Stimmungssystem – benannt nach Pythagoras, aber weit älter.',
+        + 'Das älteste systematische Stimmungssystem – benannt nach Pythagoras, aber weit älter. '
+        + 'Enharmonische Gegenstücke (z. B. dis/es) unterscheiden sich um das pythagoreische '
+        + 'Komma (23,5 Cent) – die Kreuz-Töne liegen HÖHER als ihre B-Gegenstücke.',
     ratios: [
       1, 2187/2048, 9/8, 32/27, 81/64, 4/3,
       729/512, 3/2, 128/81, 27/16, 16/9, 243/128,
-    ]
+    ],
+    // Hintere Tastenhälften: des, dis, ges, gis, ais (verlängerte Quintenkette)
+    altRatios: {
+      1: 256/243,        // Des  (−5 Quinten)
+      3: 19683/16384,    // Dis  (+9)
+      6: 1024/729,       // Ges  (−6)
+      8: 6561/4096,      // Gis  (+8)
+      10: 59049/32768,   // Ais  (+10)
+    }
   },
   {
     id: 'just',
@@ -281,11 +312,21 @@ const TUNINGS = [
     year: 'Renaissance, ca. 1000–1500',
     desc: 'Basiert auf reinen Terzen (5:4) und reinen Quinten (3:2). '
         + 'Konsonanzen klingen sehr rein und schwebungsfrei – ideal für Vokalmusik ohne feste Stimmung. '
-        + 'Chromatische Modulationen sind problematisch, da verschiedene „Arten" derselben Note entstehen.',
+        + 'Chromatische Modulationen sind problematisch, da verschiedene „Arten" derselben Note entstehen – '
+        + 'genau diese Arten werden durch die geteilten Obertasten einzeln spielbar '
+        + '(alle Kreuz-Töne als reine Terzen über A, H, D, E bzw. Fis).',
     ratios: [
-      1, 16/15, 9/8, 6/5, 5/4, 4/3,
+      1, 25/24, 9/8, 6/5, 5/4, 4/3,
       45/32, 3/2, 8/5, 5/3, 9/5, 15/8,
-    ]
+    ],
+    // Hintere Tastenhälften: des, dis, ges, gis, ais (5-Limit)
+    altRatios: {
+      1: 16/15,      // Des  (diatonischer Halbton)
+      3: 75/64,      // Dis  (reine Terz über H)
+      6: 64/45,      // Ges  (Umkehrung von Fis 45/32)
+      8: 25/16,      // Gis  (reine Terz über E)
+      10: 225/128,   // Ais  (reine Terz über Fis)
+    }
   },
   {
     id: 'meantone',
@@ -294,7 +335,9 @@ const TUNINGS = [
     desc: 'Die Quinte wird leicht verkleinert (um ¼ des syntonischen Kommas), '
         + 'damit die großen Terzen rein klingen (5:4). '
         + 'In Tonarten mit wenigen Vorzeichen klingt sie hervorragend; '
-        + 'in anderen entsteht die berüchtigte Wolfsquinte (As–Cis).',
+        + 'in anderen entsteht die berüchtigte Wolfsquinte (As–Cis). '
+        + 'Die geteilten Obertasten machen den Unterschied zwischen dis und es hörbar: '
+        + 'gut 41 Cent (kleine Diësis) – die Kreuz-Töne liegen TIEFER als ihre B-Gegenstücke.',
     ratios: (() => {
       const pw = (b, e) => Math.pow(b, e);
       return [
@@ -302,6 +345,22 @@ const TUNINGS = [
         2/pw(5,1/4), pw(5,3/2)/8, pw(5,1/4), 8/5,
         pw(5,3/4)/2, 4/Math.sqrt(5), pw(5,5/4)/4,
       ];
+    })(),
+    // Hintere Tastenhälften aus der verlängerten Quintenkette (Quinte = 5^(1/4))
+    altRatios: (() => {
+      const fromFifths = n => {
+        let r = Math.pow(Math.pow(5, 1/4), n);
+        while (r >= 2) r /= 2;
+        while (r < 1)  r *= 2;
+        return r;
+      };
+      return {
+        1: fromFifths(-5),   // Des
+        3: fromFifths(9),    // Dis
+        6: fromFifths(-6),   // Ges
+        8: fromFifths(8),    // Gis
+        10: fromFifths(10),  // Ais
+      };
     })()
   },
   {
@@ -311,7 +370,8 @@ const TUNINGS = [
     desc: 'Andreas Werckmeister verteilte das pythagoreische Komma auf vier Quinten '
         + '(C–G, G–D, D–A, H–Fis). Alle Tonarten sind spielbar, klingen aber '
         + 'unterschiedlich charaktervoll – manche klar und hell, andere dunkler und weicher. '
-        + 'Gilt als mögliche Vorlage für Bachs Wohltemperiertes Klavier.',
+        + 'Gilt als mögliche Vorlage für Bachs Wohltemperiertes Klavier. '
+        + 'Enharmonische Töne fallen zusammen: Beide Hälften der geteilten Obertasten klingen gleich.',
     ratios: [0, 90.225, 192.18, 294.135, 390.225, 498.045,
              588.27, 696.09, 792.18, 888.27, 996.09, 1092.18]
              .map(c => Math.pow(2, c / 1200))
@@ -323,7 +383,8 @@ const TUNINGS = [
     desc: 'Alle zwölf Halbtonschritte sind identisch (2^(1⁄12) ≈ 1,05946). '
         + 'Freie Modulation in alle Tonarten ist möglich. '
         + 'Nur die Oktave (2:1) ist rein; alle anderen Intervalle sind leicht verstimmt. '
-        + 'Heute weltweit die gebräuchliche Stimmung.',
+        + 'Heute weltweit die gebräuchliche Stimmung. '
+        + 'Dis und es sind hier identisch – beide Hälften der geteilten Obertasten klingen gleich.',
     ratios: Array.from({ length: 12 }, (_, i) => Math.pow(2, i / 12))
   }
 ];
@@ -342,6 +403,10 @@ const NOTE_SHORT = [
   'c'
 ];
 
+// Hintere (geteilte) Tastenhälften: enharmonische Gegenstücke der Obertasten
+const ALT_SHORT = { 1: 'db', 3: 'd#', 6: 'gb', 8: 'g#', 10: 'a#' };
+const ALT_BASE  = { 1: 'des', 3: 'dis', 6: 'ges', 8: 'gis', 10: 'ais' };
+
 const A_IDX = 9; // A = index 9 (C-based)
 
 // Computertastatur-Belegung (deutsches Layout): noteIdx → Taste
@@ -349,6 +414,8 @@ const KEY_LABELS = {
   0:'A', 1:'W', 2:'S', 3:'E', 4:'D', 5:'F', 6:'T', 7:'G', 8:'Z',
   9:'H', 10:'U', 11:'J', 12:'K', 13:'O', 14:'L', 15:'P', 16:'Ö', 17:'Ä'
 };
+// Hintere Tastenhälften: Ziffernreihe oberhalb der vorderen Tasten
+const ALT_KEY_LABELS = { 1:'2', 3:'3', 6:'6', 8:'7', 10:'8', 13:'9', 15:'0' };
 
 // ── Zustand ──────────────────────────────────────────────────────────────────
 
@@ -356,7 +423,10 @@ let tuning    = TUNINGS[0];
 let kammerton = 440;
 let audioCtx  = null;
 let masterLimiter = null;
-const activeNotes = new Map(); // gehaltene Tasten: noteIdx → Klangknoten (+ sticky-Flag)
+const activeNotes = new Map(); // gehaltene Tasten: noteKey → Klangknoten (+ idx/alt/sticky)
+
+// Eindeutiger Schlüssel je Tastenhälfte: "3" = es′ (vorne), "3a" = dis′ (hinten)
+const noteKey = (idx, alt) => alt ? idx + 'a' : String(idx);
 
 // MIDI state
 let midiData      = null;
@@ -444,29 +514,33 @@ function fadeStop(node) {
 
 // ── Manual key sounds ─────────────────────────────────────────────────────────
 
-function keyEl(noteIdx) {
-  return document.querySelector(`#keyboard [data-note="${noteIdx}"]`);
+// alt = hintere Tastenhälfte (des, dis, ges, gis, ais)
+function keyEl(noteIdx, alt) {
+  return document.querySelector(
+    `#keyboard [data-note="${noteIdx}"]${alt ? '[data-alt]' : ':not([data-alt])'}`);
 }
 
 // sticky = per Klick angewählt (hält, bis erneut geklickt wird);
 // nicht-sticky = per Computertastatur gehalten (endet beim Loslassen)
-function noteOn(noteIdx, sticky) {
-  if (activeNotes.has(noteIdx)) return;
+function noteOn(noteIdx, alt, sticky) {
+  const k = noteKey(noteIdx, alt);
+  if (activeNotes.has(k)) return;
   const vol  = 0.6; // etwas leiser als früher, da mehrere Töne gleichzeitig klingen können
-  const node = buildPianoNode(getFreq(noteIdx), vol);
+  const node = buildPianoNode(getFreq(noteIdx, alt), vol);
   applyAttackDecaySustain(node.gain, vol, node.startTime);
-  node.sticky = sticky;
-  activeNotes.set(noteIdx, node);
-  keyEl(noteIdx)?.classList.add('active');
+  node.idx = noteIdx; node.alt = alt; node.sticky = sticky;
+  activeNotes.set(k, node);
+  keyEl(noteIdx, alt)?.classList.add('active');
   renderNotes();
 }
 
-function noteOff(noteIdx) {
-  const node = activeNotes.get(noteIdx);
+function noteOff(noteIdx, alt) {
+  const k = noteKey(noteIdx, alt);
+  const node = activeNotes.get(k);
   if (!node) return;
-  activeNotes.delete(noteIdx);
+  activeNotes.delete(k);
   fadeStop(node);
-  keyEl(noteIdx)?.classList.remove('active');
+  keyEl(noteIdx, alt)?.classList.remove('active');
   renderNotes();
 }
 
@@ -474,8 +548,8 @@ function noteOff(noteIdx) {
 function retuneAll() {
   if (!activeNotes.size) return;
   const now = getAC().currentTime;
-  activeNotes.forEach((node, idx) => {
-    const freq = getFreq(idx);
+  activeNotes.forEach(node => {
+    const freq = getFreq(node.idx, node.alt);
     node.oscs.forEach((osc, i) => {
       osc.frequency.cancelScheduledValues(now);
       osc.frequency.setTargetAtTime(freq * (i + 1), now, 0.02); // Teiltöne 1–5
@@ -589,11 +663,16 @@ function pairNotes(events) {
 
 // ── Frequenzberechnung ────────────────────────────────────────────────────────
 
-function getFreq(noteIdx) {
+// alt = true → hintere Tastenhälfte (des, dis, ges, gis, ais);
+// ohne eigene altRatios (Werckmeister, gleichstufig) klingen beide Hälften gleich
+function getFreq(noteIdx, alt) {
   const cFreq  = kammerton / tuning.ratios[A_IDX];
   const octave = Math.floor(noteIdx / 12);
   const semi   = noteIdx % 12;
-  return cFreq * tuning.ratios[semi] * Math.pow(2, octave);
+  const ratio  = (alt && tuning.altRatios?.[semi] !== undefined)
+               ? tuning.altRatios[semi]
+               : tuning.ratios[semi];
+  return cFreq * ratio * Math.pow(2, octave);
 }
 
 function midiToFreq(midiNote, transpose) {
@@ -612,6 +691,12 @@ function getCents(noteIdx, freq) {
 
 // ── Anzeige ───────────────────────────────────────────────────────────────────
 
+function noteName(noteIdx, alt) {
+  const semi = noteIdx % 12;
+  if (alt && ALT_BASE[semi]) return ALT_BASE[semi] + (noteIdx >= 12 ? '″' : '′');
+  return NOTE_NAMES[noteIdx];
+}
+
 function renderNotes() {
   const el = document.getElementById('noteDisplay');
   if (activeNotes.size === 0) {
@@ -619,14 +704,16 @@ function renderNotes() {
     el.textContent = 'Taste anklicken – der Ton hält, bis die Taste erneut angeklickt wird …';
     return;
   }
-  const rows = [...activeNotes.keys()].sort((a, b) => a - b).map(idx => {
-    const freq  = getFreq(idx);
-    const cents = getCents(idx, freq);
-    const sign  = cents >= 0 ? '+' : '';
-    return `<div class="nt-val">${NOTE_NAMES[idx]}</div>
-            <div class="nt-val">${freq.toFixed(2)} Hz</div>
-            <div class="nt-val">${sign}${cents.toFixed(1)} ¢</div>`;
-  }).join('');
+  const rows = [...activeNotes.values()]
+    .map(node => ({ node, freq: getFreq(node.idx, node.alt) }))
+    .sort((a, b) => a.freq - b.freq)
+    .map(({ node, freq }) => {
+      const cents = getCents(node.idx, freq);
+      const sign  = cents >= 0 ? '+' : '';
+      return `<div class="nt-val">${noteName(node.idx, node.alt)}</div>
+              <div class="nt-val">${freq.toFixed(2)} Hz</div>
+              <div class="nt-val">${sign}${cents.toFixed(1)} ¢</div>`;
+    }).join('');
   el.className = 'note-display filled';
   el.innerHTML =
     `<div class="note-table">
@@ -665,14 +752,17 @@ function buildKeyboard() {
     kb.appendChild(key);
   });
 
-  // Black keys
+  // Black keys – geteilt in hintere (alt) und vordere Hälfte
   BLACK_NOTES.forEach(note => {
     const nextW = BLACK_NEXT_WHITE[note];
     const key   = document.createElement('div');
     key.className = 'key black';
-    key.dataset.note = note;
     key.style.left = (whitePos[nextW] - BW / 2) + 'px';
-    key.innerHTML = `${kbdLabel(note)}<span>${NOTE_SHORT[note]}</span>`;
+    const semi   = note % 12;
+    const altKbd = ALT_KEY_LABELS[note] !== undefined ? `<kbd>${ALT_KEY_LABELS[note]}</kbd>` : '';
+    key.innerHTML =
+      `<div class="subkey back" data-note="${note}" data-alt="1">${altKbd}<span>${ALT_SHORT[semi]}</span></div>
+       <div class="subkey front" data-note="${note}">${kbdLabel(note)}<span>${NOTE_SHORT[note]}</span></div>`;
     kb.appendChild(key);
   });
 
@@ -688,21 +778,27 @@ function buildKeyboard() {
 function setupKeyboard() {
   const kb = document.getElementById('keyboard');
 
-  // Maus / Touch: Klick wählt eine Taste an (Ton hält), erneuter Klick wählt sie ab
+  // Maus / Touch: Klick wählt eine Tastenhälfte an (Ton hält), erneuter Klick wählt sie ab
   kb.addEventListener('click', e => {
     const key = e.target.closest('[data-note]');
     if (!key) return;
     const idx = parseInt(key.dataset.note);
-    if (activeNotes.has(idx)) noteOff(idx);
-    else noteOn(idx, true);
+    const alt = !!key.dataset.alt;
+    if (activeNotes.has(noteKey(idx, alt))) noteOff(idx, alt);
+    else noteOn(idx, alt, true);
   });
 
   // Computertastatur wie eine Klaviatur (plus QWERTY-Ersatztasten)
   const KEYMAP = {};
-  Object.entries(KEY_LABELS).forEach(([idx, ch]) => { KEYMAP[ch.toLowerCase()] = parseInt(idx); });
-  KEYMAP['y'] = 8;   // QWERTY-Position von Z
-  KEYMAP[';'] = 16;  // QWERTY-Position von Ö
-  KEYMAP["'"] = 17;  // QWERTY-Position von Ä
+  Object.entries(KEY_LABELS).forEach(([idx, ch]) => {
+    KEYMAP[ch.toLowerCase()] = { idx: parseInt(idx), alt: false };
+  });
+  Object.entries(ALT_KEY_LABELS).forEach(([idx, ch]) => {
+    KEYMAP[ch] = { idx: parseInt(idx), alt: true };
+  });
+  KEYMAP['y'] = { idx: 8,  alt: false };  // QWERTY-Position von Z
+  KEYMAP[';'] = { idx: 16, alt: false };  // QWERTY-Position von Ö
+  KEYMAP["'"] = { idx: 17, alt: false };  // QWERTY-Position von Ä
 
   function isTypingTarget(el) {
     if (!el) return false;
@@ -713,25 +809,25 @@ function setupKeyboard() {
   document.addEventListener('keydown', e => {
     if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
     if (isTypingTarget(document.activeElement)) return;
-    const idx = KEYMAP[e.key.toLowerCase()];
-    if (idx === undefined) return;
+    const m = KEYMAP[e.key.toLowerCase()];
+    if (m === undefined) return;
     e.preventDefault();
-    noteOn(idx, false);
+    noteOn(m.idx, m.alt, false);
   });
 
   document.addEventListener('keyup', e => {
-    const idx = KEYMAP[e.key.toLowerCase()];
-    if (idx === undefined) return;
-    const node = activeNotes.get(idx);
-    if (node && !node.sticky) noteOff(idx);
+    const m = KEYMAP[e.key.toLowerCase()];
+    if (m === undefined) return;
+    const node = activeNotes.get(noteKey(m.idx, m.alt));
+    if (node && !node.sticky) noteOff(m.idx, m.alt);
   });
 
   // Verliert das Fenster den Fokus, gehen Keyup-Ereignisse verloren →
   // per Tastatur gehaltene Töne beenden (per Klick angewählte bleiben stehen)
   window.addEventListener('blur', () => {
-    [...activeNotes.entries()]
-      .filter(([, node]) => !node.sticky)
-      .forEach(([idx]) => noteOff(idx));
+    [...activeNotes.values()]
+      .filter(node => !node.sticky)
+      .forEach(node => noteOff(node.idx, node.alt));
   });
 }
 
@@ -809,8 +905,10 @@ function stopMIDIPlayback() {
   midiIsPlaying = false;
 
   // Nur MIDI-Markierungen entfernen – per Klick gehaltene Tasten bleiben aktiv
-  document.querySelectorAll('.key.active').forEach(k => {
-    if (!activeNotes.has(parseInt(k.dataset.note))) k.classList.remove('active');
+  document.querySelectorAll('#keyboard .active').forEach(k => {
+    const idx = parseInt(k.dataset.note);
+    const alt = !!k.dataset.alt;
+    if (!activeNotes.has(noteKey(idx, alt))) k.classList.remove('active');
   });
   document.getElementById('midiPlay').textContent = '▶ Abspielen';
   document.getElementById('midiPlay').disabled = false;
@@ -834,9 +932,13 @@ function updatePlaybackUI() {
       if (idx >= 0 && idx <= 24) activeSet.add(idx);
     }
   });
-  document.querySelectorAll('.key').forEach(k => {
+  // MIDI klingt über den Standard-Tonvorrat → vordere Tastenhälften markieren;
+  // manuell gehaltene Tastenhälften bleiben ebenfalls markiert
+  document.querySelectorAll('#keyboard [data-note]').forEach(k => {
     const idx = parseInt(k.dataset.note);
-    k.classList.toggle('active', activeSet.has(idx) || activeNotes.has(idx));
+    const alt = !!k.dataset.alt;
+    k.classList.toggle('active',
+      (!alt && activeSet.has(idx)) || activeNotes.has(noteKey(idx, alt)));
   });
 
   if (elapsed >= midiDuration + 1.5) {
