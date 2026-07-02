@@ -704,14 +704,15 @@ function getTranspose() {
   return parseInt(document.getElementById('midiTranspose').value) || 0;
 }
 
-function startMIDIPlayback() {
+async function startMIDIPlayback() {
   if (!midiNotes?.length) return;
   stopMIDIPlayback();
 
   midiIsPlaying = true;
   const ac  = getAC();
+  if (ac.state !== 'running') await ac.resume();
   const tp  = getTranspose();
-  midiStartAC = ac.currentTime + 0.15;
+  midiStartAC = ac.currentTime + 0.3;
 
   midiNodes = midiNotes.map(({ note, time, dur, vel }) => {
     const freq = midiToFreq(note, tp);
