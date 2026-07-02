@@ -139,6 +139,7 @@
     .keyboard {
       position: relative; display: flex; height: 180px;
       user-select: none; -webkit-user-select: none;
+      touch-action: manipulation;
       width: 720px; /* 15 white keys × 48px */
     }
     .octave-divider {
@@ -150,7 +151,7 @@
       width: 48px; height: 170px; background: var(--white-key);
       border: 1px solid #999; border-top: none; border-radius: 0 0 5px 5px;
       position: relative; z-index: 1; flex-shrink: 0;
-      display: flex; align-items: flex-end; justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 3px;
       padding-bottom: 6px; font-size: 9px; color: #888; transition: background .05s;
     }
     .key.white:hover  { background: var(--white-key-hover); }
@@ -158,12 +159,18 @@
     .key.black {
       position: absolute; top: 0; width: 28px; height: 106px;
       background: var(--black-key); border-radius: 0 0 4px 4px; z-index: 2;
-      display: flex; align-items: flex-end; justify-content: center;
+      display: flex; flex-direction: column; align-items: center; justify-content: flex-end; gap: 2px;
       padding-bottom: 5px; font-size: 7.5px; color: #888;
       box-shadow: 2px 4px 10px rgba(0,0,0,.55); transition: background .05s;
     }
     .key.black:hover  { background: var(--black-key-hover); }
     .key.black.active { background: var(--black-key-act); color: #ddd; box-shadow: 1px 2px 5px rgba(0,0,0,.5); }
+    .key kbd {
+      font-family: ui-monospace, Menlo, monospace;
+      font-size: 8px; line-height: 1;
+      border: 1px solid currentColor; border-radius: 3px;
+      padding: 1px 3px; opacity: .5;
+    }
     .octave-label {
       font-size: .72rem; color: var(--text-muted); margin-top: 8px;
       text-align: center; font-style: italic; letter-spacing: .05em;
@@ -176,11 +183,13 @@
       display: flex; align-items: center; justify-content: center; text-align: center;
     }
     .note-display.empty { color: var(--text-muted); font-style: italic; font-size: .88rem; }
-    .note-display.filled { display: grid; grid-template-columns: 1fr 1fr 1fr; }
-    .info-cell { display: flex; flex-direction: column; align-items: center; padding: 2px 16px; }
-    .info-cell + .info-cell { border-left: 1px solid var(--border); }
-    .info-val { font-size: 1.25rem; color: var(--accent-light); }
-    .info-lbl { font-size: .68rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: .08em; margin-top: 3px; }
+    .note-display.filled { padding: 14px 28px; }
+    .note-table { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px 28px; text-align: center; }
+    .nt-head {
+      font-size: .68rem; color: var(--text-muted); text-transform: uppercase;
+      letter-spacing: .08em; border-bottom: 1px solid var(--border); padding-bottom: 5px;
+    }
+    .nt-val { font-size: 1.15rem; color: var(--accent-light); }
     .cents-hint { font-size: .75rem; color: var(--text-muted); font-style: italic; text-align: center; }
 
     footer { color: var(--text-muted); font-size: .78rem; font-style: italic; text-align: center; margin-top: 6px; }
@@ -243,9 +252,10 @@
 </div>
 
 <div class="note-display empty" id="noteDisplay">
-  Taste drücken zum Klingen bringen …
+  Taste anklicken – der Ton hält, bis die Taste erneut angeklickt wird …
 </div>
 <div class="cents-hint">¢ = Abweichung in Cent von der gleichstufigen Stimmung (100 ¢ = 1 Halbton)</div>
+<div class="cents-hint">Computertastatur: A S D F G H J K L Ö Ä = weiße Tasten · W E T Z U O P = schwarze Tasten (gedrückt halten, auch mehrere gleichzeitig)</div>
 
 <footer>Historische Stimmungen · Saskia · Seminar Vibe Coding SoSe 26 · Universität Tübingen</footer>
 
@@ -334,13 +344,19 @@ const NOTE_SHORT = [
 
 const A_IDX = 9; // A = index 9 (C-based)
 
+// Computertastatur-Belegung (deutsches Layout): noteIdx → Taste
+const KEY_LABELS = {
+  0:'A', 1:'W', 2:'S', 3:'E', 4:'D', 5:'F', 6:'T', 7:'G', 8:'Z',
+  9:'H', 10:'U', 11:'J', 12:'K', 13:'O', 14:'L', 15:'P', 16:'Ö', 17:'Ä'
+};
+
 // ── Zustand ──────────────────────────────────────────────────────────────────
 
 let tuning    = TUNINGS[0];
 let kammerton = 440;
 let audioCtx  = null;
 let masterLimiter = null;
-let activeNode = null;   // currently held manual key
+const activeNotes = new Map(); // gehaltene Tasten: noteIdx → Klangknoten (+ sticky-Flag)
 
 // MIDI state
 let midiData      = null;
@@ -395,7 +411,7 @@ function buildPianoNode(freq, vol, startTime) {
     return osc;
   });
 
-  return { oscs, gain: mg, startTime: t0 };
+  return { oscs, gain: mg, flt, startTime: t0 };
 }
 
 function applyAttackDecaySustain(mg, vol, t0) {
@@ -428,17 +444,45 @@ function fadeStop(node) {
 
 // ── Manual key sounds ─────────────────────────────────────────────────────────
 
-function startSound(freq) {
-  stopSound();
-  const node = buildPianoNode(freq, 0.75);
-  applyAttackDecaySustain(node.gain, 0.75, node.startTime);
-  activeNode = node;
+function keyEl(noteIdx) {
+  return document.querySelector(`#keyboard [data-note="${noteIdx}"]`);
 }
 
-function stopSound() {
-  if (!activeNode) return;
-  fadeStop(activeNode);
-  activeNode = null;
+// sticky = per Klick angewählt (hält, bis erneut geklickt wird);
+// nicht-sticky = per Computertastatur gehalten (endet beim Loslassen)
+function noteOn(noteIdx, sticky) {
+  if (activeNotes.has(noteIdx)) return;
+  const vol  = 0.6; // etwas leiser als früher, da mehrere Töne gleichzeitig klingen können
+  const node = buildPianoNode(getFreq(noteIdx), vol);
+  applyAttackDecaySustain(node.gain, vol, node.startTime);
+  node.sticky = sticky;
+  activeNotes.set(noteIdx, node);
+  keyEl(noteIdx)?.classList.add('active');
+  renderNotes();
+}
+
+function noteOff(noteIdx) {
+  const node = activeNotes.get(noteIdx);
+  if (!node) return;
+  activeNotes.delete(noteIdx);
+  fadeStop(node);
+  keyEl(noteIdx)?.classList.remove('active');
+  renderNotes();
+}
+
+// Gehaltene Töne übernehmen Stimmungs-/Kammerton-Wechsel sofort hörbar
+function retuneAll() {
+  if (!activeNotes.size) return;
+  const now = getAC().currentTime;
+  activeNotes.forEach((node, idx) => {
+    const freq = getFreq(idx);
+    node.oscs.forEach((osc, i) => {
+      osc.frequency.cancelScheduledValues(now);
+      osc.frequency.setTargetAtTime(freq * (i + 1), now, 0.02); // Teiltöne 1–5
+    });
+    node.flt?.frequency.setTargetAtTime(Math.min(freq * 9, 9000), now, 0.02);
+  });
+  renderNotes();
 }
 
 // ── MIDI Parser ───────────────────────────────────────────────────────────────
@@ -568,30 +612,29 @@ function getCents(noteIdx, freq) {
 
 // ── Anzeige ───────────────────────────────────────────────────────────────────
 
-function showNote(noteIdx, freq) {
-  const cents = getCents(noteIdx, freq);
-  const sign  = cents >= 0 ? '+' : '';
-  const el    = document.getElementById('noteDisplay');
+function renderNotes() {
+  const el = document.getElementById('noteDisplay');
+  if (activeNotes.size === 0) {
+    el.className = 'note-display empty';
+    el.textContent = 'Taste anklicken – der Ton hält, bis die Taste erneut angeklickt wird …';
+    return;
+  }
+  const rows = [...activeNotes.keys()].sort((a, b) => a - b).map(idx => {
+    const freq  = getFreq(idx);
+    const cents = getCents(idx, freq);
+    const sign  = cents >= 0 ? '+' : '';
+    return `<div class="nt-val">${NOTE_NAMES[idx]}</div>
+            <div class="nt-val">${freq.toFixed(2)} Hz</div>
+            <div class="nt-val">${sign}${cents.toFixed(1)} ¢</div>`;
+  }).join('');
   el.className = 'note-display filled';
   el.innerHTML =
-    `<div class="info-cell">
-       <div class="info-val">${NOTE_NAMES[noteIdx]}</div>
-       <div class="info-lbl">Note</div>
-     </div>
-     <div class="info-cell">
-       <div class="info-val">${freq.toFixed(2)} Hz</div>
-       <div class="info-lbl">Frequenz</div>
-     </div>
-     <div class="info-cell">
-       <div class="info-val">${sign}${cents.toFixed(1)} ¢</div>
-       <div class="info-lbl">Abweichung</div>
+    `<div class="note-table">
+       <div class="nt-head">Note</div>
+       <div class="nt-head">Frequenz</div>
+       <div class="nt-head">Abweichung</div>
+       ${rows}
      </div>`;
-}
-
-function clearNote() {
-  const el = document.getElementById('noteDisplay');
-  el.className = 'note-display empty';
-  el.textContent = 'Taste drücken zum Klingen bringen …';
 }
 
 // ── Klaviatur aufbauen (2 Oktaven) ────────────────────────────────────────────
@@ -611,12 +654,14 @@ function buildKeyboard() {
   const whitePos = {};
   WHITE_NOTES.forEach((n, i) => { whitePos[n] = i * W; });
 
+  const kbdLabel = note => KEY_LABELS[note] !== undefined ? `<kbd>${KEY_LABELS[note]}</kbd>` : '';
+
   // White keys
   WHITE_NOTES.forEach(note => {
     const key = document.createElement('div');
     key.className = 'key white';
     key.dataset.note = note;
-    key.innerHTML = `<span>${NOTE_SHORT[note]}</span>`;
+    key.innerHTML = `${kbdLabel(note)}<span>${NOTE_SHORT[note]}</span>`;
     kb.appendChild(key);
   });
 
@@ -627,7 +672,7 @@ function buildKeyboard() {
     key.className = 'key black';
     key.dataset.note = note;
     key.style.left = (whitePos[nextW] - BW / 2) + 'px';
-    key.innerHTML = `<span>${NOTE_SHORT[note]}</span>`;
+    key.innerHTML = `${kbdLabel(note)}<span>${NOTE_SHORT[note]}</span>`;
     kb.appendChild(key);
   });
 
@@ -642,34 +687,52 @@ function buildKeyboard() {
 
 function setupKeyboard() {
   const kb = document.getElementById('keyboard');
-  let pressed = null;
 
-  function press(key) {
-    if (!key?.dataset?.note) return;
-    if (pressed !== null) release();
-    pressed = parseInt(key.dataset.note);
-    key.classList.add('active');
-    const freq = getFreq(pressed);
-    startSound(freq);
-    showNote(pressed, freq);
+  // Maus / Touch: Klick wählt eine Taste an (Ton hält), erneuter Klick wählt sie ab
+  kb.addEventListener('click', e => {
+    const key = e.target.closest('[data-note]');
+    if (!key) return;
+    const idx = parseInt(key.dataset.note);
+    if (activeNotes.has(idx)) noteOff(idx);
+    else noteOn(idx, true);
+  });
+
+  // Computertastatur wie eine Klaviatur (plus QWERTY-Ersatztasten)
+  const KEYMAP = {};
+  Object.entries(KEY_LABELS).forEach(([idx, ch]) => { KEYMAP[ch.toLowerCase()] = parseInt(idx); });
+  KEYMAP['y'] = 8;   // QWERTY-Position von Z
+  KEYMAP[';'] = 16;  // QWERTY-Position von Ö
+  KEYMAP["'"] = 17;  // QWERTY-Position von Ä
+
+  function isTypingTarget(el) {
+    if (!el) return false;
+    if (el.tagName === 'TEXTAREA') return true;
+    return el.tagName === 'INPUT' && el.type !== 'radio' && el.type !== 'checkbox';
   }
 
-  function release() {
-    if (pressed === null) return;
-    kb.querySelector(`[data-note="${pressed}"]`)?.classList.remove('active');
-    stopSound();
-    clearNote();
-    pressed = null;
-  }
-
-  kb.addEventListener('mousedown', e => { e.preventDefault(); press(e.target.closest('[data-note]')); });
-  document.addEventListener('mouseup', release);
-  kb.addEventListener('touchstart', e => {
+  document.addEventListener('keydown', e => {
+    if (e.repeat || e.ctrlKey || e.metaKey || e.altKey) return;
+    if (isTypingTarget(document.activeElement)) return;
+    const idx = KEYMAP[e.key.toLowerCase()];
+    if (idx === undefined) return;
     e.preventDefault();
-    const t = e.touches[0];
-    press(document.elementFromPoint(t.clientX, t.clientY)?.closest('[data-note]'));
-  }, { passive: false });
-  kb.addEventListener('touchend', e => { e.preventDefault(); release(); }, { passive: false });
+    noteOn(idx, false);
+  });
+
+  document.addEventListener('keyup', e => {
+    const idx = KEYMAP[e.key.toLowerCase()];
+    if (idx === undefined) return;
+    const node = activeNotes.get(idx);
+    if (node && !node.sticky) noteOff(idx);
+  });
+
+  // Verliert das Fenster den Fokus, gehen Keyup-Ereignisse verloren →
+  // per Tastatur gehaltene Töne beenden (per Klick angewählte bleiben stehen)
+  window.addEventListener('blur', () => {
+    [...activeNotes.entries()]
+      .filter(([, node]) => !node.sticky)
+      .forEach(([idx]) => noteOff(idx));
+  });
 }
 
 // ── MIDI Laden ────────────────────────────────────────────────────────────────
@@ -745,7 +808,10 @@ function stopMIDIPlayback() {
   midiNodes = [];
   midiIsPlaying = false;
 
-  document.querySelectorAll('.key.active').forEach(k => k.classList.remove('active'));
+  // Nur MIDI-Markierungen entfernen – per Klick gehaltene Tasten bleiben aktiv
+  document.querySelectorAll('.key.active').forEach(k => {
+    if (!activeNotes.has(parseInt(k.dataset.note))) k.classList.remove('active');
+  });
   document.getElementById('midiPlay').textContent = '▶ Abspielen';
   document.getElementById('midiPlay').disabled = false;
   document.getElementById('midiProgressBar').style.width = '0%';
@@ -769,7 +835,8 @@ function updatePlaybackUI() {
     }
   });
   document.querySelectorAll('.key').forEach(k => {
-    k.classList.toggle('active', activeSet.has(parseInt(k.dataset.note)));
+    const idx = parseInt(k.dataset.note);
+    k.classList.toggle('active', activeSet.has(idx) || activeNotes.has(idx));
   });
 
   if (elapsed >= midiDuration + 1.5) {
@@ -793,6 +860,7 @@ function buildTuningOptions() {
     lbl.querySelector('input').addEventListener('change', () => {
       tuning = t;
       document.getElementById('description').textContent = t.desc;
+      retuneAll();
     });
     container.appendChild(lbl);
   });
@@ -802,7 +870,7 @@ function buildTuningOptions() {
 
 document.getElementById('kammerton').addEventListener('input', e => {
   const v = parseFloat(e.target.value);
-  if (v > 0) kammerton = v;
+  if (v > 0) { kammerton = v; retuneAll(); }
 });
 
 document.getElementById('midiFile').addEventListener('change', e => {
