@@ -120,7 +120,7 @@
     .main {
       display: grid;
       grid-template-columns: 1fr 380px;
-      grid-auto-rows: clamp(300px, calc(100vh - 380px), 420px);
+      grid-auto-rows: clamp(260px, calc(100vh - 440px), 420px);
       gap: 16px;
       padding: 16px;
       min-height: 0;
@@ -433,29 +433,44 @@
       opacity: 0.4;
     }
 
+    /* Ereignis = senkrechter Anker an der Jahresposition; Punkt, Verbindungs-
+       linie und Label werden per JS vertikal gestapelt (mehrere Ebenen), damit
+       sich die BWV-Beschriftungen nie überlappen. */
     .timeline-event {
       position: absolute;
+      top: 0;
+      height: 100%;
+      width: 0;
       transform: translateX(-50%);
       cursor: pointer;
-      transition: transform 0.15s;
     }
-    .timeline-event:hover { transform: translateX(-50%) translateY(-3px); }
+
+    .event-connector {
+      position: absolute;
+      left: 50%;
+      width: 2px;
+      transform: translateX(-50%);
+      background: rgba(90,74,106,0.22);
+    }
 
     .event-dot {
-      width: 22px;
-      height: 22px;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 20px;
+      height: 20px;
       border-radius: 50%;
       border: 3px solid white;
       box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      margin: 0 auto;
+      transition: transform 0.15s, box-shadow 0.15s;
     }
 
     .event-label {
       position: absolute;
-      top: 30px;
       left: 50%;
       transform: translateX(-50%);
-      font-size: 0.7rem;
+      font-size: 0.68rem;
+      line-height: 1;
       white-space: nowrap;
       background: white;
       padding: 3px 7px;
@@ -463,25 +478,20 @@
       border: 1px solid #e0d8ed;
       color: var(--ink);
       font-weight: bold;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
     }
 
-    .timeline-event.above .event-dot {
-      position: absolute;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-    }
-    .timeline-event.above .event-label {
-      top: auto;
-      bottom: 30px;
-    }
+    .timeline-event:hover .event-dot { transform: translateX(-50%) scale(1.2); }
+    .timeline-event:hover .event-label { border-color: var(--gold); }
 
     .timeline-event.active .event-dot {
-      transform: translateX(-50%) scale(1.4);
+      transform: translateX(-50%) scale(1.45);
       box-shadow: 0 0 0 4px var(--gold), 0 4px 10px rgba(0,0,0,0.3);
     }
-    .timeline-event.above.active .event-dot {
-      transform: translateX(-50%) scale(1.4);
+    .timeline-event.active .event-label {
+      background: var(--gold);
+      color: #fff;
+      border-color: var(--gold);
     }
 
     .lifespan-bar {
@@ -947,6 +957,7 @@
         '211': { type: 'Secular cantata (Coffee Cantata)', text: 'A funny little cantata, almost like a mini play. A father (Schlendrian) is annoyed because his daughter Lieschen loves drinking coffee so much. He tries everything to make her stop – but Lieschen simply loves her coffee too much!', fun: 'Bach performed this piece in a Leipzig coffee house, where he gave concerts with students. Coffee was a brand-new, exciting drink back then – some people even found it suspicious!', textdichter: 'Christian Friedrich Henrici (Picander)', anlass: 'Entertainment music for the Collegium Musicum at Zimmermann’s coffee house, Leipzig (around 1734)', besetzung: 'Soli STB (Lieschen, narrator, Schlendrian), transverse flute, 2 violins, viola, basso continuo (with harpsichord)' },
         '215': { type: 'Secular cantata (congratulatory cantata)', text: 'Festive music in honour of the Saxon elector, who had also become King of Poland. Bach and his students performed it in the evening by torchlight in the open air, while the king and his family listened.', fun: 'Bach had only three days to write this big festive music! Shortly after the performance his best trumpeter, Gottfried Reiche, died – some say the smoke of the torches and the strain were to blame.', textdichter: 'Johann Christoph Clauder', anlass: 'Anniversary of the royal election of Elector Friedrich August II (as King August III of Poland), 5 October 1734 (Leipzig)', besetzung: 'Soli STB, double choir SATB/SATB, 3 trumpets, timpani, 2 transverse flutes, 2 oboes, 2 oboes d’amore, 2 violins, viola, basso continuo' },
         4: { type: 'Easter cantata', text: 'One of Bach’s very first cantatas, for Easter. He was probably only 22 years old when he wrote it in Mühlhausen. Bach sets all seven verses of an old hymn – each verse sounds different.', fun: 'The melody and the text are by Martin Luther and are almost 200 years older than Bach’s cantata. Luther himself took them from an even much older Easter chant from the Middle Ages!', textdichter: 'Martin Luther (chorale, 1524) – all seven verses unchanged', anlass: 'Easter Sunday (probably Mühlhausen 1707/08; later Leipzig performance on 1 April 1725)', besetzung: 'Soli SATB, Choir SATB, [cornett, 3 trombones], 2 violins, 2 violas, basso continuo' },
+        150: { type: 'Sacred cantata', text: 'One of Bach’s very first sacred cantatas – many experts even think it is his earliest of all. Bach was only about 22 years old. The music uses very few instruments (just bassoon, two violins and basso continuo), and the choir takes centre stage: it sings in four of the seven movements.', fun: 'The famous composer Johannes Brahms loved the final movement of this cantata – a chaconne over a constantly repeating bass line – so much that almost 180 years later he made that very bass line the grand finale of his 4th Symphony!', textdichter: 'Unknown poet; movements 2, 4 and 6 are taken from Psalm 25 (verses 1–2, 5 and 15). In movements 3, 5 and 7 the initial letters spell the acrostic “Doctor Conrad Meckbach”.', anlass: 'Unknown – probably a dedicatory work for the Mühlhausen councilman Conrad Meckbach, possibly for his 70th birthday on 19 April 1707 (Mühlhausen, around 1707)', besetzung: 'Soli SATB, Choir SATB, bassoon, violin I, violin II, basso continuo' },
         106: { type: 'Funeral music', text: 'A wonderful funeral piece from Bach’s youth, probably written for a burial in Mühlhausen. Bach was only 22 or 23 years old – yet many people consider this one of his most beautiful works of all.', fun: 'Here Bach uses unusual instruments: two recorders and two violas da gamba, but no violins. That sounds very dark and special – he never uses such a combination again in any of his other vocal works!', textdichter: 'Anonymous compiler (Bible passages from the Old and New Testaments, combined with chorale verses by Luther, Adam Reusner and others)', anlass: 'Funeral service – thought to be the burial of the Mühlhausen mayor Adolph Strecker (1708) or that of Bach’s uncle Tobias Lämmerhirt (1707)', besetzung: 'Choir SATB, 2 recorders, 2 violas da gamba, basso continuo (no violins – a dark, “ancient” tone colour)' },
         71: { type: 'Town-council cantata', text: 'Bach composed this festive cantata for the day on which a new town council was elected in Mühlhausen – 4 February 1708. The town council spared no expense for the music: Bach scores the piece magnificently with trumpets, timpani and many other instruments.', fun: 'This is the only work of Bach’s for which a printed score appeared during his lifetime! Everything else was only copied out by hand – which is why many pieces are lost today.', textdichter: 'Anonymous (psalm and Bible verses, including from Psalm 74, combined with free poetry)', anlass: 'Council-inauguration service at St Mary’s church, Mühlhausen, 4 February 1708', besetzung: 'Soli SATB, Choir SATB, 2 recorders, 2 oboes, bassoon, 3 trumpets, timpani, obbligato organ, 2 violins, viola, violoncello, violone, basso continuo' },
         21: { type: 'Cantata', text: 'A large cantata that leads from sadness to joy – it has eleven movements and was sung in the service before and after the sermon. Bach performed it again and again throughout his life, adapting it to different places and singers.', fun: 'With this cantata Bach introduced himself in Hamburg in 1720. The old, famous organist Reincken was so delighted that he exclaimed: “I thought this art had died out – but in you it still lives!”', textdichter: 'Probably Salomon Franck (Weimar court poet); psalm verses + free poetry + chorale “Sei nun wieder zufrieden” (Georg Neumark)', anlass: '3rd Sunday after Trinity (17 June 1714); according to Bach’s own note also usable “per ogni tempo” (for any time)', besetzung: 'Soli STB (SB/TB/SATB), Choir SATB, oboe, bassoon, 3 trumpets, 4 timpani, 2 violins, viola, basso continuo, [4 trombones]' },
@@ -1065,6 +1076,7 @@
         '211': { type: 'Cantate profane (Cantate du café)', text: 'Une petite cantate amusante, presque comme une mini-pièce de théâtre. Un père (Schlendrian) s’énerve parce que sa fille Lieschen aime tant boire du café. Il essaie tout pour qu’elle arrête – mais Lieschen aime tout simplement trop son café !', fun: 'Bach a donné ce morceau dans un café de Leipzig, où il faisait des concerts avec des étudiants. Le café était alors une boisson toute nouvelle et passionnante – certains le trouvaient même suspect !', textdichter: 'Christian Friedrich Henrici (Picander)', anlass: 'Musique de divertissement pour le Collegium Musicum au café Zimmermann, Leipzig (vers 1734)', besetzung: 'Solistes STB (Lieschen, narrateur, Schlendrian), flûte traversière, 2 violons, alto, basse continue (avec clavecin)' },
         '215': { type: 'Cantate profane (cantate de félicitations)', text: 'Une musique de fête en l’honneur de l’électeur de Saxe, devenu aussi roi de Pologne. Bach et ses étudiants l’exécutèrent le soir à la lumière des torches, en plein air, tandis que le roi et sa famille écoutaient.', fun: 'Bach n’eut que trois jours pour écrire cette grande musique de fête ! Peu après l’exécution, son meilleur trompettiste, Gottfried Reiche, mourut – certains disent que la fumée des torches et l’effort en furent la cause.', textdichter: 'Johann Christoph Clauder', anlass: 'Anniversaire de l’élection royale de l’électeur Friedrich August II (comme roi Auguste III de Pologne), 5 octobre 1734 (Leipzig)', besetzung: 'Solistes STB, double chœur SATB/SATB, 3 trompettes, timbales, 2 flûtes traversières, 2 hautbois, 2 hautbois d’amour, 2 violons, alto, basse continue' },
         4: { type: 'Cantate de Pâques', text: 'L’une des toutes premières cantates de Bach, pour la fête de Pâques. Il n’avait probablement que 22 ans lorsqu’il l’écrivit à Mühlhausen. Bach met en musique les sept strophes d’un ancien cantique – chaque strophe sonne différemment.', fun: 'La mélodie et le texte sont de Martin Luther et sont presque 200 ans plus anciens que la cantate de Bach. Luther lui-même les a repris d’un chant de Pâques bien plus ancien encore, datant du Moyen Âge !', textdichter: 'Martin Luther (choral, 1524) – les sept strophes inchangées', anlass: 'Dimanche de Pâques (probablement Mühlhausen 1707/08 ; exécution ultérieure à Leipzig le 1ᵉʳ avril 1725)', besetzung: 'Solistes SATB, chœur SATB, [cornet à bouquin, 3 trombones], 2 violons, 2 altos, basse continue' },
+        150: { type: 'Cantate sacrée', text: 'L’une des toutes premières cantates sacrées de Bach – beaucoup de spécialistes la considèrent même comme la plus ancienne de toutes. Bach n’avait qu’environ 22 ans. La musique n’utilise que très peu d’instruments (un basson, deux violons et la basse continue), mais le chœur est au premier plan : il chante dans quatre des sept mouvements.', fun: 'Le célèbre compositeur Johannes Brahms aimait tellement le dernier mouvement de cette cantate – une chaconne sur une ligne de basse sans cesse répétée – que près de 180 ans plus tard il en fit le grand finale de sa 4ᵉ Symphonie !', textdichter: 'Poète inconnu ; les mouvements 2, 4 et 6 proviennent du Psaume 25 (versets 1-2, 5 et 15). Dans les mouvements 3, 5 et 7, les initiales forment l’acrostiche « Doctor Conrad Meckbach ».', anlass: 'Inconnue – probablement une œuvre de dédicace pour le conseiller municipal de Mühlhausen Conrad Meckbach, peut-être pour son 70ᵉ anniversaire le 19 avril 1707 (Mühlhausen, vers 1707)', besetzung: 'Solistes SATB, chœur SATB, basson, violon I, violon II, basse continue' },
         106: { type: 'Musique funèbre', text: 'Une magnifique musique funèbre de la jeunesse de Bach, probablement écrite pour un enterrement à Mühlhausen. Bach n’avait que 22 ou 23 ans – pourtant, beaucoup considèrent cette pièce comme l’une de ses plus belles œuvres.', fun: 'Bach utilise ici des instruments inhabituels : deux flûtes à bec et deux violes de gambe, mais pas de violons. Cela sonne très sombre et particulier – il ne réutilise plus jamais un tel mélange dans ses autres œuvres vocales !', textdichter: 'Compilateur anonyme (passages bibliques de l’Ancien et du Nouveau Testament, combinés à des strophes de chorals de Luther, d’Adam Reusner et d’autres)', anlass: 'Service funèbre – on suppose l’inhumation du bourgmestre de Mühlhausen Adolph Strecker (1708) ou celle de l’oncle de Bach, Tobias Lämmerhirt (1707)', besetzung: 'Chœur SATB, 2 flûtes à bec, 2 violes de gambe, basse continue (sans violons – une couleur sonore sombre et « ancienne »)' },
         71: { type: 'Cantate pour le renouvellement du conseil municipal', text: 'Bach composa cette cantate festive pour le jour où un nouveau conseil municipal fut élu à Mühlhausen – le 4 février 1708. Le conseil ne lésina pas sur la musique : Bach dote l’œuvre d’un effectif somptueux avec trompettes, timbales et beaucoup d’autres instruments.', fun: 'C’est la seule œuvre de Bach dont une partition imprimée parut de son vivant ! Tout le reste n’était recopié qu’à la main – c’est aussi pourquoi beaucoup de pièces sont perdues aujourd’hui.', textdichter: 'Anonyme (versets de psaumes et de la Bible, notamment du Psaume 74, combinés à de la poésie libre)', anlass: 'Service de renouvellement du conseil à l’église Sainte-Marie de Mühlhausen, le 4 février 1708', besetzung: 'Solistes SATB, chœur SATB, 2 flûtes à bec, 2 hautbois, basson, 3 trompettes, timbales, orgue obligé, 2 violons, alto, violoncelle, violone, basse continue' },
         21: { type: 'Cantate', text: 'Une grande cantate qui mène de la tristesse à la joie – elle compte onze mouvements et était chantée pendant l’office, avant et après le sermon. Bach l’a rejouée sans cesse tout au long de sa vie, en l’adaptant à différents lieux et chanteurs.', fun: 'Avec cette cantate, Bach se présenta à Hambourg en 1720. Le vieil et célèbre organiste Reincken fut si enthousiasmé qu’il s’écria : « Je croyais cet art éteint – mais en vous il vit encore ! »', textdichter: 'Probablement Salomon Franck (poète de la cour de Weimar) ; versets de psaumes + poésie libre + choral « Sei nun wieder zufrieden » (Georg Neumark)', anlass: '3ᵉ dimanche après la Trinité (17 juin 1714) ; selon une note de Bach lui-même, utilisable aussi « per ogni tempo » (en tout temps)', besetzung: 'Solistes STB (SB/TB/SATB), chœur SATB, hautbois, basson, 3 trompettes, 4 timbales, 2 violons, alto, basse continue, [4 trombones]' },
@@ -1183,6 +1195,7 @@
         '211': { type: 'Cantata profana (Cantata del caffè)', text: 'Una divertente cantatina, quasi come un piccolo spettacolo teatrale. Un padre (Schlendrian) si arrabbia perché sua figlia Lieschen ama tanto bere il caffè. Tenta di tutto per farla smettere – ma Lieschen ama semplicemente troppo il suo caffè!', fun: 'Bach eseguì questo brano in un caffè di Lipsia, dove teneva concerti con gli studenti. Il caffè era allora una bevanda nuovissima ed emozionante – alcuni la trovavano persino sospetta!', textdichter: 'Christian Friedrich Henrici (Picander)', anlass: 'Musica d’intrattenimento per il Collegium Musicum al caffè Zimmermann, Lipsia (intorno al 1734)', besetzung: 'Soli STB (Lieschen, narratore, Schlendrian), flauto traverso, 2 violini, viola, basso continuo (con clavicembalo)' },
         '215': { type: 'Cantata profana (cantata di auguri)', text: 'Una musica di festa in onore dell’elettore di Sassonia, divenuto anche re di Polonia. Bach e i suoi studenti la eseguirono di sera a lume di torce, all’aperto, mentre il re e la sua famiglia ascoltavano.', fun: 'Bach ebbe solo tre giorni per scrivere questa grande musica di festa! Poco dopo l’esecuzione morì il suo miglior trombettista, Gottfried Reiche – alcuni raccontano che ne furono causa il fumo delle torce e lo sforzo.', textdichter: 'Johann Christoph Clauder', anlass: 'Anniversario dell’elezione a re dell’elettore Friedrich August II (come re Augusto III di Polonia), 5 ottobre 1734 (Lipsia)', besetzung: 'Soli STB, doppio coro SATB/SATB, 3 trombe, timpani, 2 flauti traversi, 2 oboi, 2 oboi d’amore, 2 violini, viola, basso continuo' },
         4: { type: 'Cantata pasquale', text: 'Una delle primissime cantate di Bach, per la Pasqua. Probabilmente aveva solo 22 anni quando la scrisse a Mühlhausen. Bach mette in musica tutte e sette le strofe di un antico corale – ogni strofa suona diversa.', fun: 'La melodia e il testo sono di Martin Lutero e sono quasi 200 anni più antichi della cantata di Bach. Lutero stesso li riprese da un canto pasquale ancora molto più antico, del Medioevo!', textdichter: 'Martin Lutero (corale, 1524) – tutte e sette le strofe invariate', anlass: 'Domenica di Pasqua (probabilmente Mühlhausen 1707/08; successiva esecuzione a Lipsia il 1º aprile 1725)', besetzung: 'Soli SATB, coro SATB, [cornetto, 3 tromboni], 2 violini, 2 viole, basso continuo' },
+        150: { type: 'Cantata sacra', text: 'Una delle primissime cantate sacre di Bach – molti studiosi la ritengono addirittura la sua più antica in assoluto. Bach aveva solo circa 22 anni. La musica impiega pochissimi strumenti (solo fagotto, due violini e basso continuo), ma il coro è protagonista: canta in quattro dei sette movimenti.', fun: 'Il celebre compositore Johannes Brahms amava a tal punto l’ultimo movimento di questa cantata – una ciaccona su una linea di basso continuamente ripetuta – che quasi 180 anni dopo ne fece il grande finale della sua Sinfonia n. 4!', textdichter: 'Poeta sconosciuto; i movimenti 2, 4 e 6 provengono dal Salmo 25 (versetti 1-2, 5 e 15). Nei movimenti 3, 5 e 7 le iniziali formano l’acrostico «Doctor Conrad Meckbach».', anlass: 'Sconosciuta – probabilmente un’opera dedicatoria per il consigliere comunale di Mühlhausen Conrad Meckbach, forse per il suo 70º compleanno il 19 aprile 1707 (Mühlhausen, verso il 1707)', besetzung: 'Soli SATB, coro SATB, fagotto, violino I, violino II, basso continuo' },
         106: { type: 'Musica funebre', text: 'Una bellissima musica funebre della giovinezza di Bach, probabilmente scritta per un funerale a Mühlhausen. Bach aveva solo 22 o 23 anni – eppure molti considerano questo brano una delle sue opere più belle in assoluto.', fun: 'Qui Bach usa strumenti insoliti: due flauti dolci e due viole da gamba, ma nessun violino. Il suono è molto scuro e particolare – una tale combinazione non la riutilizza mai più in nessun’altra delle sue opere vocali!', textdichter: 'Compilatore anonimo (passi biblici dell’Antico e del Nuovo Testamento, combinati con strofe di corali di Lutero, Adam Reusner e altri)', anlass: 'Funzione funebre – si suppone la sepoltura del borgomastro di Mühlhausen Adolph Strecker (1708) o quella dello zio di Bach, Tobias Lämmerhirt (1707)', besetzung: 'Coro SATB, 2 flauti dolci, 2 viole da gamba, basso continuo (senza violini – un colore sonoro scuro e «antico»)' },
         71: { type: 'Cantata per il rinnovo del consiglio cittadino', text: 'Bach compose questa cantata festiva per il giorno in cui a Mühlhausen fu eletto un nuovo consiglio cittadino – il 4 febbraio 1708. Il consiglio non badò a spese per la musica: Bach dota il brano di un organico sontuoso con trombe, timpani e molti altri strumenti.', fun: 'È l’unica opera di Bach di cui durante la sua vita uscì una partitura a stampa! Tutto il resto veniva copiato solo a mano – ecco perché molti brani oggi sono perduti.', textdichter: 'Anonimo (versetti di salmi e biblici, tra cui dal Salmo 74, combinati con poesia libera)', anlass: 'Funzione per il rinnovo del consiglio nella chiesa di Santa Maria a Mühlhausen, 4 febbraio 1708', besetzung: 'Soli SATB, coro SATB, 2 flauti dolci, 2 oboi, fagotto, 3 trombe, timpani, organo obbligato, 2 violini, viola, violoncello, violone, basso continuo' },
         21: { type: 'Cantata', text: 'Una grande cantata che conduce dalla tristezza alla gioia – ha undici movimenti e veniva cantata durante la funzione, prima e dopo la predica. Bach la eseguì più volte per tutta la vita, adattandola a luoghi e cantanti diversi.', fun: 'Con questa cantata Bach si presentò ad Amburgo nel 1720. L’anziano e celebre organista Reincken ne fu così entusiasta che esclamò: «Credevo che quest’arte si fosse estinta – ma in voi vive ancora!»', textdichter: 'Probabilmente Salomon Franck (poeta di corte di Weimar); versetti di salmi + poesia libera + corale «Sei nun wieder zufrieden» (Georg Neumark)', anlass: '3ª domenica dopo la Trinità (17 giugno 1714); secondo un’annotazione dello stesso Bach utilizzabile anche «per ogni tempo»', besetzung: 'Soli STB (SB/TB/SATB), coro SATB, oboe, fagotto, 3 trombe, 4 timpani, 2 violini, viola, basso continuo, [4 tromboni]' },
@@ -1301,6 +1314,7 @@
         '211': { type: 'Cantata profana (Cantata del café)', text: 'Una pequeña cantata divertida, casi como una mini obra de teatro. Un padre (Schlendrian) se enfada porque a su hija Lieschen le encanta beber café. Lo intenta todo para que lo deje, ¡pero a Lieschen le gusta demasiado su café!', fun: '¡Bach interpretó esta pieza en un café de Leipzig, donde daba conciertos con estudiantes. El café era entonces una bebida nueva y emocionante; algunos incluso lo encontraban sospechoso!', textdichter: 'Christian Friedrich Henrici (Picander)', anlass: 'Música de entretenimiento para el Collegium Musicum en el café Zimmermann, Leipzig (hacia 1734)', besetzung: 'Solistas STB (Lieschen, narrador, Schlendrian), flauta travesera, 2 violines, viola, bajo continuo (con clave)' },
         '215': { type: 'Cantata profana (cantata de felicitación)', text: 'Una música festiva en honor del elector de Sajonia, que se había convertido también en rey de Polonia. Bach y sus estudiantes la interpretaron por la noche a la luz de las antorchas, al aire libre, mientras el rey y su familia escuchaban.', fun: '¡Bach solo tuvo tres días para escribir esta gran música festiva! Poco después de la interpretación murió su mejor trompetista, Gottfried Reiche; algunos dicen que el humo de las antorchas y el esfuerzo tuvieron la culpa.', textdichter: 'Johann Christoph Clauder', anlass: 'Aniversario de la elección como rey del elector Friedrich August II (como rey Augusto III de Polonia), 5 de octubre de 1734 (Leipzig)', besetzung: 'Solistas STB, doble coro SATB/SATB, 3 trompetas, timbales, 2 flautas traveseras, 2 oboes, 2 oboes d’amore, 2 violines, viola, bajo continuo' },
         4: { type: 'Cantata de Pascua', text: 'Una de las primerísimas cantatas de Bach, para la fiesta de Pascua. Probablemente solo tenía 22 años cuando la escribió en Mühlhausen. Bach pone música a las siete estrofas de un antiguo coral: cada estrofa suena distinta.', fun: '¡La melodía y el texto son de Martín Lutero y son casi 200 años más antiguos que la cantata de Bach. El propio Lutero los tomó de un canto pascual aún mucho más antiguo, de la Edad Media!', textdichter: 'Martín Lutero (coral, 1524) – las siete estrofas sin cambios', anlass: 'Domingo de Pascua (probablemente Mühlhausen 1707/08; interpretación posterior en Leipzig el 1 de abril de 1725)', besetzung: 'Solistas SATB, coro SATB, [corneta, 3 trombones], 2 violines, 2 violas, bajo continuo' },
+        150: { type: 'Cantata sacra', text: 'Una de las primerísimas cantatas sacras de Bach: muchos expertos la consideran incluso la más antigua de todas. Bach solo tenía unos 22 años. La música emplea muy pocos instrumentos (solo fagot, dos violines y bajo continuo), pero el coro es el protagonista: canta en cuatro de los siete movimientos.', fun: '¡Al célebre compositor Johannes Brahms le gustaba tanto el último movimiento de esta cantata –una chacona sobre una línea de bajo que se repite sin cesar– que casi 180 años después la convirtió en el gran final de su 4ª Sinfonía!', textdichter: 'Poeta desconocido; los movimientos 2, 4 y 6 proceden del Salmo 25 (versículos 1-2, 5 y 15). En los movimientos 3, 5 y 7 las iniciales forman el acróstico «Doctor Conrad Meckbach».', anlass: 'Desconocida: probablemente una obra de dedicatoria para el concejal de Mühlhausen Conrad Meckbach, quizá para su 70.º cumpleaños el 19 de abril de 1707 (Mühlhausen, hacia 1707)', besetzung: 'Solistas SATB, coro SATB, fagot, violín I, violín II, bajo continuo' },
         106: { type: 'Música fúnebre', text: 'Una hermosísima música fúnebre de la juventud de Bach, probablemente escrita para un entierro en Mühlhausen. Bach solo tenía 22 o 23 años; aun así, muchos consideran esta pieza una de sus obras más bellas.', fun: '¡Aquí Bach utiliza instrumentos poco habituales: dos flautas de pico y dos violas da gamba, pero ningún violín. Suena muy oscuro y especial; nunca vuelve a usar tal combinación en ninguna otra de sus obras vocales!', textdichter: 'Compilador anónimo (pasajes bíblicos del Antiguo y del Nuevo Testamento, combinados con estrofas de corales de Lutero, Adam Reusner y otros)', anlass: 'Oficio fúnebre; se supone el entierro del alcalde de Mühlhausen Adolph Strecker (1708) o el del tío de Bach, Tobias Lämmerhirt (1707)', besetzung: 'Coro SATB, 2 flautas de pico, 2 violas da gamba, bajo continuo (sin violines: un color sonoro oscuro y «antiguo»)' },
         71: { type: 'Cantata para la renovación del consejo municipal', text: 'Bach compuso esta cantata festiva para el día en que en Mühlhausen se eligió un nuevo consejo municipal: el 4 de febrero de 1708. El consejo no escatimó en la música: Bach dota a la pieza de una plantilla suntuosa con trompetas, timbales y muchos otros instrumentos.', fun: '¡Es la única obra de Bach de la que apareció una partitura impresa en vida! Todo lo demás solo se copiaba a mano; por eso muchas piezas están hoy perdidas.', textdichter: 'Anónimo (versículos de salmos y bíblicos, entre ellos del Salmo 74, combinados con poesía libre)', anlass: 'Oficio de renovación del consejo en la iglesia de Santa María de Mühlhausen, 4 de febrero de 1708', besetzung: 'Solistas SATB, coro SATB, 2 flautas de pico, 2 oboes, fagot, 3 trompetas, timbales, órgano obligado, 2 violines, viola, violonchelo, violone, bajo continuo' },
         21: { type: 'Cantata', text: 'Una gran cantata que conduce de la tristeza a la alegría: tiene once movimientos y se cantaba en el oficio, antes y después del sermón. Bach la interpretó una y otra vez a lo largo de su vida, adaptándola a distintos lugares y cantantes.', fun: 'Con esta cantata Bach se presentó en Hamburgo en 1720. El anciano y famoso organista Reincken quedó tan entusiasmado que exclamó: «¡Creía que este arte se había extinguido, pero en usted aún vive!»', textdichter: 'Probablemente Salomon Franck (poeta de la corte de Weimar); versículos de salmos + poesía libre + coral «Sei nun wieder zufrieden» (Georg Neumark)', anlass: '3.er domingo después de la Trinidad (17 de junio de 1714); según una nota del propio Bach, también utilizable «per ogni tempo» (para cualquier tiempo)', besetzung: 'Solistas STB (SB/TB/SATB), coro SATB, oboe, fagot, 3 trompetas, 4 timbales, 2 violines, viola, bajo continuo, [4 trombones]' },
@@ -1419,6 +1433,7 @@
         '211': { type: 'Cantata profana (Cantata do café)', text: 'Uma pequena cantata divertida, quase como uma mini peça de teatro. Um pai (Schlendrian) irrita-se porque a sua filha Lieschen gosta tanto de beber café. Tenta tudo para que ela pare – mas Lieschen gosta simplesmente demasiado do seu café!', fun: 'Bach apresentou esta peça num café de Leipzig, onde dava concertos com estudantes. O café era na altura uma bebida novíssima e empolgante – algumas pessoas até o achavam suspeito!', textdichter: 'Christian Friedrich Henrici (Picander)', anlass: 'Música de entretenimento para o Collegium Musicum no café Zimmermann, Leipzig (por volta de 1734)', besetzung: 'Solistas STB (Lieschen, narrador, Schlendrian), flauta transversal, 2 violinos, viola, baixo contínuo (com cravo)' },
         '215': { type: 'Cantata profana (cantata de felicitações)', text: 'Uma música de festa em honra do eleitor da Saxónia, que se tornara também rei da Polónia. Bach e os seus estudantes apresentaram-na à noite, à luz das tochas, ao ar livre, enquanto o rei e a sua família ouviam.', fun: 'Bach teve apenas três dias para escrever esta grande música de festa! Pouco depois da apresentação morreu o seu melhor trompetista, Gottfried Reiche – há quem diga que o fumo das tochas e o esforço tiveram a culpa.', textdichter: 'Johann Christoph Clauder', anlass: 'Aniversário da eleição como rei do eleitor Friedrich August II (como rei Augusto III da Polónia), 5 de outubro de 1734 (Leipzig)', besetzung: 'Solistas STB, coro duplo SATB/SATB, 3 trombetas, tímpanos, 2 flautas transversais, 2 oboés, 2 oboés d’amore, 2 violinos, viola, baixo contínuo' },
         4: { type: 'Cantata da Páscoa', text: 'Uma das primeiríssimas cantatas de Bach, para a festa da Páscoa. Provavelmente tinha apenas 22 anos quando a escreveu em Mühlhausen. Bach põe em música as sete estrofes de um antigo coral – cada estrofe soa diferente.', fun: 'A melodia e o texto são de Martinho Lutero e são quase 200 anos mais antigos do que a cantata de Bach. O próprio Lutero retirou-os de um canto pascal ainda muito mais antigo, da Idade Média!', textdichter: 'Martinho Lutero (coral, 1524) – as sete estrofes inalteradas', anlass: 'Domingo de Páscoa (provavelmente Mühlhausen 1707/08; execução posterior em Leipzig a 1 de abril de 1725)', besetzung: 'Solistas SATB, coro SATB, [corneta, 3 trombones], 2 violinos, 2 violas, baixo contínuo' },
+        150: { type: 'Cantata sacra', text: 'Uma das primeiríssimas cantatas sacras de Bach – muitos especialistas consideram-na mesmo a mais antiga de todas. Bach tinha apenas cerca de 22 anos. A música usa pouquíssimos instrumentos (apenas fagote, dois violinos e baixo contínuo), mas o coro está em primeiro plano: canta em quatro dos sete andamentos.', fun: 'O célebre compositor Johannes Brahms gostava tanto do último andamento desta cantata – uma chacona sobre uma linha de baixo que se repete sem parar – que quase 180 anos depois a transformou no grande final da sua 4.ª Sinfonia!', textdichter: 'Poeta desconhecido; os andamentos 2, 4 e 6 provêm do Salmo 25 (versículos 1-2, 5 e 15). Nos andamentos 3, 5 e 7 as iniciais formam o acróstico «Doctor Conrad Meckbach».', anlass: 'Desconhecida – provavelmente uma obra de dedicatória para o vereador de Mühlhausen Conrad Meckbach, possivelmente para o seu 70.º aniversário a 19 de abril de 1707 (Mühlhausen, por volta de 1707)', besetzung: 'Solistas SATB, coro SATB, fagote, violino I, violino II, baixo contínuo' },
         106: { type: 'Música fúnebre', text: 'Uma belíssima música fúnebre da juventude de Bach, provavelmente escrita para um funeral em Mühlhausen. Bach tinha apenas 22 ou 23 anos – ainda assim, muitos consideram esta peça uma das suas obras mais belas.', fun: 'Aqui Bach utiliza instrumentos invulgares: duas flautas de bisel e duas violas da gamba, mas nenhum violino. Soa muito escuro e particular – nunca mais usa tal combinação em nenhuma das suas outras obras vocais!', textdichter: 'Compilador anónimo (passagens bíblicas do Antigo e do Novo Testamento, combinadas com estrofes de corais de Lutero, Adam Reusner e outros)', anlass: 'Ofício fúnebre – supõe-se o enterro do burgomestre de Mühlhausen Adolph Strecker (1708) ou o do tio de Bach, Tobias Lämmerhirt (1707)', besetzung: 'Coro SATB, 2 flautas de bisel, 2 violas da gamba, baixo contínuo (sem violinos – uma cor sonora escura e «antiga»)' },
         71: { type: 'Cantata para a renovação do conselho municipal', text: 'Bach compôs esta cantata festiva para o dia em que, em Mühlhausen, foi eleito um novo conselho municipal – a 4 de fevereiro de 1708. O conselho não poupou na música: Bach dota a peça de uma formação sumptuosa, com trombetas, tímpanos e muitos outros instrumentos.', fun: 'É a única obra de Bach da qual, em vida, saiu uma partitura impressa! Tudo o resto era copiado apenas à mão – é também por isso que muitas peças estão hoje perdidas.', textdichter: 'Anónimo (versículos de salmos e bíblicos, entre eles do Salmo 74, combinados com poesia livre)', anlass: 'Ofício de renovação do conselho na igreja de Santa Maria de Mühlhausen, 4 de fevereiro de 1708', besetzung: 'Solistas SATB, coro SATB, 2 flautas de bisel, 2 oboés, fagote, 3 trombetas, tímpanos, órgão obrigado, 2 violinos, viola, violoncelo, violone, baixo contínuo' },
         21: { type: 'Cantata', text: 'Uma grande cantata que conduz da tristeza à alegria – tem onze andamentos e era cantada no culto, antes e depois do sermão. Bach executou-a vezes sem conta ao longo da sua vida, adaptando-a a diferentes lugares e cantores.', fun: 'Com esta cantata, Bach apresentou-se em Hamburgo em 1720. O velho e famoso organista Reincken ficou tão encantado que exclamou: «Julgava que esta arte se tinha extinguido – mas em si ela ainda vive!»', textdichter: 'Provavelmente Salomon Franck (poeta da corte de Weimar); versículos de salmos + poesia livre + coral «Sei nun wieder zufrieden» (Georg Neumark)', anlass: '3.º domingo depois da Trindade (17 de junho de 1714); segundo uma nota do próprio Bach, também utilizável «per ogni tempo» (para qualquer tempo)', besetzung: 'Solistas STB (SB/TB/SATB), coro SATB, oboé, fagote, 3 trombetas, 4 tímpanos, 2 violinos, viola, baixo contínuo, [4 trombones]' },
@@ -1580,6 +1595,24 @@
         hoer: [
           { label: 'Gesamtaufnahme René Jacobs (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=uQNBDsDdLeE', quelle: 'Netherlands Bach Society' },
           { label: 'Werkeinführung Rudolf Lutz (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=ux8FtnryzG4', quelle: 'J. S. Bach-Stiftung' }
+        ]
+      },
+      {
+        bwv: 150, year: 1707, station: 'muehlhausen',
+        title: 'Nach dir, Herr, verlanget mich',
+        type: 'Geistliche Kantate',
+        text: 'Eine von Bachs allerersten geistlichen Kantaten - viele Fachleute halten sie sogar für seine früheste überhaupt. Bach war da erst um die 22 Jahre alt. Die Musik kommt mit ganz wenigen Instrumenten aus (nur Fagott, zwei Geigen und Basso continuo), dafür steht der Chor im Mittelpunkt: In vier der sieben Sätze singt er.',
+        fun: 'Der berühmte Komponist Johannes Brahms war vom letzten Satz dieser Kantate - einer Chaconne über einer immer wiederkehrenden Basslinie - so begeistert, dass er fast 180 Jahre später genau diese Basslinie zum großen Finale seiner 4. Sinfonie machte!',
+        textdichter: 'Unbekannter Dichter; die Sätze 2, 4 und 6 stammen aus Psalm 25 (Verse 1-2, 5 und 15). In den Sätzen 3, 5 und 7 ergeben die Anfangsbuchstaben das Akrostichon "Doctor Conrad Meckbach".',
+        anlass: 'Unbekannt - vermutlich eine Widmungskomposition für den Mühlhäuser Ratsherrn Conrad Meckbach, möglicherweise zu dessen 70. Geburtstag am 19. April 1707 (Mühlhausen, um 1707)',
+        besetzung: 'Soli SATB, Coro SATB, Fagott, Violine I, Violine II, Basso continuo',
+        dauer: '16 min',
+        quelle: '',
+        quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000184',
+        funquelle: 'Bach digital · Emmanuel Music (BWV 150)',
+        hoer: [
+          { label: 'Gesamtaufnahme Shunske Sato (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=lC8UErdK_XE', quelle: 'Netherlands Bach Society' },
+          { label: 'Schluss-Chaconne „Meine Tage in dem Leide" (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=1qWdALq02qo', quelle: 'Netherlands Bach Society' }
         ]
       },
       {
@@ -1822,7 +1855,10 @@
         dauer: '40 min',
         quelle: 'BWV 208.1',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000261',
-        funquelle: 'Bach digital'
+        funquelle: 'Bach digital',
+        hoer: [
+          { label: 'Gesamtaufnahme Masaaki Suzuki (Bach Collegium Japan)', url: 'https://www.youtube.com/watch?v=6pba2VMHp-s', quelle: 'Bach Collegium Japan · M. Suzuki' }
+        ]
       },
       {
         bwv: '134a', year: 1719, station: 'koethen',
@@ -1836,7 +1872,10 @@
         dauer: '28 min',
         quelle: 'BWV 134.1',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000166',
-        funquelle: 'Bach digital · BWV 134'
+        funquelle: 'Bach digital · BWV 134',
+        hoer: [
+          { label: 'Gesamtaufnahme Masaaki Suzuki (Bach Collegium Japan)', url: 'https://www.youtube.com/watch?v=HJ60JMy4uH4', quelle: 'Bach Collegium Japan · M. Suzuki' }
+        ]
       },
       {
         bwv: '173a', year: 1722, station: 'koethen',
@@ -1850,7 +1889,10 @@
         dauer: '28 min',
         quelle: 'BWV 173.1',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000211',
-        funquelle: 'Bach digital · BWV 173'
+        funquelle: 'Bach digital · BWV 173',
+        hoer: [
+          { label: 'Gesamtaufnahme der Kantate (BWV 173a)', url: 'https://www.youtube.com/watch?v=eoaqCd26gf0', quelle: 'YouTube (Interpret nicht gesichert)' }
+        ]
       },
       {
         bwv: '213', year: 1733, station: 'leipzig',
@@ -1864,7 +1906,10 @@
         dauer: '55 min',
         quelle: '',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000269',
-        funquelle: 'Bach digital · BWV 248'
+        funquelle: 'Bach digital · BWV 248',
+        hoer: [
+          { label: 'Gesamtaufnahme René Jacobs (Akademie für Alte Musik Berlin)', url: 'https://www.youtube.com/watch?v=Ua6s9N26NGg', quelle: 'René Jacobs' }
+        ]
       },
       {
         bwv: '214', year: 1733, station: 'leipzig',
@@ -1878,7 +1923,10 @@
         dauer: '35 min',
         quelle: '',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000270',
-        funquelle: 'Bach digital · BWV 248'
+        funquelle: 'Bach digital · BWV 248',
+        hoer: [
+          { label: 'Gesamtaufnahme Ton Koopman (Amsterdam Baroque Orchestra & Choir)', url: 'https://www.youtube.com/watch?v=_3jfXq62wtA', quelle: 'Ton Koopman' }
+        ]
       },
       {
         bwv: '211', year: 1734, station: 'leipzig',
@@ -1892,7 +1940,11 @@
         dauer: '25 min',
         quelle: '',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000267',
-        funquelle: 'Bach digital'
+        funquelle: 'Bach digital',
+        hoer: [
+          { label: 'Gesamtaufnahme Shunske Sato (Netherlands Bach Society)', url: 'https://www.youtube.com/watch?v=B6Loyexw3uk', quelle: 'Netherlands Bach Society' },
+          { label: 'Workshop zur Kantate (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=_q8KekdlDrA', quelle: 'J. S. Bach-Stiftung' }
+        ]
       },
       {
         bwv: '215', year: 1734, station: 'leipzig',
@@ -1906,7 +1958,10 @@
         dauer: '40 min',
         quelle: '',
         quelle_url: 'https://www.bach-digital.de/receive/BachDigitalWork_work_00000271',
-        funquelle: 'Bach digital · Bach-Dokumente'
+        funquelle: 'Bach digital · Bach-Dokumente',
+        hoer: [
+          { label: 'Gesamtaufnahme Rudolf Lutz (J. S. Bach-Stiftung)', url: 'https://www.youtube.com/watch?v=8da0KuW3SE0', quelle: 'J. S. Bach-Stiftung' }
+        ]
       }
     ];
 
@@ -1982,43 +2037,92 @@
 
     const timeline = document.getElementById('timeline');
 
-    // Lifespan bars (Hintergrund je Station)
+    // Werke nach Jahr sortieren und kollisionsfrei in Ebenen (Lanes) verteilen,
+    // damit sich die BWV-Beschriftungen nicht überlappen (z. B. mehrere Werke
+    // im selben Jahr wie 1707, 1708 oder 1733/34/35).
+    const tlWorks = works.slice().sort((a, b) => a.year - b.year);
+    const GAP = 3.0;                 // Mindestabstand in % zwischen zwei Labels
+    const laneLastX = [];            // zuletzt belegte x-Position je Ebene
+    const laneOf = [];
+    tlWorks.forEach((w, i) => {
+      const x = yearToPercent(w.year);
+      let lane = 0;
+      while (lane < laneLastX.length && (x - laneLastX[lane]) < GAP) lane++;
+      laneLastX[lane] = x;
+      laneOf[i] = lane;
+    });
+    // Ebene -> Seite (unter/über der Achse) und Stufe
+    const sideOf = laneOf.map(l => (l % 2 === 0 ? 'below' : 'above'));
+    const tierOf = laneOf.map(l => Math.floor(l / 2));
+    let maxAbove = 0, maxBelow = 0, hasAbove = false;
+    laneOf.forEach((l, i) => {
+      if (sideOf[i] === 'above') { hasAbove = true; maxAbove = Math.max(maxAbove, tierOf[i]); }
+      else maxBelow = Math.max(maxBelow, tierOf[i]);
+    });
+
+    // Geometrie berechnen und Höhe/Breite des Zeitstrahls anpassen
+    const ROW = 25, LABEL_H = 20, DOT = 20, PAD = 12;
+    const dotCenter = hasAbove ? (PAD + 37 + maxAbove * ROW) : (PAD + 16);
+    const axisY = dotCenter - 3;
+    const dotTop = dotCenter - DOT / 2;
+    const yearLabelTop = dotCenter + DOT / 2 + 5;
+    const belowStart = dotCenter + DOT / 2 + 21;
+    const timelineHeight = belowStart + maxBelow * ROW + LABEL_H + PAD;
+    timeline.style.minWidth = '2200px';
+    timeline.style.height = timelineHeight + 'px';
+
+    // Lebensabschnitts-Balken (Hintergrund je Station), knapp über der Achse
     stations.forEach(s => {
       const bar = document.createElement('div');
       bar.className = 'lifespan-bar';
       bar.style.left = yearToPercent(s.startYear) + '%';
       bar.style.width = (yearToPercent(s.endYear) - yearToPercent(s.startYear)) + '%';
+      bar.style.top = (axisY - 18) + 'px';
       bar.style.background = s.colorHex;
       bar.title = `${s.name} (${s.years})`;
       timeline.appendChild(bar);
     });
 
-    // Achse + Jahreslabels
+    // Achse
     const axis = document.createElement('div');
     axis.className = 'timeline-axis';
+    axis.style.top = axisY + 'px';
     timeline.appendChild(axis);
 
+    // Jahreslabels direkt unter der Achse
     [1685, 1695, 1705, 1715, 1725, 1735, 1745, 1750].forEach(y => {
       const lbl = document.createElement('div');
       lbl.className = 'year-label';
       lbl.style.left = yearToPercent(y) + '%';
+      lbl.style.top = yearLabelTop + 'px';
       lbl.textContent = y;
       timeline.appendChild(lbl);
     });
 
-    // Werke - abwechselnd oben/unten zur besseren Lesbarkeit
-    works.sort((a, b) => a.year - b.year).forEach((w, idx) => {
+    // Werke als gestapelte Ereignisse (Punkt auf der Achse, Label in seiner Ebene)
+    tlWorks.forEach((w, idx) => {
       const station = stations.find(s => s.id === w.station);
+      const tier = tierOf[idx];
       const ev = document.createElement('div');
-      ev.className = 'timeline-event' + (idx % 2 === 0 ? ' above' : '');
+      ev.className = 'timeline-event';
       ev.style.left = yearToPercent(w.year) + '%';
-      ev.style.top = idx % 2 === 0 ? '0' : '78px';
-      ev.style.height = '78px';
       ev.dataset.bwv = w.bwv;
 
+      let labelTop, connTop, connH;
+      if (sideOf[idx] === 'below') {
+        labelTop = belowStart + tier * ROW;
+        connTop = dotCenter;
+        connH = labelTop - dotCenter;
+      } else {
+        labelTop = dotCenter - DOT / 2 - 6 - LABEL_H - tier * ROW;
+        connTop = labelTop + LABEL_H;
+        connH = dotCenter - connTop;
+      }
+
       ev.innerHTML = `
-        <div class="event-dot" style="background:${station.colorHex}"></div>
-        <div class="event-label">BWV ${w.bwv}</div>
+        <div class="event-connector" style="top:${connTop}px;height:${Math.max(0, connH)}px"></div>
+        <div class="event-dot" style="top:${dotTop}px;background:${station.colorHex}"></div>
+        <div class="event-label" style="top:${labelTop}px">BWV ${w.bwv}</div>
       `;
       ev.title = `${w.title} (${w.year})`;
       ev.addEventListener('click', () => selectWork(w.bwv));
