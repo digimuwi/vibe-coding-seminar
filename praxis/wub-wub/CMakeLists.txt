@@ -14,7 +14,7 @@ FetchContent_MakeAvailable(JUCE)
 juce_add_plugin(WubWub
     COMPANY_NAME "VibeCoding"
     IS_SYNTH FALSE
-    NEEDS_MIDI_INPUT TRUE
+    NEEDS_MIDI_INPUT FALSE
     NEEDS_MIDI_OUTPUT FALSE
     PLUGIN_MANUFACTURER_CODE Vibe
     PLUGIN_CODE WbWb

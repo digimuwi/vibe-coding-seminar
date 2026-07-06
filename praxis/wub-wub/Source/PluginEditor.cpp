@@ -4,7 +4,7 @@
 WubWubEditor::WubWubEditor(WubWubProcessor& p)
     : AudioProcessorEditor(p), processor(p)
 {
-    setSize(500, 620);
+    setSize(500, 700);
 
     htmlFile = juce::File::getSpecialLocation(juce::File::tempDirectory)
                   .getChildFile("wubwub_ui.html");
@@ -32,6 +32,28 @@ WubWubEditor::~WubWubEditor()
 void WubWubEditor::timerCallback()
 {
     juce::String js;
+
+    // When DAW loads a project, push all saved state to the JS UI
+    if (processor.stateJustLoaded.exchange(false))
+    {
+        js += "mix=" + juce::String((int)processor.mix.load()) + ";drawK();";
+        js += "threshold=" + juce::String((int)processor.threshold.load()) + ";drawT();";
+        js += "if(typeof setMode==='function')setMode(" + juce::String(processor.triggerMode.load()) + ");";
+        js += "if(typeof setBeat==='function')setBeat(" + juce::String(processor.beatDiv.load()) + ");";
+        js += "if(typeof setGainSmooth==='function')setGainSmooth(" + juce::String(processor.gainSmoothing.load() ? 1 : 0) + ");";
+
+        if (processor.savedTableValid)
+        {
+            juce::String tblJs = "tbl=[";
+            for (int i = 0; i < kTableSize; ++i)
+            {
+                if (i > 0) tblJs += ",";
+                tblJs += juce::String(processor.savedTable[i] * 100.0f, 1);
+            }
+            tblJs += "];if(typeof drawE==='function')drawE();";
+            js += tblJs;
+        }
+    }
 
     // Fire trigger notification — JS animates playhead independently via requestAnimationFrame
     if (processor.justTriggered.exchange(false))
@@ -72,6 +94,7 @@ void WubWubEditor::handleCommand(const juce::String& url)
     else if (param == "mode") processor.triggerMode.store(value.getIntValue());
     else if (param == "beat") processor.beatDiv.store(value.getIntValue());
     else if (param == "threshold") processor.threshold.store(value.getFloatValue());
+    else if (param == "gainSmooth") processor.gainSmoothing.store(value.getIntValue() != 0);
     else if (param == "table")
     {
         float table[kTableSize];
