@@ -438,12 +438,6 @@ function drawEnv(){
   ctx.save();ctx.shadowColor='rgba(255,255,0,.5)';ctx.shadowBlur=8;ctx.beginPath();
   for(var i=0;i<N2;i++){var tx=p+(ew-2*p)*(i/(N2-1)),ty=eh-p-(eh-2*p)*tbl2[i];if(i===0)ctx.moveTo(tx,ty);else ctx.lineTo(tx,ty)}
   ctx.strokeStyle='#ffff00';ctx.lineWidth=2.5;ctx.stroke();ctx.restore();
-  // Control dots for smooth preset
-  var pts=[{x:0,y:.5-.5*Math.cos(0)},{x:.25,y:.5-.5*Math.cos(pi*.25)},{x:.5,y:.5},{x:.75,y:.5-.5*Math.cos(pi*.75)},{x:1,y:1}];
-  for(var i=0;i<pts.length;i++){
-    var px=p+(ew-2*p)*pts[i].x,py=eh-p-(eh-2*p)*pts[i].y;
-    ctx.save();ctx.shadowColor='rgba(255,255,0,.5)';ctx.shadowBlur=8;ctx.beginPath();ctx.arc(px,py,5,0,2*pi);ctx.fillStyle='#ffff00';ctx.fill();ctx.restore();
-  }
   if(envPhase>0){
     var phx=p+(ew-2*p)*envPhase;
     ctx.save();ctx.strokeStyle='rgba(0,255,185,.9)';ctx.lineWidth=2.5;ctx.shadowColor='rgba(0,255,185,.5)';ctx.shadowBlur=12;
