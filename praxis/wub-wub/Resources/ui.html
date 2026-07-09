@@ -56,8 +56,7 @@ h1{font-size:28px;font-weight:900;letter-spacing:10px;color:#ffff00;margin-botto
 <div class="section">
 <div class="rtitle">Trigger</div>
 <span class="b on" onclick="setMode(0)">AUDIO</span>
-<span class="b" onclick="setMode(1)">MIDI</span>
-<span class="b" onclick="setMode(2)">SYNC</span>
+<span class="b" onclick="setMode(1)">SYNC</span>
 </div>
 
 <div class="section hide" id="BR">
@@ -314,7 +313,7 @@ function radioG(parent,idx){
 function setMode(v){
   mode=v;tx('mode',v);
   radioG(document.querySelectorAll('.section')[0],v);
-  document.getElementById('BR').className=v===2?'section':'section hide';
+  document.getElementById('BR').className=v===1?'section':'section hide';
   document.getElementById('inputMeter').style.display=v===0?'block':'none';
 }
 function setBeat(v){beat=v;tx('beat',v);radioG(document.getElementById('BR'),v);}

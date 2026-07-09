@@ -16,7 +16,7 @@ public:
     bool hasEditor() const override { return true; }
 
     const juce::String getName() const override { return "Wub Wub"; }
-    bool acceptsMidi() const override { return true; }
+    bool acceptsMidi() const override { return false; }
     bool producesMidi() const override { return false; }
     double getTailLengthSeconds() const override { return 0.0; }
 
@@ -29,7 +29,7 @@ public:
     void getStateInformation(juce::MemoryBlock& destData) override;
     void setStateInformation(const void* data, int sizeInBytes) override;
 
-    std::atomic<int> triggerMode { 0 };    // 0=audio, 1=midi, 2=sync
+    std::atomic<int> triggerMode { 0 };    // 0=audio, 1=sync
     std::atomic<int> beatDiv { 1 };        // 0=1/8, 1=1/4, 2=1/2, 3=1/1
     std::atomic<float> mix { 100.0f };     // 0-100
     std::atomic<float> threshold { 50.0f };// 0-100, maps to 0.05-0.5 actual threshold

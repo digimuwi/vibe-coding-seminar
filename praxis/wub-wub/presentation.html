@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WUB WUB — Wie ein Audio-Plugin entsteht</title>
+<style>
+:root {
+  --y:#ffff00; --yd:#bbbb00; --bg:#020205;
+  --surf:rgba(255,255,255,0.04); --border:rgba(255,255,255,0.07);
+  --text:#e0e0e0; --dim:#555; --green:#00e87a; --red:#ff5c5c;
+}
+*,*::before,*::after { margin:0; padding:0; box-sizing:border-box }
+html,body { width:100%; height:100%; overflow:hidden; background:var(--bg);
+  font-family:-apple-system,'SF Pro Display','Helvetica Neue',sans-serif;
+  color:var(--text); }
+
+/* ── Progress bar ── */
+#prog { position:fixed; top:0; left:0; height:3px; background:var(--y);
+  transition:width .5s cubic-bezier(.22,1,.36,1); z-index:200;
+  box-shadow:0 0 14px rgba(255,255,0,.6); }
+
+/* ── Slide number ── */
+#snum { position:fixed; top:22px; right:40px; font-size:11px;
+  color:rgba(255,255,255,.15); letter-spacing:3px; z-index:200; }
+
+/* ── Deck ── */
+#deck { width:100%; height:100%; position:relative; }
+
+/* ── Slide base ── */
+.slide {
+  position:absolute; inset:0;
+  display:flex; flex-direction:column; justify-content:center;
+  align-items:flex-start; padding:72px 100px 100px;
+  opacity:0; pointer-events:none;
+  transform:translateX(80px);
+  transition:opacity .45s cubic-bezier(.22,1,.36,1),
+             transform .45s cubic-bezier(.22,1,.36,1);
+}
+.slide.active { opacity:1; transform:none; pointer-events:all; }
+.slide.out    { opacity:0; transform:translateX(-80px); }
+.slide.cover  { align-items:center; text-align:center; }
+
+/* ── Type scale ── */
+.tag { font-size:10px; color:var(--yd); letter-spacing:4px;
+  text-transform:uppercase; font-weight:700; margin-bottom:14px; }
+h1 { font-size:clamp(64px,11vw,130px); font-weight:900; letter-spacing:.18em;
+  color:var(--y); line-height:1;
+  text-shadow:0 0 60px rgba(255,255,0,.45),0 0 160px rgba(255,255,0,.15);
+  margin-bottom:18px; }
+h2 { font-size:clamp(28px,4.5vw,54px); font-weight:800; line-height:1.1;
+  color:#fff; margin-bottom:28px; }
+h2 em { font-style:normal; color:var(--y); }
+.sub { font-size:clamp(12px,1.6vw,18px); color:rgba(255,255,255,.3);
+  letter-spacing:4px; text-transform:uppercase; font-weight:300; }
+.lead { font-size:clamp(15px,1.7vw,20px); color:rgba(255,255,255,.5);
+  line-height:1.75; max-width:720px; margin-bottom:20px; }
+
+/* ── Bullets ── */
+.bl { list-style:none; display:flex; flex-direction:column; gap:12px;
+  max-width:820px; }
+.bl li { font-size:clamp(14px,1.6vw,19px); color:rgba(255,255,255,.72);
+  line-height:1.5; display:flex; gap:14px; align-items:flex-start; }
+.bl li::before { content:'▸'; color:var(--y); flex-shrink:0; margin-top:2px; }
+.bl.good li::before { content:'✓'; color:var(--green); }
+.bl.bad  li::before { content:'✗'; color:var(--red); }
+.bl strong { color:#fff; }
+
+/* ── Two-column grid ── */
+.two { display:grid; grid-template-columns:1fr 1fr; gap:48px;
+  width:100%; max-width:960px; }
+.col-head { font-size:10px; color:var(--yd); letter-spacing:3px;
+  text-transform:uppercase; font-weight:700; margin-bottom:14px;
+  padding-bottom:8px; border-bottom:1px solid rgba(255,255,0,.12); }
+
+/* ── Code block ── */
+pre { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.07);
+  border-radius:8px; padding:16px 20px; font-family:'SF Mono','Menlo',monospace;
+  font-size:clamp(12px,1.3vw,15px); line-height:1.75; color:#bbb;
+  max-width:100%; overflow:auto; margin:12px 0; }
+.kw  { color:#ff79c6; } .fn { color:#50fa7b; }
+.str { color:#f1fa8c; } .cm { color:#444; } .hl { color:var(--y); }
+
+/* ── Format table ── */
+.ft { border-collapse:collapse; width:100%; max-width:880px; }
+.ft th { font-size:10px; letter-spacing:3px; text-transform:uppercase;
+  color:var(--dim); padding:0 24px 12px 0; text-align:left;
+  border-bottom:1px solid var(--border); }
+.ft td { padding:13px 24px 13px 0; font-size:clamp(13px,1.5vw,17px);
+  border-bottom:1px solid rgba(255,255,255,.04); vertical-align:middle; }
+.ft td:first-child { font-weight:900; color:var(--y); letter-spacing:2px;
+  font-size:clamp(13px,1.4vw,16px); }
+.badge { display:inline-block; background:rgba(255,255,0,.07);
+  border:1px solid rgba(255,255,0,.18); color:var(--yd); font-size:11px;
+  letter-spacing:1.5px; padding:2px 9px; border-radius:4px; font-weight:700;
+  margin:2px; font-family:'SF Mono',monospace; }
+
+/* ── Signal flow ── */
+.flow { display:flex; align-items:center; flex-wrap:wrap;
+  gap:0; margin:20px 0; }
+.fb { background:var(--surf); border:1px solid var(--border);
+  border-radius:8px; padding:12px 18px; text-align:center; min-width:110px; }
+.fb.hl { background:rgba(255,255,0,.05); border-color:rgba(255,255,0,.3); }
+.fb-l { font-size:10px; color:var(--dim); letter-spacing:2px;
+  text-transform:uppercase; margin-bottom:4px; }
+.fb-v { font-size:15px; font-weight:700; color:#fff; }
+.fa { color:rgba(255,255,0,.4); font-size:22px; padding:0 12px; flex-shrink:0; }
+
+/* ── Architecture boxes ── */
+.arch { display:flex; flex-direction:column; gap:6px; max-width:640px; }
+.abox { background:var(--surf); border:1px solid var(--border);
+  border-radius:8px; padding:13px 18px; }
+.abox.hl { border-color:rgba(255,255,0,.3); background:rgba(255,255,0,.025); }
+.abox-l { font-size:11px; font-weight:800; color:var(--y); letter-spacing:2px;
+  text-transform:uppercase; margin-bottom:3px; }
+.abox-d { font-size:12px; color:var(--dim); line-height:1.5; }
+.aarrow { text-align:center; color:rgba(255,255,0,.25); font-size:16px;
+  margin:-2px 0; letter-spacing:2px; }
+
+/* ── VS comparison ── */
+.vs-row { display:grid; grid-template-columns:1fr auto 1fr; gap:0;
+  max-width:880px; margin-top:16px; }
+.vs-col { padding:24px; }
+.vs-col:first-child { background:rgba(255,60,60,.04);
+  border:1px solid rgba(255,60,60,.1); border-radius:8px 0 0 8px; }
+.vs-col:last-child { background:rgba(0,200,100,.04);
+  border:1px solid rgba(0,200,100,.1); border-radius:0 8px 8px 0; }
+.vs-head { font-size:11px; font-weight:800; letter-spacing:3px;
+  text-transform:uppercase; margin-bottom:14px; }
+.vs-head.red { color:var(--red); }
+.vs-head.green { color:var(--green); }
+.vs-sep { display:flex; align-items:center; justify-content:center;
+  font-size:14px; font-weight:700; color:var(--dim); padding:0 16px; }
+
+/* ── Nav ── */
+#nav { position:fixed; bottom:32px; left:50%;
+  transform:translateX(-50%); display:flex; align-items:center;
+  gap:18px; z-index:200; }
+#nav button { background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.1); color:var(--dim);
+  width:42px; height:42px; border-radius:50%; font-size:20px;
+  cursor:pointer; transition:all .2s; line-height:1;
+  display:flex; align-items:center; justify-content:center; }
+#nav button:hover { background:rgba(255,255,0,.1);
+  border-color:rgba(255,255,0,.35); color:var(--y); }
+#ctr { font-size:11px; color:var(--dim); letter-spacing:3px;
+  min-width:56px; text-align:center; }
+
+/* ── Stagger (JS-driven) ── */
+.s-item { opacity:0; transform:translateY(14px); }
+
+@media(max-width:900px) {
+  .slide { padding:60px 40px 90px; }
+  .two { grid-template-columns:1fr; gap:32px; }
+  .vs-row { grid-template-columns:1fr; }
+  .vs-col:first-child { border-radius:8px 8px 0 0; }
+  .vs-col:last-child  { border-radius:0 0 8px 8px; }
+  .vs-sep { display:none; }
+}
+</style>
+</head>
+<body>
+
+<div id="prog"></div>
+<div id="snum"></div>
+
+<div id="deck">
+
+<!-- ══ 1 · COVER ══════════════════════════════════════ -->
+<div class="slide cover" data-n="0">
+  <div class="tag">Vibe Coding Seminar · SoSe 26</div>
+  <h1>WUB WUB</h1>
+  <p class="sub">Wie ein Audio-Plugin entsteht</p>
+  <p style="margin-top:56px;font-size:12px;color:rgba(255,255,255,.15);letter-spacing:3px">
+    ← →&nbsp; zum Navigieren
+  </p>
+</div>
+
+<!-- ══ EDM & PUMP-EFFEKT ════════════════════════════════ -->
+<div class="slide" data-n="pump">
+  <div class="tag">Kontext</div>
+  <h2>Der <em>Pump-Effekt</em></h2>
+  <p class="lead">Wenn die Kick-Drum alle anderen Instrumente kurz leiser macht — rhythmisch, wie ein Atemzug — nennt man das den <em>Pump-Effekt</em>. Technisch steckt dahinter Sidechain-Kompression.</p>
+  <div class="flow s-item" style="margin:20px 0;flex-wrap:wrap">
+    <div class="fb"><div class="fb-l">Kick-Drum</div><div class="fb-v">🥁 schlägt an</div></div>
+    <div class="fa">→ löst aus</div>
+    <div class="fb hl"><div class="fb-l">Kompressor</div><div class="fb-v">senkt Lautstärke</div></div>
+    <div class="fa">→ erholt sich</div>
+    <div class="fb"><div class="fb-l">Bass / Synth</div><div class="fb-v">✨ pulsiert</div></div>
+  </div>
+  <ul class="bl s-item">
+    <li>Bekannte Beispiele: Daft Punk — <em>One More Time</em>, Eric Prydz — <em>Call On Me</em></li>
+    <li>Klassisch umgesetzt mit Kompressor-Plugins: Attack/Release in Millisekunden einstellen</li>
+    <li>Problem: abstrakt, schwer zu visualisieren — man hört, was man meint, kann es aber nicht zeigen</li>
+    <li>Idee hinter WUB WUB: <strong>die genaue Kurve des Effekts direkt zeichnen</strong></li>
+  </ul>
+  <p class="lead s-item" style="margin-top:20px;font-size:15px;color:rgba(255,200,0,.55)">
+    Aber wie baut man so etwas? Dafür braucht es ein paar Grundlagen über Plugins — die kommen jetzt.
+  </p>
+</div>
+
+<!-- ══ 2 · WAS IST EIN PLUGIN? ════════════════════════ -->
+<div class="slide" data-n="1">
+  <div class="tag">Grundlagen</div>
+  <h2>Was ist ein <em>Audio-Plugin?</em></h2>
+  <p class="lead">Ein Audio-Plugin ist ein kleines Softwareprogramm, das Audiosignale in Echtzeit verändert — und zwar <em>innerhalb</em> einer anderen Software, dem sogenannten Host.</p>
+  <ul class="bl s-item">
+    <li><strong>Effekte:</strong> Equalizer · Kompressor · Hall · Verzerrer</li>
+    <li><strong>Instrumente:</strong> Synthesizer · Sampler · Drummachines</li>
+    <li><strong>Analyse:</strong> Spektrum-Analyzer · Stimmgerät · Lautstärkemeter</li>
+    <li>WUB WUB ist ein Effekt-Plugin — es verändert ein vorhandenes Audiosignal in Echtzeit</li>
+  </ul>
+</div>
+
+<!-- ══ 3 · DAW-KONTEXT ════════════════════════════════ -->
+<div class="slide" data-n="2">
+  <div class="tag">Grundlagen</div>
+  <h2>Die <em>DAW</em> als Wirt</h2>
+  <p class="lead">DAW = Digital Audio Workstation. Die Software, in der Musik aufgenommen, arrangiert und abgemischt wird.</p>
+  <div class="flow s-item">
+    <div class="fb"><div class="fb-l">Instrument</div><div class="fb-v">🎹 Keyboard</div></div>
+    <div class="fa">→</div>
+    <div class="fb hl" style="position:relative">
+      <div class="fb-l">DAW</div>
+      <div class="fb-v">Ableton · Logic</div>
+      <div style="position:absolute;top:-22px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,0,.5);white-space:nowrap;letter-spacing:1px">Plugin läuft hier drin ↓</div>
+    </div>
+    <div class="fa">→</div>
+    <div class="fb"><div class="fb-l">Ausgabe</div><div class="fb-v">🔊 Speaker</div></div>
+  </div>
+  <ul class="bl s-item">
+    <li>Bekannte DAWs: <strong>Logic Pro · Ableton Live · FL Studio · Reaper</strong></li>
+    <li>Eine Spur kann beliebig viele Plugins hintereinander haben</li>
+    <li>Plugins werden als separate Bibliotheksdateien installiert und geladen</li>
+  </ul>
+</div>
+
+<!-- ══ 4 · FORMATE ════════════════════════════════════ -->
+<div class="slide" data-n="3">
+  <div class="tag">Technik</div>
+  <h2><em>Plugin-Formate</em></h2>
+  <table class="ft s-item">
+    <thead>
+      <tr>
+        <th>Format</th>
+        <th>Erfunden von</th>
+        <th>Betriebssystem</th>
+        <th>Typische DAWs</th>
+        <th>Datei</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>VST3</td>
+        <td>Steinberg (Yamaha)</td>
+        <td>Win · macOS · Linux</td>
+        <td>Ableton, FL Studio, Reaper …</td>
+        <td><span class="badge">.vst3</span></td>
+      </tr>
+      <tr>
+        <td>AU</td>
+        <td>Apple</td>
+        <td>nur macOS</td>
+        <td>Logic Pro, GarageBand</td>
+        <td><span class="badge">.component</span></td>
+      </tr>
+      <tr>
+        <td>AAX</td>
+        <td>Avid</td>
+        <td>Win · macOS</td>
+        <td>nur Pro Tools</td>
+        <td><span class="badge">.aaxplugin</span></td>
+      </tr>
+      <tr>
+        <td>Standalone</td>
+        <td style="color:#555">—</td>
+        <td>Win · macOS · Linux</td>
+        <td style="color:#555;font-style:italic">kein Format — läuft direkt als App ohne DAW</td>
+        <td><span class="badge">.app / .exe</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="lead s-item" style="margin-top:18px;font-size:15px">Gleiche Audiologik — aber jedes Format ist eine andere Binärdatei mit einem anderen API-Standard.</p>
+</div>
+
+<!-- ══ 5 · DAS PROBLEM ════════════════════════════════ -->
+<div class="slide" data-n="4">
+  <div class="tag">Problem</div>
+  <h2>Das <em>Problem</em></h2>
+  <p class="lead">Ohne ein Framework muss man dasselbe Plugin für jedes Format komplett separat implementieren — mit den jeweiligen SDKs der Hersteller, in unterschiedlichen APIs.</p>
+  <div class="flow s-item" style="margin:24px 0;gap:10px;flex-wrap:wrap">
+    <div class="fb"><div class="fb-l">VST3 SDK</div><div class="fb-v" style="font-size:13px">Steinberg-API</div></div>
+    <div class="fa" style="color:var(--dim);font-size:14px">+</div>
+    <div class="fb"><div class="fb-l">AU SDK</div><div class="fb-v" style="font-size:13px">Apple CoreAudio</div></div>
+    <div class="fa" style="color:var(--dim);font-size:14px">+</div>
+    <div class="fb"><div class="fb-l">AAX SDK</div><div class="fb-v" style="font-size:13px">Avid/Pro Tools</div></div>
+    <div class="fa">=</div>
+    <div class="fb hl"><div class="fb-l">Problem</div><div class="fb-v" style="font-size:12px;color:var(--red)">3× Code</div></div>
+  </div>
+  <ul class="bl s-item">
+    <li>Dreifacher Code · dreifache Fehler · dreifache Wartung</li>
+    <li>Änderung am Algorithmus? → in <em>allen drei</em> Versionen separat nachziehen</li>
+  </ul>
+  <p style="margin-top:24px;font-size:18px;font-weight:700;color:var(--y)" class="s-item">
+    → Lösung: ein Framework, das alle Formate aus <em>einer</em> Codebase baut.
+  </p>
+</div>
+
+<!-- ══ 6 · JUCE ═══════════════════════════════════════ -->
+<div class="slide" data-n="5">
+  <div class="tag">Framework</div>
+  <h2><em>JUCE</em></h2>
+  <p class="lead">C++-Framework für Audio-Anwendungen, entwickelt von ROLI (heute Focusrite). Open Source (GPL) — für kommerzielle Nutzung lizenzpflichtig.</p>
+  <ul class="bl s-item">
+    <li><strong>Einmal schreiben</strong> → VST3 · AU · AAX · Standalone aus einer Codebase kompilieren</li>
+    <li>Übernimmt: Audio-I/O · MIDI · Zustandsspeicherung · Threading</li>
+    <li>Eigenes UI-System: Buttons, Slider, Labels — alles in C++</li>
+    <li>Genutzt von tausenden kommerzieller Plugins — u.a. Produkte von Focusrite und Tracktion</li>
+  </ul>
+  <div class="flow s-item" style="margin-top:24px;gap:8px;flex-wrap:wrap">
+    <div class="fb hl"><div class="fb-l">Dein C++-Code</div><div class="fb-v" style="font-size:13px">1× schreiben</div></div>
+    <div class="fa">→</div>
+    <div class="fb"><div class="fb-l">JUCE</div><div class="fb-v" style="font-size:13px">kompiliert</div></div>
+    <div class="fa">→</div>
+    <div class="fb hl"><div class="fb-l">Output</div><div class="fb-v" style="font-size:12px">VST3 · AU · AAX · App</div></div>
+  </div>
+</div>
+
+<!-- ══ TECH-STACK ENTSCHEIDUNG ════════════════════════ -->
+<div class="slide" data-n="techstack">
+  <div class="tag">Entscheidung</div>
+  <h2>Tech-Stack: <em>Warum diese Wahl?</em></h2>
+  <p class="lead">Hätte ich auch eine einfache Website bauen können? Ja — aber die würde nicht in Ableton laufen.</p>
+  <div class="two s-item" style="max-width:960px;align-items:start">
+    <div>
+      <div class="col-head">Was ich ausgeschlossen habe — und warum</div>
+      <ul class="bl bad" style="font-size:15px;gap:11px">
+        <li><strong>Website (Web Audio API):</strong> kein VST3, kein AU — läuft nicht in einer DAW</li>
+        <li><strong>Max/MSP / Pure Data:</strong> kein echter Plugin-Standard, teuer, nicht frei verteilbar</li>
+        <li><strong>C++ ohne Framework:</strong> für jede DAW separat — dreifacher Code (wie auf der letzten Folie)</li>
+      </ul>
+    </div>
+    <div>
+      <div class="col-head">Was ich gewählt habe — und warum</div>
+      <ul class="bl good" style="font-size:15px;gap:11px">
+        <li><strong>C++ für den Klang:</strong> schnell genug für Echtzeit-Audio, von JUCE gefordert</li>
+        <li><strong>JUCE:</strong> baut VST3 + AU + Standalone aus einer einzigen Codebase</li>
+        <li><strong>HTML + JS für die Oberfläche:</strong> bekannte Sprache, CSS-Animationen, Canvas für den Kurven-Editor</li>
+        <li>→ jeder Teil übernimmt, was er am besten kann</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 7 · JUCE UI vs HTML UI ═════════════════════════ -->
+<div class="slide" data-n="6">
+  <div class="tag">UI-Entscheidung</div>
+  <h2>JUCE-UI <em>vs.</em> HTML-UI</h2>
+  <div class="vs-row s-item">
+    <div class="vs-col">
+      <div class="vs-head red">JUCE Native UI — C++</div>
+      <ul class="bl bad" style="font-size:14px;gap:10px">
+        <li>Jedes Pixel manuell in C++ zeichnen</li>
+        <li>Kein CSS, kein Flexbox, kein Grid</li>
+        <li>Animationen = aufwändig, viel Boilerplate-Code</li>
+        <li>Jede Änderung → neu kompilieren (30–60 s)</li>
+        <li>Für anspruchsvolles UI braucht man Tausende Zeilen C++</li>
+      </ul>
+    </div>
+    <div class="vs-sep">vs.</div>
+    <div class="vs-col">
+      <div class="vs-head green">HTML UI — WebView im Plugin</div>
+      <ul class="bl good" style="font-size:14px;gap:10px">
+        <li>HTML + CSS + JavaScript — die UI-Sprache des Webs</li>
+        <li>Canvas 2D API für Kurven &amp; Visualisierungen</li>
+        <li>CSS-Animationen, Flexbox, moderne Layouts</li>
+        <li>Änderungen sofort sichtbar — kein Recompile</li>
+        <li>JUCE hostet einen echten Browser-Renderer</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ══ HTML ↔ C++ BRÜCKE (IPC) ══════════════════════════ -->
+<div class="slide" data-n="bruecke">
+  <div class="tag">Kommunikation</div>
+  <h2>HTML <em>↔</em> C++: Die Brücke</h2>
+  <p class="lead">Plugin-UI und Audiologik sind zwei getrennte Welten — aber wenn man auf einen Button klickt, muss der Klang sofort reagieren.</p>
+  <div class="flow s-item" style="margin:24px 0;flex-wrap:wrap">
+    <div class="fb hl"><div class="fb-l">HTML</div><div class="fb-v" style="font-size:12px">Button-Klick</div></div>
+    <div class="fa">→ Nachricht</div>
+    <div class="fb"><div class="fb-l">JUCE</div><div class="fb-v" style="font-size:12px">Vermittler</div></div>
+    <div class="fa">→</div>
+    <div class="fb hl"><div class="fb-l">C++</div><div class="fb-v" style="font-size:12px">ändert Klang</div></div>
+  </div>
+  <ul class="bl s-item">
+    <li>JUCE öffnet einen Browser direkt im Plugin-Fenster — so kann dort HTML laufen</li>
+    <li>Klickt man auf einen Button, schickt HTML eine Textnachricht über das Schema <code style="background:rgba(255,255,0,.08);padding:2px 6px;border-radius:3px">juce://</code></li>
+    <li>C++ hat einen Empfänger, der diese Nachrichten liest und die Audiologik entsprechend anpasst</li>
+    <li>Ändert man die Kurve → die neue Form wird als Zahlenreihe an C++ übergeben → nächster Trigger nutzt sie</li>
+  </ul>
+  <p class="lead s-item" style="margin-top:18px;font-size:15px;color:rgba(255,200,0,.55)">Vergleich: wie ein WhatsApp-Chat zwischen Oberfläche und Klang-Motor — nur in Echtzeit.</p>
+</div>
+
+<!-- ══ UX: WAS GEWÜNSCHT WAR ════════════════════════════ -->
+<div class="slide" data-n="ux">
+  <div class="tag">Design</div>
+  <h2>UX-Vision: <em>Zeichnen statt Drehen</em></h2>
+  <div class="two" style="max-width:960px;align-items:start">
+    <div>
+      <div class="col-head">Was ich mir vorgestellt habe</div>
+      <ul class="bl s-item" style="font-size:15px;gap:11px">
+        <li>Kein Attack/Release — stattdessen eine <strong>zeichenbare Kurve</strong> direkt im Plugin</li>
+        <li>Die Hüllkurve soll <strong>sichtbar</strong> sein, nicht nur hörbar</li>
+        <li>Ein <strong>Mix-Knob</strong>, der bei jedem Kick-Trigger kurz aufleuchtet</li>
+        <li>Ein <strong>Sidechain-Meter</strong> mit direkt ziehbarer Schwellenlinie</li>
+        <li>Minimalistisch und dunkel — Werkzeug, kein Spielzeug</li>
+      </ul>
+      <p class="lead s-item" style="font-size:14px;margin-top:18px">Hintergedanke: Wer eine sanfte Kurve will, <em>malt</em> sie — statt Attack=80ms, Release=650ms blind durchzuprobieren.</p>
+    </div>
+    <div class="s-item">
+      <div class="col-head">Das Konzept</div>
+      <div style="background:#07070b;border:1px solid rgba(255,255,0,.15);border-radius:8px;padding:14px 16px">
+        <div style="font-family:'SF Mono',monospace">
+          <div style="color:var(--y);text-align:center;letter-spacing:8px;font-size:12px;font-weight:900;margin-bottom:10px;text-shadow:0 0 10px rgba(255,255,0,.25)">WUB WUB</div>
+          <div style="display:flex;gap:10px;margin-bottom:8px;align-items:center">
+            <div style="border:1px solid rgba(255,255,0,.3);border-radius:50%;width:48px;height:48px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#888;text-align:center;flex-shrink:0">100%<br><span style="font-size:7px;letter-spacing:1px">MIX</span></div>
+            <div>
+              <div style="font-size:8px;color:#444;letter-spacing:2px;margin-bottom:4px">TRIGGER</div>
+              <span style="background:rgba(255,255,0,.15);color:#aaaa00;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700">AUDIO</span>
+              <span style="color:#444;padding:2px 8px;font-size:10px">SYNC ¼</span>
+              <span style="color:#444;padding:2px 8px;font-size:10px">SYNC ⅛</span>
+            </div>
+          </div>
+          <div style="background:#060609;border:1px solid #1a1a1e;border-radius:4px;height:26px;margin-bottom:7px;display:flex;align-items:flex-end;padding:3px 4px;gap:2px">
+            <div style="width:8px;height:7px;background:rgba(60,200,80,.7);border-radius:1px"></div>
+            <div style="width:8px;height:5px;background:rgba(60,200,80,.7);border-radius:1px"></div>
+            <div style="width:8px;height:11px;background:rgba(60,200,80,.7);border-radius:1px"></div>
+            <div style="width:8px;height:19px;background:rgba(255,70,30,.85);border-radius:1px"></div>
+            <div style="width:8px;height:20px;background:rgba(255,70,30,.85);border-radius:1px"></div>
+            <div style="width:8px;height:17px;background:rgba(255,70,30,.85);border-radius:1px"></div>
+            <div style="width:8px;height:9px;background:rgba(60,200,80,.7);border-radius:1px"></div>
+            <div style="width:8px;height:4px;background:rgba(60,200,80,.7);border-radius:1px"></div>
+            <div style="width:8px;height:6px;background:rgba(60,200,80,.7);border-radius:1px"></div>
+          </div>
+          <div style="background:#060609;border:1px solid #1a1a1e;border-radius:4px;height:68px;overflow:hidden">
+            <svg width="100%" height="100%" viewBox="0 0 300 68" preserveAspectRatio="none" style="display:block">
+              <line x1="75" y1="0" x2="75" y2="68" stroke="#1a1a1e" stroke-width="1"/>
+              <line x1="150" y1="0" x2="150" y2="68" stroke="#1a1a1e" stroke-width="1"/>
+              <line x1="225" y1="0" x2="225" y2="68" stroke="#1a1a1e" stroke-width="1"/>
+              <path d="M0,68 L0,54 C30,54 50,3 80,5 C130,9 185,60 300,10 L300,68 Z" fill="rgba(255,255,0,.06)"/>
+              <path d="M0,54 C30,54 50,3 80,5 C130,9 185,60 300,10" fill="none" stroke="#ffff00" stroke-width="1.8"/>
+              <circle cx="0" cy="54" r="3.5" fill="#ffff00"/>
+              <circle cx="80" cy="5" r="3.5" fill="#ffff00"/>
+              <circle cx="195" cy="50" r="3.5" fill="#ffff00"/>
+              <circle cx="300" cy="10" r="3.5" fill="#ffff00"/>
+            </svg>
+          </div>
+          <div style="font-size:9px;color:#2a2a2a;text-align:center;margin-top:4px;letter-spacing:1px">klicken · ziehen · doppelklick zum Entfernen</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ 10 · FAZIT ═════════════════════════════════════ -->
+<div class="slide" data-n="9">
+  <div class="tag">Fazit</div>
+  <h2><em>Zusammenfassung</em></h2>
+  <ul class="bl s-item">
+    <li><strong>Audio-Plugin</strong> = Echtzeit-Software, die innerhalb einer DAW Audiosignale verändert</li>
+    <li><strong>VST3 / AU / AAX</strong> = verschiedene Binärformate für verschiedene DAWs und Betriebssysteme</li>
+    <li><strong>JUCE</strong> = C++-Framework → alle Formate aus einer einzigen Codebase kompilieren</li>
+    <li><strong>HTML UI</strong> = modernes, flexibles Interface statt manuell gezeichneter C++-Widgets</li>
+    <li><strong>WUB WUB</strong> = der Pump-Effekt — zeichenbar statt drehbar</li>
+  </ul>
+  <div class="s-item" style="margin-top:40px;display:flex;gap:14px;flex-wrap:wrap">
+    <a href="website/index.html"
+       style="padding:13px 26px;background:var(--y);color:#000;font-weight:800;
+              font-size:12px;letter-spacing:2px;text-transform:uppercase;
+              border-radius:6px;text-decoration:none">
+      Demo öffnen →
+    </a>
+    <a href="https://juce.com" target="_blank"
+       style="padding:13px 26px;background:transparent;color:var(--dim);
+              font-size:12px;letter-spacing:2px;text-transform:uppercase;
+              border:1px solid rgba(255,255,255,.1);border-radius:6px;text-decoration:none">
+      juce.com ↗
+    </a>
+    <a href="https://developer.steinberg.net/vst3sdk" target="_blank"
+       style="padding:13px 26px;background:transparent;color:var(--dim);
+              font-size:12px;letter-spacing:2px;text-transform:uppercase;
+              border:1px solid rgba(255,255,255,.1);border-radius:6px;text-decoration:none">
+      VST3 SDK ↗
+    </a>
+  </div>
+</div>
+
+</div><!-- /deck -->
+
+<div id="nav">
+  <button id="pb" title="Zurück (←)">‹</button>
+  <span id="ctr"></span>
+  <button id="nb" title="Weiter (→)">›</button>
+</div>
+
+<script>
+var slides = Array.from(document.querySelectorAll('.slide'));
+var total = slides.length;
+var cur = 0;
+var busy = false;
+
+function staggerIn(slide) {
+  var items = slide.querySelectorAll('.s-item');
+  items.forEach(function(el) {
+    el.style.opacity = '0';
+    el.style.transform = 'translateY(14px)';
+    el.style.transition = 'none';
+  });
+  items.forEach(function(el, i) {
+    setTimeout(function() {
+      el.style.transition = 'opacity .4s ease, transform .4s ease';
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+    }, 100 + i * 90);
+  });
+}
+
+function go(n, dir) {
+  if (busy || n < 0 || n >= total || n === cur) return;
+  busy = true;
+  dir = dir === undefined ? (n > cur ? 1 : -1) : dir;
+
+  var prev = cur;
+  cur = n;
+
+  // Exit current
+  slides[prev].classList.remove('active');
+  slides[prev].style.transform = dir > 0 ? 'translateX(-80px)' : 'translateX(80px)';
+  slides[prev].style.opacity = '0';
+
+  // Prepare new slide off-screen
+  slides[cur].style.transition = 'none';
+  slides[cur].style.opacity = '0';
+  slides[cur].style.transform = dir > 0 ? 'translateX(80px)' : 'translateX(-80px)';
+  slides[cur].style.pointerEvents = 'none';
+
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      // Remove inline styles so CSS transition kicks in
+      slides[prev].style.transition = '';
+      setTimeout(function() {
+        slides[prev].style.transform = '';
+        slides[prev].style.opacity = '';
+        slides[prev].style.transition = '';
+      }, 480);
+
+      slides[cur].style.transition = '';
+      slides[cur].classList.add('active');
+      slides[cur].style.opacity = '';
+      slides[cur].style.transform = '';
+      slides[cur].style.pointerEvents = '';
+
+      staggerIn(slides[cur]);
+      update();
+
+      setTimeout(function() { busy = false; }, 500);
+    });
+  });
+}
+
+function update() {
+  document.getElementById('ctr').textContent = (cur + 1) + ' / ' + total;
+  document.getElementById('snum').textContent = (cur + 1) + ' / ' + total;
+  var pct = total > 1 ? (cur / (total - 1)) * 100 : 0;
+  document.getElementById('prog').style.width = pct + '%';
+}
+
+document.getElementById('nb').onclick = function() { go(cur + 1, 1); };
+document.getElementById('pb').onclick = function() { go(cur - 1, -1); };
+
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ') {
+    e.preventDefault(); go(cur + 1, 1);
+  } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
+    e.preventDefault(); go(cur - 1, -1);
+  }
+});
+
+// Touch/swipe
+var tx0 = 0;
+document.addEventListener('touchstart', function(e) { tx0 = e.touches[0].clientX; }, {passive:true});
+document.addEventListener('touchend', function(e) {
+  var dx = e.changedTouches[0].clientX - tx0;
+  if (Math.abs(dx) > 50) go(dx < 0 ? cur + 1 : cur - 1, dx < 0 ? 1 : -1);
+}, {passive:true});
+
+// Init
+slides[0].classList.add('active');
+staggerIn(slides[0]);
+update();
+</script>
+</body>
+</html>

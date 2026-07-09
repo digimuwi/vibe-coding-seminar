@@ -34,22 +34,8 @@ void WubWubProcessor::processBlock(juce::AudioBuffer<float>& buffer, juce::MidiB
 
     // table is set via setEnvelopeTable from the editor
 
-    // MIDI trigger
-    if (mode == 1)
-    {
-        for (const auto metadata : midi)
-        {
-            if (metadata.getMessage().isNoteOn())
-            {
-                envelope.trigger();
-                justTriggered.store(true);
-                break;
-            }
-        }
-    }
-
     // Sync trigger
-    if (mode == 2)
+    if (mode == 1)
     {
         if (auto* ph = getPlayHead())
         {
