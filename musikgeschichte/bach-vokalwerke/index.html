@@ -148,29 +148,17 @@
 
       .main { display: contents; }
 
-      /* Alle drei Kacheln bekommen dieselbe, großzügige Höhe (rund eine
-         Bildschirmhöhe) und dürfen nicht zusammengestaucht werden. So sind
-         Karte und Zeitstrahl gut bedienbar und man steuert beim Scrollen ein
-         Panel nach dem anderen in gleicher Größe an. */
-      .map-wrap      { order: 1; height: 82vh; flex-shrink: 0; margin: 16px 16px 0; }
-      .info-panel    { order: 3; height: 82vh; flex-shrink: 0; margin: 16px; }
+      /* Karte und Info bekommen eine großzügige, aber nicht bildschirmfüllende
+         Höhe (rund 70 %) und dürfen nicht zusammengestaucht werden. So lugt
+         beim Scrollen schon das nächste Panel hervor. */
+      .map-wrap      { order: 1; height: 70vh; flex-shrink: 0; margin: 16px 16px 0; }
+      .info-panel    { order: 3; height: 70vh; flex-shrink: 0; margin: 16px; }
 
-      /* Zeitstrahl: hohes Feld, der Strahl liegt mittig darin und lässt sich
-         bequem mit dem Finger seitlich verschieben. */
-      .timeline-wrap {
-        order: 2;
-        height: 82vh;
-        flex-shrink: 0;
-        margin: 16px 16px 0;
-        display: flex;
-        flex-direction: column;
-      }
-      .timeline-scroll {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        overflow: auto;
-      }
+      /* Zeitstrahl: nur so hoch wie nötig – er behält seine natürliche
+         Inhaltshöhe, sodass die Werknummern (BWV) mit ihren Verbindungsstrichen
+         vollständig sichtbar sind, ohne die innere Anordnung zu verändern.
+         Seitlich lässt er sich bequem mit dem Finger verschieben. */
+      .timeline-wrap { order: 2; flex-shrink: 0; margin: 16px 16px 0; }
     }
 
     /* ===== Smartphones (schmale Bildschirme) ===== */
