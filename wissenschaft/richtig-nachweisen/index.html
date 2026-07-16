@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>richtig-nachweisen</title>
+    <style>
+      :root { color-scheme: light dark; }
+      body { font-family: Arial, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; line-height: 1.5; }
+      .box { border: 1px solid #ccc; border-radius: 12px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+      button { padding: 0.7rem 1rem; border-radius: 8px; border: 0; background: #005a9c; color: white; cursor: pointer; }
+      .muted { color: #666; font-size: 0.95rem; }
+      .report { white-space: pre-wrap; background: #f7f7f7; padding: 1rem; border-radius: 8px; }
+      .hidden { display: none; }
+    </style>
+  </head>
+  <body>
+    <h1>richtig-nachweisen</h1>
+    <p class="muted">Lade hier eine wissenschaftliche Arbeit im ODT-Format hoch. Die Anwendung aktualisiert die Fußnoten auf ein einheitliches Format und ergänzt ein Quellen- und Literaturverzeichnis im Kapitel „Quellen- und Literaturverzeichnis“.</p>
+
+    <div class="box">
+      <form id="uploadForm">
+        <label for="fileInput">ODT-Datei auswählen</label><br />
+        <input id="fileInput" name="file" type="file" accept=".odt" required />
+        <p class="muted">Die Regeln sind an der Handleitung ausgerichtet; bei Widersprüchen gilt diese als maßgeblich.</p>
+        <button type="submit">Datei überarbeiten</button>
+      </form>
+    </div>
+
+    <div id="status" class="box hidden"></div>
+    <div id="reportBox" class="box hidden">
+      <h2>Übersicht der Korrekturen</h2>
+      <div id="report" class="report"></div>
+    </div>
+    <div id="downloadBox" class="box hidden">
+      <a id="downloadLink" href="#">Überarbeitete Datei herunterladen</a>
+    </div>
+
+    <script>
+      const form = document.getElementById('uploadForm');
+      const status = document.getElementById('status');
+      const reportBox = document.getElementById('reportBox');
+      const report = document.getElementById('report');
+      const downloadBox = document.getElementById('downloadBox');
+      const downloadLink = document.getElementById('downloadLink');
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        const fileInput = document.getElementById('fileInput');
+        const file = fileInput.files[0];
+        if (!file) {
+          showStatus('Bitte eine ODT-Datei auswählen.', true);
+          return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+        showStatus('Die Datei wird verarbeitet…');
+
+        try {
+          const response = await fetch('/process', { method: 'POST', body: formData });
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || 'Verarbeitung fehlgeschlagen.');
+          }
+          const blob = await response.blob();
+          const downloadUrl = URL.createObjectURL(blob);
+          downloadLink.href = downloadUrl;
+          downloadLink.download = file.name.replace(/\.odt$/i, '-korrigiert.odt');
+          downloadLink.textContent = 'Überarbeitete Datei herunterladen';
+          downloadBox.classList.remove('hidden');
+
+          const summary = await response.text();
+          const parsed = JSON.parse(summary);
+          report.textContent = parsed.summary || 'Keine Zusammenfassung verfügbar.';
+          reportBox.classList.remove('hidden');
+          showStatus('Die Datei wurde erfolgreich überarbeitet.');
+        } catch (error) {
+          showStatus(error.message || 'Ein Fehler ist aufgetreten.', true);
+        }
+      });
+
+      function showStatus(message, isError = false) {
+        status.textContent = message;
+        status.classList.remove('hidden');
+        status.style.borderColor = isError ? '#b00020' : '#ccc';
+      }
+    </script>
+  </body>
+</html>
