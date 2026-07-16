@@ -140,10 +140,37 @@
          Damit lässt sich die Reihenfolge frei festlegen – beim Scrollen erst die
          Karte, dann der Zeitstrahl, dann das Info-Panel. So können die Kacheln
          nicht mehr überlappen, sie liegen sauber untereinander. */
+      /* Im Original ist die Seite auf feste Bildschirmhöhe eingespannt
+         (alles auf einen Screen). Auf dem Handy soll die Seite stattdessen
+         mitwachsen, damit man durch die großen Panels scrollen kann. */
+      html, body { height: auto; }
+      body { min-height: 100vh; }
+
       .main { display: contents; }
-      .map-wrap     { order: 1; height: 320px; margin: 16px 16px 0; }
-      .timeline-wrap { order: 2; margin: 16px 16px 0; }
-      .info-panel   { order: 3; min-height: 320px; margin: 16px; }
+
+      /* Alle drei Kacheln bekommen dieselbe, großzügige Höhe (rund eine
+         Bildschirmhöhe) und dürfen nicht zusammengestaucht werden. So sind
+         Karte und Zeitstrahl gut bedienbar und man steuert beim Scrollen ein
+         Panel nach dem anderen in gleicher Größe an. */
+      .map-wrap      { order: 1; height: 82vh; flex-shrink: 0; margin: 16px 16px 0; }
+      .info-panel    { order: 3; height: 82vh; flex-shrink: 0; margin: 16px; }
+
+      /* Zeitstrahl: hohes Feld, der Strahl liegt mittig darin und lässt sich
+         bequem mit dem Finger seitlich verschieben. */
+      .timeline-wrap {
+        order: 2;
+        height: 82vh;
+        flex-shrink: 0;
+        margin: 16px 16px 0;
+        display: flex;
+        flex-direction: column;
+      }
+      .timeline-scroll {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        overflow: auto;
+      }
     }
 
     /* ===== Smartphones (schmale Bildschirme) ===== */
@@ -172,9 +199,9 @@
         font-size: 0.9rem;
       }
 
-      /* Kompaktere Ränder zwischen den drei gestapelten Kacheln
-         (Reihenfolge Karte → Zeitstrahl → Info kommt aus der 900px-Regel). */
-      .map-wrap      { height: 280px; margin: 10px 10px 0; }
+      /* Kompaktere Ränder zwischen den drei gestapelten Kacheln; die
+         einheitliche Höhe (82vh) kommt aus der 900px-Regel. */
+      .map-wrap      { margin: 10px 10px 0; }
       .timeline-wrap { margin: 12px 10px 0; }
       .info-panel    { margin: 12px 10px 12px; max-height: none; }
       .info-content { padding: 14px; }
