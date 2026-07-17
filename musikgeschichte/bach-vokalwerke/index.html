@@ -71,8 +71,16 @@
       font-style: italic;
     }
 
-    .quiz-btn {
+    .header-titles { min-width: 0; }
+
+    .header-controls {
       margin-left: auto;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .quiz-btn {
       background: #ffd166;
       color: #5a3d1a;
       border: 2px solid #ffe199;
@@ -127,12 +135,80 @@
     }
 
     @media (max-width: 900px) {
-      .main {
-        grid-template-columns: 1fr;
-        grid-auto-rows: auto;
+      /* Gestapelte Ansicht: Das Raster wird aufgelöst (display:contents), sodass
+         Karte und Info-Panel zu direkten Geschwistern des Zeitstrahls werden.
+         Damit lässt sich die Reihenfolge frei festlegen – beim Scrollen erst die
+         Karte, dann der Zeitstrahl, dann das Info-Panel. So können die Kacheln
+         nicht mehr überlappen, sie liegen sauber untereinander. */
+      /* Im Original ist die Seite auf feste Bildschirmhöhe eingespannt
+         (alles auf einen Screen). Auf dem Handy soll die Seite stattdessen
+         mitwachsen, damit man durch die großen Panels scrollen kann. */
+      html, body { height: auto; }
+      body { min-height: 100vh; }
+
+      .main { display: contents; }
+
+      /* Karte und Info bekommen eine großzügige, aber nicht bildschirmfüllende
+         Höhe (rund 62 %) und dürfen nicht zusammengestaucht werden. So lugt
+         beim Scrollen schon das nächste Panel hervor. */
+      .map-wrap      { order: 1; height: 62vh; flex-shrink: 0; margin: 16px 16px 0; }
+      .info-panel    { order: 3; height: 62vh; flex-shrink: 0; margin: 16px; }
+
+      /* Zeitstrahl: nur so hoch wie nötig – er behält seine natürliche
+         Inhaltshöhe, sodass die Werknummern (BWV) mit ihren Verbindungsstrichen
+         vollständig sichtbar sind, ohne die innere Anordnung zu verändern.
+         Seitlich lässt er sich bequem mit dem Finger verschieben. */
+      .timeline-wrap { order: 2; flex-shrink: 0; margin: 16px 16px 0; }
+    }
+
+    /* ===== Smartphones (schmale Bildschirme) ===== */
+    @media (max-width: 600px) {
+      header {
+        flex-wrap: wrap;
+        padding: 12px 14px;
+        gap: 10px 12px;
       }
-      .map-wrap { height: 320px; }
-      .info-panel { min-height: 320px; max-height: 70vh; }
+      .logo { font-size: 2rem; }
+      header h1 { font-size: 1.3rem; }
+      header p { font-size: 0.82rem; margin-top: 2px; }
+
+      /* Bedien-Elemente rücken in eine eigene, volle Zeile und brechen bei
+         Platzmangel sauber um – so bleibt jede Beschriftung lesbar und ist
+         gut mit dem Daumen treffbar. */
+      .header-controls {
+        width: 100%;
+        margin-left: 0;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 8px;
+      }
+      .quiz-btn, .help-btn, .lang-select {
+        padding: 11px 14px;
+        font-size: 0.9rem;
+      }
+
+      /* Kompaktere Ränder zwischen den drei gestapelten Kacheln; die
+         einheitliche Höhe (82vh) kommt aus der 900px-Regel. */
+      .map-wrap      { margin: 10px 10px 0; }
+      .timeline-wrap { margin: 12px 10px 0; }
+      .info-panel    { margin: 12px 10px 12px; max-height: none; }
+      .info-content { padding: 14px; }
+      .panel-title { padding: 12px 14px; font-size: 1rem; }
+
+      .info-card h2 { font-size: 1.25rem; }
+
+      /* Zeitstrahl: sanftes Finger-Scrollen und ein wenig kompakter */
+      .timeline-scroll {
+        padding: 12px 16px 20px;
+        -webkit-overflow-scrolling: touch;
+      }
+
+      /* Fenster (Hilfe & Quiz) mit weniger Rand, damit mehr Inhalt passt */
+      .modal-backdrop { padding: 12px; }
+      .modal { padding: 20px; }
+      .quiz-panel { padding: 22px 16px 24px; }
+      .quiz-question { font-size: 1.12rem; }
+      .quiz-option { padding: 12px 14px; font-size: 1rem; }
     }
 
     /* ========== MAP ========== */
@@ -708,20 +784,22 @@
 <body>
   <header>
     <span class="logo">🎼</span>
-    <div>
+    <div class="header-titles">
       <h1>Bachs Vokalwerke</h1>
       <p data-i18n="header.subtitle">Eine musikalische Reise durch Deutschland</p>
     </div>
-    <button class="quiz-btn" onclick="startQuiz()" data-i18n="header.quizBtn">🎮 Quiz spielen</button>
-    <button class="help-btn" onclick="document.getElementById('help-modal').classList.add('show')" data-i18n="header.helpBtn">❓ Was ist das?</button>
-    <select class="lang-select" id="lang-select" aria-label="Sprache / Language" onchange="applyLanguage(this.value)">
-      <option value="de">🇩🇪 Deutsch</option>
-      <option value="en">🇬🇧 English</option>
-      <option value="fr">🇫🇷 Français</option>
-      <option value="it">🇮🇹 Italiano</option>
-      <option value="es">🇪🇸 Español</option>
-      <option value="pt">🇵🇹 Português</option>
-    </select>
+    <div class="header-controls">
+      <button class="quiz-btn" onclick="startQuiz()" data-i18n="header.quizBtn">🎮 Quiz spielen</button>
+      <button class="help-btn" onclick="document.getElementById('help-modal').classList.add('show')" data-i18n="header.helpBtn">❓ Was ist das?</button>
+      <select class="lang-select" id="lang-select" aria-label="Sprache / Language" onchange="applyLanguage(this.value)">
+        <option value="de">🇩🇪 Deutsch</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="fr">🇫🇷 Français</option>
+        <option value="it">🇮🇹 Italiano</option>
+        <option value="es">🇪🇸 Español</option>
+        <option value="pt">🇵🇹 Português</option>
+      </select>
+    </div>
   </header>
 
   <div class="main">
@@ -736,7 +814,7 @@
         <div class="placeholder">
           <span class="placeholder-emoji">👆</span>
           <p><strong data-i18n="placeholder.heading">Klicke auf einen Punkt!</strong></p>
-          <p style="margin-top:10px;" data-i18n="placeholder.text">Auf der Karte siehst du, wo Johann Sebastian Bach überall gelebt hat. Auf dem Zeitstrahl unten findest du seine berühmtesten Vokalwerke.</p>
+          <p style="margin-top:10px;" data-i18n="placeholder.text">Auf der Karte siehst du, wo Johann Sebastian Bach überall gelebt hat. Auf dem Zeitstrahl findest du seine berühmtesten Vokalwerke.</p>
         </div>
       </div>
     </div>
@@ -779,7 +857,7 @@
         'panel.infoTitle': '✨ Hier erfährst du mehr',
         'panel.timelineTitle': '🕰️ Bachs Leben & Werke (1685 – 1750)',
         'placeholder.heading': 'Klicke auf einen Punkt!',
-        'placeholder.text': 'Auf der Karte siehst du, wo Johann Sebastian Bach überall gelebt hat. Auf dem Zeitstrahl unten findest du seine berühmtesten Vokalwerke.',
+        'placeholder.text': 'Auf der Karte siehst du, wo Johann Sebastian Bach überall gelebt hat. Auf dem Zeitstrahl findest du seine berühmtesten Vokalwerke.',
         'card.station': 'Station',
         'card.years': 'Jahre',
         'card.funfact': '💡 Wusstest du?',
@@ -864,7 +942,7 @@
         'panel.infoTitle': '✨ Discover more here',
         'panel.timelineTitle': '🕰️ Bach’s life & works (1685 – 1750)',
         'placeholder.heading': 'Click on a dot!',
-        'placeholder.text': 'On the map you can see all the places where Johann Sebastian Bach lived. On the timeline below you’ll find his most famous vocal works.',
+        'placeholder.text': 'On the map you can see all the places where Johann Sebastian Bach lived. On the timeline you’ll find his most famous vocal works.',
         'card.station': 'Station',
         'card.years': 'years',
         'card.funfact': '💡 Did you know?',
@@ -983,7 +1061,7 @@
         'panel.infoTitle': '✨ Découvre-en plus ici',
         'panel.timelineTitle': '🕰️ La vie et les œuvres de Bach (1685 – 1750)',
         'placeholder.heading': 'Clique sur un point !',
-        'placeholder.text': 'Sur la carte, tu vois tous les endroits où Johann Sebastian Bach a vécu. Sur la frise chronologique en bas, tu trouves ses œuvres vocales les plus célèbres.',
+        'placeholder.text': 'Sur la carte, tu vois tous les endroits où Johann Sebastian Bach a vécu. Sur la frise chronologique, tu trouves ses œuvres vocales les plus célèbres.',
         'card.station': 'Étape',
         'card.years': 'ans',
         'card.funfact': '💡 Le savais-tu ?',
@@ -1102,7 +1180,7 @@
         'panel.infoTitle': '✨ Scopri di più qui',
         'panel.timelineTitle': '🕰️ Vita e opere di Bach (1685 – 1750)',
         'placeholder.heading': 'Clicca su un punto!',
-        'placeholder.text': 'Sulla mappa vedi tutti i luoghi in cui ha vissuto Johann Sebastian Bach. Sulla linea del tempo qui sotto trovi le sue opere vocali più famose.',
+        'placeholder.text': 'Sulla mappa vedi tutti i luoghi in cui ha vissuto Johann Sebastian Bach. Sulla linea del tempo trovi le sue opere vocali più famose.',
         'card.station': 'Tappa',
         'card.years': 'anni',
         'card.funfact': '💡 Lo sapevi?',
@@ -1221,7 +1299,7 @@
         'panel.infoTitle': '✨ Descubre más aquí',
         'panel.timelineTitle': '🕰️ Vida y obra de Bach (1685 – 1750)',
         'placeholder.heading': '¡Haz clic en un punto!',
-        'placeholder.text': 'En el mapa puedes ver todos los lugares donde vivió Johann Sebastian Bach. En la línea del tiempo de abajo encuentras sus obras vocales más famosas.',
+        'placeholder.text': 'En el mapa puedes ver todos los lugares donde vivió Johann Sebastian Bach. En la línea del tiempo encuentras sus obras vocales más famosas.',
         'card.station': 'Etapa',
         'card.years': 'años',
         'card.funfact': '💡 ¿Lo sabías?',
@@ -1340,7 +1418,7 @@
         'panel.infoTitle': '✨ Descobre mais aqui',
         'panel.timelineTitle': '🕰️ Vida e obra de Bach (1685 – 1750)',
         'placeholder.heading': 'Clica num ponto!',
-        'placeholder.text': 'No mapa vês todos os lugares onde Johann Sebastian Bach viveu. Na linha do tempo em baixo encontras as suas obras vocais mais famosas.',
+        'placeholder.text': 'No mapa vês todos os lugares onde Johann Sebastian Bach viveu. Na linha do tempo encontras as suas obras vocais mais famosas.',
         'card.station': 'Etapa',
         'card.years': 'anos',
         'card.funfact': '💡 Sabias?',
