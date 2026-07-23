@@ -1,440 +1,97 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>richtig nachweisen — Beispiellauf</title>
 <style>
-  * { box-sizing: border-box; }
-  :root {
-    --bg: #ffffff;
-    --panel: #ffffff;
-    --panel-2: #f9fafb;
-    --border: #e5e7eb;
-    --border-strong: #d1d5db;
-    --text: #111827;
-    --muted: #6b7280;
-    --faint: #9ca3af;
-    --accent: #2563eb;
-    --accept: #059669;
-    --accept-bg: #ecfdf5;
-    --accept-border: #a7f3d0;
-    --reject: #dc2626;
-    --reject-bg: #fef2f2;
-    --reject-border: #fecaca;
-    --warn: #d97706;
-    --style: #7c8698;
-    --ist-bg: #fef2f2;
-    --ist-text: #991b1b;
-    --soll-bg: #ecfdf5;
-    --soll-text: #065f46;
-    --shadow: 0 1px 2px rgba(0,0,0,.04), 0 1px 3px rgba(0,0,0,.06);
+  :root{
+    --bg:#ffffff; --fg:#17191c; --muted:#6b7280; --border:#e5e7eb;
+    --card:#ffffff; --accent:#4f46e5; --shadow:0 1px 2px rgba(16,18,22,.04), 0 8px 30px rgba(16,18,22,.08);
+    --err:#c2410c; --warn:#b45309;
   }
-  @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #0b0c0e; --panel: #141619; --panel-2: #1b1e22;
-      --border: #2a2e35; --border-strong: #3a3f47;
-      --text: #e8eaed; --muted: #9aa2ad; --faint: #6b7280;
-      --accent: #60a5fa;
-      --accept: #34d399; --accept-bg: #0e2a20; --accept-border: #1f5942;
-      --reject: #f87171; --reject-bg: #2a1416; --reject-border: #5c2429;
-      --warn: #fbbf24; --style: #8b95a6;
-      --ist-bg: #2a1416; --ist-text: #fca5a5;
-      --soll-bg: #0e2a20; --soll-text: #86efac;
-      --shadow: 0 1px 2px rgba(0,0,0,.3);
-    }
+  @media (prefers-color-scheme: dark){
+    :root{ --bg:#0f1115; --fg:#e6e8eb; --muted:#9aa1ab; --border:#262a30;
+           --card:#15181d; --accent:#a5b4fc; --shadow:0 1px 2px rgba(0,0,0,.4), 0 10px 34px rgba(0,0,0,.45); }
   }
-  :root[data-theme="light"] {
-    --bg:#ffffff; --panel:#ffffff; --panel-2:#f9fafb; --border:#e5e7eb; --border-strong:#d1d5db;
-    --text:#111827; --muted:#6b7280; --faint:#9ca3af; --accent:#2563eb;
-    --accept:#059669; --accept-bg:#ecfdf5; --accept-border:#a7f3d0;
-    --reject:#dc2626; --reject-bg:#fef2f2; --reject-border:#fecaca;
-    --warn:#d97706; --style:#7c8698; --ist-bg:#fef2f2; --ist-text:#991b1b;
-    --soll-bg:#ecfdf5; --soll-text:#065f46; --shadow:0 1px 2px rgba(0,0,0,.04),0 1px 3px rgba(0,0,0,.06);
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; }
+  body{
+    background:var(--bg); color:var(--fg);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    display:flex; justify-content:center; padding:clamp(20px,5vw,56px) 20px;
   }
-  :root[data-theme="dark"] {
-    --bg:#0b0c0e; --panel:#141619; --panel-2:#1b1e22; --border:#2a2e35; --border-strong:#3a3f47;
-    --text:#e8eaed; --muted:#9aa2ad; --faint:#6b7280; --accent:#60a5fa;
-    --accept:#34d399; --accept-bg:#0e2a20; --accept-border:#1f5942;
-    --reject:#f87171; --reject-bg:#2a1416; --reject-border:#5c2429;
-    --warn:#fbbf24; --style:#8b95a6; --ist-bg:#2a1416; --ist-text:#fca5a5;
-    --soll-bg:#0e2a20; --soll-text:#86efac; --shadow:0 1px 2px rgba(0,0,0,.3);
+  .wrap{ width:100%; max-width:900px; }
+  .eyebrow{
+    font-size:12px; letter-spacing:.09em; text-transform:uppercase; color:var(--muted);
+    display:flex; align-items:center; gap:8px; margin:0 0 14px;
   }
-  html, body { margin: 0; padding: 0; }
-  body {
-    background: var(--bg); color: var(--text);
-    font: 15px/1.55 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
+  .eyebrow::before{ content:""; width:7px; height:7px; border-radius:50%; background:var(--accent); }
+  h1{ font-size:clamp(26px,4.4vw,38px); line-height:1.12; margin:0 0 10px; letter-spacing:-.02em; text-wrap:balance; }
+  .lede{ font-size:clamp(15px,2.2vw,17px); color:var(--muted); margin:0 0 26px; max-width:62ch; }
+  .lede b{ color:var(--fg); font-weight:600; }
+  figure{ margin:0; }
+  .player{
+    border:1px solid var(--border); border-radius:14px; overflow:hidden;
+    background:#000; box-shadow:var(--shadow);
   }
-  .wrap { max-width: 860px; margin: 0 auto; padding: 24px 20px 140px; }
-
-  header.top { margin-bottom: 20px; }
-  h1 { font-size: 20px; font-weight: 650; margin: 0 0 4px; letter-spacing: -.01em; }
-  .sub { color: var(--muted); font-size: 13.5px; }
-
-  .progress { margin: 16px 0 8px; }
-  .bar { height: 8px; border-radius: 99px; background: var(--panel-2); overflow: hidden; border: 1px solid var(--border); display: flex; }
-  .bar .seg-a { background: var(--accept); height: 100%; transition: width .2s ease; }
-  .bar .seg-r { background: var(--reject); height: 100%; transition: width .2s ease; }
-  .counts { display: flex; gap: 14px; font-size: 12.5px; color: var(--muted); margin-top: 8px; flex-wrap: wrap; }
-  .counts b { color: var(--text); font-weight: 600; }
-
-  .filters { display: flex; gap: 6px; flex-wrap: wrap; margin: 14px 0 4px; }
-  .chip {
-    font-size: 12.5px; padding: 5px 11px; border-radius: 99px; border: 1px solid var(--border);
-    background: var(--panel); color: var(--muted); cursor: pointer; user-select: none;
+  video{ display:block; width:100%; height:auto; aspect-ratio:16/9; background:#0d1117; }
+  figcaption{
+    display:flex; flex-wrap:wrap; gap:8px 16px; align-items:center;
+    margin-top:14px; font-size:13px; color:var(--muted);
+    font-variant-numeric:tabular-nums;
   }
-  .chip:hover { border-color: var(--border-strong); color: var(--text); }
-  .chip.active { background: var(--text); color: var(--bg); border-color: var(--text); }
-
-  .group-head { display: flex; align-items: center; justify-content: space-between; margin: 22px 0 10px; }
-  .group-head h2 { font-size: 13px; font-weight: 600; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); margin: 0; }
-  .group-head button { font-size: 12px; }
-
-  .card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
-    padding: 14px 16px; margin-bottom: 10px; box-shadow: var(--shadow); position: relative;
-    scroll-margin-top: 16px; transition: border-color .15s ease, opacity .15s ease;
+  figcaption .file{ font-family:"Menlo","Monaco",ui-monospace,monospace; color:var(--fg); }
+  .steps{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:14px;
+    margin:30px 0 0; padding:0; list-style:none;
   }
-  .card.decided-accept { border-color: var(--accept-border); }
-  .card.decided-reject { border-color: var(--reject-border); opacity: .72; }
-  .card.hidden { display: none; }
-  .card.focused { outline: 2px solid var(--accent); outline-offset: 1px; }
-
-  .meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 10px; }
-  .dot { width: 8px; height: 8px; border-radius: 99px; flex: none; }
-  .dot.fehler { background: var(--reject); }
-  .dot.warnung { background: var(--warn); }
-  .dot.stil { background: var(--style); }
-  .loc { font-size: 12.5px; font-weight: 600; }
-  .rule {
-    font-size: 11.5px; color: var(--muted); background: var(--panel-2);
-    border: 1px solid var(--border); border-radius: 6px; padding: 2px 7px;
+  .steps li{
+    border:1px solid var(--border); border-radius:12px; padding:14px 16px; background:var(--card);
   }
-  .rule b { color: var(--text); font-weight: 600; }
-  .state-tag { margin-left: auto; font-size: 11.5px; font-weight: 600; padding: 2px 8px; border-radius: 99px; display: none; }
-  .decided-accept .state-tag.a { display: inline; color: var(--accept); background: var(--accept-bg); border: 1px solid var(--accept-border); }
-  .decided-reject .state-tag.r { display: inline; color: var(--reject); background: var(--reject-bg); border: 1px solid var(--reject-border); }
-
-  .diff { display: grid; grid-template-columns: 1fr; gap: 6px; margin: 4px 0 10px; }
-  .diff .row { border-radius: 8px; padding: 8px 11px; font-size: 13.5px; font-family: "SF Mono", ui-monospace, "Menlo", monospace; line-height: 1.5; white-space: pre-wrap; word-break: break-word; }
-  .diff .ist { background: var(--ist-bg); color: var(--ist-text); }
-  .diff .ist .lbl, .diff .soll .lbl { display: block; font-family: -apple-system, sans-serif; font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .05em; opacity: .75; margin-bottom: 2px; }
-  .diff .soll { background: var(--soll-bg); color: var(--soll-text); }
-  .diff .ist .val { text-decoration: line-through; text-decoration-color: rgba(220,38,38,.5); }
-
-  .expl { font-size: 13px; color: var(--muted); margin: 0 0 12px; }
-  .open-q { font-size: 13px; color: var(--warn); margin: 0 0 12px; font-weight: 500; }
-
-  .evidence {
-    border: 1px solid var(--border); border-radius: 8px; background: var(--panel-2);
-    padding: 8px 11px; margin: 0 0 12px; font-size: 12.5px;
-  }
-  .evidence .ev-head { display: flex; align-items: center; gap: 7px; margin-bottom: 4px; }
-  .evidence .ev-badge { font-size: 10.5px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); background: var(--panel); border: 1px solid var(--border); border-radius: 5px; padding: 1px 6px; }
-  .evidence .ev-ppn { color: var(--faint); font-size: 11.5px; }
-  .evidence .ev-row { color: var(--text); }
-  .evidence .ev-row .k { color: var(--muted); }
-  .evidence a { color: var(--accent); text-decoration: none; }
-  .evidence a:hover { text-decoration: underline; }
-
-  .actions { display: flex; gap: 8px; }
-  .btn {
-    font: inherit; font-size: 13px; font-weight: 550; padding: 7px 14px; border-radius: 8px;
-    border: 1px solid var(--border-strong); background: var(--panel); color: var(--text); cursor: pointer;
-  }
-  .btn:hover { background: var(--panel-2); }
-  .btn.accept { border-color: var(--accept-border); color: var(--accept); }
-  .btn.accept:hover { background: var(--accept-bg); }
-  .btn.reject { border-color: var(--reject-border); color: var(--reject); }
-  .btn.reject:hover { background: var(--reject-bg); }
-  .btn.ghost { color: var(--muted); border-color: transparent; padding: 7px 8px; }
-  .decided-accept .btn.accept, .decided-reject .btn.reject { background: currentColor; }
-  .decided-accept .btn.accept { color: #fff; background: var(--accept); }
-  .decided-reject .btn.reject { color: #fff; background: var(--reject); }
-
-  .empty { text-align: center; color: var(--muted); padding: 60px 0; }
-
-  footer.bar-bottom {
-    position: fixed; left: 0; right: 0; bottom: 0; background: var(--panel);
-    border-top: 1px solid var(--border); box-shadow: 0 -1px 3px rgba(0,0,0,.05);
-  }
-  .foot-inner { max-width: 860px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 14px; }
-  .foot-sum { font-size: 13px; color: var(--muted); }
-  .foot-sum b { color: var(--text); }
-  .grow { flex: 1; }
-  .btn.primary { background: var(--accent); color: #fff; border-color: var(--accent); padding: 9px 18px; font-weight: 600; }
-  .btn.primary:hover { filter: brightness(1.05); }
-  .btn.primary:disabled { opacity: .5; cursor: default; filter: none; }
-
-  .fallback { max-width: 860px; margin: 0 auto; padding: 0 20px 12px; display: none; }
-  .fallback.show { display: block; }
-  .fallback textarea { width: 100%; height: 120px; font-family: ui-monospace, monospace; font-size: 12px; border: 1px solid var(--border); border-radius: 8px; padding: 8px; background: var(--panel-2); color: var(--text); }
-  .fallback .hint { font-size: 12px; color: var(--muted); margin: 6px 0; }
-
-  .toast {
-    position: fixed; bottom: 76px; left: 50%; transform: translateX(-50%) translateY(20px);
-    background: var(--text); color: var(--bg); font-size: 13px; padding: 9px 16px; border-radius: 99px;
-    opacity: 0; pointer-events: none; transition: opacity .2s, transform .2s; z-index: 20;
-  }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .steps .n{ font-size:12px; color:var(--muted); font-variant-numeric:tabular-nums; letter-spacing:.04em; }
+  .steps .t{ font-weight:600; margin:3px 0 2px; }
+  .steps .d{ font-size:13.5px; color:var(--muted); }
+  .foot{ margin-top:26px; font-size:13.5px; color:var(--muted); }
+  .foot code{ font-family:"Menlo","Monaco",ui-monospace,monospace; font-size:12.5px;
+    background:color-mix(in srgb, var(--fg) 7%, transparent); padding:1px 6px; border-radius:5px; }
 </style>
+</head>
+<body>
+  <main class="wrap">
+    <p class="eyebrow">Vibe-Coding-Seminar · Wissenschaft</p>
+    <h1>richtig nachweisen</h1>
+    <p class="lede">Ein Claude-Code-Skill, der wissenschaftliche Arbeiten auf <b>korrekte
+      Nachweise</b> prüft — Fußnoten, Kurzbelege und das Quellen-/Literaturverzeichnis. Das Video
+      zeigt einen <b>echten Lauf</b> über eine Hausarbeit zu Christoph Graupner: erst die Prüfung
+      im Terminal, dann der fertige Bericht zum Durchklicken.</p>
 
-<div class="wrap">
-  <header class="top">
-    <h1 id="doc-title">Nachweisprüfung</h1>
-    <div class="sub" id="doc-sub"></div>
-    <div class="progress">
-      <div class="bar"><div class="seg-a" id="seg-a" style="width:0"></div><div class="seg-r" id="seg-r" style="width:0"></div></div>
-      <div class="counts">
-        <span><b id="c-total">0</b> Befunde</span>
-        <span style="color:var(--accept)"><b id="c-acc">0</b> angenommen</span>
-        <span style="color:var(--reject)"><b id="c-rej">0</b> abgelehnt</span>
-        <span><b id="c-open">0</b> offen</span>
+    <figure>
+      <div class="player">
+        <video src="demo.mp4" poster="demo-poster.jpg" autoplay muted loop playsinline controls></video>
       </div>
-    </div>
-    <div class="filters" id="filters"></div>
-  </header>
-  <div id="list"></div>
-</div>
+      <figcaption>
+        <span>Beispiellauf · <span class="file">Hausarbeit-Graupner_V5.odt</span></span>
+        <span>13 Befunde — 7 Fehler · 6 Warnungen</span>
+        <span>15 s</span>
+      </figcaption>
+    </figure>
 
-<div class="fallback" id="fallback">
-  <div class="hint">Direktes Speichern nicht verfügbar — JSON kopieren und im Chat/als Datei zurückgeben:</div>
-  <textarea id="fallback-text" readonly></textarea>
-  <div style="margin-top:6px"><button class="btn" id="copy-btn">In Zwischenablage kopieren</button></div>
-</div>
+    <ol class="steps">
+      <li><div class="n">Schritt 1</div><div class="t">Einlesen &amp; Extrahieren</div>
+        <div class="d">odt/docx → Volltext; alle Fußnoten und Verzeichniseinträge werden erfasst.</div></li>
+      <li><div class="n">Schritt 2</div><div class="t">Form &amp; Sache prüfen</div>
+        <div class="d">Form gegen das Regelwerk (Handleitung B) plus Abgleich gegen die
+          Bibliographie des Musikschrifttums.</div></li>
+      <li><div class="n">Schritt 3</div><div class="t">Bericht &amp; Rückgabe</div>
+        <div class="d">Jeder Vorschlag einzeln annehmbar; angenommene Fixes gehen als
+          Änderungsverfolgung ins Dokument zurück.</div></li>
+    </ol>
 
-<footer class="bar-bottom">
-  <div class="foot-inner">
-    <div class="foot-sum"><b id="f-decided">0</b>/<b id="f-total">0</b> entschieden</div>
-    <div class="grow"></div>
-    <button class="btn ghost" id="reset-btn">Zurücksetzen</button>
-    <button class="btn primary" id="save-btn">Entscheidungen speichern</button>
-  </div>
-</footer>
-
-<div class="toast" id="toast"></div>
-
-<script>
-  const FINDINGS = [{"id": "d001", "kind": "verzeichnis-fehlt", "severity": "fehler", "location": {"part": "literaturverzeichnis", "label": "Literaturverzeichnis", "anchor": "Zohn, Steven"}, "rule": {"id": "R-2-Vollständigkeit", "title": "Verzeichnis vollständig", "quote": "vollständig – jeder zitierte oder in Fußnoten genannte Titel taucht auch im Verzeichnis auf."}, "current": "(im Verzeichnis nicht vorhanden)", "proposed": "Zohn, Steven, Music for a Mixed Taste. Style, Genre, and Meaning in Telemann’s Instrumental Works, Oxford 2008", "explanation": "Zohns Monografie wird in Fn. 4 und Fn. 9 zitiert, fehlt aber im Literaturverzeichnis. Jeder in den Fußnoten genannte Titel muss dort auftauchen.", "confidence": 0.95, "evidence": {"source": "bms", "ppn": "003864626", "matched": {"author": "Zohn, Steven David", "title": "Music for a mixed taste. style, genre, and meaning in Telemann's instrumental works", "year": "2008"}, "url": "https://unapi.k10plus.de/?id=bmsonline:ppn:003864626&format=marcxml", "matchScore": 0.9}}, {"id": "d002", "kind": "bms-jahr", "severity": "warnung", "location": {"part": "fussnote", "label": "Fn. 4", "anchor": "Music for a Mixed Taste, Oxford 2009"}, "rule": {"id": "R-3-Erscheinungsjahr", "title": "Erscheinungsjahr", "quote": "Erscheinungsjahr: ohne Komma direkt hinter dem Ort."}, "current": "Steven Zohn, Music for a Mixed Taste, Oxford 2009, S. 87.", "proposed": "Steven Zohn, Music for a Mixed Taste. Style, Genre, and Meaning in Telemann’s Instrumental Works, Oxford 2008, S. 87.", "explanation": "Die BMS verzeichnet das Werk mit Erscheinungsjahr 2008, nicht 2009 – vermutlich ein Zahlendreher. Bitte prüfen (könnte auch eine andere Auflage sein). Zudem fehlt beim Erstbeleg der Untertitel.", "confidence": 0.75, "evidence": {"source": "bms", "ppn": "003864626", "matched": {"author": "Zohn, Steven David", "title": "Music for a mixed taste …", "year": "2008"}, "url": "https://unapi.k10plus.de/?id=bmsonline:ppn:003864626&format=marcxml", "matchScore": 0.9}}, {"id": "d003", "kind": "ebd", "severity": "warnung", "location": {"part": "fussnote", "label": "Fn. 6", "anchor": "Ebd., S. 90."}, "rule": {"id": "R-4-ebd", "title": "„ebd.“ nur bei unmittelbar identischem Beleg", "quote": "ebd. nur bei unmittelbar vorausgehendem identischem Beleg."}, "current": "Ebd., S. 90.", "proposed": null, "explanation": "Zwischen Fn. 5 und dieser „ebd.“-Fußnote steht ein Beleg auf einen anderen Titel (Fn. 5 zitiert Petzoldt). „ebd.“ verweist damit nicht mehr eindeutig auf Zohn. Bitte durch Kurzbeleg „Zohn, Music for a Mixed Taste, S. 90.“ ersetzen.", "confidence": 0.7}, {"id": "d004", "kind": "konsistenz", "severity": "fehler", "location": {"part": "fussnote", "label": "Fn. 8", "anchor": "Georg Phillipp Telemann"}, "rule": {"id": "R-2-Einheitlichkeit", "title": "Einheitliche Namensform", "quote": "einheitlich – … muss aber durchgängig konsistent sein."}, "current": "Georg Phillipp Telemann", "proposed": "Georg Philipp Telemann", "explanation": "Schreibfehler im Vornamen: „Phillipp“ → „Philipp“. An anderen Stellen der Arbeit korrekt geschrieben.", "confidence": 0.9}, {"id": "d005", "kind": "fussnotenform", "severity": "fehler", "location": {"part": "fussnote", "label": "Fn. 2", "anchor": "in: Telemann-Handbuch, Kassel 2020, S. 45-67"}, "rule": {"id": "R-6.2-Aufsatz", "title": "Aufsatz in Sammelpublikation", "quote": "Name, Vorname, „Titel. Untertitel“, in: Titel. Untertitel, hrsg. von Vorname Name, Ort Jahr, S. XX–XX"}, "current": "Wolfgang Hirschmann, Telemann in Frankfurt, in: Telemann-Handbuch, Kassel 2020, S. 45-67.", "proposed": "Wolfgang Hirschmann, „Telemann in Frankfurt“, in: Telemann-Handbuch, hrsg. von … [Hrsg. ergänzen], Kassel 2020, S. 45–67.", "explanation": "Aufsatztitel gehört in deutsche Anführungszeichen (unselbstständige Publikation), Herausgeber:in des Handbuchs ergänzen, Seitenspanne mit Halbgeviertstrich („45–67“). Buchtitel kursiv.", "confidence": 0.8}, {"id": "d006", "kind": "interpunktion", "severity": "stil", "location": {"part": "fussnote", "label": "Fn. 1", "anchor": "S.12"}, "rule": {"id": "R-3-Abkürzungen", "title": "Abkürzungen mit geschütztem Leerzeichen", "quote": "laut Duden u. a., d. h., z. B. mit geschützten Leerzeichen."}, "current": "S.12", "proposed": "S. 12", "explanation": "Nach „S.“ folgt ein (geschütztes) Leerzeichen vor der Seitenzahl. Durchgängig vereinheitlichen.", "confidence": 0.85}];
-  const DOCMETA = {"document": "DEMO – Telemann in Frankfurt (Beispielarbeit)", "generatedAt": "2026-07-23"};
-
-  const decisions = new Map(); // id -> "accept" | "reject"
-  let activeFilter = "alle";
-  let focusIdx = 0;
-
-  const $ = s => document.querySelector(s);
-  const el = (t, c) => { const e = document.createElement(t); if (c) e.className = c; return e; };
-  const esc = s => (s == null ? "" : String(s));
-
-  const SEV_LABEL = { fehler: "Fehler", warnung: "Warnung", stil: "Stil" };
-  const PART_LABEL = { fussnote: "Fußnote", literaturverzeichnis: "Literaturverz.", quellenverzeichnis: "Quellenverz.", fliesstext: "Fließtext" };
-
-  function sevRank(s) { return s === "fehler" ? 0 : s === "warnung" ? 1 : 2; }
-
-  function init() {
-    $("#doc-title").textContent = "Nachweisprüfung" + (DOCMETA.document ? " — " + DOCMETA.document : "");
-    const sevCounts = { fehler: 0, warnung: 0, stil: 0 };
-    FINDINGS.forEach(f => { sevCounts[f.severity] = (sevCounts[f.severity] || 0) + 1; });
-    $("#doc-sub").textContent = FINDINGS.length + " Korrekturvorschläge · " +
-      sevCounts.fehler + " Fehler, " + sevCounts.warnung + " Warnungen, " + sevCounts.stil + " Stil";
-
-    const filterDefs = [["alle", "Alle"], ["fehler", "Fehler"], ["warnung", "Warnungen"], ["stil", "Stil"], ["offen", "Nur offene"]];
-    const fc = $("#filters");
-    filterDefs.forEach(([k, lbl]) => {
-      const c = el("div", "chip" + (k === "alle" ? " active" : ""));
-      c.textContent = lbl; c.dataset.f = k;
-      c.onclick = () => { activeFilter = k; document.querySelectorAll(".chip").forEach(x => x.classList.toggle("active", x.dataset.f === k)); applyFilter(); };
-      fc.appendChild(c);
-    });
-
-    const sorted = [...FINDINGS].sort((a, b) => sevRank(a.severity) - sevRank(b.severity));
-    const list = $("#list");
-    sorted.forEach((f, i) => list.appendChild(renderCard(f, i)));
-    render();
-  }
-
-  function renderCard(f, i) {
-    const card = el("div", "card");
-    card.dataset.id = f.id; card.dataset.sev = f.severity; card.dataset.idx = i;
-
-    const meta = el("div", "meta");
-    const dot = el("span", "dot " + f.severity); meta.appendChild(dot);
-    const loc = el("span", "loc");
-    loc.textContent = (f.location && f.location.label) || (PART_LABEL[f.location && f.location.part] || "");
-    meta.appendChild(loc);
-    if (f.rule && (f.rule.id || f.rule.title)) {
-      const r = el("span", "rule");
-      r.innerHTML = (f.rule.id ? "<b>" + esc(f.rule.id) + "</b> " : "") + esc(f.rule.title || "");
-      if (f.rule.quote) r.title = f.rule.quote;
-      meta.appendChild(r);
-    }
-    const ta = el("span", "state-tag a"); ta.textContent = "✓ angenommen"; meta.appendChild(ta);
-    const tr = el("span", "state-tag r"); tr.textContent = "✕ abgelehnt"; meta.appendChild(tr);
-    card.appendChild(meta);
-
-    const diff = el("div", "diff");
-    const ist = el("div", "row ist");
-    ist.innerHTML = '<span class="lbl">Ist</span><span class="val">' + esc(f.current) + '</span>';
-    diff.appendChild(ist);
-    if (f.proposed != null && f.proposed !== "") {
-      const soll = el("div", "row soll");
-      soll.innerHTML = '<span class="lbl">Soll</span><span class="val">' + esc(f.proposed) + '</span>';
-      diff.appendChild(soll);
-    }
-    card.appendChild(diff);
-
-    if (f.proposed == null || f.proposed === "") {
-      const q = el("div", "open-q"); q.textContent = "⚠ Offene Frage — keine automatische Korrektur: " + esc(f.explanation);
-      card.appendChild(q);
-    } else if (f.explanation) {
-      const ex = el("div", "expl"); ex.textContent = f.explanation; card.appendChild(ex);
-    }
-
-    if (f.evidence && f.evidence.source) {
-      card.appendChild(renderEvidence(f.evidence));
-    }
-
-    const actions = el("div", "actions");
-    const acc = el("button", "btn accept"); acc.textContent = "Annehmen";
-    acc.onclick = () => decide(f.id, "accept");
-    const rej = el("button", "btn reject"); rej.textContent = "Ablehnen";
-    rej.onclick = () => decide(f.id, "reject");
-    actions.appendChild(acc); actions.appendChild(rej);
-    card.appendChild(actions);
-    return card;
-  }
-
-  function renderEvidence(ev) {
-    const box = el("div", "evidence");
-    const head = el("div", "ev-head");
-    const badge = el("span", "ev-badge");
-    badge.textContent = ev.source === "bms" ? "BMS-Abgleich" : esc(ev.source);
-    head.appendChild(badge);
-    if (ev.ppn) { const p = el("span", "ev-ppn"); p.textContent = "PPN " + esc(ev.ppn); head.appendChild(p); }
-    box.appendChild(head);
-    const m = ev.matched || {};
-    const bits = [];
-    if (m.author) bits.push(["Autor:in", m.author]);
-    if (m.title) bits.push(["Titel", m.title]);
-    if (m.year) bits.push(["Jahr", m.year]);
-    bits.forEach(([k, v]) => {
-      const r = el("div", "ev-row");
-      r.innerHTML = '<span class="k">' + k + ':</span> ' + esc(v);
-      box.appendChild(r);
-    });
-    if (ev.url) {
-      const a = document.createElement("a");
-      a.href = ev.url; a.target = "_blank"; a.rel = "noopener";
-      a.textContent = "Beleg in BMS ansehen (XML)";
-      const wrap = el("div", "ev-row"); wrap.style.marginTop = "3px"; wrap.appendChild(a);
-      box.appendChild(wrap);
-    }
-    return box;
-  }
-
-  function decide(id, val) {
-    if (decisions.get(id) === val) decisions.delete(id); // toggle off
-    else decisions.set(id, val);
-    render();
-  }
-
-  function render() {
-    document.querySelectorAll(".card").forEach(card => {
-      const d = decisions.get(card.dataset.id);
-      card.classList.toggle("decided-accept", d === "accept");
-      card.classList.toggle("decided-reject", d === "reject");
-    });
-    const acc = [...decisions.values()].filter(v => v === "accept").length;
-    const rej = [...decisions.values()].filter(v => v === "reject").length;
-    const total = FINDINGS.length;
-    const decided = acc + rej;
-    $("#c-total").textContent = total;
-    $("#c-acc").textContent = acc;
-    $("#c-rej").textContent = rej;
-    $("#c-open").textContent = total - decided;
-    $("#f-decided").textContent = decided;
-    $("#f-total").textContent = total;
-    $("#seg-a").style.width = (total ? acc / total * 100 : 0) + "%";
-    $("#seg-r").style.width = (total ? rej / total * 100 : 0) + "%";
-    $("#save-btn").disabled = decided === 0;
-    applyFilter();
-  }
-
-  function applyFilter() {
-    document.querySelectorAll(".card").forEach(card => {
-      let show = true;
-      if (activeFilter === "offen") show = !decisions.has(card.dataset.id);
-      else if (activeFilter !== "alle") show = card.dataset.sev === activeFilter;
-      card.classList.toggle("hidden", !show);
-    });
-  }
-
-  function buildPayload() {
-    return {
-      schema: "richtig-nachweisen/decisions@1",
-      document: DOCMETA.document || null,
-      generatedAt: DOCMETA.generatedAt || null,
-      decidedAt: new Date().toISOString(),
-      summary: {
-        total: FINDINGS.length,
-        accepted: [...decisions.values()].filter(v => v === "accept").length,
-        rejected: [...decisions.values()].filter(v => v === "reject").length
-      },
-      decisions: FINDINGS.map(f => ({ id: f.id, decision: decisions.get(f.id) || "pending" }))
-    };
-  }
-
-  async function saveDecisions() {
-    const data = JSON.stringify(buildPayload(), null, 2);
-    if (window.claude && window.claude.downloads) {
-      try {
-        await window.claude.downloads.save({ filename: "nachweis-entscheidungen.json", data });
-        toast("Gespeichert — liegt in ~/Downloads. Zurück in den Chat.");
-        return;
-      } catch (e) {
-        const code = e && e.code;
-        if (code === "declined") { toast("Speichern abgebrochen."); return; }
-        if (code === "rate_limited") { toast("Kurz warten und erneut speichern."); return; }
-        // fall through to fallback for unavailable/bad_request/etc.
-      }
-    }
-    showFallback(data);
-    toast("Direktes Speichern nicht möglich — JSON unten kopieren.");
-  }
-
-  function showFallback(data) {
-    $("#fallback-text").value = data;
-    $("#fallback").classList.add("show");
-    $("#fallback").scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-
-  let toastTimer;
-  function toast(msg) {
-    const t = $("#toast"); t.textContent = msg; t.classList.add("show");
-    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2600);
-  }
-
-  // keyboard: j/k move, a accept, r reject, u undo
-  function visibleCards() { return [...document.querySelectorAll(".card:not(.hidden)")]; }
-  function focusCard(idx) {
-    const cards = visibleCards(); if (!cards.length) return;
-    focusIdx = Math.max(0, Math.min(idx, cards.length - 1));
-    cards.forEach(c => c.classList.remove("focused"));
-    const c = cards[focusIdx]; c.classList.add("focused");
-    c.scrollIntoView({ behavior: "smooth", block: "center" });
-  }
-  document.addEventListener("keydown", e => {
-    if (e.target.tagName === "TEXTAREA") return;
-    const cards = visibleCards(); if (!cards.length) return;
-    const cur = cards[focusIdx] || cards[0];
-    if (e.key === "j") { e.preventDefault(); focusCard(focusIdx + 1); }
-    else if (e.key === "k") { e.preventDefault(); focusCard(focusIdx - 1); }
-    else if (e.key === "a") { e.preventDefault(); decide(cur.dataset.id, "accept"); focusCard(focusIdx + 1); }
-    else if (e.key === "r") { e.preventDefault(); decide(cur.dataset.id, "reject"); focusCard(focusIdx + 1); }
-    else if (e.key === "u") { e.preventDefault(); decisions.delete(cur.dataset.id); render(); }
-  });
-
-  $("#save-btn").onclick = saveDecisions;
-  $("#reset-btn").onclick = () => { decisions.clear(); $("#fallback").classList.remove("show"); render(); toast("Zurückgesetzt."); };
-  $("#copy-btn").onclick = () => {
-    const t = $("#fallback-text"); t.select();
-    navigator.clipboard.writeText(t.value).then(() => toast("Kopiert.")).catch(() => toast("Bitte manuell kopieren."));
-  };
-
-  init();
-</script>
+    <p class="foot">Als Skill installieren: <code>cp -r richtig-nachweisen ~/.claude/skills/</code>,
+      dann in Claude Code <code>/richtig-nachweisen &lt;datei&gt;</code>. Details in
+      <code>README.md</code> und <code>SKILL.md</code>.</p>
+  </main>
+</body>
+</html>

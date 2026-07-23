@@ -17,7 +17,7 @@ einzeln angenommen oder abgelehnt werden kann (Ist rot ↔ Soll grün, mit Regel
 und – bei Bibliografie-Abgleichen – dem gefundenen BMS-Satz). Die angenommenen
 Korrekturen kommen als **Änderungsverfolgung + Kommentar** zurück ins Dokument.
 
-- **App öffnen** zeigt einen echten Beispiel-Bericht (fiktive Telemann-Arbeit) zum Durchklicken
+- **App öffnen** zeigt ein kurzes Video: ein echter Lauf über eine Graupner-Hausarbeit (Terminal → fertiger Bericht)
 - prüft **Form** (Kurz-/Erstbeleg, `ebd.`, Titelkursivierung, Interpunktion) und **Sache** (BMS-Abgleich)
 - erfindet nie eine Angabe: offene Fragen werden markiert, nicht ausgefüllt
 - die eigentliche Anleitung für Claude steht in `SKILL.md`, das Regelwerk in `unterlagen/rules.md`

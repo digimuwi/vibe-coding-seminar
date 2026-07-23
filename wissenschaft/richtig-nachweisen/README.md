@@ -33,11 +33,10 @@ Die angenommenen Fixes werden anschließend als **Änderungsverfolgung + Komment
 
 ## App öffnen
 
-Die `index.html` ist ein **echter Beispiel-Bericht** zum Durchklicken (eine fiktive
-Seminararbeit „Telemann in Frankfurt", sechs Beispiel-Befunde – darunter ein echter,
-gegen die BMS verifizierter Treffer). Der „Entscheidungen speichern"-Knopf zeigt auf
-der Website die JSON-Ausgabe zum Kopieren; im echten Skill-Lauf landet sie direkt als
-Datei zur Rückgabe an Claude.
+Die `index.html` zeigt ein **kurzes Beispiel-Video** (ca. 15 s): ein echter Lauf des
+Skills über eine Hausarbeit zu Christoph Graupner – erst die Prüfung im Terminal
+(Regelwerk laden, Nachweise extrahieren, BMS-Abgleich), dann ein Scroll durch den
+fertigen, durchklickbaren Bericht mit seinen 13 Befunden.
 
 ## Pipeline (im echten Lauf)
 
@@ -65,7 +64,8 @@ in `SKILL.md`.
 | Datei | Zweck |
 |---|---|
 | `SKILL.md` | Anleitung für Claude (die eigentliche Skill-Definition) |
-| `index.html` | statischer Beispiel-Bericht („App öffnen") |
+| `index.html` | Video-Seite mit dem Beispiellauf („App öffnen") |
+| `demo.mp4` | das Beispiel-Video (Graupner-Lauf: Terminal → Bericht) |
 | `assets/report-template.html` | Vorlage für den durchklickbaren Bericht |
 | `assets/bms_lookup.py` | BMS-SRU-Helfer (Python-Standardbibliothek, kein `pip` nötig) |
 | `unterlagen/rules.md` | **das Regelwerk** – einzige Quelle der Wahrheit für „richtig" |
