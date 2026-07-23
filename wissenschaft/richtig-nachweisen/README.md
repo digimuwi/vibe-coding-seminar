@@ -1,25 +1,72 @@
-# richtig-nachweisen
+# richtig nachweisen
 
-Dieses Projekt stellt eine lokale Web-Anwendung bereit, mit der eine wissenschaftliche Arbeit im ODT-Format überarbeitet werden kann.
+Ein **Claude-Code-Skill**, der wissenschaftliche Arbeiten auf **korrekte Nachweise**
+prüft – Fußnoten, In-Text-Belege sowie Quellen- und Literaturverzeichnis – und
+begründete, einzeln annehmbare Korrekturen zurück ins Dokument schreibt.
 
-## Funktion
+Der Skill *erfindet keine Zitierregeln*. Er wendet ein hinterlegtes Regelwerk an
+(`unterlagen/rules.md`), das die **Tübinger Handleitung B**, Gardner/Springfelds
+*Musikwissenschaftliches Arbeiten* und die Kursunterlagen zusammenführt. Bei
+Widersprüchen ist die Handleitung B maßgeblich. Jede Korrektur trägt die Regel-ID
+und das wörtliche Regelzitat mit, auf das sie sich stützt.
 
-- ODT-Datei hochladen
-- Fußnoten auf ein einheitliches Format bringen
-- Ein Quellen- und Literaturverzeichnis im Kapitel „Quellen- und Literaturverzeichnis“ ergänzen
-- Überarbeitete Datei als Download anbieten
-- Kurze Übersicht der vorgenommenen Korrekturen ausgeben
+## Was er prüft
 
-## Regeln
+- **Form** gegen das Regelwerk: Erst- vs. Kurzbeleg, `ebd.`/`a.a.O.`, Titelkursivierung,
+  Ort/Jahr, Seitenzahl-Notation, Interpunktion, geschützte Leerzeichen.
+- **Querbezüge**: Steht jeder in Fußnoten zitierte Titel im richtigen Verzeichnis
+  (und keine Waisen)? Wird ein Werk durchgängig gleich benannt?
+- **Sache** gegen die **Bibliographie des Musikschrifttums (BMS)**: Ist ein Autorname
+  falsch geschrieben, ein Titel verdreht, ein Erscheinungsjahr vertauscht? Der Abgleich
+  läuft über die freie SRU-Schnittstelle von `musikbibliographie.de` (kein Login, kein
+  VPN). BMS ist ein *Plausibilitätsabgleich*: Abweichungen sind Warnungen mit Beleg –
+  ein anderes Jahr kann eine legitime Auflage sein –, die Entscheidung trifft der Mensch.
 
-Die Anwendung arbeitet mit einem einfachen Regelwerk, das die Unterscheidung zwischen Quellen und Literatur abbildet:
+## Ergebnis
 
-- Quellen sind Primärquellen wie Archivstücke, Quelleneditionen, Interviews, handschriftliche Zeugnisse, Tonaufnahmen oder Dokumente.
-- Literatur sind Sekundärliteratur wie Monographien, Aufsätze, Dissertationen, Biographien oder wissenschaftliche Studien.
-- Bei Widersprüchen zwischen verschiedenen Erläuterungen gilt die Handleitung als maßgeblich.
+Ein **durchklickbarer HTML-Bericht** (weißes, ruhiges Layout). Jede Karte zeigt Ort,
+Regel-Badge, **Ist** (rot, durchgestrichen) ↔ **Soll** (grün), eine Begründung in
+Klartext und die Knöpfe *Annehmen · Ablehnen* (Tastatur: `j/k/a/r/u`). Bei
+BMS-Befunden erscheint zusätzlich der gefundene Bibliografie-Satz mit PPN und Link.
+Die angenommenen Fixes werden anschließend als **Änderungsverfolgung + Kommentar**
+(mit Regel-ID) ins Dokument geschrieben – das finale Annehmen bleibt beim Menschen.
 
-## Starten
+## App öffnen
 
-1. In dieses Verzeichnis wechseln.
-2. Python starten: `python server.py`
-3. Im Browser die Adresse `http://127.0.0.1:8000/` öffnen.
+Die `index.html` ist ein **echter Beispiel-Bericht** zum Durchklicken (eine fiktive
+Seminararbeit „Telemann in Frankfurt", sechs Beispiel-Befunde – darunter ein echter,
+gegen die BMS verifizierter Treffer). Der „Entscheidungen speichern"-Knopf zeigt auf
+der Website die JSON-Ausgabe zum Kopieren; im echten Skill-Lauf landet sie direkt als
+Datei zur Rückgabe an Claude.
+
+## Pipeline (im echten Lauf)
+
+```
+1 Einlesen     docx / odt / LaTeX  →  Volltext + Rohstruktur
+2 Extrahieren  alle Nachweise (Fußnoten, In-Text, Verzeichnisse)
+3 Prüfen       Form gegen rules.md  +  Sachabgleich gegen BMS
+4 Bericht      durchklickbares Artifact: annehmen / ablehnen
+5 Rückgabe     angenommene Fixes als Änderungsverfolgung + Kommentar ins Dokument
+```
+
+## Installation als Claude-Code-Skill
+
+```bash
+# in den Skills-Ordner kopieren
+cp -r wissenschaft/richtig-nachweisen ~/.claude/skills/richtig-nachweisen
+```
+
+Aufruf in Claude Code: `/richtig-nachweisen <datei>`. Der Skill braucht Internet für
+den (optionalen) BMS-Abgleich; die API ist frei zugänglich. Details für Claude stehen
+in `SKILL.md`.
+
+## Dateien
+
+| Datei | Zweck |
+|---|---|
+| `SKILL.md` | Anleitung für Claude (die eigentliche Skill-Definition) |
+| `index.html` | statischer Beispiel-Bericht („App öffnen") |
+| `assets/report-template.html` | Vorlage für den durchklickbaren Bericht |
+| `assets/bms_lookup.py` | BMS-SRU-Helfer (Python-Standardbibliothek, kein `pip` nötig) |
+| `unterlagen/rules.md` | **das Regelwerk** – einzige Quelle der Wahrheit für „richtig" |
+| `unterlagen/HANDOFF_bms_api.md` | Vertrag der BMS-API (Endpunkte, Indizes, Schemata) |
