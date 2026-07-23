@@ -13,6 +13,51 @@
     <button class="level-btn level-hard-btn" data-level="hard" role="tab" aria-selected="false">Modus 3</button>
   </nav>
 
+  <!-- Modus 3: Einstellungs-Menü oben rechts -->
+  <div class="quiz-settings" id="quiz-settings">
+    <button class="settings-toggle" id="settings-toggle" type="button"
+            aria-expanded="false" aria-controls="settings-panel">⚙ Einstellungen</button>
+    <div class="settings-panel" id="settings-panel" hidden>
+      <div class="setting-group">
+        <span class="setting-label">Spielweise</span>
+        <div class="seg" role="group" aria-label="Spielweise">
+          <button class="seg-btn active" data-set="play" data-val="einzeln" type="button">einzeln</button>
+          <button class="seg-btn" data-set="play" data-val="gleichzeitig" type="button">gleichzeitig</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <span class="setting-label">Tonumfang</span>
+        <div class="seg" role="group" aria-label="Tonumfang">
+          <button class="seg-btn active" data-set="range" data-val="standard" type="button">Standard</button>
+          <button class="seg-btn" data-set="range" data-val="mehr" type="button">mehr Töne</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <span class="setting-label">Oktavlage</span>
+        <div class="seg" role="group" aria-label="Oktavlage">
+          <button class="seg-btn" data-set="octave" data-val="-1" type="button">tief</button>
+          <button class="seg-btn active" data-set="octave" data-val="0" type="button">normal</button>
+          <button class="seg-btn" data-set="octave" data-val="1" type="button">hoch</button>
+        </div>
+      </div>
+
+      <div class="setting-group">
+        <span class="setting-label">Zeitlimit</span>
+        <div class="seg" role="group" aria-label="Zeitlimit">
+          <button class="seg-btn active" data-set="timer" data-val="off" type="button">aus</button>
+          <button class="seg-btn" data-set="timer" data-val="on" type="button">an</button>
+        </div>
+        <div class="timer-slider" id="timer-slider" hidden>
+          <input type="range" id="timer-range" min="5" max="20" step="1" value="10"
+                 aria-label="Sekunden pro Aufgabe" />
+          <span id="timer-value">10 s</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <header>
     <h1>Gehörbildung bilden</h1>
     <p class="subtitle" id="subtitle">Prototyp – Klaviatur einer Oktave (c<sup>1</sup> – c<sup>2</sup>)</p>
@@ -25,9 +70,22 @@
       <button class="mode-btn" data-mode="intervalle" role="tab" aria-selected="false">Intervalle</button>
     </div>
 
-    <!-- Modus 3: Neue Aufgabe -->
+    <!-- Modus 3: Spielstand + Neue Aufgabe -->
     <div class="quiz-top">
-      <button class="quiz-primary-btn" id="new-task-btn" type="button">Neue Aufgabe</button>
+      <div class="quiz-hud" id="quiz-hud">
+        <div class="hud-lives" id="hud-lives" aria-label="Leben"></div>
+        <div class="hud-item">Punkte: <span id="hud-score">0</span></div>
+        <div class="hud-item hud-streak-wrap" id="hud-streak-wrap">
+          Streak: <span id="hud-streak">0</span> <span class="flame">🔥</span>
+        </div>
+      </div>
+      <div class="quiz-buttons-top">
+        <button class="quiz-primary-btn" id="new-task-btn" type="button">Neue Aufgabe</button>
+        <button class="quiz-secondary-btn" id="replay-btn" type="button">🔊 Nochmal hören</button>
+      </div>
+      <div class="quiz-timer" id="quiz-timer" hidden>
+        <div class="quiz-timer-bar" id="quiz-timer-bar"></div>
+      </div>
     </div>
 
     <div class="keyboard" id="keyboard" role="group" aria-label="Klaviatur">
@@ -47,6 +105,8 @@
           <button class="ans-btn" data-cat="qual" data-val="gross" type="button">große</button>
           <button class="ans-btn" data-cat="qual" data-val="klein" type="button">kleine</button>
           <button class="ans-btn" data-cat="qual" data-val="rein" type="button">reine</button>
+          <button class="ans-btn" data-cat="qual" data-val="vermindert" type="button">verminderte</button>
+          <button class="ans-btn" data-cat="qual" data-val="uebermaessig" type="button">übermäßige</button>
         </div>
 
         <div class="quiz-row names" role="group" aria-label="Intervall">
@@ -64,11 +124,26 @@
           <button class="ans-btn" data-cat="dir" data-val="up" type="button">aufwärts</button>
           <button class="ans-btn" data-cat="dir" data-val="down" type="button">abwärts</button>
         </div>
+
+        <div class="quiz-row special" role="group" aria-label="Tritonus">
+          <span class="or-label">oder direkt:</span>
+          <button class="ans-btn tritonus-btn" data-cat="special" data-val="tritonus" type="button">Tritonus</button>
+        </div>
       </div>
 
       <button class="quiz-primary-btn quiz-check-btn" id="check-btn" type="button">Prüfen</button>
     </div>
   </main>
+
+  <!-- Modus 3: Game-Over-Fenster -->
+  <div class="gameover" id="gameover" hidden>
+    <div class="gameover-card">
+      <h2>Game Over</h2>
+      <p class="gameover-line">Punkte: <span id="final-score">0</span></p>
+      <p class="gameover-line">Längste Streak: <span id="final-streak">0</span> 🔥</p>
+      <button class="quiz-primary-btn" id="restart-btn" type="button">Nochmal spielen</button>
+    </div>
+  </div>
 
   <footer class="uni-credit">
     <img src="uni-tuebingen-logo.svg" alt="Logo der Universität Tübingen" class="uni-logo" />

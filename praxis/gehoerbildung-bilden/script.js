@@ -48,33 +48,89 @@ const INTERVAL_NAMES_FULL = {
 };
 
 // Welche Halbton-Anzahl entspricht welcher Qualität+Name-Kombination?
-// null = diese Kombination gibt es musikalisch nicht.
+// undefined/fehlend = diese Kombination gibt es musikalisch nicht.
+// Qualitäten: rein, gross, klein, vermindert, uebermaessig.
 const QUALITY_INTERVAL_SEMITONES = {
-  Prim:    { rein: 0,  gross: 1,  klein: null },
-  Sekunde: { gross: 2, klein: 1,  rein: null },
-  Terz:    { gross: 4, klein: 3,  rein: null },
-  Quarte:  { rein: 5,  gross: 6,  klein: 4 },
-  Quinte:  { rein: 7,  gross: 8,  klein: 6 },
-  Sexte:   { gross: 9, klein: 8,  rein: null },
-  Septime: { gross: 11, klein: 10, rein: null },
-  Oktave:  { rein: 12, gross: 13, klein: 11 },
+  Prim:    { rein: 0,                          uebermaessig: 1  },
+  Sekunde: { klein: 1,  gross: 2,  vermindert: 0,  uebermaessig: 3  },
+  Terz:    { klein: 3,  gross: 4,  vermindert: 2,  uebermaessig: 5  },
+  Quarte:  { rein: 5,                vermindert: 4,  uebermaessig: 6  },
+  Quinte:  { rein: 7,                vermindert: 6,  uebermaessig: 8  },
+  Sexte:   { klein: 8,  gross: 9,  vermindert: 7,  uebermaessig: 10 },
+  Septime: { klein: 10, gross: 11, vermindert: 9,  uebermaessig: 12 },
+  Oktave:  { rein: 12,               vermindert: 11, uebermaessig: 13 },
 };
 
 let level = "easy";        // "easy" | "mid" | "hard"
 let mode = "normal";       // "normal" | "intervalle"
 let selectedSemi = null;
 let currentTask = null;    // { semitones, direction, first, second } im Quiz-Modus
-let quizSelection = { qual: null, name: null, dir: null };
+let quizSelection = { qual: null, name: null, dir: null, tritonus: false };
+
+// Einstellungen des Quiz (über das Menü oben rechts steuerbar)
+let quizSettings = {
+  play: "einzeln",    // "einzeln" (melodisch) | "gleichzeitig" (harmonisch)
+  range: "standard",  // "standard" (c¹–c²) | "mehr" (c¹–g²)
+  octave: 0,          // -1 (tief) | 0 (normal) | 1 (hoch)
+  timerOn: false,
+  timerSecs: 10,      // 5–20
+};
+
+// Spielstand
+let lives = 3;
+let score = 0;
+let streak = 0;
+let bestStreak = 0;
+let gameOver = false;
+
+// Timer
+let timerId = null;
+let timerDeadline = 0;
+
+// Oberste Tonhöhe im Quiz, je nach gewähltem Tonumfang.
+function quizRangeMax() {
+  return quizSettings.range === "mehr" ? HARD_MAX_SEMI : EASY_MAX_SEMI;
+}
+
+// Verschiebt einen Tonnamen um ganze Oktaven (c¹ -> c² usw.).
+function transposeName(name, shift) {
+  const supers = { "¹": 1, "²": 2, "³": 3 };
+  const last = name[name.length - 1];
+  let oct, base;
+  if (supers[last]) {
+    oct = supers[last];
+    base = name.slice(0, -1);
+  } else {
+    oct = 0;
+    base = name;
+  }
+  const suffix = { 0: "", 1: "¹", 2: "²", 3: "³" }[oct + shift] ?? "";
+  return base + suffix;
+}
+
+// Wendet die eingestellte Oktavlage auf einen Ton an (Frequenz verdoppelt/halbiert).
+function mapQuizNote(k) {
+  if (quizSettings.octave === 0) return k;
+  return {
+    semi: k.semi,
+    name: transposeName(k.name, quizSettings.octave),
+    freq: k.freq * Math.pow(2, quizSettings.octave),
+  };
+}
 
 function getWhiteKeys() {
-  const max = level === "hard" ? HARD_MAX_SEMI : EASY_MAX_SEMI;
-  return ALL_WHITE.filter((k) => k.semi <= max);
+  if (level === "hard") {
+    return ALL_WHITE.filter((k) => k.semi <= quizRangeMax()).map(mapQuizNote);
+  }
+  return ALL_WHITE.filter((k) => k.semi <= EASY_MAX_SEMI);
 }
 
 function getBlackKeys() {
   if (level === "easy") return [];
-  const max = level === "hard" ? HARD_MAX_SEMI : EASY_MAX_SEMI;
-  return ALL_BLACK.filter((k) => k.semi <= max);
+  if (level === "hard") {
+    return ALL_BLACK.filter((k) => k.semi <= quizRangeMax()).map(mapQuizNote);
+  }
+  return ALL_BLACK.filter((k) => k.semi <= EASY_MAX_SEMI);
 }
 
 function getAllKeys() {
@@ -399,6 +455,11 @@ function setLevel(newLevel) {
   clearTaskTimeouts();
   clearAnswerSelections();
   clearFeedback();
+  stopTimer();
+  hideTimer();
+
+  const over = document.getElementById("gameover");
+  if (over) over.hidden = true;
 
   document.body.classList.remove("level-easy", "level-mid", "level-hard");
   document.body.classList.add(`level-${level}`);
@@ -409,10 +470,63 @@ function setLevel(newLevel) {
     b.setAttribute("aria-selected", isActive ? "true" : "false");
   });
 
+  if (level === "hard") {
+    resetGame();
+    closeSettings();
+  }
+  applyHarmonicClass();
+
   buildKeyboard();
   updateSubtitle();
   updateKeyNumbers();
   updateInfo();
+}
+
+/* ---- Quiz-Einstellungen (Menü oben rechts) ---- */
+
+function applyHarmonicClass() {
+  document.body.classList.toggle(
+    "quiz-harmonic",
+    level === "hard" && quizSettings.play === "gleichzeitig"
+  );
+}
+
+function closeSettings() {
+  const panel = document.getElementById("settings-panel");
+  const toggle = document.getElementById("settings-toggle");
+  if (panel) panel.hidden = true;
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
+}
+
+function setSetting(key, val) {
+  if (key === "play") {
+    quizSettings.play = val;
+    applyHarmonicClass();
+    if (currentTask) newQuizTask();
+  } else if (key === "range") {
+    quizSettings.range = val;
+    buildKeyboard();
+    if (currentTask) newQuizTask();
+  } else if (key === "octave") {
+    quizSettings.octave = parseInt(val, 10);
+    buildKeyboard();
+    if (currentTask) newQuizTask();
+  } else if (key === "timer") {
+    quizSettings.timerOn = val === "on";
+    const slider = document.getElementById("timer-slider");
+    if (slider) slider.hidden = !quizSettings.timerOn;
+    if (quizSettings.timerOn) {
+      if (currentTask) startTimer();
+    } else {
+      stopTimer();
+      hideTimer();
+    }
+  }
+
+  // Aktiven Knopf je Gruppe markieren
+  document
+    .querySelectorAll(`.seg-btn[data-set="${key}"]`)
+    .forEach((b) => b.classList.toggle("active", b.dataset.val === val));
 }
 
 /* ============== Quiz (Modus 3) ============== */
@@ -428,6 +542,7 @@ function clearTaskTimeouts() {
 }
 
 function newQuizTask() {
+  if (gameOver) return;
   const keys = getAllKeys();
   let a, b, tries = 0;
   do {
@@ -453,10 +568,25 @@ function newQuizTask() {
   clearAnswerSelections();
   clearFeedback();
   playTaskNotes(first, second);
+  startTimer();
 }
 
 function playTaskNotes(first, second) {
   clearTaskTimeouts();
+
+  if (quizSettings.play === "gleichzeitig") {
+    // Beide Töne als Akkord – Richtung ist hier nicht hörbar.
+    highlightTaskKey(first.semi, true);
+    highlightTaskKey(second.semi, true);
+    playNote(first.freq, 1.6);
+    playNote(second.freq, 1.6);
+    taskTimeouts.push(setTimeout(() => {
+      highlightTaskKey(first.semi, false);
+      highlightTaskKey(second.semi, false);
+    }, 1500));
+    return;
+  }
+
   highlightTaskKey(first.semi, true);
   playNote(first.freq, 0.9);
   taskTimeouts.push(setTimeout(() => {
@@ -469,6 +599,11 @@ function playTaskNotes(first, second) {
   }, 700));
 }
 
+// Spielt die aktuelle Aufgabe noch einmal vor (Knopf „Nochmal hören").
+function replayTask() {
+  if (currentTask) playTaskNotes(currentTask.first, currentTask.second);
+}
+
 function highlightTaskKey(semi, on) {
   const el = document.querySelector(`.key[data-semi="${semi}"]`);
   if (el) el.classList.toggle("task-on", on);
@@ -476,6 +611,27 @@ function highlightTaskKey(semi, on) {
 
 function selectAnswer(btn) {
   const cat = btn.dataset.cat;
+
+  // Tritonus ist eine eigenständige Antwort: ein Klick genügt, er hebt
+  // Qualität/Intervall/Richtung auf – und umgekehrt.
+  if (cat === "special") {
+    const turnOn = !quizSelection.tritonus;
+    document
+      .querySelectorAll(".ans-btn.selected")
+      .forEach((b) => b.classList.remove("selected"));
+    quizSelection = { qual: null, name: null, dir: null, tritonus: turnOn };
+    if (turnOn) btn.classList.add("selected");
+    return;
+  }
+
+  // Eine normale Antwort hebt eine evtl. gewählte Tritonus-Antwort auf.
+  if (quizSelection.tritonus) {
+    quizSelection.tritonus = false;
+    document
+      .querySelectorAll('.ans-btn[data-cat="special"].selected')
+      .forEach((b) => b.classList.remove("selected"));
+  }
+
   document.querySelectorAll(`.ans-btn[data-cat="${cat}"]`).forEach((b) => {
     b.classList.remove("selected");
   });
@@ -486,7 +642,7 @@ function selectAnswer(btn) {
 }
 
 function clearAnswerSelections() {
-  quizSelection = { qual: null, name: null, dir: null };
+  quizSelection = { qual: null, name: null, dir: null, tritonus: false };
   document
     .querySelectorAll(".ans-btn.selected")
     .forEach((b) => b.classList.remove("selected"));
@@ -506,28 +662,180 @@ function clearFeedback() {
 }
 
 function checkAnswer() {
+  if (gameOver) return;
   if (!currentTask) {
-    showFeedback('Drücke zuerst „Neue Aufgabe".', 'neutral');
+    showFeedback('Drücke zuerst „Neue Aufgabe".', "neutral");
     return;
   }
   const sel = quizSelection;
-  if (!sel.qual || !sel.name || !sel.dir) {
-    showFeedback("Wähle Qualität, Intervall und Richtung aus.", "neutral");
+  const harmonic = quizSettings.play === "gleichzeitig";
+
+  // Tritonus-Knopf: allein gültig, ohne Intervallname/Richtung.
+  if (sel.tritonus) {
+    if (currentTask.semitones === 6) handleCorrect();
+    else handleWrong();
     return;
   }
+
+  if (!sel.qual || !sel.name || (!harmonic && !sel.dir)) {
+    showFeedback(
+      harmonic
+        ? "Wähle Qualität und Intervall aus."
+        : "Wähle Qualität, Intervall und Richtung aus.",
+      "neutral"
+    );
+    return;
+  }
+
   const expected = QUALITY_INTERVAL_SEMITONES[sel.name]?.[sel.qual];
-  if (expected === null || expected === undefined) {
+  if (expected === undefined) {
     showFeedback("Diese Kombination gibt es nicht. Versuche es noch einmal.", "wrong");
     return;
   }
   const intervalOk = expected === currentTask.semitones;
-  const dirOk = sel.dir === currentTask.direction;
-  if (intervalOk && dirOk) {
-    showFeedback("Richtig!", "right");
-    taskTimeouts.push(setTimeout(() => newQuizTask(), 1600));
-  } else {
-    showFeedback("Nicht ganz – versuche es noch einmal.", "wrong");
+  const dirOk = harmonic || sel.dir === currentTask.direction;
+  if (intervalOk && dirOk) handleCorrect();
+  else handleWrong();
+}
+
+/* ---- Richtig / Falsch / Zeit abgelaufen ---- */
+
+function handleCorrect() {
+  stopTimer();
+  streak += 1;
+  if (streak > bestStreak) bestStreak = streak;
+
+  let points = 10 + (streak - 1) * 2; // Streak-Bonus
+  if (quizSettings.timerOn) {
+    const remSec = Math.max(0, Math.ceil((timerDeadline - Date.now()) / 1000));
+    points += remSec; // Zeitbonus
   }
+  score += points;
+
+  renderHud();
+  showFeedback(`Richtig!  +${points}`, "right");
+  taskTimeouts.push(setTimeout(() => newQuizTask(), 1600));
+}
+
+function handleWrong() {
+  streak = 0;
+  loseLife();
+  renderHud();
+  if (gameOver) return;
+  showFeedback("Nicht ganz – versuche es noch einmal.", "wrong");
+}
+
+function onTimeout() {
+  if (gameOver || !currentTask) return;
+  streak = 0;
+  loseLife();
+  renderHud();
+  if (gameOver) return;
+  showFeedback("Zeit abgelaufen!", "wrong");
+  taskTimeouts.push(setTimeout(() => newQuizTask(), 1300));
+}
+
+function loseLife() {
+  lives = Math.max(0, lives - 1);
+  if (lives === 0) showGameOver();
+}
+
+/* ---- Spielstand-Anzeige (Herzen, Punkte, Streak) ---- */
+
+function renderHud() {
+  const livesEl = document.getElementById("hud-lives");
+  if (livesEl) {
+    let html = "";
+    for (let i = 0; i < 3; i++) {
+      html += `<span class="heart ${i < lives ? "full" : "empty"}">${
+        i < lives ? "♥" : "♡"
+      }</span>`;
+    }
+    livesEl.innerHTML = html;
+  }
+  const scoreEl = document.getElementById("hud-score");
+  if (scoreEl) scoreEl.textContent = String(score);
+  const streakEl = document.getElementById("hud-streak");
+  if (streakEl) streakEl.textContent = String(streak);
+  const streakWrap = document.getElementById("hud-streak-wrap");
+  if (streakWrap) streakWrap.classList.toggle("hot", streak >= 3);
+}
+
+function resetGame() {
+  lives = 3;
+  score = 0;
+  streak = 0;
+  bestStreak = 0;
+  gameOver = false;
+  renderHud();
+}
+
+function showGameOver() {
+  gameOver = true;
+  stopTimer();
+  clearTaskTimeouts();
+  currentTask = null;
+  const over = document.getElementById("gameover");
+  if (over) {
+    document.getElementById("final-score").textContent = String(score);
+    document.getElementById("final-streak").textContent = String(bestStreak);
+    over.hidden = false;
+  }
+}
+
+function restartGame() {
+  const over = document.getElementById("gameover");
+  if (over) over.hidden = true;
+  resetGame();
+  newQuizTask();
+}
+
+/* ---- Timer ---- */
+
+function startTimer() {
+  stopTimer();
+  if (!quizSettings.timerOn || !currentTask) {
+    hideTimer();
+    return;
+  }
+  const total = quizSettings.timerSecs * 1000;
+  timerDeadline = Date.now() + total;
+  showTimer();
+  updateTimerBar(total, total);
+  timerId = setInterval(() => {
+    const remaining = timerDeadline - Date.now();
+    if (remaining <= 0) {
+      stopTimer();
+      onTimeout();
+    } else {
+      updateTimerBar(remaining, total);
+    }
+  }, 80);
+}
+
+function stopTimer() {
+  if (timerId !== null) {
+    clearInterval(timerId);
+    timerId = null;
+  }
+}
+
+function showTimer() {
+  const el = document.getElementById("quiz-timer");
+  if (el) el.hidden = false;
+}
+
+function hideTimer() {
+  const el = document.getElementById("quiz-timer");
+  if (el) el.hidden = true;
+}
+
+function updateTimerBar(remaining, total) {
+  const bar = document.getElementById("quiz-timer-bar");
+  if (!bar) return;
+  const pct = Math.max(0, Math.min(100, (remaining / total) * 100));
+  bar.style.width = `${pct}%`;
+  bar.classList.toggle("low", pct < 30);
 }
 
 /* ============== Event-Bindings ============== */
@@ -553,10 +861,47 @@ document.querySelectorAll(".ans-btn").forEach((btn) => {
 document.getElementById("new-task-btn").addEventListener("click", newQuizTask);
 document.getElementById("check-btn").addEventListener("click", checkAnswer);
 
+const replayBtn = document.getElementById("replay-btn");
+if (replayBtn) replayBtn.addEventListener("click", replayTask);
+
+const restartBtn = document.getElementById("restart-btn");
+if (restartBtn) restartBtn.addEventListener("click", restartGame);
+
+// Einstellungs-Menü auf-/zuklappen
+const settingsToggle = document.getElementById("settings-toggle");
+if (settingsToggle) {
+  settingsToggle.addEventListener("click", () => {
+    const panel = document.getElementById("settings-panel");
+    if (!panel) return;
+    const open = panel.hidden;
+    panel.hidden = !open;
+    settingsToggle.setAttribute("aria-expanded", open ? "true" : "false");
+  });
+}
+
+// Auswahl-Knöpfe im Einstellungs-Menü
+document.querySelectorAll(".seg-btn").forEach((btn) => {
+  btn.addEventListener("click", () => setSetting(btn.dataset.set, btn.dataset.val));
+});
+
+// Zeitlimit-Schieberegler
+const timerRange = document.getElementById("timer-range");
+if (timerRange) {
+  timerRange.addEventListener("input", () => {
+    quizSettings.timerSecs = parseInt(timerRange.value, 10);
+    const valEl = document.getElementById("timer-value");
+    if (valEl) valEl.textContent = `${quizSettings.timerSecs} s`;
+  });
+}
+
 document.addEventListener("keydown", (e) => {
   if (e.repeat) return;
   if (e.key === "Escape") {
-    if (level !== "hard" && mode === "intervalle" && selectedSemi !== null) {
+    if (level === "hard") {
+      closeSettings();
+      return;
+    }
+    if (mode === "intervalle" && selectedSemi !== null) {
       selectedSemi = null;
       document
         .querySelectorAll(".key.selected")
@@ -566,7 +911,10 @@ document.addEventListener("keydown", (e) => {
     }
     return;
   }
-  if (level === "hard") return;
+  if (level === "hard") {
+    if (e.key === "Enter") checkAnswer();
+    return;
+  }
   const num = parseInt(e.key, 10);
   if (num >= 1 && num <= 8) {
     const whites = getWhiteKeys();
