@@ -100,6 +100,7 @@
     <div class="quiz-bottom">
       <div class="quiz-feedback" id="quiz-feedback" aria-live="polite"></div>
 
+      <div class="quiz-answer-area">
       <div class="quiz-buttons">
         <div class="quiz-row qualities" role="group" aria-label="Qualität">
           <button class="ans-btn" data-cat="qual" data-val="gross" type="button">große</button>
@@ -120,18 +121,18 @@
           <button class="ans-btn" data-cat="name" data-val="Oktave" type="button">Oktave</button>
         </div>
 
-        <div class="quiz-row directions" role="group" aria-label="Richtung">
-          <button class="ans-btn" data-cat="dir" data-val="up" type="button">aufwärts</button>
-          <button class="ans-btn" data-cat="dir" data-val="down" type="button">abwärts</button>
-        </div>
-
-        <div class="quiz-row special" role="group" aria-label="Tritonus">
+        <div class="quiz-row dirspecial">
+          <div class="dir-group directions" role="group" aria-label="Richtung">
+            <button class="ans-btn" data-cat="dir" data-val="up" type="button">aufwärts</button>
+            <button class="ans-btn" data-cat="dir" data-val="down" type="button">abwärts</button>
+          </div>
           <span class="or-label">oder direkt:</span>
           <button class="ans-btn tritonus-btn" data-cat="special" data-val="tritonus" type="button">Tritonus</button>
         </div>
       </div>
 
       <button class="quiz-primary-btn quiz-check-btn" id="check-btn" type="button">Prüfen</button>
+      </div>
     </div>
   </main>
 

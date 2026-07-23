@@ -50,7 +50,7 @@ body {
 
 header {
   text-align: center;
-  padding: 2.5rem 1rem 1rem;
+  padding: 1.5rem 1rem 0.75rem;
 }
 
 h1 {
@@ -165,7 +165,7 @@ main {
 }
 
 body.level-hard .keyboard {
-  max-width: 1050px;
+  max-width: 700px;
 }
 
 .key-row {
@@ -190,7 +190,7 @@ body.level-hard .keyboard {
 /* Weiße Tasten */
 .key.white {
   flex: 1 1 0;
-  height: 280px;
+  height: clamp(150px, 30vh, 280px);
   background: var(--key-white);
   border-radius: 0 0 10px 10px;
   padding-bottom: 1rem;
@@ -226,7 +226,7 @@ body.level-hard .keyboard {
 .key.black {
   position: absolute;
   top: 0;
-  height: 175px;
+  height: 62%;
   background: linear-gradient(180deg, #2a2a33 0%, #1a1a20 100%);
   border-radius: 0 0 6px 6px;
   padding-bottom: 0.7rem;
@@ -350,7 +350,7 @@ body.level-hard .quiz-bottom {
   align-items: center;
   gap: 1rem;
   width: 100%;
-  max-width: 900px;
+  max-width: 1040px;
 }
 
 body.level-hard .mode-selector,
@@ -621,8 +621,9 @@ body.level-hard .quiz-hud { display: flex; flex-wrap: wrap; justify-content: cen
 }
 .quiz-timer-bar.low { background: #f29191; }
 
-/* Tritonus-Sonderzeile */
-.quiz-row.special { align-items: center; gap: 0.7rem; margin-top: 0.2rem; }
+/* Richtung + Tritonus stehen in einer Zeile nebeneinander */
+.quiz-row.dirspecial { align-items: center; gap: 0.9rem; margin-top: 0.2rem; }
+.dir-group { display: flex; gap: 0.5rem; }
 .or-label { color: var(--muted); font-size: 0.9rem; }
 .tritonus-btn { font-weight: 700; letter-spacing: 0.02em; }
 
@@ -658,6 +659,73 @@ body.quiz-harmonic .directions { display: none; }
 .gameover-line { margin: 0.4rem 0; font-size: 1.2rem; }
 .gameover-line span { color: var(--accent-soft); font-weight: 700; }
 .gameover-card .quiz-primary-btn { margin-top: 1.5rem; }
+
+/* === Modus 3: alles auf einen Blick, ohne Scrollen === */
+/* Die Seite füllt genau eine Bildschirmhöhe. Kopf und Fußzeile werden
+   kompakt, die Klaviatur nimmt den übrigen Platz und schrumpft bei Bedarf,
+   damit die Intervall-Eingabe immer sichtbar bleibt. */
+body.level-hard {
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
+}
+
+body.level-hard header {
+  flex: 0 0 auto;
+  padding: 0.9rem 1rem 0.3rem;
+}
+body.level-hard .subtitle { display: none; }
+
+body.level-hard main {
+  flex: 1 1 auto;
+  min-height: 0;
+  justify-content: center;
+  gap: 0.45rem;
+  padding: 0.4rem 1rem;
+  width: 100%;
+}
+
+body.level-hard .quiz-top { gap: 0.5rem; }
+body.level-hard .quiz-bottom { gap: 0.5rem; }
+
+/* Klaviatur in Modus 3: höhere, schmalere Tasten (klaviertypisch). */
+body.level-hard .keyboard { flex: 0 0 auto; }
+body.level-hard .key.white { height: clamp(200px, 38vh, 340px); }
+
+/* Antwortbereich etwas kompakter */
+body.level-hard .quiz-buttons { flex: 0 1 auto; width: auto; padding: 0.55rem; gap: 0.35rem; }
+body.level-hard .quiz-row { gap: 0.35rem; }
+body.level-hard .ans-btn { padding: 0.35rem 0.85rem; font-size: 0.9rem; }
+body.level-hard .quiz-feedback { min-height: 1rem; font-size: 1.05rem; }
+
+/* Auswahl-Buttons und „Prüfen" nebeneinander – spart Höhe für die Klaviatur */
+body.level-hard .quiz-answer-area {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  width: 100%;
+}
+body.level-hard .quiz-check-btn {
+  align-self: center;
+  min-width: 240px;
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+}
+body.level-hard .quiz-primary-btn,
+body.level-hard .quiz-secondary-btn { padding: 0.55rem 1.4rem; font-size: 1rem; }
+
+/* Fußzeile schlank in eine Zeile */
+body.level-hard .uni-credit {
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 1rem 0.4rem;
+}
+body.level-hard .uni-logo { width: clamp(56px, 6vh, 84px); }
+body.level-hard .uni-line { font-size: 0.72rem; }
 
 @media (max-width: 720px) {
   .level-selector {
