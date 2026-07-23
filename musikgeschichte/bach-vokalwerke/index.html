@@ -779,6 +779,76 @@
       font-size: 1rem;
     }
     .quiz-close-btn:hover { background: #e7dcff; }
+
+    /* --- Schwierigkeitsauswahl --- */
+    .quiz-diff-select { text-align: center; padding: 6px 4px 4px; }
+    .quiz-diff-emoji { font-size: 3rem; }
+    .quiz-diff-select h2 { color: #6a4caf; font-size: 1.5rem; margin: 8px 0 6px; }
+    .quiz-diff-sub { color: var(--ink-soft); line-height: 1.45; margin-bottom: 18px; font-size: 0.95rem; }
+    .quiz-diff-list { display: grid; gap: 12px; }
+    .quiz-diff-btn {
+      display: flex; align-items: center; gap: 14px; text-align: left;
+      background: #faf6ff; border: 2.5px solid #ece4ff; border-radius: 16px;
+      padding: 14px 16px; cursor: pointer; font-family: inherit; color: var(--ink);
+      transition: all 0.15s;
+    }
+    .quiz-diff-btn:hover { transform: translateX(3px); border-color: #c4abff; background: #f0e6ff; }
+    .quiz-diff-btn.is-last { box-shadow: 0 0 0 3px #d9c8ff; }
+    .quiz-diff-btn-emoji { font-size: 1.9rem; line-height: 1; flex-shrink: 0; }
+    .quiz-diff-btn-txt { display: flex; flex-direction: column; gap: 2px; }
+    .quiz-diff-btn-txt strong { font-size: 1.12rem; }
+    .quiz-diff-btn-txt small { color: var(--ink-soft); font-size: 0.86rem; }
+    .quiz-diff-btn.diff-leicht { border-color: #bfe3b5; }
+    .quiz-diff-btn.diff-leicht:hover { background: #eefbe9; }
+    .quiz-diff-btn.diff-mittel { border-color: #ffe0a3; }
+    .quiz-diff-btn.diff-mittel:hover { background: #fff6e6; }
+    .quiz-diff-btn.diff-schwer { border-color: #ffc1a3; }
+    .quiz-diff-btn.diff-schwer:hover { background: #fff0e8; }
+    .quiz-diff-btn.diff-unmoeglich { border-color: #e0a3a3; }
+    .quiz-diff-btn.diff-unmoeglich:hover { background: #fdeaea; }
+
+    /* --- Timer pro Frage --- */
+    .quiz-timer { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .quiz-timer-track { flex: 1; height: 8px; background: #eee; border-radius: 5px; overflow: hidden; }
+    .quiz-timer-bar { height: 100%; width: 100%; background: linear-gradient(90deg, #43aa8b, #90be6d); transition: width 1s linear; }
+    .quiz-timer-bar.low { background: linear-gradient(90deg, #e05a5a, #f08c3c); }
+    .quiz-timer-num { font-weight: bold; font-size: 0.95rem; color: #6a4caf; min-width: 2.4em; text-align: right; }
+
+    /* --- „Zeig mir die Antwort“-Verweis --- */
+    .quiz-reveal {
+      display: block; width: 100%; margin-top: 12px;
+      background: #fff4d4; color: #8b6914; border: 2px solid #f2dfa0;
+      padding: 11px; border-radius: 16px; cursor: pointer;
+      font-family: inherit; font-size: 0.98rem; font-weight: bold;
+      transition: all 0.15s;
+    }
+    .quiz-reveal:hover { background: #ffecb3; transform: translateY(-1px); }
+
+    /* --- „Antwort ansehen“: Quiz dockt unten an, Karte bleibt sichtbar --- */
+    .modal-backdrop.revealing {
+      background: transparent;
+      pointer-events: none;
+      align-items: flex-end;
+      padding: 0 12px 12px;
+    }
+    .modal-backdrop.revealing .quiz-panel {
+      pointer-events: auto;
+      max-width: 560px;
+      max-height: 48vh;
+      overflow-y: auto;
+      box-shadow: 0 -6px 30px rgba(0,0,0,0.3);
+    }
+    .quiz-reveal-hint {
+      background: #eef6ff; color: #2c5b8a; border: 2px solid #c8e0f5;
+      border-radius: 12px; padding: 9px 12px; font-size: 0.9rem;
+      font-weight: bold; line-height: 1.35; margin-top: 12px; text-align: center;
+    }
+
+    /* --- Schwierigkeits-Kennzeichnung im Ergebnis --- */
+    .quiz-diff-badge {
+      display: inline-block; margin: 0 auto 16px; font-size: 0.85rem; font-weight: bold;
+      color: #6a4caf; background: #f3edff; padding: 4px 12px; border-radius: 12px;
+    }
   </style>
 </head>
 <body>
@@ -878,7 +948,19 @@
         question: 'Frage {n} von {total}',
         points: '⭐ {n} Punkte',
         correct: '✅ Richtig! +{n} Punkte',
-        streakBonus: ' 🔥 Serie! +5 Bonus',
+        streakBonus: ' 🔥 Serie! +{n} Bonus',
+        timeUp: '⏰ Zeit abgelaufen! Richtig ist: ',
+        showMe: '🔎 Zeig mir die Antwort auf der Karte',
+        revealHint: '👀 Die richtige Antwort steht jetzt auf der Karte. Mit „Weiter →“ geht das Quiz weiter.',
+        diffTitle: 'Wähle deine Schwierigkeit',
+        diffSub: 'Je schwerer, desto weniger Zeit und mehr Antwortmöglichkeiten – dafür gibt es mehr Punkte!',
+        diffResult: 'Schwierigkeit: {name}',
+        diffs: {
+          leicht:     { emoji: '🌱', name: 'Leicht',    desc: '2 Antworten · ohne Zeitlimit' },
+          mittel:     { emoji: '🎵', name: 'Mittel',    desc: '3 Antworten · 25 Sek. · Punkte ×2' },
+          schwer:     { emoji: '🔥', name: 'Schwer',    desc: '4 Antworten · 15 Sek. · Punkte ×3' },
+          unmoeglich: { emoji: '💀', name: 'Unmöglich', desc: '6 Antworten · 8 Sek. · Punkte ×4' }
+        },
         wrong: '❌ Leider falsch. Richtig ist: ',
         next: 'Weiter →',
         showResult: 'Ergebnis ansehen 🏆',
@@ -963,7 +1045,19 @@
         question: 'Question {n} of {total}',
         points: '⭐ {n} points',
         correct: '✅ Correct! +{n} points',
-        streakBonus: ' 🔥 Streak! +5 bonus',
+        streakBonus: ' 🔥 Streak! +{n} bonus',
+        timeUp: '⏰ Time’s up! The answer is: ',
+        showMe: '🔎 Show me the answer on the map',
+        revealHint: '👀 The answer is now shown on the map. Tap “Next →” to keep playing.',
+        diffTitle: 'Choose your difficulty',
+        diffSub: 'The harder it gets, the less time and the more answer choices – but you earn more points!',
+        diffResult: 'Difficulty: {name}',
+        diffs: {
+          leicht:     { emoji: '🌱', name: 'Easy',       desc: '2 answers · no time limit' },
+          mittel:     { emoji: '🎵', name: 'Medium',     desc: '3 answers · 25 sec · points ×2' },
+          schwer:     { emoji: '🔥', name: 'Hard',       desc: '4 answers · 15 sec · points ×3' },
+          unmoeglich: { emoji: '💀', name: 'Impossible', desc: '6 answers · 8 sec · points ×4' }
+        },
         wrong: '❌ Sorry, that’s wrong. The answer is: ',
         next: 'Next →',
         showResult: 'See result 🏆',
@@ -1082,7 +1176,19 @@
         question: 'Question {n} sur {total}',
         points: '⭐ {n} points',
         correct: '✅ Correct ! +{n} points',
-        streakBonus: ' 🔥 Série ! +5 bonus',
+        streakBonus: ' 🔥 Série ! +{n} bonus',
+        timeUp: '⏰ Temps écoulé ! La bonne réponse est : ',
+        showMe: '🔎 Montre-moi la réponse sur la carte',
+        revealHint: '👀 La réponse s’affiche maintenant sur la carte. Appuie sur « Suivant → » pour continuer.',
+        diffTitle: 'Choisis ta difficulté',
+        diffSub: 'Plus c’est difficile, moins il y a de temps et plus il y a de réponses – mais tu gagnes plus de points !',
+        diffResult: 'Difficulté : {name}',
+        diffs: {
+          leicht:     { emoji: '🌱', name: 'Facile',     desc: '2 réponses · sans limite de temps' },
+          mittel:     { emoji: '🎵', name: 'Moyen',      desc: '3 réponses · 25 s · points ×2' },
+          schwer:     { emoji: '🔥', name: 'Difficile',  desc: '4 réponses · 15 s · points ×3' },
+          unmoeglich: { emoji: '💀', name: 'Impossible', desc: '6 réponses · 8 s · points ×4' }
+        },
         wrong: '❌ Dommage, c’est faux. La bonne réponse est : ',
         next: 'Suivant →',
         showResult: 'Voir le résultat 🏆',
@@ -1201,7 +1307,19 @@
         question: 'Domanda {n} di {total}',
         points: '⭐ {n} punti',
         correct: '✅ Giusto! +{n} punti',
-        streakBonus: ' 🔥 Serie! +5 bonus',
+        streakBonus: ' 🔥 Serie! +{n} bonus',
+        timeUp: '⏰ Tempo scaduto! La risposta giusta è: ',
+        showMe: '🔎 Mostrami la risposta sulla mappa',
+        revealHint: '👀 Ora la risposta è sulla mappa. Tocca « Avanti → » per continuare.',
+        diffTitle: 'Scegli la difficoltà',
+        diffSub: 'Più è difficile, meno tempo hai e più risposte ci sono – ma guadagni più punti!',
+        diffResult: 'Difficoltà: {name}',
+        diffs: {
+          leicht:     { emoji: '🌱', name: 'Facile',      desc: '2 risposte · senza limite di tempo' },
+          mittel:     { emoji: '🎵', name: 'Medio',       desc: '3 risposte · 25 sec · punti ×2' },
+          schwer:     { emoji: '🔥', name: 'Difficile',   desc: '4 risposte · 15 sec · punti ×3' },
+          unmoeglich: { emoji: '💀', name: 'Impossibile', desc: '6 risposte · 8 sec · punti ×4' }
+        },
         wrong: '❌ Peccato, è sbagliato. La risposta giusta è: ',
         next: 'Avanti →',
         showResult: 'Vedi il risultato 🏆',
@@ -1320,7 +1438,19 @@
         question: 'Pregunta {n} de {total}',
         points: '⭐ {n} puntos',
         correct: '✅ ¡Correcto! +{n} puntos',
-        streakBonus: ' 🔥 ¡Racha! +5 de bonus',
+        streakBonus: ' 🔥 ¡Racha! +{n} de bonus',
+        timeUp: '⏰ ¡Se acabó el tiempo! La respuesta correcta es: ',
+        showMe: '🔎 Muéstrame la respuesta en el mapa',
+        revealHint: '👀 La respuesta ya aparece en el mapa. Pulsa « Siguiente → » para seguir.',
+        diffTitle: 'Elige tu dificultad',
+        diffSub: 'Cuanto más difícil, menos tiempo y más opciones de respuesta, ¡pero ganas más puntos!',
+        diffResult: 'Dificultad: {name}',
+        diffs: {
+          leicht:     { emoji: '🌱', name: 'Fácil',     desc: '2 respuestas · sin límite de tiempo' },
+          mittel:     { emoji: '🎵', name: 'Medio',     desc: '3 respuestas · 25 s · puntos ×2' },
+          schwer:     { emoji: '🔥', name: 'Difícil',   desc: '4 respuestas · 15 s · puntos ×3' },
+          unmoeglich: { emoji: '💀', name: 'Imposible', desc: '6 respuestas · 8 s · puntos ×4' }
+        },
         wrong: '❌ Vaya, es incorrecto. La respuesta correcta es: ',
         next: 'Siguiente →',
         showResult: 'Ver resultado 🏆',
@@ -1439,7 +1569,19 @@
         question: 'Pergunta {n} de {total}',
         points: '⭐ {n} pontos',
         correct: '✅ Certo! +{n} pontos',
-        streakBonus: ' 🔥 Sequência! +5 de bónus',
+        streakBonus: ' 🔥 Sequência! +{n} de bónus',
+        timeUp: '⏰ Tempo esgotado! A resposta certa é: ',
+        showMe: '🔎 Mostra-me a resposta no mapa',
+        revealHint: '👀 A resposta já aparece no mapa. Toca em « Seguinte → » para continuar.',
+        diffTitle: 'Escolhe a tua dificuldade',
+        diffSub: 'Quanto mais difícil, menos tempo e mais opções de resposta – mas ganhas mais pontos!',
+        diffResult: 'Dificuldade: {name}',
+        diffs: {
+          leicht:     { emoji: '🌱', name: 'Fácil',      desc: '2 respostas · sem limite de tempo' },
+          mittel:     { emoji: '🎵', name: 'Médio',      desc: '3 respostas · 25 s · pontos ×2' },
+          schwer:     { emoji: '🔥', name: 'Difícil',    desc: '4 respostas · 15 s · pontos ×3' },
+          unmoeglich: { emoji: '💀', name: 'Impossível', desc: '6 respostas · 8 s · pontos ×4' }
+        },
         wrong: '❌ Que pena, está errado. A resposta certa é: ',
         next: 'Seguinte →',
         showResult: 'Ver resultado 🏆',
@@ -2373,7 +2515,26 @@
       return shuffle([correct, ...distractors]);
     }
 
-    function buildQuizQuestions() {
+    // Zu jeder festen Frage die passende Stelle auf der Seite (Station oder Werk),
+    // in derselben Reihenfolge wie die Fragen in „quiz.fixed“ (in allen Sprachen gleich).
+    // So bekommt wirklich jede Frage einen Verweis auf die richtige Antwort.
+    const FIXED_REVEAL = [
+      { type: 'station', id: 'eisenach' }, // Geburtsstadt
+      { type: 'station', id: 'leipzig' },  // Thomaskantor Leipzig
+      { type: 'station', id: 'eisenach' }, // Geburtsjahr 1685
+      { type: 'station', id: 'leipzig' },  // Todesjahr 1750
+      { type: 'work',    bwv: 147 },       // Was ist ein Vokalwerk (Beispiel)
+      { type: 'work',    bwv: 147 },       // „Jesus bleibet meine Freude“
+      { type: 'work',    bwv: 225 },       // Mozart & „Singet dem Herrn“
+      { type: 'work',    bwv: 244 },       // Chöre der Matthäus-Passion
+      { type: 'station', id: 'eisenach' }, // Musikerfamilie
+      { type: 'work',    bwv: 244 }        // längstes Vokalwerk
+    ];
+
+    // nOptions = Anzahl der Antwortmöglichkeiten (hängt von der Schwierigkeit ab).
+    // reveal = Verweis auf die Stelle auf der Seite mit der richtigen Antwort
+    //          (Station oder Werk) – wird bei falscher Antwort angeboten.
+    function buildQuizQuestions(nOptions = 4) {
       const qs = [];
       const q = translations[currentLang] && translations[currentLang].quiz
         ? translations[currentLang].quiz : translations.de.quiz;
@@ -2382,54 +2543,111 @@
       const types = [...new Set(works.map(w => tWork(w).type))];
 
       // --- feste Wissensfragen (aus den Sprachdaten) ---
-      q.fixed.forEach(f => {
+      q.fixed.forEach((f, idx) => {
         let options;
-        if (f.kind === 'city') options = makeOptions(f.correct, cityNames);
-        else if (f.kind === 'title') options = makeOptions(f.correct, workTitles);
-        else options = shuffle(f.options);
-        qs.push({ emoji: f.emoji, q: f.q, correct: f.correct, options });
+        if (f.kind === 'city') options = makeOptions(f.correct, cityNames, nOptions);
+        else if (f.kind === 'title') options = makeOptions(f.correct, workTitles, nOptions);
+        else options = makeOptions(f.correct, f.options, nOptions);
+        qs.push({ emoji: f.emoji, q: f.q, correct: f.correct, options, reveal: FIXED_REVEAL[idx] || null });
       });
 
       // --- aus den Daten erzeugte Fragen: In welcher Stadt entstand ein Werk? ---
       sample(works, 3).forEach(w => {
         const s = stations.find(x => x.id === w.station);
         qs.push({ emoji: '📍', q: fmt(q.tplCity, { title: w.title }),
-          correct: s.name, options: makeOptions(s.name, cityNames) });
+          correct: s.name, options: makeOptions(s.name, cityNames, nOptions),
+          reveal: { type: 'station', id: s.id } });
       });
 
       // --- aus den Daten erzeugte Fragen: Was für ein Werk ist das? ---
       sample(works, 3).forEach(w => {
         const type = tWork(w).type;
         qs.push({ emoji: '🎼', q: fmt(q.tplType, { title: w.title }),
-          correct: type, options: makeOptions(type, types) });
+          correct: type, options: makeOptions(type, types, nOptions),
+          reveal: { type: 'work', bwv: w.bwv } });
       });
 
       return qs;
     }
 
-    const QUIZ_LENGTH = 8;
-    let quizQuestions = [], quizIndex = 0, quizScore = 0, quizCorrect = 0, quizStreak = 0, quizAnswered = false;
+    // Schwierigkeitsstufen: Antwortmöglichkeiten, Zeit pro Frage in Sekunden
+    // (0 = ohne Zeitlimit), Punkte-Faktor und Anzahl der Fragen.
+    const DIFFICULTIES = {
+      leicht:     { options: 2, time: 0,  mult: 1, length: 6 },
+      mittel:     { options: 3, time: 25, mult: 2, length: 8 },
+      schwer:     { options: 4, time: 15, mult: 3, length: 10 },
+      unmoeglich: { options: 6, time: 8,  mult: 4, length: 12 }
+    };
+    const DIFF_ORDER = ['leicht', 'mittel', 'schwer', 'unmoeglich'];
 
+    let quizQuestions = [], quizIndex = 0, quizScore = 0, quizCorrect = 0, quizStreak = 0, quizAnswered = false;
+    let currentDiff = DIFFICULTIES.mittel, currentDiffKey = 'mittel', quizTimerId = null;
+
+    function clearQuizTimer() {
+      if (quizTimerId) { clearInterval(quizTimerId); quizTimerId = null; }
+    }
+
+    // Beim Start zuerst die Schwierigkeit auswählen lassen.
     function startQuiz() {
-      quizQuestions = shuffle(buildQuizQuestions()).slice(0, QUIZ_LENGTH);
+      clearQuizTimer();
+      const modal = document.getElementById('quiz-modal');
+      modal.classList.remove('revealing');
+      modal.classList.add('show');
+      renderDifficultySelect();
+    }
+
+    function renderDifficultySelect() {
+      const qz = translations[currentLang] && translations[currentLang].quiz ? translations[currentLang].quiz : translations.de.quiz;
+      let saved = null;
+      try { saved = localStorage.getItem('bach-quiz-diff'); } catch (e) {}
+      const btns = DIFF_ORDER.map(key => {
+        const t = qz.diffs[key];
+        return `<button class="quiz-diff-btn diff-${key}${key === saved ? ' is-last' : ''}" onclick="beginQuiz('${key}')">
+            <span class="quiz-diff-btn-emoji">${t.emoji}</span>
+            <span class="quiz-diff-btn-txt"><strong>${t.name}</strong><small>${t.desc}</small></span>
+          </button>`;
+      }).join('');
+      document.getElementById('quiz-body').innerHTML = `
+        <div class="quiz-diff-select">
+          <div class="quiz-diff-emoji">🎯</div>
+          <h2>${qz.diffTitle}</h2>
+          <p class="quiz-diff-sub">${qz.diffSub}</p>
+          <div class="quiz-diff-list">${btns}</div>
+        </div>
+      `;
+    }
+
+    function beginQuiz(key) {
+      currentDiffKey = DIFFICULTIES[key] ? key : 'mittel';
+      currentDiff = DIFFICULTIES[currentDiffKey];
+      try { localStorage.setItem('bach-quiz-diff', currentDiffKey); } catch (e) {}
+      quizQuestions = shuffle(buildQuizQuestions(currentDiff.options)).slice(0, currentDiff.length);
       quizIndex = 0; quizScore = 0; quizCorrect = 0; quizStreak = 0;
-      document.getElementById('quiz-modal').classList.add('show');
       renderQuestion();
     }
 
     function renderQuestion() {
+      clearQuizTimer();
+      document.getElementById('quiz-modal').classList.remove('revealing');
       quizAnswered = false;
       const q = quizQuestions[quizIndex];
       const total = quizQuestions.length;
       const progress = (quizIndex / total) * 100;
 
       const qz = translations[currentLang] && translations[currentLang].quiz ? translations[currentLang].quiz : translations.de.quiz;
+      const timerHtml = currentDiff.time > 0
+        ? `<div class="quiz-timer">
+             <div class="quiz-timer-track"><div class="quiz-timer-bar" id="quiz-timer-bar"></div></div>
+             <span class="quiz-timer-num" id="quiz-timer-num">${currentDiff.time}</span>
+           </div>`
+        : '';
       document.getElementById('quiz-body').innerHTML = `
         <div class="quiz-top">
           <span class="quiz-count">${fmt(qz.question, { n: quizIndex + 1, total })}</span>
           <span class="quiz-score">${fmt(qz.points, { n: quizScore })}</span>
         </div>
         <div class="quiz-progress"><div class="quiz-progress-bar" style="width:${progress}%"></div></div>
+        ${timerHtml}
         <div class="quiz-question"><span class="quiz-q-emoji">${q.emoji}</span>${q.q}</div>
         <div class="quiz-options" id="quiz-options"></div>
         <div class="quiz-feedback" id="quiz-feedback"></div>
@@ -2443,11 +2661,30 @@
         btn.addEventListener('click', () => answerQuestion(opt, btn));
         optWrap.appendChild(btn);
       });
+
+      if (currentDiff.time > 0) startTimer();
+    }
+
+    // Zählt die Zeit für die aktuelle Frage herunter; bei 0 gilt sie als falsch.
+    function startTimer() {
+      let left = currentDiff.time;
+      const numEl = document.getElementById('quiz-timer-num');
+      const barEl = document.getElementById('quiz-timer-bar');
+      quizTimerId = setInterval(() => {
+        left--;
+        if (numEl) numEl.textContent = Math.max(0, left);
+        if (barEl) {
+          barEl.style.width = Math.max(0, (left / currentDiff.time) * 100) + '%';
+          if (left <= 5) barEl.classList.add('low');
+        }
+        if (left <= 0) { clearQuizTimer(); timeUp(); }
+      }, 1000);
     }
 
     function answerQuestion(opt, btn) {
       if (quizAnswered) return;
       quizAnswered = true;
+      clearQuizTimer();
       const q = quizQuestions[quizIndex];
 
       document.querySelectorAll('.quiz-option').forEach(b => {
@@ -2460,22 +2697,77 @@
       if (opt === q.correct) {
         quizCorrect++;
         quizStreak++;
-        let gained = 10, bonus = '';
-        if (quizStreak >= 3) { gained += 5; bonus = qz.streakBonus; }
+        let gained = 10 * currentDiff.mult, bonus = '';
+        if (quizStreak >= 3) { const b = 5 * currentDiff.mult; gained += b; bonus = fmt(qz.streakBonus, { n: b }); }
         quizScore += gained;
         fb.innerHTML = `<div class="fb-correct">${fmt(qz.correct, { n: gained })}${bonus}</div>`;
       } else {
         quizStreak = 0;
-        btn.classList.add('wrong');
+        if (btn) btn.classList.add('wrong');
         fb.innerHTML = `<div class="fb-wrong">${qz.wrong}<strong>${q.correct}</strong></div>`;
+        addRevealLink(fb, q, qz);
       }
       document.querySelector('.quiz-score').textContent = fmt(qz.points, { n: quizScore });
+      addNextButton(fb, qz);
+    }
 
+    // Läuft die Zeit ab, zählt die Frage als falsch.
+    function timeUp() {
+      if (quizAnswered) return;
+      quizAnswered = true;
+      const q = quizQuestions[quizIndex];
+      document.querySelectorAll('.quiz-option').forEach(b => {
+        b.disabled = true;
+        if (b.textContent === q.correct) b.classList.add('correct');
+      });
+      quizStreak = 0;
+      const qz = translations[currentLang] && translations[currentLang].quiz ? translations[currentLang].quiz : translations.de.quiz;
+      const fb = document.getElementById('quiz-feedback');
+      fb.innerHTML = `<div class="fb-wrong">${qz.timeUp}<strong>${q.correct}</strong></div>`;
+      addRevealLink(fb, q, qz);
+      addNextButton(fb, qz);
+    }
+
+    // Bei falscher Antwort: Verweis, der die richtige Stelle auf der Seite zeigt.
+    function addRevealLink(fb, q, qz) {
+      if (!q.reveal) return;
+      const rb = document.createElement('button');
+      rb.className = 'quiz-reveal';
+      rb.textContent = qz.showMe;
+      rb.addEventListener('click', () => revealAnswer(q.reveal));
+      fb.appendChild(rb);
+    }
+
+    function addNextButton(fb, qz) {
       const nextBtn = document.createElement('button');
       nextBtn.className = 'quiz-next';
       nextBtn.textContent = quizIndex < quizQuestions.length - 1 ? qz.next : qz.showResult;
       nextBtn.addEventListener('click', nextQuestion);
       fb.appendChild(nextBtn);
+    }
+
+    // Dockt das Quiz unten an (Karte und Info-Karte bleiben sichtbar) und zeigt die
+    // richtige Antwort an ihrer Stelle. Das Quiz läuft weiter – mit „Weiter →“ geht
+    // es an genau derselben Stelle nahtlos weiter.
+    function revealAnswer(target) {
+      clearQuizTimer();
+      document.getElementById('quiz-modal').classList.add('revealing');
+      if (target.type === 'station') selectStation(target.id);
+      else selectWork(target.bwv);
+      const info = document.getElementById('info-content');
+      if (info && info.scrollIntoView) info.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      // Aus dem „Zeig mir“-Knopf wird ein Hinweis; der „Weiter →“-Knopf bleibt bestehen.
+      const qz = translations[currentLang] && translations[currentLang].quiz ? translations[currentLang].quiz : translations.de.quiz;
+      const rb = document.querySelector('#quiz-feedback .quiz-reveal');
+      if (rb) {
+        const hint = document.createElement('div');
+        hint.className = 'quiz-reveal-hint';
+        hint.textContent = qz.revealHint;
+        rb.replaceWith(hint);
+      }
+      // Im angedockten Fenster ans Ende scrollen, damit „Weiter →“ sichtbar ist.
+      const panel = document.querySelector('#quiz-modal .quiz-panel');
+      if (panel) panel.scrollTop = panel.scrollHeight;
     }
 
     function nextQuestion() {
@@ -2484,15 +2776,19 @@
     }
 
     function finishQuiz() {
+      clearQuizTimer();
+      document.getElementById('quiz-modal').classList.remove('revealing');
       const total = quizQuestions.length;
       const pct = quizCorrect / total;
       const qz = translations[currentLang] && translations[currentLang].quiz ? translations[currentLang].quiz : translations.de.quiz;
       const tier = pct >= 0.9 ? qz.tiers[0] : pct >= 0.6 ? qz.tiers[1] : pct >= 0.3 ? qz.tiers[2] : qz.tiers[3];
+      const diffName = qz.diffs[currentDiffKey] ? qz.diffs[currentDiffKey].name : '';
 
       document.getElementById('quiz-body').innerHTML = `
         <div class="quiz-result">
           <div class="quiz-result-stars">${tier.stars}</div>
           <h2>${tier.title}</h2>
+          <p class="quiz-diff-badge">${fmt(qz.diffResult, { name: diffName })}</p>
           <p class="quiz-result-score">${fmt(qz.resultScore, { correct: quizCorrect, total })}</p>
           <p class="quiz-result-points">${fmt(qz.points, { n: quizScore })}</p>
           <p class="quiz-result-msg">${tier.msg}</p>
@@ -2505,7 +2801,8 @@
     }
 
     function closeQuiz() {
-      document.getElementById('quiz-modal').classList.remove('show');
+      clearQuizTimer();
+      document.getElementById('quiz-modal').classList.remove('revealing', 'show');
     }
 
     // ============== SPRACHE ANWENDEN ==============
